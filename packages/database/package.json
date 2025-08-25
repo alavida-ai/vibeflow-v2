@@ -1,5 +1,5 @@
 {
-  "name": "db",
+  "name": "@brand-listener/database",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -14,6 +14,9 @@
     "dotenv": "^17.2.1",
     "drizzle-orm": "^0.44.5",
     "postgres": "^3.4.7"
+  },
+  "exports": {
+    ".": "./src/index.ts"
   },
   "devDependencies": {
     "drizzle-kit": "^0.31.4",

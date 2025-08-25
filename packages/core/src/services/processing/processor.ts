@@ -3,14 +3,13 @@ import type { ProcessedTweet, Tweet } from '@brand-listener/types';
 export class TweetProcessor {
 
   async process(
-    mentionTweets: Tweet[], 
-    keywordTweets: Tweet[],
+    tweets: Tweet[],
     thresholds = { notify: 0.7, log_only: 0.6 }
   ): Promise<ProcessedTweet[]> {
     const processed: ProcessedTweet[] = [];
     
     // Process mentions - always relevant
-    mentionTweets.forEach(tweet => {
+    tweets.forEach(tweet => {
       processed.push({
         tweet,
         source: 'mentions',
@@ -20,24 +19,6 @@ export class TweetProcessor {
       });
     });
     
-    // Process keywords - apply relevance scoring (placeholder for now)
-    keywordTweets.forEach(tweet => {
-      const relevanceScore = this.calculateRelevance(tweet);
-      processed.push({
-        tweet,
-        source: 'keywords',
-        shouldNotify: relevanceScore >= thresholds.notify,
-        shouldLog: relevanceScore >= thresholds.log_only,
-        relevanceScore
-      });
-    });
-    
     return processed;
-  }
-  
-  private calculateRelevance(tweet: Tweet): number {
-    // TODO: Add GPT-4 relevance scoring here
-    // For now, just return a placeholder score
-    return 0.8;
   }
 }

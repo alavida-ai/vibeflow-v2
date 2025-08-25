@@ -8,6 +8,7 @@
   },
   "dependencies": {
     "@brand-listener/types": "workspace:*",
+    "@brand-listener/database": "workspace:*",
     "googleapis": "^126.0.1",
     "yaml": "^2.3.2"
   },
