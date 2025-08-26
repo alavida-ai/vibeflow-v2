@@ -3,8 +3,7 @@
     "compilerOptions": {
       "outDir": "dist",
       "rootDir": "src",
-      "composite": true,
-      "tsBuildInfoFile": "./dist/ingestion.tsbuildinfo"
+      "composite": true
     },
     "include": ["src/**/*"],
     "exclude": ["dist", "node_modules"],

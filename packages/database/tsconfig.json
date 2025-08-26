@@ -3,14 +3,9 @@
     "compilerOptions": {
       "outDir": "dist",
       "rootDir": "src",
-      "composite": true,
-      "tsBuildInfoFile": "./dist/core.tsbuildinfo"
+      "composite": true
     },
     "include": ["src/**/*"],
-    "exclude": ["dist", "node_modules"],
-    "references": [
-      { "path": "../types" },
-      { "path": "../utils" }
-    ]
+    "exclude": ["dist", "node_modules"]
   }
   
