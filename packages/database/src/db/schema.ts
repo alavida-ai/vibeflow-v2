@@ -22,6 +22,9 @@ export const tweetStatusEnumSchema = z.enum([
   "ignored",            // intentionally not engaging
 ]);
 
+export const statusConstants = tweetStatusEnumSchema.enum;
+
+
 export const tweetStatusEnum = pgEnum("tweet_status", tweetStatusEnumSchema.options as [string, ...string[]]);
 // Main table for processed tweets (your "hits")
 export const tweetsTable = pgTable("tweets", {
@@ -67,6 +70,9 @@ export const tweetsTable = pgTable("tweets", {
   /** Safety / provenance */
   source: varchar("source", { length: 32 }).notNull().default("mentions"),
   rawJson: jsonb("raw_json").notNull(), // full payload for reprocessing
+
+  reply: text("reply"),
+  reasoning: text("reasoning")
 }, (table) => [
   index("idx_tweets_tweet_id").on(table.tweetId),
 ]);

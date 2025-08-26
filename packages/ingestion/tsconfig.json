@@ -4,7 +4,7 @@
       "outDir": "dist",
       "rootDir": "src",
       "composite": true,
-      "tsBuildInfoFile": "./dist/core.tsbuildinfo"
+      "tsBuildInfoFile": "./dist/ingestion.tsbuildinfo"
     },
     "include": ["src/**/*"],
     "exclude": ["dist", "node_modules"],

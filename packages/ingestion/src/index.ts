@@ -1,6 +1,6 @@
 import { TwitterClient } from "./client/twitter";
 import { TwitterTransformer } from "./transformer";
-import { TwitterDatabaseService } from "./client/insert";
+import { TwitterDatabaseService } from "@brand-listener/core";
 
 const TWITTER_API_KEY = 'd074cc3ac812460ca73cb6b8dd886b18';
 
