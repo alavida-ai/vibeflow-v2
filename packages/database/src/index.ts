@@ -1,21 +1,16 @@
 import { drizzle } from "drizzle-orm/postgres-js";
 import postgres from "postgres";
 import * as schema from "./db/schema";
-import type * as SchemaTypes from "./db/schema";
 
-export module Database {
-  // Get your Supabase connection string from SST Resource or environment variable
-  const DATABASE_URL = process.env.DATABASE_URL!;
+let _client: ReturnType<typeof drizzle> | null = null;
 
-  // Create a postgres connection
-  const db = postgres(DATABASE_URL, { max: 1 });
-  
-  // Create a Drizzle ORM instance
-  export const client = drizzle(db, {
-    schema: schema,
-  });
-
-  export const tables = schema;
+export function getDb() {
+  if (_client) return _client;
+  const url = 'postgresql://postgres.vbdntompztegzppzjzep:zeBWGkeXWCBnYHoE@aws-1-eu-west-2.pooler.supabase.com:6543/postgres';
+  if (!url) throw new Error("DATABASE_URL is not set");
+  const db = postgres(url, { max: 1, prepare: false, ssl: 'allow' });
+  _client = drizzle(db, { schema });
+  return _client;
 }
 
-export type { SchemaTypes };
+export { schema };

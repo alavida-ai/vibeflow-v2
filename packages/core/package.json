@@ -7,18 +7,13 @@
     "dev": "tsx src/index.ts --watch"
   },
   "dependencies": {
-    "@brand-listener/types": "workspace:*",
     "@brand-listener/database": "workspace:*",
     "googleapis": "^126.0.1",
+    "drizzle-orm": "^0.44.5",
     "yaml": "^2.3.2"
   },
   "exports": {
-    ".": "./src/index.ts",
-    "./twitter": "./src/services/twitter/index.ts",
-    "./sources": "./src/services/sources/index.ts",
-    "./processing": "./src/services/processing/index.ts",
-    "./sinks": "./src/services/sinks/index.ts",
-    "./sinks/sheets": "./src/services/sinks/sheets.ts"
+    ".": "./src/index.ts"
   },
   "devDependencies": {
     "@types/node": "^20.5.0",

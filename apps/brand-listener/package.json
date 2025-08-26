@@ -8,8 +8,6 @@
   },
   "dependencies": {
     "@brand-listener/core": "workspace:*",
-    "@brand-listener/types": "workspace:*",
-    "@brand-listener/utils": "workspace:*",
     "dotenv": "^17.2.1"
   },
   "devDependencies": {
