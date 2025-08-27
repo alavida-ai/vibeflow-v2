@@ -79,6 +79,16 @@ export async function main() {
     for (const reply of replies) {
         console.log("Replied to tweet: " + reply.tweetId + " with reply: " + reply.reply + " and reasoning: " + reply.reasoning + "\n");
     }
+    
+    console.log("🎉 Brand listener process completed successfully");
 }
 
-main();
+main()
+    .then(() => {
+        console.log("✅ Main process finished");
+        process.exit(0);
+    })
+    .catch((error) => {
+        console.error("❌ Main process failed:", error);
+        process.exit(1);
+    });
