@@ -2,9 +2,6 @@ import { getMostRelevantTweetsToReplyTo } from "@brand-listener/core/services/da
 import { SlackClient } from "@brand-listener/core/services/slack";
 import { buildMostRelevantTweetsReport } from "@brand-listener/reporting";
 import { type SlackMessagePayload } from "@brand-listener/core";
-import { config } from "dotenv";
-
-config();
 
 export async function generateMostRelevantTweetsReport(topK: number): Promise<SlackMessagePayload> {
     const tweets = await getMostRelevantTweetsToReplyTo({ top_k: topK });
