@@ -4,8 +4,6 @@ import { schema } from "@brand-listener/database";
 import * as AnalyticsService from "@brand-listener/core/services/analytics";
 import * as TwitterDatabaseService from "@brand-listener/core/services/database";
 
-const TWITTER_API_KEY = process.env.TWITTER_API_KEY;
-
 /* -------------------------------------------------------------------------- */
 /*                              TYPES                                         */
 /* -------------------------------------------------------------------------- */
@@ -119,10 +117,10 @@ export async function hasUserRepliedToTweet({
     maxPages?: number;
     cursor?: string;
   }): Promise<boolean> {
-    if (!TWITTER_API_KEY) {
+    if (!process.env.TWITTER_API_KEY) {
       throw new Error("TWITTER_API_KEY is not set");
     }
-    const client = new TwitterClient(TWITTER_API_KEY);
+    const client = new TwitterClient(process.env.TWITTER_API_KEY);
 
     try {
       let currentCursor: string | undefined = initialCursor;
@@ -244,11 +242,11 @@ export async function ingestMentions(config: BrandListenerConfig): Promise<Inges
       cursor: initialCursor 
     } = config;
 
-    if (!TWITTER_API_KEY) {
+    if (!process.env.TWITTER_API_KEY) {
       throw new Error("TWITTER_API_KEY is not set");
     }
 
-    const client = new TwitterClient(TWITTER_API_KEY);
+    const client = new TwitterClient(process.env.TWITTER_API_KEY);
     
     const fetchFunction: PaginatedFetchFunction = (cursor?: string) => 
       client.mentions({ userName, sinceTime, cursor });

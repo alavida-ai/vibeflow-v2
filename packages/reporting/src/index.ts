@@ -1,3 +1,5 @@
+// Brand Listener Reports - Generated January 25, 2025, 2:47 PM
+
 import { schema } from '@brand-listener/database';
 import { type SlackMessagePayload } from '@brand-listener/core';
 import { TweetCandidate } from '@brand-listener/core/services/database';
@@ -86,11 +88,19 @@ function escapeSlackText(text: string): string {
 }
 
 export function buildMostRelevantTweetsReport(tweetCandidates: TweetCandidate[]): SlackMessagePayload {
+    const currentTime = new Date().toLocaleString('en-US', {
+        weekday: 'short',
+        month: 'short', 
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+    });
+    
     const header = {
         type: 'section',
         text: {
             type: 'mrkdwn',
-            text: '🎯 *Most Relevant Tweets to Reply To*'
+            text: `🎯 *Most Relevant Tweets to Reply To*\n_${currentTime}_`
         }
     } as const;
 
