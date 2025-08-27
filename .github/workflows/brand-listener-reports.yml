@@ -1,4 +1,4 @@
-name: Brand Listener - Reports
+name: Brand Listener - Generate Reports
 
 on:
   push:

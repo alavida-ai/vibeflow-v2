@@ -1,4 +1,4 @@
-name: Brand Listener - Main
+name: Brand Listener - Ingest Data and Reply to Tweets
 
 on:
   push:
@@ -54,6 +54,10 @@ jobs:
           
           if [ -z "${{ secrets.TWITTER_USERNAME }}" ]; then
             missing_secrets+=("TWITTER_USERNAME")
+          fi
+
+          if [ -z "${{ secrets.TWITTER_API_KEY }}" ]; then
+            missing_secrets+=("TWITTER_API_KEY")
           fi
           
           if [ -z "${{ secrets.OPENROUTER_API_KEY }}" ]; then

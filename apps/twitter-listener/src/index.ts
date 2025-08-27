@@ -17,6 +17,10 @@ export async function main() {
         throw new Error("OPENROUTER_API_KEY is not set");
     }
 
+    if (!process.env.TWITTER_API_KEY) {
+        throw new Error("TWITTER_API_KEY is not set");
+    }
+
     const replyGuyAgent = createReplyGuyAgent({
         openRouter: {
             apiKey: process.env.OPENROUTER_API_KEY!,
