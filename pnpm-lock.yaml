@@ -212,6 +212,9 @@ importers:
       '@brand-listener/core':
         specifier: workspace:*
         version: link:../core
+      '@brand-listener/database':
+        specifier: workspace:*
+        version: link:../database
       zod:
         specifier: ^3.23.8
         version: 3.25.76
