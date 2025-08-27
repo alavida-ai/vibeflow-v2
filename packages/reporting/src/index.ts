@@ -1,6 +1,6 @@
 import { schema } from '@brand-listener/database';
 import { type SlackMessagePayload } from '@brand-listener/core';
-import { getMostRelevantTweetsToReplyTo, TweetCandidate } from '@brand-listener/core/services/database';
+import { TweetCandidate } from '@brand-listener/core/services/database';
 
 /* -------------------------------------------------------------------------- */
 /*                       SLACK MESSAGE BUILDERS                               */
@@ -168,14 +168,3 @@ export function buildMostRelevantTweetsReport(tweetCandidates: TweetCandidate[])
         blocks: blocks as SlackMessagePayload['blocks']
     };
 }
-
-async function main() {
-    const tweets = await getMostRelevantTweetsToReplyTo({ top_k: 20 });
-    
-    // Generate the report
-    const report = buildMostRelevantTweetsReport(tweets);
-    console.log('Generated Slack Report:');
-    console.log(JSON.stringify(report, null, 2));
-}
-
-main();

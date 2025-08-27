@@ -55,6 +55,13 @@ jobs:
       - name: Build packages
         run: pnpm run build
 
+      - name: Validate required secrets
+        run: |
+          if [ -z "${{ secrets.SLACK_WEBHOOK_URL }}" ]; then
+            echo "❌ SLACK_WEBHOOK_URL secret is not set"
+            exit 1
+          fi
+          echo "✅ All required secrets are configured"
 
       - name: Generate and send reports
         working-directory: apps/twitter-listener
@@ -62,7 +69,7 @@ jobs:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
           NODE_ENV: production
           DEBUG: ${{ inputs.debug }}
-          TOP_K: ${{ inputs.top_k }}
+          TOP_K: ${{ inputs.top_k || '5' }}
         run: |
           echo "📊 Starting Brand Listener Reports..."
           echo "Timestamp: $(date -u)"
@@ -71,7 +78,7 @@ jobs:
           echo "Pnpm version: $(pnpm --version)"
           echo "GCP Authentication: Configured via google-github-actions/auth"
           echo "Debug mode: ${{ inputs.debug }}"
-          echo "Top K tweets: ${{ inputs.top_k }}"
+          echo "Top K tweets: ${{ inputs.top_k || '5' }}"
           echo ""
           npx tsx src/reporting.ts
 

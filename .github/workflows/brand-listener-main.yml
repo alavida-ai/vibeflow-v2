@@ -48,15 +48,32 @@ jobs:
       - name: Build packages
         run: pnpm run build
 
-      - name: Authenticate to Google Cloud
-        uses: google-github-actions/auth@v2
-        with:
-          credentials_json: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS_JSON }}
+      - name: Validate required secrets
+        run: |
+          missing_secrets=()
+          
+          if [ -z "${{ secrets.TWITTER_USERNAME }}" ]; then
+            missing_secrets+=("TWITTER_USERNAME")
+          fi
+          
+          if [ -z "${{ secrets.OPENROUTER_API_KEY }}" ]; then
+            missing_secrets+=("OPENROUTER_API_KEY")
+          fi
+          
+          if [ -z "${{ secrets.SLACK_WEBHOOK_URL }}" ]; then
+            missing_secrets+=("SLACK_WEBHOOK_URL")
+          fi
+          
+          if [ ${#missing_secrets[@]} -gt 0 ]; then
+            echo "❌ Missing required secrets: ${missing_secrets[*]}"
+            exit 1
+          fi
+          
+          echo "✅ All required secrets are configured"
 
       - name: Run main brand listener
         working-directory: apps/twitter-listener
         env:
-          TWITTER_API_KEY: ${{ secrets.TWITTER_API_KEY }}
           TWITTER_USERNAME: ${{ secrets.TWITTER_USERNAME }}
           OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
