@@ -11,6 +11,7 @@
       "@brand-listener/ingestion": "workspace:*",
       "@brand-listener/replier": "workspace:*",
       "@brand-listener/agents": "workspace:*",
+      "@brand-listener/reporting": "workspace:*",
       "dotenv": "^17.2.1"
     },
     "devDependencies": {

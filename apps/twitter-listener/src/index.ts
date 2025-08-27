@@ -1,6 +1,6 @@
 import { ingestMentions, batchCheckResponseStatus } from "@brand-listener/ingestion";
-import * as AnalyticsService from "@brand-listener/core/analytics-service";
-import * as TwitterDatabaseService from "@brand-listener/core/database-service";
+import * as AnalyticsService from "@brand-listener/core/services/analytics";
+import * as TwitterDatabaseService from "@brand-listener/core/services/database";
 import { batchReplyToTweets } from "@brand-listener/replier";
 import { createReplyGuyAgent } from "@brand-listener/agents";
 import { config } from "dotenv";
@@ -14,7 +14,7 @@ export async function main() {
             baseURL: "https://openrouter.ai/api/v1"
         }
     });
-    
+
     console.log("Starting ingestion");
     const mentions = await ingestMentions({
         userName: "send",
