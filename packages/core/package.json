@@ -14,8 +14,9 @@
   },
   "exports": {
     ".": "./src/index.ts",
-    "./analytics-service": "./src/services/analytics-service/index.ts",
-    "./database-service": "./src/services/database-service/index.ts"
+    "./services/analytics": "./src/services/analytics/index.ts",
+    "./services/database": "./src/services/database/index.ts",
+    "./services/slack": "./src/services/slack/index.ts"
   },
   "devDependencies": {
     "@types/node": "^20.5.0",

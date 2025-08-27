@@ -1,12 +1,17 @@
-name: Brand Listener
+name: Brand Listener - Reports
 
 on:
   push:
     branches:
       - main
+    paths:
+      - 'apps/twitter-listener/src/reporting.ts'
+      - 'packages/reporting/**'
+      - 'packages/core/src/services/**'
   schedule:
-    # Run every 6 hours (at 00:00, 06:00, 12:00, 18:00 UTC)
-    - cron: "0 */6 * * *"
+    # Run every 6 hours starting at 03:00 UTC (03:00, 09:00, 15:00, 21:00)
+    # This runs 3 hours after the main workflow to ensure fresh data
+    - cron: "0 3,9,15,21 * * *"
   workflow_dispatch: # Allow manual triggering
     inputs:
       debug:
@@ -14,11 +19,16 @@ on:
         required: false
         default: false
         type: boolean
+      top_k:
+        description: 'Number of top tweets to include in report'
+        required: false
+        default: '5'
+        type: string
 
 jobs:
-  run-brand-listener:
+  run-reports:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 15
     
     steps:
       - name: Checkout code
@@ -45,37 +55,35 @@ jobs:
       - name: Build packages
         run: pnpm run build
 
-      - name: Authenticate to Google Cloud
-        uses: google-github-actions/auth@v2
-        with:
-          credentials_json: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS_JSON }}
 
-      - name: Run brand listener
-        working-directory: apps/brand-listener
+      - name: Generate and send reports
+        working-directory: apps/twitter-listener
         env:
-          TWITTER_API_KEY: ${{ secrets.TWITTER_API_KEY }}
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-          GOOGLE_PROJECT_ID: ${{ secrets.GOOGLE_PROJECT_ID }}
           NODE_ENV: production
+          DEBUG: ${{ inputs.debug }}
+          TOP_K: ${{ inputs.top_k }}
         run: |
-          echo "🚀 Starting Brand Listener..."
+          echo "📊 Starting Brand Listener Reports..."
           echo "Timestamp: $(date -u)"
           echo "Working directory: $(pwd)"
           echo "Node version: $(node --version)"
           echo "Pnpm version: $(pnpm --version)"
           echo "GCP Authentication: Configured via google-github-actions/auth"
+          echo "Debug mode: ${{ inputs.debug }}"
+          echo "Top K tweets: ${{ inputs.top_k }}"
           echo ""
-          npx tsx src/main.ts
+          npx tsx src/reporting.ts
 
       - name: Upload logs on failure
         if: failure()
         uses: actions/upload-artifact@v4
         with:
-          name: brand-listener-logs-${{ github.run_number }}
+          name: brand-listener-reports-logs-${{ github.run_number }}
           path: |
-            apps/brand-listener/.state/
-            apps/brand-listener/logs/
-            apps/brand-listener/dist/
+            apps/twitter-listener/.state/
+            apps/twitter-listener/logs/
+            apps/twitter-listener/dist/
           retention-days: 7
           if-no-files-found: ignore
 
@@ -86,7 +94,7 @@ jobs:
           status: failure
           webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
           text: |
-            🚨 Brand Listener scheduled run failed!
+            🚨 Brand Listener Reports failed!
             
             **Details:**
             - Run: ${{ github.run_number }}

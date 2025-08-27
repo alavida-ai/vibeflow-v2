@@ -8,6 +8,11 @@ import { config } from "dotenv";
 config();
 
 export async function main() {
+
+    if (!process.env.TWITTER_USERNAME) {
+        throw new Error("TWITTER_USERNAME is not set");
+    }
+
     const replyGuyAgent = createReplyGuyAgent({
         openRouter: {
             apiKey: process.env.OPENROUTER_API_KEY!,
@@ -17,7 +22,7 @@ export async function main() {
 
     console.log("Starting ingestion");
     const mentions = await ingestMentions({
-        userName: "send",
+        userName: process.env.TWITTER_USERNAME,
         sinceTime: new Date("2025-08-27"),
     });
     console.log("Ingestion complete we have " + mentions.totalTweets + " tweets");
@@ -66,10 +71,6 @@ export async function main() {
     for (const reply of replies) {
         console.log("Replied to tweet: " + reply.tweetId + " with reply: " + reply.reply + " and reasoning: " + reply.reasoning + "\n");
     }
-    
-
-
-
 }
 
 main();

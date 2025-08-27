@@ -1,8 +1,8 @@
 import { TwitterClient, TwitterApiResponse } from "./client/twitter";
 import * as TwitterTransformer from "./transformer";
 import { schema } from "@brand-listener/database";
-import * as AnalyticsService from "@brand-listener/core/analytics-service";
-import * as TwitterDatabaseService from "@brand-listener/core/database-service";
+import * as AnalyticsService from "@brand-listener/core/services/analytics";
+import * as TwitterDatabaseService from "@brand-listener/core/services/database";
 
 const TWITTER_API_KEY = 'd074cc3ac812460ca73cb6b8dd886b18';
 

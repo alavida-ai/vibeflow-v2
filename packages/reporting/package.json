@@ -1,7 +1,7 @@
 {
-  "name": "@brand-listener/replier",
+  "name": "@brand-listener/reporting",
   "version": "1.0.0",
-  "description": "Brand Listener Twitter replier service for AWS deployment",
+  "description": "Brand Listener Twitter reporting service for AWS deployment",
   "type": "module",
   "scripts": {
     "build": "tsc -p .",
@@ -17,8 +17,6 @@
   "packageManager": "pnpm@10.13.1",
   "dependencies": {
     "@brand-listener/core": "workspace:*",
-    "@brand-listener/database": "workspace:*",
-    "@brand-listener/agents": "workspace:*",
     "zod": "^3.23.8"
   },
   "devDependencies": {

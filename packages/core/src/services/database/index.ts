@@ -1,5 +1,5 @@
 import { getDb, schema } from "@brand-listener/database";
-import { eq, inArray, gt, and, ne } from "drizzle-orm";
+import { eq, inArray, gt, and, ne, desc } from "drizzle-orm";
 
 /* -------------------------------------------------------------------------- */
 /*                              TYPES                                     */
@@ -62,6 +62,32 @@ export async function addReplyToTweet(tweetId: string, reply: string, reasoning:
         return result[0];
     } catch (error) {
         console.error("Error updating tweet status", error);
+        throw error;
+    }
+}
+
+export async function getMostRelevantTweetsToReplyTo({
+    top_k = 10,
+}): Promise<TweetCandidate[]> {
+    try {
+        const db = getDb();
+        const result = await db
+            .select({
+                tweet: schema.tweetsTable,
+                analytics: schema.tweetAnalyticsTable
+            })
+            .from(schema.tweetsTable)
+            .innerJoin(
+                schema.tweetAnalyticsTable,
+                eq(schema.tweetsTable.tweetId, schema.tweetAnalyticsTable.tweetId)
+            )
+            .where(eq(schema.tweetsTable.status, READY_TO_RESPOND_TWEET_STATUS))
+            .orderBy(desc(schema.tweetAnalyticsTable.finalScore))
+            .limit(top_k);
+        
+        return result;
+    } catch (error) {
+        console.error("Error getting most relevant tweets to reply to", error);
         throw error;
     }
 }

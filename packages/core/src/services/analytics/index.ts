@@ -20,7 +20,7 @@ import { schema } from "@brand-listener/database";
 
   export const REPLY_THRESHOLD = 0.5;
 
-  export const SEND_USERNAME = "Send";
+  export const TWITTER_USERNAME = process.env.TWITTER_USERNAME;
 
 /* -------------------------------------------------------------------------- */
 /*                              FUNCTIONS                                     */
@@ -87,7 +87,7 @@ import { schema } from "@brand-listener/database";
   }
 
   export async function checkIfUserRepliedToTweet(reply: schema.InsertTweet): Promise<boolean> {
-    if (reply.authorUsername === SEND_USERNAME) {
+    if (reply.authorUsername?.toLowerCase() === TWITTER_USERNAME?.toLowerCase()) {
       return true;
     } else {
       return false;

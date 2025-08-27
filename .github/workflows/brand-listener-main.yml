@@ -1,0 +1,102 @@
+name: Brand Listener - Main
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'apps/twitter-listener/**'
+      - 'packages/**'
+  schedule:
+    # Run every 6 hours starting at 00:00 UTC (00:00, 06:00, 12:00, 18:00)
+    - cron: "0 */6 * * *"
+  workflow_dispatch: # Allow manual triggering
+    inputs:
+      debug:
+        description: 'Enable debug logging'
+        required: false
+        default: false
+        type: boolean
+
+jobs:
+  run-brand-listener:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
+          run_install: false
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Clean previous builds
+        run: pnpm run clean
+
+      - name: Build packages
+        run: pnpm run build
+
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS_JSON }}
+
+      - name: Run main brand listener
+        working-directory: apps/twitter-listener
+        env:
+          TWITTER_API_KEY: ${{ secrets.TWITTER_API_KEY }}
+          TWITTER_USERNAME: ${{ secrets.TWITTER_USERNAME }}
+          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          NODE_ENV: production
+          DEBUG: ${{ inputs.debug }}
+        run: |
+          echo "🚀 Starting Brand Listener Main Process..."
+          echo "Timestamp: $(date -u)"
+          echo "Working directory: $(pwd)"
+          echo "Node version: $(node --version)"
+          echo "Pnpm version: $(pnpm --version)"
+          echo "GCP Authentication: Configured via google-github-actions/auth"
+          echo "Debug mode: ${{ inputs.debug }}"
+          echo ""
+          npx tsx src/index.ts
+
+      - name: Upload logs on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: brand-listener-main-logs-${{ github.run_number }}
+          path: |
+            apps/twitter-listener/.state/
+            apps/twitter-listener/logs/
+            apps/twitter-listener/dist/
+          retention-days: 7
+          if-no-files-found: ignore
+
+      - name: Notify on failure
+        if: failure() && github.event_name == 'schedule'
+        uses: 8398a7/action-slack@v3
+        with:
+          status: failure
+          webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
+          text: |
+            🚨 Brand Listener Main Process failed!
+            
+            **Details:**
+            - Run: ${{ github.run_number }}
+            - Time: ${{ github.event.head_commit.timestamp }}
+            - View logs: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}

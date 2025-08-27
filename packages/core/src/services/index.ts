@@ -1,2 +1,3 @@
-export * from "./database-service";
-export * from "./analytics-service";
+export * from "./database";
+export * from "./analytics";
+export * from "./slack";

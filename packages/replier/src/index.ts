@@ -1,5 +1,5 @@
 import { type ReplyGuyAgent } from '@brand-listener/agents';
-import * as TwitterDatabaseService from '@brand-listener/core/database-service';  
+import * as TwitterDatabaseService from '@brand-listener/core/services/database';  
 import { schema } from '@brand-listener/database';
 
 interface ParsedAgentResponse {
