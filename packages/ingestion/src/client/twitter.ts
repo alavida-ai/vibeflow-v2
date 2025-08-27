@@ -2,7 +2,7 @@
 import { z } from "zod";
 
 /* -------------------------------------------------------------------------- */
-/*                              SCHEMA                                     */
+/*                              TYPES                                     */
 /* -------------------------------------------------------------------------- */
 
 export const twitterAuthorSchema = z.looseObject({
@@ -69,12 +69,19 @@ export type TwitterApiTweet = z.infer<typeof twitterTweetSchema>;
 export type TwitterApiResponse = z.infer<typeof twitterApiResponseSchema>;
 
 /* -------------------------------------------------------------------------- */
+/*                              CONSTANTS                                     */
+/* -------------------------------------------------------------------------- */
+
+export const TWITTER_API_BASE_URL = 'https://api.twitterapi.io';
+export const USER_MENTIONS_ENDPOINT = '/twitter/user/mentions';
+export const REPLIES_ENDPOINT = '/twitter/tweet/replies';
+
+/* -------------------------------------------------------------------------- */
 /*                              CLASS                                     */
 /* -------------------------------------------------------------------------- */
 
 export class TwitterClient {
     private readonly apiKey: string;
-    private readonly baseUrl = 'https://api.twitterapi.io';
   
     constructor(apiKey: string) {
       this.apiKey = apiKey;
@@ -110,7 +117,7 @@ export class TwitterClient {
     }): Promise<TwitterApiResponse> {
       try {
       
-      const url = new URL('/twitter/user/mentions', this.baseUrl);
+      const url = new URL(USER_MENTIONS_ENDPOINT, TWITTER_API_BASE_URL);
       url.searchParams.set('userName', userName);
       url.searchParams.set('sinceTime', Math.floor(sinceTime.getTime() / 1000).toString());
       
@@ -128,4 +135,21 @@ export class TwitterClient {
         throw error;
       }
     }
+
+    async getReplies(tweetId: string, cursor?: string): Promise<TwitterApiResponse> {
+      try {
+      const url = new URL(REPLIES_ENDPOINT, TWITTER_API_BASE_URL);
+      url.searchParams.set('tweetId', tweetId);
+      if (cursor) {
+        url.searchParams.set('cursor', cursor);
+      }
+      const rawData = await this.makeRequest(url.toString());
+        const response = twitterApiResponseSchema.parse(rawData);
+        return response;
+      } catch (error) {
+        console.error('❌ Error in replies:', error);
+        throw error;
+      }
+    }
+    
   }

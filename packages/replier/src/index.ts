@@ -1,8 +1,6 @@
-import { createReplyGuyAgent } from '@brand-listener/agents';
-import { TwitterDatabaseService } from '@brand-listener/core';  
-import dotenv from 'dotenv';
-
-dotenv.config({ path: '.env' });
+import { type ReplyGuyAgent } from '@brand-listener/agents';
+import * as TwitterDatabaseService from '@brand-listener/core/database-service';  
+import { schema } from '@brand-listener/database';
 
 interface ParsedAgentResponse {
     response: string;
@@ -24,59 +22,43 @@ function parseAgentResponse(rawResponse: string): ParsedAgentResponse {
     };
 }
 
-async function main() {
-    const pendingTweets = await TwitterDatabaseService.getPendingTweets();
-    console.log("Starting replier with " + pendingTweets.length + " pending tweets");
-
-    const tweetToReply = pendingTweets[0];
-    const {reply, reasoning} = await replyToTweet(tweetToReply.text);
-    const updatedTweet = await TwitterDatabaseService.addReplyToTweet(tweetToReply.tweetId, reply, reasoning);
-
-    console.log("Replied to tweet " + updatedTweet.tweetId + " with reply: " + updatedTweet.reply + " and reasoning: " + updatedTweet.reasoning);
-
-    // // Create the agent with runtime configuration
-    // const replyGuyAgent = createReplyGuyAgent({
-    //     openRouter: {
-    //         apiKey: process.env.OPENROUTER_API_KEY!,
-    //         baseURL: "https://openrouter.ai/api/v1"
-    //     }
-    // });
-
-    // const tweet = `
-    //     @Send @ethentree @xino_it @send_africa @muniwtr @Callmeblackbot @base @USDC @usdcoinprinter @usdc_cool It's not just about storing money, it's about making it work for you in a borderless and digital-first economy.
-
-    //     Let's save it on https://t.co/FSzuo8Lam1 now.
-
-    //     $SEND $USDC 
-
-    //     @Send @ethentree
-    //     @send_africa @xino_it 
-    //     @StrongMind0 @zeroxBigBoss 
-    //     @USDC @TheRealKrayo
-    // `;
-
-    // const rawResponse = await replyGuyAgent.generate("Reply to this tweet: " + tweet);
-    // console.log(rawResponse);
-}
-
-export async function replyToTweet(tweet: string) {
-    const replyGuyAgent = createReplyGuyAgent({
-        openRouter: {
-            apiKey: process.env.OPENROUTER_API_KEY!,
-            baseURL: "https://openrouter.ai/api/v1"
+export async function replyToTweet({
+    tweet,
+    replyGuyAgent
+}: {
+    tweet: schema.Tweet;
+    replyGuyAgent: ReplyGuyAgent;
+}) : Promise<schema.Tweet> {
+    try {
+        const { text } = await replyGuyAgent.generate("Reply to this tweet: " + tweet.text);
+        if (!text) {
+            throw new Error("No response from agent");
         }
-    });
-
-    const {text} = await replyGuyAgent.generate("Reply to this tweet: " + tweet);
-    if (!text) {
-        throw new Error("No response from agent");
+        const parsedTags = parseAgentResponse(text);
+        const updatedTweet = await TwitterDatabaseService.addReplyToTweet(
+            tweet.tweetId,
+            parsedTags.response,
+            parsedTags.reasoning
+        );
+        return updatedTweet;
+    } catch (error) {
+        console.error("Error replying to tweet", error);
+        await TwitterDatabaseService.addErrorToTweet(
+            tweet.tweetId,
+            error instanceof Error ? error.message : String(error)
+        );
+        throw error;
     }
-    const parsedTags = parseAgentResponse(text);
-    
-    return {
-        reply: parsedTags.response,
-        reasoning: parsedTags.reasoning
-    };
 }
 
-main();
+export async function batchReplyToTweets({
+    tweets,
+    replyGuyAgent
+}: {
+    tweets: schema.Tweet[];
+    replyGuyAgent: ReplyGuyAgent;
+}) : Promise<schema.Tweet[]> {
+    return Promise.all(
+        tweets.map((tweet) => replyToTweet({ tweet, replyGuyAgent }))
+    );
+}

@@ -9,6 +9,8 @@ export interface ReplyGuyAgentConfig {
     openRouter: OpenRouterConfig;
 }
 
+export type ReplyGuyAgent = Agent;
+
 // Factory function for creating the reply guy agent at runtime
 export function createReplyGuyAgent(config: ReplyGuyAgentConfig): Agent {
     console.log('🚀 Creating Reply Guy Agent with runtime configuration...');

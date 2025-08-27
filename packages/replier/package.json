@@ -1,11 +1,15 @@
 {
-  "name": "@brand-listener/ingestion",
+  "name": "@brand-listener/replier",
   "version": "1.0.0",
-  "description": "Brand Listener Twitter ingestion service for AWS deployment",
+  "description": "Brand Listener Twitter replier service for AWS deployment",
+  "type": "module",
   "scripts": {
     "build": "tsc",
     "dev": "tsx src/index.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "exports": {
+    ".": "./src/index.ts"
   },
   "keywords": ["twitter", "ingestion", "aws", "lambda", "sst"],
   "author": "",

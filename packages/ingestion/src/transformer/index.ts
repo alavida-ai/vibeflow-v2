@@ -1,8 +1,6 @@
 import { TwitterApiTweet, TwitterApiResponse } from "../client/twitter";
 import { schema } from "@brand-listener/database";
 
-export namespace TwitterTransformer {
-
 /* -------------------------------------------------------------------------- */
 /*                              FUNCTIONS                                     */
 /* -------------------------------------------------------------------------- */
@@ -71,4 +69,3 @@ export function transformTweetToDbFormat(tweet: TwitterApiTweet, capturedAt: Dat
       nextCursor: apiResponse.next_cursor,
     };
   }
-}

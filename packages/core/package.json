@@ -13,7 +13,9 @@
     "yaml": "^2.3.2"
   },
   "exports": {
-    ".": "./src/index.ts"
+    ".": "./src/index.ts",
+    "./analytics-service": "./src/services/analytics-service/index.ts",
+    "./database-service": "./src/services/database-service/index.ts"
   },
   "devDependencies": {
     "@types/node": "^20.5.0",

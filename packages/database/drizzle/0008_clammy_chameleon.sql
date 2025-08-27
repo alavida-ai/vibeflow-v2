@@ -1,0 +1,1 @@
+ALTER TABLE "tweet_analytics" ADD CONSTRAINT "tweet_analytics_tweet_id_tweets_tweet_id_fk" FOREIGN KEY ("tweet_id") REFERENCES "public"."tweets"("tweet_id") ON DELETE no action ON UPDATE no action;
