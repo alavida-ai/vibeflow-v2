@@ -204,8 +204,4 @@ I'm not sure if I'm just being paranoid but I'm starting to think that my ex is 
 Wow that very funny make sure to send it. 
 </response>
 </example1>
-
-
-
-
 `
