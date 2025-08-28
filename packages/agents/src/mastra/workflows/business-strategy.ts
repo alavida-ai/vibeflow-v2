@@ -7,21 +7,16 @@ type WorkflowContext = {
   resourceId: string;
 };
  
-const startStep = createStep({
-  id: "start-step",
-  description: "Develop a brand strategy for a given brand",
-  inputSchema: z.object({
-    brandName: z.string()
-  }),
-  outputSchema: z.object({
-    brandName: z.string()
-  }),
-  execute: async ({ inputData, runtimeContext }: { inputData: { brandName: string }, runtimeContext: RuntimeContext<WorkflowContext> }) => {
-    const { brandName } = inputData;
+const initialiseWorkflow = createStep({
+  id: "initialise-workflow",
+  inputSchema: z.object({}),
+  description: "Initialise the workflow",
+  outputSchema: z.object({}),
+  execute: async ({ runtimeContext }: { runtimeContext: RuntimeContext<WorkflowContext> }) => {
     runtimeContext.set("threadId", "123");
     runtimeContext.set("resourceId", "user_123");
     console.log(`Thread ID: ${runtimeContext.get("threadId")}`);
-    return { brandName };
+    return {};
   }
 });
  
@@ -109,6 +104,7 @@ const winStep = createStep({
  
 export const strategyWorkflow = createWorkflow({
   id: "strategy-workflow",
+  description: "This is a 4-step process to develop a complete business strategy foundation for your brand",
   inputSchema: z.object({
     brandName: z.string()
   }),
