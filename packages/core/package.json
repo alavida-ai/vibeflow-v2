@@ -8,8 +8,10 @@
   },
   "dependencies": {
     "@brand-listener/database": "workspace:*",
-    "googleapis": "^126.0.1",
+    "@google/genai": "^1.15.0",
     "drizzle-orm": "^0.44.5",
+    "googleapis": "^126.0.1",
+    "uuid": "^10.0.0",
     "yaml": "^2.3.2"
   },
   "exports": {
@@ -20,6 +22,7 @@
   },
   "devDependencies": {
     "@types/node": "^20.5.0",
+    "@types/uuid": "^10.0.0",
     "typescript": "^5.1.6"
   }
 }
