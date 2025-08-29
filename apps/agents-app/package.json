@@ -1,0 +1,22 @@
+{
+  "name": "agents-app",
+  "scripts": {
+    "dev": "bun run --hot src/index.ts"
+  },
+  "type": "module",
+  "dependencies": {
+    "hono": "^4.9.5",
+    "@mastra/core": "latest",
+    "@mastra/libsql": "latest",
+    "@mastra/loggers": "latest",
+    "@mastra/mcp": "^0.10.12",
+    "@brand-listener/agents": "workspace:*",
+    "@mastra/deployer": "^0.3.20"
+  },
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "engines": {
+    "bun": ">=1.1.0"
+  }
+}
