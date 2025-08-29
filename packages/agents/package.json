@@ -33,7 +33,8 @@
     "ai": "^4.3.19",
     "dotenv": "^17.0.1",
     "replicate": "^1.0.1",
-    "zod": "^3.25.75"
+    "zod": "^3.25.75",
+    "@brand-listener/ingestion": "workspace:*"
   },
   "devDependencies": {
     "@types/node": "^24.0.10",

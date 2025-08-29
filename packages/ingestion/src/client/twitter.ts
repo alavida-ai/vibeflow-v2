@@ -1,4 +1,3 @@
-
 import { z } from "zod";
 
 /* -------------------------------------------------------------------------- */
@@ -54,7 +53,29 @@ export const twitterTweetSchema = z.looseObject({
   inReplyToUserId: z.string().optional().nullable(),
   inReplyToUsername: z.string().optional().nullable(),
   author: twitterAuthorSchema,
-}); 
+  extendedEntities: z.object({
+    media: z.array(z.object({
+      type: z.string(),
+      media_url_https: z.string(),
+      video_info: z.object({
+        variants: z.array(z.object({
+          url: z.string(),
+          content_type: z.string()
+        }))
+      }).optional()
+    })).optional()
+  })
+});
+
+export const lastTweetsApiResponseSchema = z.object({
+  data: z.object({
+    tweets: z.array(twitterTweetSchema)
+  }),
+  has_next_page: z.boolean(),
+  next_cursor: z.string().optional().nullable(),
+  status: z.string(),
+  msg: z.string(),
+});
 
 export const twitterApiResponseSchema = z.object({
   tweets: z.array(twitterTweetSchema),
@@ -67,6 +88,7 @@ export const twitterApiResponseSchema = z.object({
 export type TwitterApiAuthor = z.infer<typeof twitterAuthorSchema>;
 export type TwitterApiTweet = z.infer<typeof twitterTweetSchema>;
 export type TwitterApiResponse = z.infer<typeof twitterApiResponseSchema>;
+export type LastTweetsApiResponse = z.infer<typeof lastTweetsApiResponseSchema>;
 
 /* -------------------------------------------------------------------------- */
 /*                              CONSTANTS                                     */
@@ -75,81 +97,98 @@ export type TwitterApiResponse = z.infer<typeof twitterApiResponseSchema>;
 export const TWITTER_API_BASE_URL = 'https://api.twitterapi.io';
 export const USER_MENTIONS_ENDPOINT = '/twitter/user/mentions';
 export const REPLIES_ENDPOINT = '/twitter/tweet/replies';
+export const LAST_TWEETS_ENDPOINT = '/twitter/user/last_tweets';
 
 /* -------------------------------------------------------------------------- */
 /*                              CLASS                                     */
 /* -------------------------------------------------------------------------- */
 
 export class TwitterClient {
-    private readonly apiKey: string;
-  
-    constructor(apiKey: string) {
-      this.apiKey = apiKey;
-    }
-  
-    private async makeRequest(url: string): Promise<unknown> {
-      const response = await fetch(url, {
-        method: 'GET',
-        headers: {
-          'X-API-Key': this.apiKey,
-          'Accept': 'application/json'
-        }
-      });
-  
-      const data = await response.json();
-  
-      if (!response.ok) {
-        console.error('❌ API Error:', JSON.stringify(data, null, 2));
-        throw new Error(`HTTP error! status: ${response.status}, data: ${JSON.stringify(data)}`);
+  private readonly apiKey: string;
+
+  constructor(apiKey: string) {
+    this.apiKey = apiKey;
+  }
+
+  private async makeRequest(url: string): Promise<unknown> {
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        'X-API-Key': this.apiKey,
+        'Accept': 'application/json'
       }
-  
-      return data;
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      console.error('❌ API Error:', JSON.stringify(data, null, 2));
+      throw new Error(`HTTP error! status: ${response.status}, data: ${JSON.stringify(data)}`);
     }
 
-    async mentions({
-        userName,
-        sinceTime,
-        cursor
-    }: {
-        userName: string;
-        sinceTime: Date;
-        cursor?: string;
-    }): Promise<TwitterApiResponse> {
-      try {
-      
+    return data;
+  }
+
+  async mentions({
+    userName,
+    sinceTime,
+    cursor
+  }: {
+    userName: string;
+    sinceTime: Date;
+    cursor?: string;
+  }): Promise<TwitterApiResponse> {
+    try {
+
       const url = new URL(USER_MENTIONS_ENDPOINT, TWITTER_API_BASE_URL);
       url.searchParams.set('userName', userName);
       url.searchParams.set('sinceTime', Math.floor(sinceTime.getTime() / 1000).toString());
-      
+
       if (cursor) {
         url.searchParams.set('cursor', cursor);
       }
 
       const rawData = await this.makeRequest(url.toString());
-      
+
       const response = twitterApiResponseSchema.parse(rawData);
 
       return response;
-      } catch (error) {
-        console.error('❌ Error in mentions:', error);
-        throw error;
-      }
+    } catch (error) {
+      console.error('❌ Error in mentions:', error);
+      throw error;
     }
+  }
 
-    async getReplies(tweetId: string, cursor?: string): Promise<TwitterApiResponse> {
-      try {
+  async getReplies(tweetId: string, cursor?: string): Promise<TwitterApiResponse> {
+    try {
       const url = new URL(REPLIES_ENDPOINT, TWITTER_API_BASE_URL);
       url.searchParams.set('tweetId', tweetId);
       if (cursor) {
         url.searchParams.set('cursor', cursor);
       }
       const rawData = await this.makeRequest(url.toString());
-        const response = twitterApiResponseSchema.parse(rawData);
-        return response;
-      } catch (error) {
-        console.error('❌ Error in replies:', error);
-        throw error;
-      }
+      const response = twitterApiResponseSchema.parse(rawData);
+      return response;
+    } catch (error) {
+      console.error('❌ Error in replies:', error);
+      throw error;
     }
-    
   }
+
+  async getLastTweets(userName: string, cursor?: string): Promise<LastTweetsApiResponse> {
+    try {
+      const url = new URL(LAST_TWEETS_ENDPOINT, TWITTER_API_BASE_URL);
+      url.searchParams.set('userName', userName);
+      if (cursor) {
+        url.searchParams.set('cursor', cursor);
+      }
+      const rawData = await this.makeRequest(url.toString());
+
+      const response = lastTweetsApiResponseSchema.parse(rawData);
+      return response;
+    } catch (error) {
+      console.error('❌ Error in last tweets:', error);
+      throw error;
+    }
+  }
+}

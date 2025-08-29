@@ -78,6 +78,13 @@
       "when": 1756295478503,
       "tag": "0010_shallow_sunfire",
       "breakpoints": true
+    },
+    {
+      "idx": 11,
+      "version": "7",
+      "when": 1756470537615,
+      "tag": "0011_daffy_serpent_society",
+      "breakpoints": true
     }
   ]
 }

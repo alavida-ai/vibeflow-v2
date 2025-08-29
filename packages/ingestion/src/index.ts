@@ -14,6 +14,12 @@ export interface BrandListenerConfig {
     maxPages?: number;
     cursor?: string;
   }
+
+  export interface UserLastTweetsConfig {
+    userName: string;
+    maxPages?: number;
+    cursor?: string;
+  }
   
   export interface IngestionResult {
     success: boolean;
@@ -265,3 +271,76 @@ export async function ingestMentions(config: BrandListenerConfig): Promise<Inges
       operationName: `mention ingestion for @${userName} since ${sinceTime.toISOString()}`
     });
   }
+
+export async function ingestUserLastTweets(config: UserLastTweetsConfig): Promise<IngestionResult> {
+  const { 
+    userName, 
+    maxPages = 1, 
+    cursor: initialCursor 
+  } = config;
+
+  if (!process.env.TWITTER_API_KEY) {
+    throw new Error("TWITTER_API_KEY is not set");
+  }
+
+  const client = new TwitterClient(process.env.TWITTER_API_KEY);
+  
+  try {
+    let cursor: string | undefined = initialCursor;
+    let hasNextPage = true;
+    let pageCount = 0;
+    let totalTweets = 0;
+
+    console.log(`🚀 Starting user last tweets ingestion for @${userName}`);
+
+    while (hasNextPage && pageCount < maxPages) {
+      pageCount++;
+      console.log(`📄 Fetching page ${pageCount}${cursor ? ` with cursor: ${cursor}` : ''}`);
+      
+      const response = await client.getLastTweets(userName, cursor);
+      const transformed = TwitterTransformer.transformTwitterAnalyzerResponse(response);
+
+      if (transformed.tweets.length > 0) {
+        const result = await TwitterDatabaseService.AnalyzerService.saveParsedTweets(transformed.tweets);
+        console.log(`💾 Uploaded ${result.length} tweets`);
+        totalTweets += transformed.tweets.length;
+      } else {
+        console.log("No tweets found for this page");
+        break;
+      }
+      
+      // Update pagination state
+      hasNextPage = transformed.hasNextPage;
+      cursor = transformed.nextCursor || undefined;
+      
+      console.log(`✅ Page ${pageCount}: Found ${transformed.tweets.length} tweets, hasNextPage: ${hasNextPage}`);
+    }
+
+    const reachedMaxPages = pageCount >= maxPages;
+    if (reachedMaxPages) {
+      console.log(`⚠️  Reached maximum page limit (${maxPages}). There may be more tweets available.`);
+    }
+    
+    console.log(`🎉 Complete! Processed ${totalTweets} total tweets across ${pageCount} pages`);
+
+    return {
+      success: true,
+      totalTweets,
+      pagesProcessed: pageCount,
+      nextCursor: cursor,
+      hasMorePages: reachedMaxPages && hasNextPage
+    };
+
+  } catch (error) {
+    console.error(`❌ User last tweets ingestion failed:`, error);
+    return {
+      success: false,
+      totalTweets: 0,
+      pagesProcessed: 0,
+      hasMorePages: false,
+      error: error instanceof Error ? error.message : 'Unknown error'
+    };
+  }
+}
+
+
