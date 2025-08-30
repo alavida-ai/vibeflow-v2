@@ -1,30 +1,35 @@
-import { RuntimeContext } from "@mastra/core/runtime-context";
-import { MastraClient } from "@mastra/client-js";
+import { VibeflowAgentClient } from "./client";
 
-export const mastraClient = new MastraClient({
-  baseUrl: "http://localhost:4111/",
-});
+interface StartWorkflowResult {
+  runId: string;
+  stepName: string;
+  suspendPayload: any;
+  status: "suspended" | "success" | "error";
+}
 
-// Define the context type
-type WorkflowRuntimeContext = {
-  "current-run-id": string;
-  "workflowId": string;
-};
+interface GetNextStepResult {
+  stepName?: string;
+  suspendPayload?: any;
+  status: "suspended" | "success" | "error";
+  message?: string;
+}
 
-const runtimeContext = new RuntimeContext<WorkflowRuntimeContext>();
+const VIBEFLOW_BASE_URL = process.env.VIBEFLOW_BASE_URL || "http://localhost:4111/";
 
-export async function startWorkflow(workflowId: string, inputData: Record<string, any> = { start: true }) {
+export async function startWorkflow(workflowId: string) : Promise<StartWorkflowResult> {
+  const vibeflowAgentClient = new VibeflowAgentClient(VIBEFLOW_BASE_URL);
+  const mastraClient = await vibeflowAgentClient.createMastraClient();
+
   try {
-    const workflow = mastraClient.getWorkflow(workflowId as "testWorkflow");
+    const workflow = mastraClient.getWorkflow(workflowId);
     const run = await workflow.createRun();
     const result = await workflow.startAsync({
         runId: run.runId,
-        inputData: inputData,
+        inputData: {
+            start: true
+        },
       });
     
-    // Store in context for subsequent calls
-    runtimeContext.set("current-run-id", run.runId);
-    runtimeContext.set("workflowId", workflowId);
     console.log("Started workflow, run ID:", run.runId, result);
     
     if (result.status === "suspended" && result.suspended.length > 0) {
@@ -38,36 +43,31 @@ export async function startWorkflow(workflowId: string, inputData: Record<string
         status: "suspended" as const
       };
     } else if (result.status === "success") {
-      return {
-        runId: run.runId,
-        status: "success" as const,
-        result: result.result
-      };
+      throw new Error("No suspended step found to resume");
     } else {
-      return {
-        runId: run.runId,
-        status: "error" as const,
-        message: "Workflow failed"
-      };
+      throw new Error("Workflow failed to start");
     }
   } catch (error) {
     throw new Error(`Failed to start workflow: ${error instanceof Error ? error.message : String(error)}`);
   }
 }
 
-export async function getNextStep() {
-  const workflowId = runtimeContext.get("workflowId") as string;
-  const runId = runtimeContext.get("current-run-id") as string;
-
-  console.log("workflowId", workflowId);
-  console.log("runId", runId);
-  
+export async function getNextStep({
+    runId,
+    workflowId
+}: {
+    runId: string;
+    workflowId: string;
+}) : Promise<GetNextStepResult> {
   if (!workflowId || !runId) {
     throw new Error("No active workflow found. Please start a workflow first.");
   }
   
   try {
-    const workflow = mastraClient.getWorkflow(workflowId as "testWorkflow");
+    const vibeflowAgentClient = new VibeflowAgentClient(VIBEFLOW_BASE_URL);
+    const mastraClient = await vibeflowAgentClient.createMastraClient();
+
+    const workflow = mastraClient.getWorkflow(workflowId);
     
     // Get the current workflow state to find suspended steps
     const currentState = await workflow.runExecutionResult(runId);
@@ -93,7 +93,7 @@ export async function getNextStep() {
         runId: runId,
         step: step,
         resumeData: {
-          stepCompleted: true // All steps use the same completion signal
+          stepCompleted: true
         }
       });
       
@@ -107,17 +107,14 @@ export async function getNextStep() {
         status: "suspended" as const
       };
     } else if (result.status === "success") {
-      // Clean up the context since workflow is complete
-      runtimeContext.delete("current-run-id");
-      runtimeContext.delete("workflowId");
       return {
-        status: "success" as const,
-        result: result.result
-      };
+        status: "success",
+        message: "Workflow completed successfully"
+      };    
     } else {
       return {
-        status: "error" as const,
-        message: "Workflow failed during resume"
+        status: "error",
+        message: "Workflow failed to resume"
       };
     }
   } catch (error) {
