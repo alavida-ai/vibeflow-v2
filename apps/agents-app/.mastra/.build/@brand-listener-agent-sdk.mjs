@@ -10,9 +10,14 @@ class VibeflowAgentClient {
     this.baseUrl = baseUrl;
   }
   async createMastraClient() {
-    return new MastraClient({
-      baseUrl: this.baseUrl
-    });
+    try {
+      return new MastraClient({
+        baseUrl: this.baseUrl
+      });
+    } catch (error) {
+      console.error("Error creating Mastra client", error);
+      throw new Error("Error creating Mastra client");
+    }
   }
   async createMastraAgent(agentName) {
     if (!agentName) {
@@ -34,7 +39,7 @@ const startWorkflowResultSchema = z.object({
 });
 const getNextStepResultSchema = z.object({
   suspendPayload: z.any().optional(),
-  status: z.enum(["suspended", "success"])
+  status: z.enum(["suspended", "success"]).optional()
 });
 const VIBEFLOW_BASE_URL = process.env.VIBEFLOW_BASE_URL || "http://localhost:4111/";
 async function startWorkflow(workflowId) {

@@ -25,6 +25,10 @@ export const mastra = new Mastra({
       "@brand-listener/agent-sdk"
     ],
     sourcemap: true,
-  }
+  },
+  server: {
+    port: 4111,
+    host: "localhost",
+  },
 });
 

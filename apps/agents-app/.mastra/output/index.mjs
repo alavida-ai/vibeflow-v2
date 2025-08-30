@@ -4,8 +4,8 @@ import { TABLE_EVALS } from '@mastra/core/storage';
 import { generateEmptyFromSchema, checkEvalStorageFields } from '@mastra/core/utils';
 import { Mastra } from '@mastra/core/mastra';
 import { MCPServer } from '@mastra/mcp';
-import { startWorkflowTool } from './tools/8214edfc-5eb3-4797-8676-0faa1d4b039e.mjs';
-import { getNextStepTool } from './tools/4d0489ef-b828-42ad-a2cf-0a3496d26027.mjs';
+import { startWorkflowTool } from './tools/0c068a37-30fb-440c-ba52-40219255d116.mjs';
+import { getNextStepTool } from './tools/10493559-2a65-4a0a-8c30-8ec38747d8cd.mjs';
 import { createWorkflow, createStep } from '@mastra/core/workflows';
 import { z } from 'zod';
 import { Agent } from '@mastra/core/agent';
@@ -280,6 +280,10 @@ const mastra = new Mastra({
   bundler: {
     transpilePackages: ["@brand-listener/agent-sdk"],
     sourcemap: true
+  },
+  server: {
+    port: 4111,
+    host: "localhost"
   }
 });
 

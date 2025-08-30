@@ -3,6 +3,7 @@
   "scripts": {
     "dev": "mastra dev",
     "build": "mastra build",
+    "dev:mcp": "bun run --hot src/mastra/stdio.ts",
     "build:mcp": "tsup src/mastra/stdio.ts --format esm --no-splitting --dts && chmod +x dist/stdio.js"
   },
   "bin": "dist/stdio.js",
