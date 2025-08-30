@@ -1,6 +1,6 @@
 import { ingestUserLastTweets } from "@brand-listener/ingestion";
 import { config } from "dotenv";
-import * as TwitterDatabaseService from "@brand-listener/core/services/database";
+import { AnalyzerService } from "@brand-listener/core/services/database";
 import { generateVisualDescription } from "@brand-listener/core/services/media-files";
 
 config();
@@ -25,12 +25,12 @@ export async function main() {
 
     console.log("Ingestion complete we have " + lastTweets.totalTweets + " tweets");
 
-    const mediaItems = await TwitterDatabaseService.AnalyzerService.getMediaByAuthorUsername(userName);
+    const mediaItems = await AnalyzerService.getMediaByAuthorUsername(userName);
 
     for (const media of mediaItems) {
-        const description = await generateVisualDescription(media);
+        const description = await generateVisualDescription(media.type, media.url);
         media.description = description;
-        await TwitterDatabaseService.AnalyzerService.updateMediaDescriptions(media);
+        await AnalyzerService.updateMediaDescriptions(media);
     }
 
     console.log("Media descriptions generated");

@@ -7,9 +7,8 @@ import {
     createUserContent,
     createPartFromUri,
 } from "@google/genai";
-import { schema } from '@brand-listener/database';
 
-export const generateVisualDescription = async (media: schema.TweetMediaAnalyzer): Promise<string> => {
+export const generateVisualDescription = async (type: string, url: string): Promise<string> => {
     if (!process.env.GOOGLE_API_KEY) {
         throw new Error("Google API key is not set");
     }
@@ -18,10 +17,10 @@ export const generateVisualDescription = async (media: schema.TweetMediaAnalyzer
     let prompt = '';
     let mimeType = '';
 
-    if (media.type === 'video') {
+    if (type === 'video') {
         prompt = "Transcribe the audio from this video, giving timestamps for salient events in the video. Also provide visual descriptions.";
         mimeType = 'video/mp4';
-    } else if (media.type === 'photo' || media.type === 'image') {
+    } else if (type === 'photo' || type === 'image') {
         prompt = "Detail this image in full";
         mimeType = 'image/jpeg';
     } else {
@@ -30,7 +29,7 @@ export const generateVisualDescription = async (media: schema.TweetMediaAnalyzer
     }
 
     // Download the file to a temp location
-    const tempFile = await downloadToTemp(media.url);
+    const tempFile = await downloadToTemp(url);
     try {
         const file = await ai.files.upload({
             file: tempFile,
