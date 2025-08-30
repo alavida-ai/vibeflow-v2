@@ -1,4 +1,5 @@
 import { MastraClient } from "@mastra/client-js";
+import { GetAgentResponse } from "@mastra/client-js";
 
 
 export class VibeflowAgentClient {
@@ -14,9 +15,14 @@ export class VibeflowAgentClient {
     }
 
     async createMastraClient() {
+        try {
         return new MastraClient({
-            baseUrl: this.baseUrl,
-        });
+                baseUrl: this.baseUrl,
+            });
+        } catch (error) {
+            console.error("Error creating Mastra client", error);
+            throw new Error("Error creating Mastra client");
+        }
     }
 
     async createMastraAgent(agentName: string): Promise<any> {

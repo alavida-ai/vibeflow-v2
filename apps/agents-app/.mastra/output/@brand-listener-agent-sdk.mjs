@@ -1,4 +1,5 @@
 import { MastraClient } from '@mastra/client-js';
+import { z } from 'zod';
 
 class VibeflowAgentClient {
   baseUrl;
@@ -26,6 +27,15 @@ class VibeflowAgentClient {
   }
 }
 
+const startWorkflowResultSchema = z.object({
+  runId: z.string().optional(),
+  suspendPayload: z.any().optional(),
+  status: z.enum(["suspended"]).optional()
+});
+const getNextStepResultSchema = z.object({
+  suspendPayload: z.any().optional(),
+  status: z.enum(["suspended", "success"])
+});
 const VIBEFLOW_BASE_URL = process.env.VIBEFLOW_BASE_URL || "http://localhost:4111/";
 async function startWorkflow(workflowId) {
   const vibeflowAgentClient = new VibeflowAgentClient(VIBEFLOW_BASE_URL);
@@ -45,12 +55,11 @@ async function startWorkflow(workflowId) {
       const suspendPayload = result.steps[suspendedStepName].suspendPayload;
       return {
         runId: run.runId,
-        stepName: suspendedStepName,
         suspendPayload,
         status: "suspended"
       };
     } else if (result.status === "success") {
-      throw new Error("No suspended step found to resume");
+      throw new Error("You forgot to add a suspended step to your workflow");
     } else {
       throw new Error("Workflow failed to start");
     }
@@ -63,7 +72,7 @@ async function getNextStep({
   workflowId
 }) {
   if (!workflowId || !runId) {
-    throw new Error("No active workflow found. Please start a workflow first.");
+    throw new Error("No active workflow runId or workflowId found. Please start a workflow first.");
   }
   try {
     const vibeflowAgentClient = new VibeflowAgentClient(VIBEFLOW_BASE_URL);
@@ -93,25 +102,20 @@ async function getNextStep({
       const nextSuspendedStepName = result.suspended[0][0];
       const nextSuspendPayload = result.steps[nextSuspendedStepName].suspendPayload;
       return {
-        stepName: nextSuspendedStepName,
         suspendPayload: nextSuspendPayload,
         status: "suspended"
       };
     } else if (result.status === "success") {
       return {
-        status: "success",
-        message: "Workflow completed successfully"
+        status: "success"
       };
     } else {
-      return {
-        status: "error",
-        message: "Workflow failed to resume"
-      };
+      throw new Error("Workflow failed to resume");
     }
   } catch (error) {
     throw new Error(`Failed to get next step: ${error instanceof Error ? error.message : String(error)}`);
   }
 }
 
-export { getNextStep as g, startWorkflow as s };
+export { getNextStep as a, startWorkflow as b, getNextStepResultSchema as g, startWorkflowResultSchema as s };
 //# sourceMappingURL=@brand-listener-agent-sdk.mjs.map

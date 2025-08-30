@@ -1,18 +1,19 @@
 import { VibeflowAgentClient } from "./client";
+import { z } from "zod";
 
-interface StartWorkflowResult {
-  runId: string;
-  stepName: string;
-  suspendPayload: any;
-  status: "suspended" | "success" | "error";
-}
+export const startWorkflowResultSchema = z.object({
+  runId: z.string().optional(),
+  suspendPayload: z.any().optional(),
+  status: z.enum(["suspended"]).optional()
+});
 
-interface GetNextStepResult {
-  stepName?: string;
-  suspendPayload?: any;
-  status: "suspended" | "success" | "error";
-  message?: string;
-}
+export const getNextStepResultSchema = z.object({
+  suspendPayload: z.any().optional(),
+  status: z.enum(["suspended", "success"]).optional()
+});
+
+export type StartWorkflowResult = z.infer<typeof startWorkflowResultSchema>;
+export type GetNextStepResult = z.infer<typeof getNextStepResultSchema>;
 
 const VIBEFLOW_BASE_URL = process.env.VIBEFLOW_BASE_URL || "http://localhost:4111/";
 
@@ -38,12 +39,11 @@ export async function startWorkflow(workflowId: string) : Promise<StartWorkflowR
       
       return {
         runId: run.runId,
-        stepName: suspendedStepName,
         suspendPayload,
-        status: "suspended" as const
+        status: "suspended" as const,
       };
     } else if (result.status === "success") {
-      throw new Error("No suspended step found to resume");
+      throw new Error("You forgot to add a suspended step to your workflow");
     } else {
       throw new Error("Workflow failed to start");
     }
@@ -60,7 +60,7 @@ export async function getNextStep({
     workflowId: string;
 }) : Promise<GetNextStepResult> {
   if (!workflowId || !runId) {
-    throw new Error("No active workflow found. Please start a workflow first.");
+    throw new Error("No active workflow runId or workflowId found. Please start a workflow first.");
   }
   
   try {
@@ -102,20 +102,15 @@ export async function getNextStep({
       const nextSuspendPayload = result.steps[nextSuspendedStepName].suspendPayload;
       
       return {
-        stepName: nextSuspendedStepName,
         suspendPayload: nextSuspendPayload,
-        status: "suspended" as const
+        status: "suspended" as const,
       };
     } else if (result.status === "success") {
       return {
-        status: "success",
-        message: "Workflow completed successfully"
+        status: "success" as const,
       };    
     } else {
-      return {
-        status: "error",
-        message: "Workflow failed to resume"
-      };
+      throw new Error("Workflow failed to resume");
     }
   } catch (error) {
     throw new Error(`Failed to get next step: ${error instanceof Error ? error.message : String(error)}`);
