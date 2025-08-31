@@ -8,9 +8,8 @@
     },
     "dependencies": {
       "@brand-listener/core": "workspace:*",
-      "@brand-listener/ingestion": "workspace:*",
+      "@brand-listener/ingestion": "workspace:* r",
       "@brand-listener/replier": "workspace:*",
-      "@brand-listener/agents": "workspace:*",
       "@brand-listener/reporting": "workspace:*",
       "dotenv": "^17.2.1"
     },

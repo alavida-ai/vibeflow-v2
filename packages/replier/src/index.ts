@@ -1,6 +1,8 @@
-import { type ReplyGuyAgent } from '@brand-listener/agents';
+import { VibeflowAgentClient } from '@brand-listener/agent-sdk/client';
 import * as TwitterDatabaseService from '@brand-listener/core/services/database';  
 import { schema } from '@brand-listener/database';
+
+const VIBEFLOW_BASE_URL = process.env.VIBEFLOW_BASE_URL || "http://localhost:4111/";
 
 interface ParsedAgentResponse {
     response: string;
@@ -23,14 +25,17 @@ function parseAgentResponse(rawResponse: string): ParsedAgentResponse {
 }
 
 export async function replyToTweet({
-    tweet,
-    replyGuyAgent
+    tweet
 }: {
-    tweet: schema.Tweet;
-    replyGuyAgent: ReplyGuyAgent;
+    tweet: schema.Tweet
 }) : Promise<schema.Tweet> {
     try {
-        const { text } = await replyGuyAgent.generate("Reply to this tweet: " + tweet.text);
+        const vibeflowAgentClient = new VibeflowAgentClient(VIBEFLOW_BASE_URL);
+        console.log("Creating reply guy agent");
+        const replyGuyAgent  = await vibeflowAgentClient.createMastraAgent("reply-guy");
+        console.log("Reply guy agent created");
+        const { text } = await replyGuyAgent.generate({ messages: ["Reply to this tweet: " + tweet.text] });
+        console.log("Text generated");
         if (!text) {
             throw new Error("No response from agent");
         }
@@ -53,12 +58,10 @@ export async function replyToTweet({
 
 export async function batchReplyToTweets({
     tweets,
-    replyGuyAgent
 }: {
     tweets: schema.Tweet[];
-    replyGuyAgent: ReplyGuyAgent;
 }) : Promise<schema.Tweet[]> {
     return Promise.all(
-        tweets.map((tweet) => replyToTweet({ tweet, replyGuyAgent }))
+        tweets.map((tweet) => replyToTweet({ tweet }))
     );
 }

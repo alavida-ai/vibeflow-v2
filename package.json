@@ -50,6 +50,6 @@
   "packageManager": "pnpm@10.13.1",
   "dependencies": {
     "dotenv": "^17.2.1",
-    "zod": "^4.1.1"
+    "zod": "^3.25.76"
   }
 }
