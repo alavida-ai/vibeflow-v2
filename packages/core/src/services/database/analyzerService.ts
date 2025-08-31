@@ -109,54 +109,54 @@ export class AnalyzerService {
     }
 
 
-    static async getMediaByAuthorUsername(username: string): Promise < schema.TweetMediaAnalyzer[] > {
-    return await getDb()
-        .select({
-            id: schema.tweetMediaAnalyzer.id,
-            tweetId: schema.tweetMediaAnalyzer.tweetId,
-            url: schema.tweetMediaAnalyzer.url,
-            type: schema.tweetMediaAnalyzer.type,
-            description: schema.tweetMediaAnalyzer.description,
-            scrapedAt: schema.tweetMediaAnalyzer.scrapedAt,
-            updatedAt: schema.tweetMediaAnalyzer.updatedAt
-        })
-        .from(schema.tweetMediaAnalyzer)
-        .innerJoin(schema.tweetsAnalyzer, eq(schema.tweetMediaAnalyzer.tweetId, schema.tweetsAnalyzer.id))
-        .where(and(eq(schema.tweetsAnalyzer.username, username), isNull(schema.tweetMediaAnalyzer.description)))
-        .orderBy(schema.tweetsAnalyzer.createdAt);
-}
+    static async getMediaByAuthorUsername(username: string): Promise<schema.TweetMediaAnalyzer[]> {
+        return await getDb()
+            .select({
+                id: schema.tweetMediaAnalyzer.id,
+                tweetId: schema.tweetMediaAnalyzer.tweetId,
+                url: schema.tweetMediaAnalyzer.url,
+                type: schema.tweetMediaAnalyzer.type,
+                description: schema.tweetMediaAnalyzer.description,
+                scrapedAt: schema.tweetMediaAnalyzer.scrapedAt,
+                updatedAt: schema.tweetMediaAnalyzer.updatedAt
+            })
+            .from(schema.tweetMediaAnalyzer)
+            .innerJoin(schema.tweetsAnalyzer, eq(schema.tweetMediaAnalyzer.tweetId, schema.tweetsAnalyzer.id))
+            .where(and(eq(schema.tweetsAnalyzer.username, username), isNull(schema.tweetMediaAnalyzer.description)))
+            .orderBy(schema.tweetsAnalyzer.createdAt);
+    }
 
     /**
      * Get all tweets
      */
     static async getAllTweets() {
-    return await getDb()
-        .select()
-        .from(schema.tweetsAnalyzer)
-        .orderBy(schema.tweetsAnalyzer.createdAt);
-}
+        return await getDb()
+            .select()
+            .from(schema.tweetsAnalyzer)
+            .orderBy(schema.tweetsAnalyzer.createdAt);
+    }
 
     /**
      * Get tweet by database ID
      */
     static async getTweetById(id: number) {
-    const result = await getDb()
-        .select()
-        .from(schema.tweetsAnalyzer)
-        .where(eq(schema.tweetsAnalyzer.id, id))
-        .limit(1);
-    return result[0] || null;
-}
+        const result = await getDb()
+            .select()
+            .from(schema.tweetsAnalyzer)
+            .where(eq(schema.tweetsAnalyzer.id, id))
+            .limit(1);
+        return result[0] || null;
+    }
 
     /**
      * Get tweet by API ID (external tweet ID)
      */
     static async getTweetByApiId(apiId: string) {
-    const result = await getDb()
-        .select()
-        .from(schema.tweetsAnalyzer)
-        .where(eq(schema.tweetsAnalyzer.apiId, apiId))
-        .limit(1);
-    return result[0] || null;
-}
+        const result = await getDb()
+            .select()
+            .from(schema.tweetsAnalyzer)
+            .where(eq(schema.tweetsAnalyzer.apiId, apiId))
+            .limit(1);
+        return result[0] || null;
+    }
 }

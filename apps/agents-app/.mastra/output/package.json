@@ -10,6 +10,10 @@
   "author": "Mastra",
   "license": "ISC",
   "dependencies": {
+    "pg": "latest",
+    "@brand-listener/ingestion": "file:./workspace-module/brand-listener-ingestion-1.0.0.tgz",
+    "@brand-listener/core": "file:./workspace-module/brand-listener-core-0.0.0.tgz",
+    "@brand-listener/database": "file:./workspace-module/brand-listener-database-1.0.0.tgz",
     "@opentelemetry/core": "^2.0.1",
     "@opentelemetry/auto-instrumentations-node": "^0.59.0",
     "@opentelemetry/exporter-trace-otlp-grpc": "^0.201.0",
@@ -19,6 +23,11 @@
     "@opentelemetry/sdk-trace-base": "^2.0.1",
     "@opentelemetry/semantic-conventions": "^1.33.0",
     "@opentelemetry/instrumentation": "^0.202.0"
+  },
+  "resolutions": {
+    "@brand-listener/ingestion": "file:./workspace-module/brand-listener-ingestion-1.0.0.tgz",
+    "@brand-listener/core": "file:./workspace-module/brand-listener-core-0.0.0.tgz",
+    "@brand-listener/database": "file:./workspace-module/brand-listener-database-1.0.0.tgz"
   },
   "pnpm": {
     "neverBuiltDependencies": []

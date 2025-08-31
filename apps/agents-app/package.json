@@ -11,6 +11,9 @@
   "dependencies": {
     "@ai-sdk/openai": "^1.3.24",
     "@brand-listener/agent-sdk": "workspace:*",
+    "@brand-listener/ingestion": "workspace:*",
+    "@brand-listener/core": "workspace:*",
+    "@brand-listener/database": "workspace:*",
     "@mastra/client-js": "latest",
     "@mastra/core": "latest",
     "@mastra/deployer": "^0.15.2",

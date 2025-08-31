@@ -2,16 +2,8 @@ import { Mastra } from "@mastra/core/mastra";
 import { server } from "./server";
 import { testWorkflow } from "./workflows/test-workflow";
 import dotenv from "dotenv";
-import { RuntimeContext } from "@mastra/core/di";
 
-
-dotenv.config({path: "/Users/alexandergirardet/Code/vibeflow-projects/brand-listener/apps/agents-app/.env"});
-
-// Define RuntimeContext type
-interface WorkflowRuntimeContext {
-  currentRunId: string;
-  workflowId: string;
-};
+dotenv.config({path: "/Users/alexandergirardet/Code/vibeflow/vibeflow-projects/vibeflow-v2/.env"});
 
 export const mastra = new Mastra({
   mcpServers: {
@@ -22,7 +14,10 @@ export const mastra = new Mastra({
   },
   bundler: {
     transpilePackages: [
-      "@brand-listener/agent-sdk"
+      "@brand-listener/agent-sdk",
+      "@brand-listener/ingestion",
+      "@brand-listener/core",
+      "@brand-listener/database"
     ],
     sourcemap: true,
   },

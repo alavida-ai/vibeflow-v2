@@ -1,20 +1,4 @@
-import { evaluate } from '@mastra/core/eval';
-import { registerHook, AvailableHooks } from '@mastra/core/hooks';
-import { TABLE_EVALS } from '@mastra/core/storage';
-import { generateEmptyFromSchema, checkEvalStorageFields } from '@mastra/core/utils';
-import { Mastra } from '@mastra/core/mastra';
-import { MCPServer } from '@mastra/mcp';
-import { startWorkflowTool } from './tools/0c068a37-30fb-440c-ba52-40219255d116.mjs';
-import { getNextStepTool } from './tools/10493559-2a65-4a0a-8c30-8ec38747d8cd.mjs';
-import { createWorkflow, createStep } from '@mastra/core/workflows';
-import { z } from 'zod';
-import { Agent } from '@mastra/core/agent';
-import { createOpenRouter } from '@openrouter/ai-sdk-provider';
-import { T as TEXT_EMBEDDING_3_SMALL, G as GPT_4O } from './constants.mjs';
-import { createOpenAI as createOpenAI$1 } from '@ai-sdk/openai';
-import { Memory } from '@mastra/memory';
-import { PgVector, PostgresStore } from '@mastra/pg';
-import dotenv from 'dotenv';
+import { M as MastraError, e as executeHook, z as z$1, x as xid, _ as _void, u as uuidv7, a as uuidv6, b as uuidv4, d as uuid, f as url, h as _uppercase, i as unknown, j as union, k as _undefined, l as ulid, m as uint64, n as uint32, t as tuple, o as _trim, p as treeifyError, q as transform, r as _toUpperCase, v as _toLowerCase, w as toJSONSchema, y as templateLiteral, A as symbol$1, B as superRefine, C as success, D as stringbool, E as stringFormat, F as string$1, G as strictObject, H as _startsWith, I as _size, J as set, K as safeParseAsync, L as safeParse, N as registry, O as regexes, P as _regex, Q as refine, R as record, S as readonly, T as _property, U as promise, V as prettifyError, W as preprocess, X as prefault, Y as _positive, Z as pipe, $ as partialRecord, a0 as parseAsync, a1 as parse, a2 as _overwrite, a3 as optional, a4 as object, a5 as number$1, a6 as nullish, a7 as nullable, a8 as _null, a9 as _normalize, aa as _nonpositive, ab as nonoptional, ac as _nonnegative, ad as never, ae as _negative, af as nativeEnum, ag as nanoid, ah as nan, ai as _multipleOf, aj as _minSize, ak as _minLength, al as _mime, am as _maxSize, an as _maxLength, ao as map, ap as _lte, aq as _lt, ar as _lowercase, as as looseObject, at as literal, au as _length, av as lazy, aw as ksuid, ax as keyof, ay as jwt, az as json, aA as iso, aB as ipv6, aC as ipv4, aD as intersection, aE as int64, aF as int32, aG as int, aH as _instanceof, aI as _includes, aJ as guid, aK as _gte, aL as _gt, aM as globalRegistry, aN as formatError, aO as float64, aP as float32, aQ as flattenError, aR as file, aS as _enum, aT as _endsWith, aU as emoji, aV as email, aW as e164, aX as discriminatedUnion, aY as date$1, aZ as custom, a_ as cuid2, a$ as cuid, b0 as config, b1 as clone, b2 as cidrv6, b3 as cidrv4, b4 as check, b5 as _catch, b6 as boolean$1, b7 as bigint$1, b8 as base64url, b9 as base64, ba as array, bb as any, bc as _default, bd as _ZodString, be as ZodXID, bf as ZodVoid, bg as ZodUnknown, bh as ZodUnion, bi as ZodUndefined, bj as ZodUUID, bk as ZodURL, bl as ZodULID, bm as ZodType, bn as ZodTuple, bo as ZodTransform, bp as ZodTemplateLiteral, bq as ZodSymbol, br as ZodSuccess, bs as ZodStringFormat, bt as ZodString, bu as ZodSet, bv as ZodRecord, bw as ZodRealError, bx as ZodReadonly, by as ZodPromise, bz as ZodPrefault, bA as ZodPipe, bB as ZodOptional, bC as ZodObject, bD as ZodNumberFormat, bE as ZodNumber, bF as ZodNullable, bG as ZodNull, bH as ZodNonOptional, bI as ZodNever, bJ as ZodNanoID, bK as ZodNaN, bL as ZodMap, bM as ZodLiteral, bN as ZodLazy, bO as ZodKSUID, bP as ZodJWT, bQ as ZodIntersection, bR as ZodISOTime, bS as ZodISODuration, bT as ZodISODateTime, bU as ZodISODate, bV as ZodIPv6, bW as ZodIPv4, bX as ZodGUID, bY as ZodFile, bZ as ZodError, b_ as ZodEnum, b$ as ZodEmoji, c0 as ZodEmail, c1 as ZodE164, c2 as ZodDiscriminatedUnion, c3 as ZodDefault, c4 as ZodDate, c5 as ZodCustomStringFormat, c6 as ZodCustom, c7 as ZodCatch, c8 as ZodCUID2, c9 as ZodCUID, ca as ZodCIDRv6, cb as ZodCIDRv4, cc as ZodBoolean, cd as ZodBigIntFormat, ce as ZodBigInt, cf as ZodBase64URL, cg as ZodBase64, ch as ZodArray, ci as ZodAny, cj as TimePrecision, ck as NEVER, cl as $output, cm as $input, cn as $brand, co as _unknown, cp as _tuple, cq as _array, cr as $ZodUnknown, cs as $ZodArray, ct as version, cu as util, cv as toDotPath, cw as safeParseAsync$1, cx as safeParse$1, cy as parseAsync$1, cz as parse$1, cA as isValidJWT, cB as isValidBase64URL, cC as isValidBase64, cD as globalConfig, cE as _xid, cF as _void$1, cG as _uuidv7, cH as _uuidv6, cI as _uuidv4, cJ as _uuid, cK as _url, cL as _union, cM as _undefined$1, cN as _ulid, cO as _uint64, cP as _uint32, cQ as _transform, cR as _templateLiteral, cS as _symbol, cT as _success, cU as _stringbool, cV as _stringFormat, cW as _string, cX as _set, cY as _safeParseAsync, cZ as _safeParse, c_ as _refine, c$ as _record, d0 as _readonly, d1 as _promise, d2 as _pipe, d3 as _parseAsync, d4 as _parse$1, d5 as _optional, d6 as _number, d7 as _nullable, d8 as _null$1, d9 as _nonoptional, da as _never, db as _nativeEnum, dc as _nanoid, dd as _nan, de as _map, df as _literal, dg as _lazy, dh as _ksuid, di as _jwt, dj as _isoTime, dk as _isoDuration, dl as _isoDateTime, dm as _isoDate, dn as _ipv6, dp as _ipv4, dq as _intersection, dr as _int64, ds as _int32, dt as _int, du as _guid, dv as _float64, dw as _float32, dx as _file, dy as _enum$1, dz as _emoji, dA as _email, dB as _e164, dC as _discriminatedUnion, dD as _default$1, dE as _date, dF as _custom, dG as _cuid2, dH as _cuid, dI as _coercedString, dJ as _coercedNumber, dK as _coercedDate, dL as _coercedBoolean, dM as _coercedBigint, dN as _cidrv6, dO as _cidrv4, dP as _catch$1, dQ as _boolean, dR as _bigint, dS as _base64url, dT as _base64, dU as _any, dV as JSONSchemaGenerator, dW as Doc, dX as $constructor, dY as $ZodXID, dZ as $ZodVoid, d_ as $ZodUnion, d$ as $ZodUndefined, e0 as $ZodUUID, e1 as $ZodURL, e2 as $ZodULID, e3 as $ZodType, e4 as $ZodTuple, e5 as $ZodTransform, e6 as $ZodTemplateLiteral, e7 as $ZodSymbol, e8 as $ZodSuccess, e9 as $ZodStringFormat, ea as $ZodString, eb as $ZodSet, ec as $ZodRegistry, ed as $ZodRecord, ee as $ZodRealError, ef as $ZodReadonly, eg as $ZodPromise, eh as $ZodPrefault, ei as $ZodPipe, ej as $ZodOptional, ek as $ZodObject, el as $ZodNumberFormat, em as $ZodNumber, en as $ZodNullable, eo as $ZodNull, ep as $ZodNonOptional, eq as $ZodNever, er as $ZodNanoID, es as $ZodNaN, et as $ZodMap, eu as $ZodLiteral, ev as $ZodLazy, ew as $ZodKSUID, ex as $ZodJWT, ey as $ZodIntersection, ez as $ZodISOTime, eA as $ZodISODuration, eB as $ZodISODateTime, eC as $ZodISODate, eD as $ZodIPv6, eE as $ZodIPv4, eF as $ZodGUID, eG as $ZodFile, eH as $ZodError, eI as $ZodEnum, eJ as $ZodEmoji, eK as $ZodEmail, eL as $ZodE164, eM as $ZodDiscriminatedUnion, eN as $ZodDefault, eO as $ZodDate, eP as $ZodCustomStringFormat, eQ as $ZodCustom, eR as $ZodCheckUpperCase, eS as $ZodCheckStringFormat, eT as $ZodCheckStartsWith, eU as $ZodCheckSizeEquals, eV as $ZodCheckRegex, eW as $ZodCheckProperty, eX as $ZodCheckOverwrite, eY as $ZodCheckNumberFormat, eZ as $ZodCheckMultipleOf, e_ as $ZodCheckMinSize, e$ as $ZodCheckMinLength, f0 as $ZodCheckMimeType, f1 as $ZodCheckMaxSize, f2 as $ZodCheckMaxLength, f3 as $ZodCheckLowerCase, f4 as $ZodCheckLessThan, f5 as $ZodCheckLengthEquals, f6 as $ZodCheckIncludes, f7 as $ZodCheckGreaterThan, f8 as $ZodCheckEndsWith, f9 as $ZodCheckBigIntFormat, fa as $ZodCheck, fb as $ZodCatch, fc as $ZodCUID2, fd as $ZodCUID, fe as $ZodCIDRv6, ff as $ZodCIDRv4, fg as $ZodBoolean, fh as $ZodBigIntFormat, fi as $ZodBigInt, fj as $ZodBase64URL, fk as $ZodBase64, fl as $ZodAsyncError, fm as $ZodAny, fn as joinValues, fo as stringifyPrimitive, fp as zodToJsonSchema, fq as isVercelTool, fr as generateEmptyFromSchema, fs as Tool, ft as Telemetry, fu as Agent, fv as AISpanType, fw as mastra, fx as registerHook, fy as AvailableHooks, fz as checkEvalStorageFields, fA as TABLE_EVALS } from './mastra.mjs';
 import crypto$1, { randomUUID } from 'crypto';
 import { readFile } from 'fs/promises';
 import { join } from 'path/posix';
@@ -23,20 +7,18 @@ import { Http2ServerRequest } from 'http2';
 import { Readable, Writable } from 'stream';
 import { createReadStream, lstatSync } from 'fs';
 import { join as join$1 } from 'path';
-import { RuntimeContext } from '@mastra/core/runtime-context';
-import { Telemetry } from '@mastra/core/telemetry';
-import { isVercelTool, Tool } from '@mastra/core/tools';
-import util from 'util';
+import require$$0 from 'util';
 import { Buffer as Buffer$1 } from 'buffer';
-import { zodToJsonSchema } from '@mastra/core/utils/zod-to-json';
-import { AISpanType } from '@mastra/core/ai-tracing';
-import { MastraA2AError } from '@mastra/core/a2a';
-import z62, { z as z$1 } from 'zod/v4';
 import { ReadableStream as ReadableStream$1 } from 'stream/web';
 import { tools } from './tools.mjs';
-import '@mastra/core';
-import './sessionStore.mjs';
-import '@mastra/client-js';
+import 'events';
+import 'node:crypto';
+import 'string_decoder';
+import 'async_hooks';
+import 'url';
+import 'node:process';
+import 'pg';
+import 'os';
 
 
 // -- Shims --
@@ -46,246 +28,67 @@ import cjsModule from 'node:module';
 const __filename = cjsUrl.fileURLToPath(import.meta.url);
 const __dirname = cjsPath.dirname(__filename);
 const require = cjsModule.createRequire(import.meta.url);
-const server = new MCPServer({
-  name: "test",
-  version: "0.1.0",
-  tools: {
-    startWorkflowTool,
-    getNextStepTool
+// src/eval/evaluation.ts
+async function evaluate({
+  agentName,
+  input,
+  metric,
+  output,
+  runId,
+  globalRunId,
+  testInfo,
+  instructions
+}) {
+  const runIdToUse = runId || crypto.randomUUID();
+  let metricResult;
+  let metricName = metric.constructor.name;
+  try {
+    metricResult = await metric.measure(input.toString(), output);
+  } catch (e) {
+    throw new MastraError(
+      {
+        id: "EVAL_METRIC_MEASURE_EXECUTION_FAILED",
+        domain: "EVAL" /* EVAL */,
+        category: "USER" /* USER */,
+        details: {
+          agentName,
+          metricName,
+          globalRunId
+        }
+      },
+      e
+    );
   }
-});
-
-function createOpenRouterProvider(config) {
-  console.log("\u{1F527} Initializing OpenRouter provider...");
-  if (!config.apiKey) {
-    throw new Error("OpenRouter API key is required for initialization");
+  const traceObject = {
+    input: input.toString(),
+    output,
+    result: metricResult,
+    agentName,
+    metricName,
+    instructions,
+    globalRunId,
+    runId: runIdToUse,
+    testInfo
+  };
+  try {
+    executeHook("onEvaluation" /* ON_EVALUATION */, traceObject);
+  } catch (e) {
+    throw new MastraError(
+      {
+        id: "EVAL_HOOK_EXECUTION_FAILED",
+        domain: "EVAL" /* EVAL */,
+        category: "USER" /* USER */,
+        details: {
+          agentName,
+          metricName,
+          globalRunId
+        }
+      },
+      e
+    );
   }
-  const openRouterInstance = createOpenRouter({
-    apiKey: config.apiKey,
-    baseURL: config.baseURL || "https://openrouter.ai/api/v1"
-  });
-  console.log("\u2705 OpenRouter provider initialized successfully");
-  return openRouterInstance;
+  return { ...metricResult, output };
 }
-
-createOpenRouterProvider({
-  apiKey: process.env.OPENROUTER_API_KEY
-});
-const openaiForEmbeddings = createOpenAI$1({
-  apiKey: process.env.OPENAI_API_KEY
-});
-const host = "aws-1-eu-west-2.pooler.supabase.com";
-const port = 6543;
-const user = "postgres.vbdntompztegzppzjzep";
-const database = "postgres";
-const password = "zeBWGkeXWCBnYHoE";
-const connectionString = `postgresql://postgres.vbdntompztegzppzjzep:zeBWGkeXWCBnYHoE@aws-1-eu-west-2.pooler.supabase.com:6543/postgres`;
-const storage = new PostgresStore({
-  host,
-  port,
-  user,
-  database,
-  password
-});
-const memory = new Memory({
-  storage,
-  vector: new PgVector({ connectionString }),
-  embedder: openaiForEmbeddings.embedding(TEXT_EMBEDDING_3_SMALL),
-  options: {
-    semanticRecall: {
-      topK: 5,
-      messageRange: 4
-    }
-  }
-});
-
-const router = createOpenRouterProvider({
-  apiKey: process.env.OPENROUTER_API_KEY
-});
-const workflowOrchestrationAgent = new Agent({
-  name: "Workflow Orchestration Agent",
-  instructions: `You are a workflow orchestration agent and prompt engineering expert. 
-
-Your primary job is to tell the cursor agent to use its Plan tool with optimized, specific sub-prompts that will generate high-quality outputs.
-
-**Your Process:**
-1. Analyze the step requirements, deliverables, and acceptance criteria
-2. Craft sophisticated, detailed sub-prompts (not generic task descriptions) 
-3. Include strategic guidance on user input and information gathering
-4. Always end with the two mandatory final steps
-
-**Your Output Format:**
-"Use your Plan tool to break down this task with these optimized steps:
-
-[Step 1: Detailed, specific prompt with strategic guidance]
-[Step 2: Another optimized prompt focusing on actionable insights]
-[...continue with logical breakdown...]
-[Second-to-last step: Verify that your output meets the acceptance criteria: '[specific acceptance criteria]']
-[Final step: Run the get-next-step tool to proceed to the next workflow step]"
-
-**Prompt Engineering Guidelines:**
-- Replace generic descriptions with specific, actionable prompts
-- Include what to look for, how to analyze it, and what insights to extract  
-- Add strategic guidance like "Before starting, check if you need [specific info] from the user"
-- Focus on identifying gaps, opportunities, and actionable intelligence
-- Specify analysis frameworks, comparison criteria, and evaluation methods
-- Guide the cursor agent toward outputs that exceed basic requirements
-
-**Context Information Available:**
-- Workflow description, step description, acceptance criteria
-- Deliverables, available tools, user input, cursor output
-- You can suggest requesting additional user input when needed
-
-**Remember:** Every plan must end with verifying acceptance criteria, then running get-next-step. The cursor agent should never proceed without completing both final steps.
-  `,
-  model: router(GPT_4O),
-  memory
-});
-
-const initialiseWorkflow = createStep({
-  id: "initialise-workflow",
-  inputSchema: z.object({}),
-  description: "Initialise the workflow",
-  outputSchema: z.object({}),
-  execute: async ({ runtimeContext }) => {
-    runtimeContext.set("threadId", "123");
-    runtimeContext.set("resourceId", "user_123");
-    console.log(`Thread ID: ${runtimeContext.get("threadId")}`);
-    return {};
-  }
-});
-const understandCompanyStep = createStep({
-  id: "understand-company-step",
-  description: "Understand the company",
-  inputSchema: z.object({}),
-  resumeSchema: z.object({
-    stepCompleted: z.boolean()
-  }),
-  suspendSchema: z.object({
-    agentResponse: z.string(),
-    stepCompleted: z.boolean()
-  }),
-  outputSchema: z.object({
-    stepCompleted: z.boolean()
-  }),
-  execute: async ({ resumeData, suspend, runtimeContext }) => {
-    try {
-      const { stepCompleted } = resumeData ?? {};
-      const threadId = runtimeContext.get("threadId");
-      const resourceId = runtimeContext.get("resourceId");
-      console.log("threadId", threadId);
-      console.log("resourceId", resourceId);
-      const acceptanceCriteria = "Fetch the name of the company, the website, and the industry of the company";
-      if (!stepCompleted) {
-        const prompt = `
-        The prompt is:
-        Get all the information about the company, including the name of the company, the website, and the industry of the company
-    
-        The acceptance criteria is:
-        ${acceptanceCriteria}
-    `;
-        const result = await workflowOrchestrationAgent.generate(prompt, {
-          memory: {
-            thread: {
-              id: threadId
-            },
-            resource: resourceId
-          }
-        });
-        await suspend({
-          agentResponse: result.text,
-          stepCompleted: false
-        });
-        return { agentResponse: result.text, stepCompleted: false };
-      }
-      return { stepCompleted: true };
-    } catch (error) {
-      console.error("Error in understandCompanyStep", error);
-      return { stepCompleted: false };
-    }
-  }
-});
-const researchStep = createStep({
-  id: "research-step",
-  description: "Research the company",
-  inputSchema: z.object({}),
-  resumeSchema: z.object({
-    stepCompleted: z.boolean()
-  }),
-  suspendSchema: z.object({
-    agentResponse: z.string(),
-    stepCompleted: z.boolean()
-  }),
-  outputSchema: z.object({
-    stepCompleted: z.boolean()
-  }),
-  execute: async ({ inputData, mastra, resumeData, suspend, runtimeContext }) => {
-    try {
-      const { stepCompleted } = resumeData ?? {};
-      const threadId = runtimeContext.get("threadId");
-      const resourceId = runtimeContext.get("resourceId");
-      console.log("threadId", threadId);
-      console.log("resourceId", resourceId);
-      const acceptanceCriteria = "Make a research and fetch all the information about the company, including the name of the company, the website, and the industry of the company";
-      if (!stepCompleted) {
-        const prompt = `
-          The prompt is:
-          Make a research and fetch all the information about the company, including the name of the company, the website, and the industry of the company
-      
-          The acceptance criteria is:
-          ${acceptanceCriteria}
-      `;
-        const result = await workflowOrchestrationAgent.generate(prompt, {
-          memory: {
-            thread: {
-              id: threadId
-            },
-            resource: resourceId
-          }
-        });
-        await suspend({
-          agentResponse: result.text,
-          stepCompleted: false
-        });
-        return { stepCompleted: false };
-      }
-      return { stepCompleted: true };
-    } catch (error) {
-      console.error("Error in researchStep", error);
-      return { stepCompleted: false };
-    }
-  }
-});
-const testWorkflow = createWorkflow({
-  id: "testWorkflow",
-  description: "This is a test workflow",
-  inputSchema: z.object({}),
-  outputSchema: z.object({
-    brandName: z.string(),
-    workflowStepOutput: z.string(),
-    stepCompleted: z.boolean()
-  })
-}).then(initialiseWorkflow).map(async () => ({})).dountil(understandCompanyStep, async ({ inputData: { stepCompleted } }) => stepCompleted).map(async () => ({})).dountil(researchStep, async ({ inputData: { stepCompleted } }) => stepCompleted).commit();
-
-dotenv.config({
-  path: "/Users/alexandergirardet/Code/vibeflow-projects/brand-listener/apps/agents-app/.env"
-});
-const mastra = new Mastra({
-  mcpServers: {
-    server
-  },
-  workflows: {
-    testWorkflow
-  },
-  bundler: {
-    transpilePackages: ["@brand-listener/agent-sdk"],
-    sourcemap: true
-  },
-  server: {
-    port: 4111,
-    host: "localhost"
-  }
-});
 
 // src/utils/mime.ts
 var getMimeType = (filename, mimes = baseMimes) => {
@@ -505,6 +308,81 @@ var html = (strings, ...values) => {
   }
   buffer[0] += strings.at(-1);
   return buffer.length === 1 ? "callbacks" in buffer ? raw(resolveCallbackSync(raw(buffer[0], buffer.callbacks))) : raw(buffer[0]) : stringBufferToString(buffer, buffer.callbacks);
+};
+
+// src/runtime-context/index.ts
+var RuntimeContext = class {
+  registry = /* @__PURE__ */ new Map();
+  constructor(iterable) {
+    this.registry = new Map(iterable);
+  }
+  /**
+   * set a value with strict typing if `Values` is a Record and the key exists in it.
+   */
+  set(key, value) {
+    this.registry.set(key, value);
+  }
+  /**
+   * Get a value with its type
+   */
+  get(key) {
+    return this.registry.get(key);
+  }
+  /**
+   * Check if a key exists in the container
+   */
+  has(key) {
+    return this.registry.has(key);
+  }
+  /**
+   * Delete a value by key
+   */
+  delete(key) {
+    return this.registry.delete(key);
+  }
+  /**
+   * Clear all values from the container
+   */
+  clear() {
+    this.registry.clear();
+  }
+  /**
+   * Get all keys in the container
+   */
+  keys() {
+    return this.registry.keys();
+  }
+  /**
+   * Get all values in the container
+   */
+  values() {
+    return this.registry.values();
+  }
+  /**
+   * Get all entries in the container
+   */
+  entries() {
+    return this.registry.entries();
+  }
+  /**
+   * Get the size of the container
+   */
+  size() {
+    return this.registry.size;
+  }
+  /**
+   * Execute a function for each entry in the container
+   */
+  forEach(callbackfn) {
+    this.registry.forEach(callbackfn);
+  }
+  /**
+   * Custom JSON serialization method
+   * Converts the internal Map to a plain object for proper JSON serialization
+   */
+  toJSON() {
+    return Object.fromEntries(this.registry);
+  }
 };
 
 // src/server/a2a/store.ts
@@ -2125,7 +2003,7 @@ var logger = (fn = console.log) => {
 };
 
 // src/http-exception.ts
-var HTTPException$1 = class HTTPException extends Error {
+var HTTPException$2 = class HTTPException extends Error {
   res;
   status;
   constructor(status = 500, options) {
@@ -2148,7 +2026,7 @@ var HTTPException$1 = class HTTPException extends Error {
 };
 
 // src/middleware/timeout/index.ts
-var defaultTimeoutException = new HTTPException$1(504, {
+var defaultTimeoutException = new HTTPException$2(504, {
   message: "Gateway Timeout"
 });
 var timeout = (duration, exception = defaultTimeoutException) => {
@@ -2167,6 +2045,29 @@ var timeout = (duration, exception = defaultTimeoutException) => {
       }
     }
   };
+};
+
+// src/http-exception.ts
+var HTTPException$1 = class HTTPException extends Error {
+  res;
+  status;
+  constructor(status = 500, options) {
+    super(options?.message, { cause: options?.cause });
+    this.res = options?.res;
+    this.status = status;
+  }
+  getResponse() {
+    if (this.res) {
+      const newResponse = new Response(this.res.body, {
+        status: this.status,
+        headers: this.res.headers
+      });
+      return newResponse;
+    }
+    return new Response(this.message, {
+      status: this.status
+    });
+  }
 };
 
 var __create = Object.create;
@@ -2198,6 +2099,73 @@ var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__ge
   __defProp(target, "default", { value: mod, enumerable: true }) ,
   mod
 ));
+
+// src/a2a/types.ts
+var ErrorCodeParseError = -32700;
+var ErrorCodeInvalidRequest = -32600;
+var ErrorCodeMethodNotFound = -32601;
+var ErrorCodeInvalidParams = -32602;
+var ErrorCodeInternalError = -32603;
+var ErrorCodeTaskNotFound = -32001;
+var ErrorCodeTaskNotCancelable = -32002;
+var ErrorCodePushNotificationNotSupported = -32003;
+var ErrorCodeUnsupportedOperation = -32004;
+
+// src/a2a/error.ts
+var MastraA2AError = class _MastraA2AError extends Error {
+  code;
+  data;
+  taskId;
+  // Optional task ID context
+  constructor(code, message, data, taskId) {
+    super(message);
+    this.name = "MastraA2AError";
+    this.code = code;
+    this.data = data;
+    this.taskId = taskId;
+  }
+  /**
+   * Formats the error into a standard JSON-RPC error object structure.
+   */
+  toJSONRPCError() {
+    const errorObject = {
+      code: this.code,
+      message: this.message
+    };
+    if (this.data !== void 0) {
+      errorObject.data = this.data;
+    }
+    return errorObject;
+  }
+  // Static factory methods for common errors
+  static parseError(message, data) {
+    return new _MastraA2AError(ErrorCodeParseError, message, data);
+  }
+  static invalidRequest(message, data) {
+    return new _MastraA2AError(ErrorCodeInvalidRequest, message, data);
+  }
+  static methodNotFound(method) {
+    return new _MastraA2AError(ErrorCodeMethodNotFound, `Method not found: ${method}`);
+  }
+  static invalidParams(message, data) {
+    return new _MastraA2AError(ErrorCodeInvalidParams, message, data);
+  }
+  static internalError(message, data) {
+    return new _MastraA2AError(ErrorCodeInternalError, message, data);
+  }
+  static taskNotFound(taskId) {
+    return new _MastraA2AError(ErrorCodeTaskNotFound, `Task not found: ${taskId}`, void 0, taskId);
+  }
+  static taskNotCancelable(taskId) {
+    return new _MastraA2AError(ErrorCodeTaskNotCancelable, `Task not cancelable: ${taskId}`, void 0, taskId);
+  }
+  static pushNotificationNotSupported() {
+    return new _MastraA2AError(ErrorCodePushNotificationNotSupported, "Push Notification is not supported");
+  }
+  static unsupportedOperation(operation) {
+    return new _MastraA2AError(ErrorCodeUnsupportedOperation, `Unsupported operation: ${operation}`);
+  }
+};
 
 // src/server/handlers/a2a.ts
 var a2a_exports = {};
@@ -2376,22 +2344,22 @@ function createTaskContext({
 }
 
 // src/server/handlers/a2a.ts
-var messageSendParamsSchema = z.object({
-  message: z.object({
-    role: z.enum(["user", "agent"]),
-    parts: z.array(
-      z.object({
-        kind: z.enum(["text"]),
-        text: z.string()
+var messageSendParamsSchema = z$1.object({
+  message: z$1.object({
+    role: z$1.enum(["user", "agent"]),
+    parts: z$1.array(
+      z$1.object({
+        kind: z$1.enum(["text"]),
+        text: z$1.string()
       })
     ),
-    kind: z.literal("message"),
-    messageId: z.string(),
-    contextId: z.string().optional(),
-    taskId: z.string().optional(),
-    referenceTaskIds: z.array(z.string()).optional(),
-    extensions: z.array(z.string()).optional(),
-    metadata: z.record(z.any()).optional()
+    kind: z$1.literal("message"),
+    messageId: z$1.string(),
+    contextId: z$1.string().optional(),
+    taskId: z$1.string().optional(),
+    referenceTaskIds: z$1.array(z$1.string()).optional(),
+    extensions: z$1.array(z$1.string()).optional(),
+    metadata: z$1.record(z$1.any()).optional()
   })
 });
 async function getAgentCardByIdHandler$1({
@@ -2442,7 +2410,7 @@ function validateMessageSendParams(params) {
   try {
     messageSendParamsSchema.parse(params);
   } catch (error) {
-    if (error instanceof z.ZodError) {
+    if (error instanceof z$1.ZodError) {
       throw MastraA2AError.invalidParams(error.errors[0].message);
     }
     throw error;
@@ -3597,6 +3565,5312 @@ function handleError$1(error, defaultMessage) {
   });
 }
 
+const error$C = () => {
+    const Sizable = {
+        string: { unit: "حرف", verb: "أن يحوي" },
+        file: { unit: "بايت", verb: "أن يحوي" },
+        array: { unit: "عنصر", verb: "أن يحوي" },
+        set: { unit: "عنصر", verb: "أن يحوي" },
+    };
+    function getSizing(origin) {
+        return Sizable[origin] ?? null;
+    }
+    const parsedType = (data) => {
+        const t = typeof data;
+        switch (t) {
+            case "number": {
+                return Number.isNaN(data) ? "NaN" : "number";
+            }
+            case "object": {
+                if (Array.isArray(data)) {
+                    return "array";
+                }
+                if (data === null) {
+                    return "null";
+                }
+                if (Object.getPrototypeOf(data) !== Object.prototype && data.constructor) {
+                    return data.constructor.name;
+                }
+            }
+        }
+        return t;
+    };
+    const Nouns = {
+        regex: "مدخل",
+        email: "بريد إلكتروني",
+        url: "رابط",
+        emoji: "إيموجي",
+        uuid: "UUID",
+        uuidv4: "UUIDv4",
+        uuidv6: "UUIDv6",
+        nanoid: "nanoid",
+        guid: "GUID",
+        cuid: "cuid",
+        cuid2: "cuid2",
+        ulid: "ULID",
+        xid: "XID",
+        ksuid: "KSUID",
+        datetime: "تاريخ ووقت بمعيار ISO",
+        date: "تاريخ بمعيار ISO",
+        time: "وقت بمعيار ISO",
+        duration: "مدة بمعيار ISO",
+        ipv4: "عنوان IPv4",
+        ipv6: "عنوان IPv6",
+        cidrv4: "مدى عناوين بصيغة IPv4",
+        cidrv6: "مدى عناوين بصيغة IPv6",
+        base64: "نَص بترميز base64-encoded",
+        base64url: "نَص بترميز base64url-encoded",
+        json_string: "نَص على هيئة JSON",
+        e164: "رقم هاتف بمعيار E.164",
+        jwt: "JWT",
+        template_literal: "مدخل",
+    };
+    return (issue) => {
+        switch (issue.code) {
+            case "invalid_type":
+                return `مدخلات غير مقبولة: يفترض إدخال ${issue.expected}، ولكن تم إدخال ${parsedType(issue.input)}`;
+            case "invalid_value":
+                if (issue.values.length === 1)
+                    return `مدخلات غير مقبولة: يفترض إدخال ${stringifyPrimitive(issue.values[0])}`;
+                return `اختيار غير مقبول: يتوقع انتقاء أحد هذه الخيارات: ${joinValues(issue.values, "|")}`;
+            case "too_big": {
+                const adj = issue.inclusive ? "<=" : "<";
+                const sizing = getSizing(issue.origin);
+                if (sizing)
+                    return ` أكبر من اللازم: يفترض أن تكون ${issue.origin ?? "القيمة"} ${adj} ${issue.maximum.toString()} ${sizing.unit ?? "عنصر"}`;
+                return `أكبر من اللازم: يفترض أن تكون ${issue.origin ?? "القيمة"} ${adj} ${issue.maximum.toString()}`;
+            }
+            case "too_small": {
+                const adj = issue.inclusive ? ">=" : ">";
+                const sizing = getSizing(issue.origin);
+                if (sizing) {
+                    return `أصغر من اللازم: يفترض لـ ${issue.origin} أن يكون ${adj} ${issue.minimum.toString()} ${sizing.unit}`;
+                }
+                return `أصغر من اللازم: يفترض لـ ${issue.origin} أن يكون ${adj} ${issue.minimum.toString()}`;
+            }
+            case "invalid_format": {
+                const _issue = issue;
+                if (_issue.format === "starts_with")
+                    return `نَص غير مقبول: يجب أن يبدأ بـ "${issue.prefix}"`;
+                if (_issue.format === "ends_with")
+                    return `نَص غير مقبول: يجب أن ينتهي بـ "${_issue.suffix}"`;
+                if (_issue.format === "includes")
+                    return `نَص غير مقبول: يجب أن يتضمَّن "${_issue.includes}"`;
+                if (_issue.format === "regex")
+                    return `نَص غير مقبول: يجب أن يطابق النمط ${_issue.pattern}`;
+                return `${Nouns[_issue.format] ?? issue.format} غير مقبول`;
+            }
+            case "not_multiple_of":
+                return `رقم غير مقبول: يجب أن يكون من مضاعفات ${issue.divisor}`;
+            case "unrecognized_keys":
+                return `معرف${issue.keys.length > 1 ? "ات" : ""} غريب${issue.keys.length > 1 ? "ة" : ""}: ${joinValues(issue.keys, "، ")}`;
+            case "invalid_key":
+                return `معرف غير مقبول في ${issue.origin}`;
+            case "invalid_union":
+                return "مدخل غير مقبول";
+            case "invalid_element":
+                return `مدخل غير مقبول في ${issue.origin}`;
+            default:
+                return "مدخل غير مقبول";
+        }
+    };
+};
+function ar () {
+    return {
+        localeError: error$C(),
+    };
+}
+
+const error$B = () => {
+    const Sizable = {
+        string: { unit: "simvol", verb: "olmalıdır" },
+        file: { unit: "bayt", verb: "olmalıdır" },
+        array: { unit: "element", verb: "olmalıdır" },
+        set: { unit: "element", verb: "olmalıdır" },
+    };
+    function getSizing(origin) {
+        return Sizable[origin] ?? null;
+    }
+    const parsedType = (data) => {
+        const t = typeof data;
+        switch (t) {
+            case "number": {
+                return Number.isNaN(data) ? "NaN" : "number";
+            }
+            case "object": {
+                if (Array.isArray(data)) {
+                    return "array";
+                }
+                if (data === null) {
+                    return "null";
+                }
+                if (Object.getPrototypeOf(data) !== Object.prototype && data.constructor) {
+                    return data.constructor.name;
+                }
+            }
+        }
+        return t;
+    };
+    const Nouns = {
+        regex: "input",
+        email: "email address",
+        url: "URL",
+        emoji: "emoji",
+        uuid: "UUID",
+        uuidv4: "UUIDv4",
+        uuidv6: "UUIDv6",
+        nanoid: "nanoid",
+        guid: "GUID",
+        cuid: "cuid",
+        cuid2: "cuid2",
+        ulid: "ULID",
+        xid: "XID",
+        ksuid: "KSUID",
+        datetime: "ISO datetime",
+        date: "ISO date",
+        time: "ISO time",
+        duration: "ISO duration",
+        ipv4: "IPv4 address",
+        ipv6: "IPv6 address",
+        cidrv4: "IPv4 range",
+        cidrv6: "IPv6 range",
+        base64: "base64-encoded string",
+        base64url: "base64url-encoded string",
+        json_string: "JSON string",
+        e164: "E.164 number",
+        jwt: "JWT",
+        template_literal: "input",
+    };
+    return (issue) => {
+        switch (issue.code) {
+            case "invalid_type":
+                return `Yanlış dəyər: gözlənilən ${issue.expected}, daxil olan ${parsedType(issue.input)}`;
+            case "invalid_value":
+                if (issue.values.length === 1)
+                    return `Yanlış dəyər: gözlənilən ${stringifyPrimitive(issue.values[0])}`;
+                return `Yanlış seçim: aşağıdakılardan biri olmalıdır: ${joinValues(issue.values, "|")}`;
+            case "too_big": {
+                const adj = issue.inclusive ? "<=" : "<";
+                const sizing = getSizing(issue.origin);
+                if (sizing)
+                    return `Çox böyük: gözlənilən ${issue.origin ?? "dəyər"} ${adj}${issue.maximum.toString()} ${sizing.unit ?? "element"}`;
+                return `Çox böyük: gözlənilən ${issue.origin ?? "dəyər"} ${adj}${issue.maximum.toString()}`;
+            }
+            case "too_small": {
+                const adj = issue.inclusive ? ">=" : ">";
+                const sizing = getSizing(issue.origin);
+                if (sizing)
+                    return `Çox kiçik: gözlənilən ${issue.origin} ${adj}${issue.minimum.toString()} ${sizing.unit}`;
+                return `Çox kiçik: gözlənilən ${issue.origin} ${adj}${issue.minimum.toString()}`;
+            }
+            case "invalid_format": {
+                const _issue = issue;
+                if (_issue.format === "starts_with")
+                    return `Yanlış mətn: "${_issue.prefix}" ilə başlamalıdır`;
+                if (_issue.format === "ends_with")
+                    return `Yanlış mətn: "${_issue.suffix}" ilə bitməlidir`;
+                if (_issue.format === "includes")
+                    return `Yanlış mətn: "${_issue.includes}" daxil olmalıdır`;
+                if (_issue.format === "regex")
+                    return `Yanlış mətn: ${_issue.pattern} şablonuna uyğun olmalıdır`;
+                return `Yanlış ${Nouns[_issue.format] ?? issue.format}`;
+            }
+            case "not_multiple_of":
+                return `Yanlış ədəd: ${issue.divisor} ilə bölünə bilən olmalıdır`;
+            case "unrecognized_keys":
+                return `Tanınmayan açar${issue.keys.length > 1 ? "lar" : ""}: ${joinValues(issue.keys, ", ")}`;
+            case "invalid_key":
+                return `${issue.origin} daxilində yanlış açar`;
+            case "invalid_union":
+                return "Yanlış dəyər";
+            case "invalid_element":
+                return `${issue.origin} daxilində yanlış dəyər`;
+            default:
+                return `Yanlış dəyər`;
+        }
+    };
+};
+function az () {
+    return {
+        localeError: error$B(),
+    };
+}
+
+function getBelarusianPlural(count, one, few, many) {
+    const absCount = Math.abs(count);
+    const lastDigit = absCount % 10;
+    const lastTwoDigits = absCount % 100;
+    if (lastTwoDigits >= 11 && lastTwoDigits <= 19) {
+        return many;
+    }
+    if (lastDigit === 1) {
+        return one;
+    }
+    if (lastDigit >= 2 && lastDigit <= 4) {
+        return few;
+    }
+    return many;
+}
+const error$A = () => {
+    const Sizable = {
+        string: {
+            unit: {
+                one: "сімвал",
+                few: "сімвалы",
+                many: "сімвалаў",
+            },
+            verb: "мець",
+        },
+        array: {
+            unit: {
+                one: "элемент",
+                few: "элементы",
+                many: "элементаў",
+            },
+            verb: "мець",
+        },
+        set: {
+            unit: {
+                one: "элемент",
+                few: "элементы",
+                many: "элементаў",
+            },
+            verb: "мець",
+        },
+        file: {
+            unit: {
+                one: "байт",
+                few: "байты",
+                many: "байтаў",
+            },
+            verb: "мець",
+        },
+    };
+    function getSizing(origin) {
+        return Sizable[origin] ?? null;
+    }
+    const parsedType = (data) => {
+        const t = typeof data;
+        switch (t) {
+            case "number": {
+                return Number.isNaN(data) ? "NaN" : "лік";
+            }
+            case "object": {
+                if (Array.isArray(data)) {
+                    return "масіў";
+                }
+                if (data === null) {
+                    return "null";
+                }
+                if (Object.getPrototypeOf(data) !== Object.prototype && data.constructor) {
+                    return data.constructor.name;
+                }
+            }
+        }
+        return t;
+    };
+    const Nouns = {
+        regex: "увод",
+        email: "email адрас",
+        url: "URL",
+        emoji: "эмодзі",
+        uuid: "UUID",
+        uuidv4: "UUIDv4",
+        uuidv6: "UUIDv6",
+        nanoid: "nanoid",
+        guid: "GUID",
+        cuid: "cuid",
+        cuid2: "cuid2",
+        ulid: "ULID",
+        xid: "XID",
+        ksuid: "KSUID",
+        datetime: "ISO дата і час",
+        date: "ISO дата",
+        time: "ISO час",
+        duration: "ISO працягласць",
+        ipv4: "IPv4 адрас",
+        ipv6: "IPv6 адрас",
+        cidrv4: "IPv4 дыяпазон",
+        cidrv6: "IPv6 дыяпазон",
+        base64: "радок у фармаце base64",
+        base64url: "радок у фармаце base64url",
+        json_string: "JSON радок",
+        e164: "нумар E.164",
+        jwt: "JWT",
+        template_literal: "увод",
+    };
+    return (issue) => {
+        switch (issue.code) {
+            case "invalid_type":
+                return `Няправільны ўвод: чакаўся ${issue.expected}, атрымана ${parsedType(issue.input)}`;
+            case "invalid_value":
+                if (issue.values.length === 1)
+                    return `Няправільны ўвод: чакалася ${stringifyPrimitive(issue.values[0])}`;
+                return `Няправільны варыянт: чакаўся адзін з ${joinValues(issue.values, "|")}`;
+            case "too_big": {
+                const adj = issue.inclusive ? "<=" : "<";
+                const sizing = getSizing(issue.origin);
+                if (sizing) {
+                    const maxValue = Number(issue.maximum);
+                    const unit = getBelarusianPlural(maxValue, sizing.unit.one, sizing.unit.few, sizing.unit.many);
+                    return `Занадта вялікі: чакалася, што ${issue.origin ?? "значэнне"} павінна ${sizing.verb} ${adj}${issue.maximum.toString()} ${unit}`;
+                }
+                return `Занадта вялікі: чакалася, што ${issue.origin ?? "значэнне"} павінна быць ${adj}${issue.maximum.toString()}`;
+            }
+            case "too_small": {
+                const adj = issue.inclusive ? ">=" : ">";
+                const sizing = getSizing(issue.origin);
+                if (sizing) {
+                    const minValue = Number(issue.minimum);
+                    const unit = getBelarusianPlural(minValue, sizing.unit.one, sizing.unit.few, sizing.unit.many);
+                    return `Занадта малы: чакалася, што ${issue.origin} павінна ${sizing.verb} ${adj}${issue.minimum.toString()} ${unit}`;
+                }
+                return `Занадта малы: чакалася, што ${issue.origin} павінна быць ${adj}${issue.minimum.toString()}`;
+            }
+            case "invalid_format": {
+                const _issue = issue;
+                if (_issue.format === "starts_with")
+                    return `Няправільны радок: павінен пачынацца з "${_issue.prefix}"`;
+                if (_issue.format === "ends_with")
+                    return `Няправільны радок: павінен заканчвацца на "${_issue.suffix}"`;
+                if (_issue.format === "includes")
+                    return `Няправільны радок: павінен змяшчаць "${_issue.includes}"`;
+                if (_issue.format === "regex")
+                    return `Няправільны радок: павінен адпавядаць шаблону ${_issue.pattern}`;
+                return `Няправільны ${Nouns[_issue.format] ?? issue.format}`;
+            }
+            case "not_multiple_of":
+                return `Няправільны лік: павінен быць кратным ${issue.divisor}`;
+            case "unrecognized_keys":
+                return `Нераспазнаны ${issue.keys.length > 1 ? "ключы" : "ключ"}: ${joinValues(issue.keys, ", ")}`;
+            case "invalid_key":
+                return `Няправільны ключ у ${issue.origin}`;
+            case "invalid_union":
+                return "Няправільны ўвод";
+            case "invalid_element":
+                return `Няправільнае значэнне ў ${issue.origin}`;
+            default:
+                return `Няправільны ўвод`;
+        }
+    };
+};
+function be () {
+    return {
+        localeError: error$A(),
+    };
+}
+
+const error$z = () => {
+    const Sizable = {
+        string: { unit: "caràcters", verb: "contenir" },
+        file: { unit: "bytes", verb: "contenir" },
+        array: { unit: "elements", verb: "contenir" },
+        set: { unit: "elements", verb: "contenir" },
+    };
+    function getSizing(origin) {
+        return Sizable[origin] ?? null;
+    }
+    const parsedType = (data) => {
+        const t = typeof data;
+        switch (t) {
+            case "number": {
+                return Number.isNaN(data) ? "NaN" : "number";
+            }
+            case "object": {
+                if (Array.isArray(data)) {
+                    return "array";
+                }
+                if (data === null) {
+                    return "null";
+                }
+                if (Object.getPrototypeOf(data) !== Object.prototype && data.constructor) {
+                    return data.constructor.name;
+                }
+            }
+        }
+        return t;
+    };
+    const Nouns = {
+        regex: "entrada",
+        email: "adreça electrònica",
+        url: "URL",
+        emoji: "emoji",
+        uuid: "UUID",
+        uuidv4: "UUIDv4",
+        uuidv6: "UUIDv6",
+        nanoid: "nanoid",
+        guid: "GUID",
+        cuid: "cuid",
+        cuid2: "cuid2",
+        ulid: "ULID",
+        xid: "XID",
+        ksuid: "KSUID",
+        datetime: "data i hora ISO",
+        date: "data ISO",
+        time: "hora ISO",
+        duration: "durada ISO",
+        ipv4: "adreça IPv4",
+        ipv6: "adreça IPv6",
+        cidrv4: "rang IPv4",
+        cidrv6: "rang IPv6",
+        base64: "cadena codificada en base64",
+        base64url: "cadena codificada en base64url",
+        json_string: "cadena JSON",
+        e164: "número E.164",
+        jwt: "JWT",
+        template_literal: "entrada",
+    };
+    return (issue) => {
+        switch (issue.code) {
+            case "invalid_type":
+                return `Tipus invàlid: s'esperava ${issue.expected}, s'ha rebut ${parsedType(issue.input)}`;
+            // return `Tipus invàlid: s'esperava ${issue.expected}, s'ha rebut ${util.getParsedType(issue.input)}`;
+            case "invalid_value":
+                if (issue.values.length === 1)
+                    return `Valor invàlid: s'esperava ${stringifyPrimitive(issue.values[0])}`;
+                return `Opció invàlida: s'esperava una de ${joinValues(issue.values, " o ")}`;
+            case "too_big": {
+                const adj = issue.inclusive ? "com a màxim" : "menys de";
+                const sizing = getSizing(issue.origin);
+                if (sizing)
+                    return `Massa gran: s'esperava que ${issue.origin ?? "el valor"} contingués ${adj} ${issue.maximum.toString()} ${sizing.unit ?? "elements"}`;
+                return `Massa gran: s'esperava que ${issue.origin ?? "el valor"} fos ${adj} ${issue.maximum.toString()}`;
+            }
+            case "too_small": {
+                const adj = issue.inclusive ? "com a mínim" : "més de";
+                const sizing = getSizing(issue.origin);
+                if (sizing) {
+                    return `Massa petit: s'esperava que ${issue.origin} contingués ${adj} ${issue.minimum.toString()} ${sizing.unit}`;
+                }
+                return `Massa petit: s'esperava que ${issue.origin} fos ${adj} ${issue.minimum.toString()}`;
+            }
+            case "invalid_format": {
+                const _issue = issue;
+                if (_issue.format === "starts_with") {
+                    return `Format invàlid: ha de començar amb "${_issue.prefix}"`;
+                }
+                if (_issue.format === "ends_with")
+                    return `Format invàlid: ha d'acabar amb "${_issue.suffix}"`;
+                if (_issue.format === "includes")
+                    return `Format invàlid: ha d'incloure "${_issue.includes}"`;
+                if (_issue.format === "regex")
+                    return `Format invàlid: ha de coincidir amb el patró ${_issue.pattern}`;
+                return `Format invàlid per a ${Nouns[_issue.format] ?? issue.format}`;
+            }
+            case "not_multiple_of":
+                return `Número invàlid: ha de ser múltiple de ${issue.divisor}`;
+            case "unrecognized_keys":
+                return `Clau${issue.keys.length > 1 ? "s" : ""} no reconeguda${issue.keys.length > 1 ? "s" : ""}: ${joinValues(issue.keys, ", ")}`;
+            case "invalid_key":
+                return `Clau invàlida a ${issue.origin}`;
+            case "invalid_union":
+                return "Entrada invàlida"; // Could also be "Tipus d'unió invàlid" but "Entrada invàlida" is more general
+            case "invalid_element":
+                return `Element invàlid a ${issue.origin}`;
+            default:
+                return `Entrada invàlida`;
+        }
+    };
+};
+function ca () {
+    return {
+        localeError: error$z(),
+    };
+}
+
+const error$y = () => {
+    const Sizable = {
+        string: { unit: "znaků", verb: "mít" },
+        file: { unit: "bajtů", verb: "mít" },
+        array: { unit: "prvků", verb: "mít" },
+        set: { unit: "prvků", verb: "mít" },
+    };
+    function getSizing(origin) {
+        return Sizable[origin] ?? null;
+    }
+    const parsedType = (data) => {
+        const t = typeof data;
+        switch (t) {
+            case "number": {
+                return Number.isNaN(data) ? "NaN" : "číslo";
+            }
+            case "string": {
+                return "řetězec";
+            }
+            case "boolean": {
+                return "boolean";
+            }
+            case "bigint": {
+                return "bigint";
+            }
+            case "function": {
+                return "funkce";
+            }
+            case "symbol": {
+                return "symbol";
+            }
+            case "undefined": {
+                return "undefined";
+            }
+            case "object": {
+                if (Array.isArray(data)) {
+                    return "pole";
+                }
+                if (data === null) {
+                    return "null";
+                }
+                if (Object.getPrototypeOf(data) !== Object.prototype && data.constructor) {
+                    return data.constructor.name;
+                }
+            }
+        }
+        return t;
+    };
+    const Nouns = {
+        regex: "regulární výraz",
+        email: "e-mailová adresa",
+        url: "URL",
+        emoji: "emoji",
+        uuid: "UUID",
+        uuidv4: "UUIDv4",
+        uuidv6: "UUIDv6",
+        nanoid: "nanoid",
+        guid: "GUID",
+        cuid: "cuid",
+        cuid2: "cuid2",
+        ulid: "ULID",
+        xid: "XID",
+        ksuid: "KSUID",
+        datetime: "datum a čas ve formátu ISO",
+        date: "datum ve formátu ISO",
+        time: "čas ve formátu ISO",
+        duration: "doba trvání ISO",
+        ipv4: "IPv4 adresa",
+        ipv6: "IPv6 adresa",
+        cidrv4: "rozsah IPv4",
+        cidrv6: "rozsah IPv6",
+        base64: "řetězec zakódovaný ve formátu base64",
+        base64url: "řetězec zakódovaný ve formátu base64url",
+        json_string: "řetězec ve formátu JSON",
+        e164: "číslo E.164",
+        jwt: "JWT",
+        template_literal: "vstup",
+    };
+    return (issue) => {
+        switch (issue.code) {
+            case "invalid_type":
+                return `Neplatný vstup: očekáváno ${issue.expected}, obdrženo ${parsedType(issue.input)}`;
+            case "invalid_value":
+                if (issue.values.length === 1)
+                    return `Neplatný vstup: očekáváno ${stringifyPrimitive(issue.values[0])}`;
+                return `Neplatná možnost: očekávána jedna z hodnot ${joinValues(issue.values, "|")}`;
+            case "too_big": {
+                const adj = issue.inclusive ? "<=" : "<";
+                const sizing = getSizing(issue.origin);
+                if (sizing) {
+                    return `Hodnota je příliš velká: ${issue.origin ?? "hodnota"} musí mít ${adj}${issue.maximum.toString()} ${sizing.unit ?? "prvků"}`;
+                }
+                return `Hodnota je příliš velká: ${issue.origin ?? "hodnota"} musí být ${adj}${issue.maximum.toString()}`;
+            }
+            case "too_small": {
+                const adj = issue.inclusive ? ">=" : ">";
+                const sizing = getSizing(issue.origin);
+                if (sizing) {
+                    return `Hodnota je příliš malá: ${issue.origin ?? "hodnota"} musí mít ${adj}${issue.minimum.toString()} ${sizing.unit ?? "prvků"}`;
+                }
+                return `Hodnota je příliš malá: ${issue.origin ?? "hodnota"} musí být ${adj}${issue.minimum.toString()}`;
+            }
+            case "invalid_format": {
+                const _issue = issue;
+                if (_issue.format === "starts_with")
+                    return `Neplatný řetězec: musí začínat na "${_issue.prefix}"`;
+                if (_issue.format === "ends_with")
+                    return `Neplatný řetězec: musí končit na "${_issue.suffix}"`;
+                if (_issue.format === "includes")
+                    return `Neplatný řetězec: musí obsahovat "${_issue.includes}"`;
+                if (_issue.format === "regex")
+                    return `Neplatný řetězec: musí odpovídat vzoru ${_issue.pattern}`;
+                return `Neplatný formát ${Nouns[_issue.format] ?? issue.format}`;
+            }
+            case "not_multiple_of":
+                return `Neplatné číslo: musí být násobkem ${issue.divisor}`;
+            case "unrecognized_keys":
+                return `Neznámé klíče: ${joinValues(issue.keys, ", ")}`;
+            case "invalid_key":
+                return `Neplatný klíč v ${issue.origin}`;
+            case "invalid_union":
+                return "Neplatný vstup";
+            case "invalid_element":
+                return `Neplatná hodnota v ${issue.origin}`;
+            default:
+                return `Neplatný vstup`;
+        }
+    };
+};
+function cs () {
+    return {
+        localeError: error$y(),
+    };
+}
+
+const error$x = () => {
+    const Sizable = {
+        string: { unit: "Zeichen", verb: "zu haben" },
+        file: { unit: "Bytes", verb: "zu haben" },
+        array: { unit: "Elemente", verb: "zu haben" },
+        set: { unit: "Elemente", verb: "zu haben" },
+    };
+    function getSizing(origin) {
+        return Sizable[origin] ?? null;
+    }
+    const parsedType = (data) => {
+        const t = typeof data;
+        switch (t) {
+            case "number": {
+                return Number.isNaN(data) ? "NaN" : "Zahl";
+            }
+            case "object": {
+                if (Array.isArray(data)) {
+                    return "Array";
+                }
+                if (data === null) {
+                    return "null";
+                }
+                if (Object.getPrototypeOf(data) !== Object.prototype && data.constructor) {
+                    return data.constructor.name;
+                }
+            }
+        }
+        return t;
+    };
+    const Nouns = {
+        regex: "Eingabe",
+        email: "E-Mail-Adresse",
+        url: "URL",
+        emoji: "Emoji",
+        uuid: "UUID",
+        uuidv4: "UUIDv4",
+        uuidv6: "UUIDv6",
+        nanoid: "nanoid",
+        guid: "GUID",
+        cuid: "cuid",
+        cuid2: "cuid2",
+        ulid: "ULID",
+        xid: "XID",
+        ksuid: "KSUID",
+        datetime: "ISO-Datum und -Uhrzeit",
+        date: "ISO-Datum",
+        time: "ISO-Uhrzeit",
+        duration: "ISO-Dauer",
+        ipv4: "IPv4-Adresse",
+        ipv6: "IPv6-Adresse",
+        cidrv4: "IPv4-Bereich",
+        cidrv6: "IPv6-Bereich",
+        base64: "Base64-codierter String",
+        base64url: "Base64-URL-codierter String",
+        json_string: "JSON-String",
+        e164: "E.164-Nummer",
+        jwt: "JWT",
+        template_literal: "Eingabe",
+    };
+    return (issue) => {
+        switch (issue.code) {
+            case "invalid_type":
+                return `Ungültige Eingabe: erwartet ${issue.expected}, erhalten ${parsedType(issue.input)}`;
+            case "invalid_value":
+                if (issue.values.length === 1)
+                    return `Ungültige Eingabe: erwartet ${stringifyPrimitive(issue.values[0])}`;
+                return `Ungültige Option: erwartet eine von ${joinValues(issue.values, "|")}`;
+            case "too_big": {
+                const adj = issue.inclusive ? "<=" : "<";
+                const sizing = getSizing(issue.origin);
+                if (sizing)
+                    return `Zu groß: erwartet, dass ${issue.origin ?? "Wert"} ${adj}${issue.maximum.toString()} ${sizing.unit ?? "Elemente"} hat`;
+                return `Zu groß: erwartet, dass ${issue.origin ?? "Wert"} ${adj}${issue.maximum.toString()} ist`;
+            }
+            case "too_small": {
+                const adj = issue.inclusive ? ">=" : ">";
+                const sizing = getSizing(issue.origin);
+                if (sizing) {
+                    return `Zu klein: erwartet, dass ${issue.origin} ${adj}${issue.minimum.toString()} ${sizing.unit} hat`;
+                }
+                return `Zu klein: erwartet, dass ${issue.origin} ${adj}${issue.minimum.toString()} ist`;
+            }
+            case "invalid_format": {
+                const _issue = issue;
+                if (_issue.format === "starts_with")
+                    return `Ungültiger String: muss mit "${_issue.prefix}" beginnen`;
+                if (_issue.format === "ends_with")
+                    return `Ungültiger String: muss mit "${_issue.suffix}" enden`;
+                if (_issue.format === "includes")
+                    return `Ungültiger String: muss "${_issue.includes}" enthalten`;
+                if (_issue.format === "regex")
+                    return `Ungültiger String: muss dem Muster ${_issue.pattern} entsprechen`;
+                return `Ungültig: ${Nouns[_issue.format] ?? issue.format}`;
+            }
+            case "not_multiple_of":
+                return `Ungültige Zahl: muss ein Vielfaches von ${issue.divisor} sein`;
+            case "unrecognized_keys":
+                return `${issue.keys.length > 1 ? "Unbekannte Schlüssel" : "Unbekannter Schlüssel"}: ${joinValues(issue.keys, ", ")}`;
+            case "invalid_key":
+                return `Ungültiger Schlüssel in ${issue.origin}`;
+            case "invalid_union":
+                return "Ungültige Eingabe";
+            case "invalid_element":
+                return `Ungültiger Wert in ${issue.origin}`;
+            default:
+                return `Ungültige Eingabe`;
+        }
+    };
+};
+function de () {
+    return {
+        localeError: error$x(),
+    };
+}
+
+const parsedType$2 = (data) => {
+    const t = typeof data;
+    switch (t) {
+        case "number": {
+            return Number.isNaN(data) ? "NaN" : "number";
+        }
+        case "object": {
+            if (Array.isArray(data)) {
+                return "array";
+            }
+            if (data === null) {
+                return "null";
+            }
+            if (Object.getPrototypeOf(data) !== Object.prototype && data.constructor) {
+                return data.constructor.name;
+            }
+        }
+    }
+    return t;
+};
+const error$w = () => {
+    const Sizable = {
+        string: { unit: "characters", verb: "to have" },
+        file: { unit: "bytes", verb: "to have" },
+        array: { unit: "items", verb: "to have" },
+        set: { unit: "items", verb: "to have" },
+    };
+    function getSizing(origin) {
+        return Sizable[origin] ?? null;
+    }
+    const Nouns = {
+        regex: "input",
+        email: "email address",
+        url: "URL",
+        emoji: "emoji",
+        uuid: "UUID",
+        uuidv4: "UUIDv4",
+        uuidv6: "UUIDv6",
+        nanoid: "nanoid",
+        guid: "GUID",
+        cuid: "cuid",
+        cuid2: "cuid2",
+        ulid: "ULID",
+        xid: "XID",
+        ksuid: "KSUID",
+        datetime: "ISO datetime",
+        date: "ISO date",
+        time: "ISO time",
+        duration: "ISO duration",
+        ipv4: "IPv4 address",
+        ipv6: "IPv6 address",
+        cidrv4: "IPv4 range",
+        cidrv6: "IPv6 range",
+        base64: "base64-encoded string",
+        base64url: "base64url-encoded string",
+        json_string: "JSON string",
+        e164: "E.164 number",
+        jwt: "JWT",
+        template_literal: "input",
+    };
+    return (issue) => {
+        switch (issue.code) {
+            case "invalid_type":
+                return `Invalid input: expected ${issue.expected}, received ${parsedType$2(issue.input)}`;
+            case "invalid_value":
+                if (issue.values.length === 1)
+                    return `Invalid input: expected ${stringifyPrimitive(issue.values[0])}`;
+                return `Invalid option: expected one of ${joinValues(issue.values, "|")}`;
+            case "too_big": {
+                const adj = issue.inclusive ? "<=" : "<";
+                const sizing = getSizing(issue.origin);
+                if (sizing)
+                    return `Too big: expected ${issue.origin ?? "value"} to have ${adj}${issue.maximum.toString()} ${sizing.unit ?? "elements"}`;
+                return `Too big: expected ${issue.origin ?? "value"} to be ${adj}${issue.maximum.toString()}`;
+            }
+            case "too_small": {
+                const adj = issue.inclusive ? ">=" : ">";
+                const sizing = getSizing(issue.origin);
+                if (sizing) {
+                    return `Too small: expected ${issue.origin} to have ${adj}${issue.minimum.toString()} ${sizing.unit}`;
+                }
+                return `Too small: expected ${issue.origin} to be ${adj}${issue.minimum.toString()}`;
+            }
+            case "invalid_format": {
+                const _issue = issue;
+                if (_issue.format === "starts_with") {
+                    return `Invalid string: must start with "${_issue.prefix}"`;
+                }
+                if (_issue.format === "ends_with")
+                    return `Invalid string: must end with "${_issue.suffix}"`;
+                if (_issue.format === "includes")
+                    return `Invalid string: must include "${_issue.includes}"`;
+                if (_issue.format === "regex")
+                    return `Invalid string: must match pattern ${_issue.pattern}`;
+                return `Invalid ${Nouns[_issue.format] ?? issue.format}`;
+            }
+            case "not_multiple_of":
+                return `Invalid number: must be a multiple of ${issue.divisor}`;
+            case "unrecognized_keys":
+                return `Unrecognized key${issue.keys.length > 1 ? "s" : ""}: ${joinValues(issue.keys, ", ")}`;
+            case "invalid_key":
+                return `Invalid key in ${issue.origin}`;
+            case "invalid_union":
+                return "Invalid input";
+            case "invalid_element":
+                return `Invalid value in ${issue.origin}`;
+            default:
+                return `Invalid input`;
+        }
+    };
+};
+function en () {
+    return {
+        localeError: error$w(),
+    };
+}
+
+const parsedType$1 = (data) => {
+    const t = typeof data;
+    switch (t) {
+        case "number": {
+            return Number.isNaN(data) ? "NaN" : "nombro";
+        }
+        case "object": {
+            if (Array.isArray(data)) {
+                return "tabelo";
+            }
+            if (data === null) {
+                return "senvalora";
+            }
+            if (Object.getPrototypeOf(data) !== Object.prototype && data.constructor) {
+                return data.constructor.name;
+            }
+        }
+    }
+    return t;
+};
+const error$v = () => {
+    const Sizable = {
+        string: { unit: "karaktrojn", verb: "havi" },
+        file: { unit: "bajtojn", verb: "havi" },
+        array: { unit: "elementojn", verb: "havi" },
+        set: { unit: "elementojn", verb: "havi" },
+    };
+    function getSizing(origin) {
+        return Sizable[origin] ?? null;
+    }
+    const Nouns = {
+        regex: "enigo",
+        email: "retadreso",
+        url: "URL",
+        emoji: "emoĝio",
+        uuid: "UUID",
+        uuidv4: "UUIDv4",
+        uuidv6: "UUIDv6",
+        nanoid: "nanoid",
+        guid: "GUID",
+        cuid: "cuid",
+        cuid2: "cuid2",
+        ulid: "ULID",
+        xid: "XID",
+        ksuid: "KSUID",
+        datetime: "ISO-datotempo",
+        date: "ISO-dato",
+        time: "ISO-tempo",
+        duration: "ISO-daŭro",
+        ipv4: "IPv4-adreso",
+        ipv6: "IPv6-adreso",
+        cidrv4: "IPv4-rango",
+        cidrv6: "IPv6-rango",
+        base64: "64-ume kodita karaktraro",
+        base64url: "URL-64-ume kodita karaktraro",
+        json_string: "JSON-karaktraro",
+        e164: "E.164-nombro",
+        jwt: "JWT",
+        template_literal: "enigo",
+    };
+    return (issue) => {
+        switch (issue.code) {
+            case "invalid_type":
+                return `Nevalida enigo: atendiĝis ${issue.expected}, riceviĝis ${parsedType$1(issue.input)}`;
+            case "invalid_value":
+                if (issue.values.length === 1)
+                    return `Nevalida enigo: atendiĝis ${stringifyPrimitive(issue.values[0])}`;
+                return `Nevalida opcio: atendiĝis unu el ${joinValues(issue.values, "|")}`;
+            case "too_big": {
+                const adj = issue.inclusive ? "<=" : "<";
+                const sizing = getSizing(issue.origin);
+                if (sizing)
+                    return `Tro granda: atendiĝis ke ${issue.origin ?? "valoro"} havu ${adj}${issue.maximum.toString()} ${sizing.unit ?? "elementojn"}`;
+                return `Tro granda: atendiĝis ke ${issue.origin ?? "valoro"} havu ${adj}${issue.maximum.toString()}`;
+            }
+            case "too_small": {
+                const adj = issue.inclusive ? ">=" : ">";
+                const sizing = getSizing(issue.origin);
+                if (sizing) {
+                    return `Tro malgranda: atendiĝis ke ${issue.origin} havu ${adj}${issue.minimum.toString()} ${sizing.unit}`;
+                }
+                return `Tro malgranda: atendiĝis ke ${issue.origin} estu ${adj}${issue.minimum.toString()}`;
+            }
+            case "invalid_format": {
+                const _issue = issue;
+                if (_issue.format === "starts_with")
+                    return `Nevalida karaktraro: devas komenciĝi per "${_issue.prefix}"`;
+                if (_issue.format === "ends_with")
+                    return `Nevalida karaktraro: devas finiĝi per "${_issue.suffix}"`;
+                if (_issue.format === "includes")
+                    return `Nevalida karaktraro: devas inkluzivi "${_issue.includes}"`;
+                if (_issue.format === "regex")
+                    return `Nevalida karaktraro: devas kongrui kun la modelo ${_issue.pattern}`;
+                return `Nevalida ${Nouns[_issue.format] ?? issue.format}`;
+            }
+            case "not_multiple_of":
+                return `Nevalida nombro: devas esti oblo de ${issue.divisor}`;
+            case "unrecognized_keys":
+                return `Nekonata${issue.keys.length > 1 ? "j" : ""} ŝlosilo${issue.keys.length > 1 ? "j" : ""}: ${joinValues(issue.keys, ", ")}`;
+            case "invalid_key":
+                return `Nevalida ŝlosilo en ${issue.origin}`;
+            case "invalid_union":
+                return "Nevalida enigo";
+            case "invalid_element":
+                return `Nevalida valoro en ${issue.origin}`;
+            default:
+                return `Nevalida enigo`;
+        }
+    };
+};
+function eo () {
+    return {
+        localeError: error$v(),
+    };
+}
+
+const error$u = () => {
+    const Sizable = {
+        string: { unit: "caracteres", verb: "tener" },
+        file: { unit: "bytes", verb: "tener" },
+        array: { unit: "elementos", verb: "tener" },
+        set: { unit: "elementos", verb: "tener" },
+    };
+    function getSizing(origin) {
+        return Sizable[origin] ?? null;
+    }
+    const parsedType = (data) => {
+        const t = typeof data;
+        switch (t) {
+            case "number": {
+                return Number.isNaN(data) ? "NaN" : "número";
+            }
+            case "object": {
+                if (Array.isArray(data)) {
+                    return "arreglo";
+                }
+                if (data === null) {
+                    return "nulo";
+                }
+                if (Object.getPrototypeOf(data) !== Object.prototype) {
+                    return data.constructor.name;
+                }
+            }
+        }
+        return t;
+    };
+    const Nouns = {
+        regex: "entrada",
+        email: "dirección de correo electrónico",
+        url: "URL",
+        emoji: "emoji",
+        uuid: "UUID",
+        uuidv4: "UUIDv4",
+        uuidv6: "UUIDv6",
+        nanoid: "nanoid",
+        guid: "GUID",
+        cuid: "cuid",
+        cuid2: "cuid2",
+        ulid: "ULID",
+        xid: "XID",
+        ksuid: "KSUID",
+        datetime: "fecha y hora ISO",
+        date: "fecha ISO",
+        time: "hora ISO",
+        duration: "duración ISO",
+        ipv4: "dirección IPv4",
+        ipv6: "dirección IPv6",
+        cidrv4: "rango IPv4",
+        cidrv6: "rango IPv6",
+        base64: "cadena codificada en base64",
+        base64url: "URL codificada en base64",
+        json_string: "cadena JSON",
+        e164: "número E.164",
+        jwt: "JWT",
+        template_literal: "entrada",
+    };
+    return (issue) => {
+        switch (issue.code) {
+            case "invalid_type":
+                return `Entrada inválida: se esperaba ${issue.expected}, recibido ${parsedType(issue.input)}`;
+            // return `Entrada inválida: se esperaba ${issue.expected}, recibido ${util.getParsedType(issue.input)}`;
+            case "invalid_value":
+                if (issue.values.length === 1)
+                    return `Entrada inválida: se esperaba ${stringifyPrimitive(issue.values[0])}`;
+                return `Opción inválida: se esperaba una de ${joinValues(issue.values, "|")}`;
+            case "too_big": {
+                const adj = issue.inclusive ? "<=" : "<";
+                const sizing = getSizing(issue.origin);
+                if (sizing)
+                    return `Demasiado grande: se esperaba que ${issue.origin ?? "valor"} tuviera ${adj}${issue.maximum.toString()} ${sizing.unit ?? "elementos"}`;
+                return `Demasiado grande: se esperaba que ${issue.origin ?? "valor"} fuera ${adj}${issue.maximum.toString()}`;
+            }
+            case "too_small": {
+                const adj = issue.inclusive ? ">=" : ">";
+                const sizing = getSizing(issue.origin);
+                if (sizing) {
+                    return `Demasiado pequeño: se esperaba que ${issue.origin} tuviera ${adj}${issue.minimum.toString()} ${sizing.unit}`;
+                }
+                return `Demasiado pequeño: se esperaba que ${issue.origin} fuera ${adj}${issue.minimum.toString()}`;
+            }
+            case "invalid_format": {
+                const _issue = issue;
+                if (_issue.format === "starts_with")
+                    return `Cadena inválida: debe comenzar con "${_issue.prefix}"`;
+                if (_issue.format === "ends_with")
+                    return `Cadena inválida: debe terminar en "${_issue.suffix}"`;
+                if (_issue.format === "includes")
+                    return `Cadena inválida: debe incluir "${_issue.includes}"`;
+                if (_issue.format === "regex")
+                    return `Cadena inválida: debe coincidir con el patrón ${_issue.pattern}`;
+                return `Inválido ${Nouns[_issue.format] ?? issue.format}`;
+            }
+            case "not_multiple_of":
+                return `Número inválido: debe ser múltiplo de ${issue.divisor}`;
+            case "unrecognized_keys":
+                return `Llave${issue.keys.length > 1 ? "s" : ""} desconocida${issue.keys.length > 1 ? "s" : ""}: ${joinValues(issue.keys, ", ")}`;
+            case "invalid_key":
+                return `Llave inválida en ${issue.origin}`;
+            case "invalid_union":
+                return "Entrada inválida";
+            case "invalid_element":
+                return `Valor inválido en ${issue.origin}`;
+            default:
+                return `Entrada inválida`;
+        }
+    };
+};
+function es () {
+    return {
+        localeError: error$u(),
+    };
+}
+
+const error$t = () => {
+    const Sizable = {
+        string: { unit: "کاراکتر", verb: "داشته باشد" },
+        file: { unit: "بایت", verb: "داشته باشد" },
+        array: { unit: "آیتم", verb: "داشته باشد" },
+        set: { unit: "آیتم", verb: "داشته باشد" },
+    };
+    function getSizing(origin) {
+        return Sizable[origin] ?? null;
+    }
+    const parsedType = (data) => {
+        const t = typeof data;
+        switch (t) {
+            case "number": {
+                return Number.isNaN(data) ? "NaN" : "عدد";
+            }
+            case "object": {
+                if (Array.isArray(data)) {
+                    return "آرایه";
+                }
+                if (data === null) {
+                    return "null";
+                }
+                if (Object.getPrototypeOf(data) !== Object.prototype && data.constructor) {
+                    return data.constructor.name;
+                }
+            }
+        }
+        return t;
+    };
+    const Nouns = {
+        regex: "ورودی",
+        email: "آدرس ایمیل",
+        url: "URL",
+        emoji: "ایموجی",
+        uuid: "UUID",
+        uuidv4: "UUIDv4",
+        uuidv6: "UUIDv6",
+        nanoid: "nanoid",
+        guid: "GUID",
+        cuid: "cuid",
+        cuid2: "cuid2",
+        ulid: "ULID",
+        xid: "XID",
+        ksuid: "KSUID",
+        datetime: "تاریخ و زمان ایزو",
+        date: "تاریخ ایزو",
+        time: "زمان ایزو",
+        duration: "مدت زمان ایزو",
+        ipv4: "IPv4 آدرس",
+        ipv6: "IPv6 آدرس",
+        cidrv4: "IPv4 دامنه",
+        cidrv6: "IPv6 دامنه",
+        base64: "base64-encoded رشته",
+        base64url: "base64url-encoded رشته",
+        json_string: "JSON رشته",
+        e164: "E.164 عدد",
+        jwt: "JWT",
+        template_literal: "ورودی",
+    };
+    return (issue) => {
+        switch (issue.code) {
+            case "invalid_type":
+                return `ورودی نامعتبر: می‌بایست ${issue.expected} می‌بود، ${parsedType(issue.input)} دریافت شد`;
+            case "invalid_value":
+                if (issue.values.length === 1) {
+                    return `ورودی نامعتبر: می‌بایست ${stringifyPrimitive(issue.values[0])} می‌بود`;
+                }
+                return `گزینه نامعتبر: می‌بایست یکی از ${joinValues(issue.values, "|")} می‌بود`;
+            case "too_big": {
+                const adj = issue.inclusive ? "<=" : "<";
+                const sizing = getSizing(issue.origin);
+                if (sizing) {
+                    return `خیلی بزرگ: ${issue.origin ?? "مقدار"} باید ${adj}${issue.maximum.toString()} ${sizing.unit ?? "عنصر"} باشد`;
+                }
+                return `خیلی بزرگ: ${issue.origin ?? "مقدار"} باید ${adj}${issue.maximum.toString()} باشد`;
+            }
+            case "too_small": {
+                const adj = issue.inclusive ? ">=" : ">";
+                const sizing = getSizing(issue.origin);
+                if (sizing) {
+                    return `خیلی کوچک: ${issue.origin} باید ${adj}${issue.minimum.toString()} ${sizing.unit} باشد`;
+                }
+                return `خیلی کوچک: ${issue.origin} باید ${adj}${issue.minimum.toString()} باشد`;
+            }
+            case "invalid_format": {
+                const _issue = issue;
+                if (_issue.format === "starts_with") {
+                    return `رشته نامعتبر: باید با "${_issue.prefix}" شروع شود`;
+                }
+                if (_issue.format === "ends_with") {
+                    return `رشته نامعتبر: باید با "${_issue.suffix}" تمام شود`;
+                }
+                if (_issue.format === "includes") {
+                    return `رشته نامعتبر: باید شامل "${_issue.includes}" باشد`;
+                }
+                if (_issue.format === "regex") {
+                    return `رشته نامعتبر: باید با الگوی ${_issue.pattern} مطابقت داشته باشد`;
+                }
+                return `${Nouns[_issue.format] ?? issue.format} نامعتبر`;
+            }
+            case "not_multiple_of":
+                return `عدد نامعتبر: باید مضرب ${issue.divisor} باشد`;
+            case "unrecognized_keys":
+                return `کلید${issue.keys.length > 1 ? "های" : ""} ناشناس: ${joinValues(issue.keys, ", ")}`;
+            case "invalid_key":
+                return `کلید ناشناس در ${issue.origin}`;
+            case "invalid_union":
+                return `ورودی نامعتبر`;
+            case "invalid_element":
+                return `مقدار نامعتبر در ${issue.origin}`;
+            default:
+                return `ورودی نامعتبر`;
+        }
+    };
+};
+function fa () {
+    return {
+        localeError: error$t(),
+    };
+}
+
+const error$s = () => {
+    const Sizable = {
+        string: { unit: "merkkiä", subject: "merkkijonon" },
+        file: { unit: "tavua", subject: "tiedoston" },
+        array: { unit: "alkiota", subject: "listan" },
+        set: { unit: "alkiota", subject: "joukon" },
+        number: { unit: "", subject: "luvun" },
+        bigint: { unit: "", subject: "suuren kokonaisluvun" },
+        int: { unit: "", subject: "kokonaisluvun" },
+        date: { unit: "", subject: "päivämäärän" },
+    };
+    function getSizing(origin) {
+        return Sizable[origin] ?? null;
+    }
+    const parsedType = (data) => {
+        const t = typeof data;
+        switch (t) {
+            case "number": {
+                return Number.isNaN(data) ? "NaN" : "number";
+            }
+            case "object": {
+                if (Array.isArray(data)) {
+                    return "array";
+                }
+                if (data === null) {
+                    return "null";
+                }
+                if (Object.getPrototypeOf(data) !== Object.prototype && data.constructor) {
+                    return data.constructor.name;
+                }
+            }
+        }
+        return t;
+    };
+    const Nouns = {
+        regex: "säännöllinen lauseke",
+        email: "sähköpostiosoite",
+        url: "URL-osoite",
+        emoji: "emoji",
+        uuid: "UUID",
+        uuidv4: "UUIDv4",
+        uuidv6: "UUIDv6",
+        nanoid: "nanoid",
+        guid: "GUID",
+        cuid: "cuid",
+        cuid2: "cuid2",
+        ulid: "ULID",
+        xid: "XID",
+        ksuid: "KSUID",
+        datetime: "ISO-aikaleima",
+        date: "ISO-päivämäärä",
+        time: "ISO-aika",
+        duration: "ISO-kesto",
+        ipv4: "IPv4-osoite",
+        ipv6: "IPv6-osoite",
+        cidrv4: "IPv4-alue",
+        cidrv6: "IPv6-alue",
+        base64: "base64-koodattu merkkijono",
+        base64url: "base64url-koodattu merkkijono",
+        json_string: "JSON-merkkijono",
+        e164: "E.164-luku",
+        jwt: "JWT",
+        template_literal: "templaattimerkkijono",
+    };
+    return (issue) => {
+        switch (issue.code) {
+            case "invalid_type":
+                return `Virheellinen tyyppi: odotettiin ${issue.expected}, oli ${parsedType(issue.input)}`;
+            case "invalid_value":
+                if (issue.values.length === 1)
+                    return `Virheellinen syöte: täytyy olla ${stringifyPrimitive(issue.values[0])}`;
+                return `Virheellinen valinta: täytyy olla yksi seuraavista: ${joinValues(issue.values, "|")}`;
+            case "too_big": {
+                const adj = issue.inclusive ? "<=" : "<";
+                const sizing = getSizing(issue.origin);
+                if (sizing) {
+                    return `Liian suuri: ${sizing.subject} täytyy olla ${adj}${issue.maximum.toString()} ${sizing.unit}`.trim();
+                }
+                return `Liian suuri: arvon täytyy olla ${adj}${issue.maximum.toString()}`;
+            }
+            case "too_small": {
+                const adj = issue.inclusive ? ">=" : ">";
+                const sizing = getSizing(issue.origin);
+                if (sizing) {
+                    return `Liian pieni: ${sizing.subject} täytyy olla ${adj}${issue.minimum.toString()} ${sizing.unit}`.trim();
+                }
+                return `Liian pieni: arvon täytyy olla ${adj}${issue.minimum.toString()}`;
+            }
+            case "invalid_format": {
+                const _issue = issue;
+                if (_issue.format === "starts_with")
+                    return `Virheellinen syöte: täytyy alkaa "${_issue.prefix}"`;
+                if (_issue.format === "ends_with")
+                    return `Virheellinen syöte: täytyy loppua "${_issue.suffix}"`;
+                if (_issue.format === "includes")
+                    return `Virheellinen syöte: täytyy sisältää "${_issue.includes}"`;
+                if (_issue.format === "regex") {
+                    return `Virheellinen syöte: täytyy vastata säännöllistä lauseketta ${_issue.pattern}`;
+                }
+                return `Virheellinen ${Nouns[_issue.format] ?? issue.format}`;
+            }
+            case "not_multiple_of":
+                return `Virheellinen luku: täytyy olla luvun ${issue.divisor} monikerta`;
+            case "unrecognized_keys":
+                return `${issue.keys.length > 1 ? "Tuntemattomat avaimet" : "Tuntematon avain"}: ${joinValues(issue.keys, ", ")}`;
+            case "invalid_key":
+                return "Virheellinen avain tietueessa";
+            case "invalid_union":
+                return "Virheellinen unioni";
+            case "invalid_element":
+                return "Virheellinen arvo joukossa";
+            default:
+                return `Virheellinen syöte`;
+        }
+    };
+};
+function fi () {
+    return {
+        localeError: error$s(),
+    };
+}
+
+const error$r = () => {
+    const Sizable = {
+        string: { unit: "caractères", verb: "avoir" },
+        file: { unit: "octets", verb: "avoir" },
+        array: { unit: "éléments", verb: "avoir" },
+        set: { unit: "éléments", verb: "avoir" },
+    };
+    function getSizing(origin) {
+        return Sizable[origin] ?? null;
+    }
+    const parsedType = (data) => {
+        const t = typeof data;
+        switch (t) {
+            case "number": {
+                return Number.isNaN(data) ? "NaN" : "nombre";
+            }
+            case "object": {
+                if (Array.isArray(data)) {
+                    return "tableau";
+                }
+                if (data === null) {
+                    return "null";
+                }
+                if (Object.getPrototypeOf(data) !== Object.prototype && data.constructor) {
+                    return data.constructor.name;
+                }
+            }
+        }
+        return t;
+    };
+    const Nouns = {
+        regex: "entrée",
+        email: "adresse e-mail",
+        url: "URL",
+        emoji: "emoji",
+        uuid: "UUID",
+        uuidv4: "UUIDv4",
+        uuidv6: "UUIDv6",
+        nanoid: "nanoid",
+        guid: "GUID",
+        cuid: "cuid",
+        cuid2: "cuid2",
+        ulid: "ULID",
+        xid: "XID",
+        ksuid: "KSUID",
+        datetime: "date et heure ISO",
+        date: "date ISO",
+        time: "heure ISO",
+        duration: "durée ISO",
+        ipv4: "adresse IPv4",
+        ipv6: "adresse IPv6",
+        cidrv4: "plage IPv4",
+        cidrv6: "plage IPv6",
+        base64: "chaîne encodée en base64",
+        base64url: "chaîne encodée en base64url",
+        json_string: "chaîne JSON",
+        e164: "numéro E.164",
+        jwt: "JWT",
+        template_literal: "entrée",
+    };
+    return (issue) => {
+        switch (issue.code) {
+            case "invalid_type":
+                return `Entrée invalide : ${issue.expected} attendu, ${parsedType(issue.input)} reçu`;
+            case "invalid_value":
+                if (issue.values.length === 1)
+                    return `Entrée invalide : ${stringifyPrimitive(issue.values[0])} attendu`;
+                return `Option invalide : une valeur parmi ${joinValues(issue.values, "|")} attendue`;
+            case "too_big": {
+                const adj = issue.inclusive ? "<=" : "<";
+                const sizing = getSizing(issue.origin);
+                if (sizing)
+                    return `Trop grand : ${issue.origin ?? "valeur"} doit ${sizing.verb} ${adj}${issue.maximum.toString()} ${sizing.unit ?? "élément(s)"}`;
+                return `Trop grand : ${issue.origin ?? "valeur"} doit être ${adj}${issue.maximum.toString()}`;
+            }
+            case "too_small": {
+                const adj = issue.inclusive ? ">=" : ">";
+                const sizing = getSizing(issue.origin);
+                if (sizing) {
+                    return `Trop petit : ${issue.origin} doit ${sizing.verb} ${adj}${issue.minimum.toString()} ${sizing.unit}`;
+                }
+                return `Trop petit : ${issue.origin} doit être ${adj}${issue.minimum.toString()}`;
+            }
+            case "invalid_format": {
+                const _issue = issue;
+                if (_issue.format === "starts_with")
+                    return `Chaîne invalide : doit commencer par "${_issue.prefix}"`;
+                if (_issue.format === "ends_with")
+                    return `Chaîne invalide : doit se terminer par "${_issue.suffix}"`;
+                if (_issue.format === "includes")
+                    return `Chaîne invalide : doit inclure "${_issue.includes}"`;
+                if (_issue.format === "regex")
+                    return `Chaîne invalide : doit correspondre au modèle ${_issue.pattern}`;
+                return `${Nouns[_issue.format] ?? issue.format} invalide`;
+            }
+            case "not_multiple_of":
+                return `Nombre invalide : doit être un multiple de ${issue.divisor}`;
+            case "unrecognized_keys":
+                return `Clé${issue.keys.length > 1 ? "s" : ""} non reconnue${issue.keys.length > 1 ? "s" : ""} : ${joinValues(issue.keys, ", ")}`;
+            case "invalid_key":
+                return `Clé invalide dans ${issue.origin}`;
+            case "invalid_union":
+                return "Entrée invalide";
+            case "invalid_element":
+                return `Valeur invalide dans ${issue.origin}`;
+            default:
+                return `Entrée invalide`;
+        }
+    };
+};
+function fr () {
+    return {
+        localeError: error$r(),
+    };
+}
+
+const error$q = () => {
+    const Sizable = {
+        string: { unit: "caractères", verb: "avoir" },
+        file: { unit: "octets", verb: "avoir" },
+        array: { unit: "éléments", verb: "avoir" },
+        set: { unit: "éléments", verb: "avoir" },
+    };
+    function getSizing(origin) {
+        return Sizable[origin] ?? null;
+    }
+    const parsedType = (data) => {
+        const t = typeof data;
+        switch (t) {
+            case "number": {
+                return Number.isNaN(data) ? "NaN" : "number";
+            }
+            case "object": {
+                if (Array.isArray(data)) {
+                    return "array";
+                }
+                if (data === null) {
+                    return "null";
+                }
+                if (Object.getPrototypeOf(data) !== Object.prototype && data.constructor) {
+                    return data.constructor.name;
+                }
+            }
+        }
+        return t;
+    };
+    const Nouns = {
+        regex: "entrée",
+        email: "adresse courriel",
+        url: "URL",
+        emoji: "emoji",
+        uuid: "UUID",
+        uuidv4: "UUIDv4",
+        uuidv6: "UUIDv6",
+        nanoid: "nanoid",
+        guid: "GUID",
+        cuid: "cuid",
+        cuid2: "cuid2",
+        ulid: "ULID",
+        xid: "XID",
+        ksuid: "KSUID",
+        datetime: "date-heure ISO",
+        date: "date ISO",
+        time: "heure ISO",
+        duration: "durée ISO",
+        ipv4: "adresse IPv4",
+        ipv6: "adresse IPv6",
+        cidrv4: "plage IPv4",
+        cidrv6: "plage IPv6",
+        base64: "chaîne encodée en base64",
+        base64url: "chaîne encodée en base64url",
+        json_string: "chaîne JSON",
+        e164: "numéro E.164",
+        jwt: "JWT",
+        template_literal: "entrée",
+    };
+    return (issue) => {
+        switch (issue.code) {
+            case "invalid_type":
+                return `Entrée invalide : attendu ${issue.expected}, reçu ${parsedType(issue.input)}`;
+            case "invalid_value":
+                if (issue.values.length === 1)
+                    return `Entrée invalide : attendu ${stringifyPrimitive(issue.values[0])}`;
+                return `Option invalide : attendu l'une des valeurs suivantes ${joinValues(issue.values, "|")}`;
+            case "too_big": {
+                const adj = issue.inclusive ? "≤" : "<";
+                const sizing = getSizing(issue.origin);
+                if (sizing)
+                    return `Trop grand : attendu que ${issue.origin ?? "la valeur"} ait ${adj}${issue.maximum.toString()} ${sizing.unit}`;
+                return `Trop grand : attendu que ${issue.origin ?? "la valeur"} soit ${adj}${issue.maximum.toString()}`;
+            }
+            case "too_small": {
+                const adj = issue.inclusive ? "≥" : ">";
+                const sizing = getSizing(issue.origin);
+                if (sizing) {
+                    return `Trop petit : attendu que ${issue.origin} ait ${adj}${issue.minimum.toString()} ${sizing.unit}`;
+                }
+                return `Trop petit : attendu que ${issue.origin} soit ${adj}${issue.minimum.toString()}`;
+            }
+            case "invalid_format": {
+                const _issue = issue;
+                if (_issue.format === "starts_with") {
+                    return `Chaîne invalide : doit commencer par "${_issue.prefix}"`;
+                }
+                if (_issue.format === "ends_with")
+                    return `Chaîne invalide : doit se terminer par "${_issue.suffix}"`;
+                if (_issue.format === "includes")
+                    return `Chaîne invalide : doit inclure "${_issue.includes}"`;
+                if (_issue.format === "regex")
+                    return `Chaîne invalide : doit correspondre au motif ${_issue.pattern}`;
+                return `${Nouns[_issue.format] ?? issue.format} invalide`;
+            }
+            case "not_multiple_of":
+                return `Nombre invalide : doit être un multiple de ${issue.divisor}`;
+            case "unrecognized_keys":
+                return `Clé${issue.keys.length > 1 ? "s" : ""} non reconnue${issue.keys.length > 1 ? "s" : ""} : ${joinValues(issue.keys, ", ")}`;
+            case "invalid_key":
+                return `Clé invalide dans ${issue.origin}`;
+            case "invalid_union":
+                return "Entrée invalide";
+            case "invalid_element":
+                return `Valeur invalide dans ${issue.origin}`;
+            default:
+                return `Entrée invalide`;
+        }
+    };
+};
+function frCA () {
+    return {
+        localeError: error$q(),
+    };
+}
+
+const error$p = () => {
+    const Sizable = {
+        string: { unit: "אותיות", verb: "לכלול" },
+        file: { unit: "בייטים", verb: "לכלול" },
+        array: { unit: "פריטים", verb: "לכלול" },
+        set: { unit: "פריטים", verb: "לכלול" },
+    };
+    function getSizing(origin) {
+        return Sizable[origin] ?? null;
+    }
+    const parsedType = (data) => {
+        const t = typeof data;
+        switch (t) {
+            case "number": {
+                return Number.isNaN(data) ? "NaN" : "number";
+            }
+            case "object": {
+                if (Array.isArray(data)) {
+                    return "array";
+                }
+                if (data === null) {
+                    return "null";
+                }
+                if (Object.getPrototypeOf(data) !== Object.prototype && data.constructor) {
+                    return data.constructor.name;
+                }
+            }
+        }
+        return t;
+    };
+    const Nouns = {
+        regex: "קלט",
+        email: "כתובת אימייל",
+        url: "כתובת רשת",
+        emoji: "אימוג'י",
+        uuid: "UUID",
+        uuidv4: "UUIDv4",
+        uuidv6: "UUIDv6",
+        nanoid: "nanoid",
+        guid: "GUID",
+        cuid: "cuid",
+        cuid2: "cuid2",
+        ulid: "ULID",
+        xid: "XID",
+        ksuid: "KSUID",
+        datetime: "תאריך וזמן ISO",
+        date: "תאריך ISO",
+        time: "זמן ISO",
+        duration: "משך זמן ISO",
+        ipv4: "כתובת IPv4",
+        ipv6: "כתובת IPv6",
+        cidrv4: "טווח IPv4",
+        cidrv6: "טווח IPv6",
+        base64: "מחרוזת בבסיס 64",
+        base64url: "מחרוזת בבסיס 64 לכתובות רשת",
+        json_string: "מחרוזת JSON",
+        e164: "מספר E.164",
+        jwt: "JWT",
+        template_literal: "קלט",
+    };
+    return (issue) => {
+        switch (issue.code) {
+            case "invalid_type":
+                return `קלט לא תקין: צריך ${issue.expected}, התקבל ${parsedType(issue.input)}`;
+            // return `Invalid input: expected ${issue.expected}, received ${util.getParsedType(issue.input)}`;
+            case "invalid_value":
+                if (issue.values.length === 1)
+                    return `קלט לא תקין: צריך ${stringifyPrimitive(issue.values[0])}`;
+                return `קלט לא תקין: צריך אחת מהאפשרויות  ${joinValues(issue.values, "|")}`;
+            case "too_big": {
+                const adj = issue.inclusive ? "<=" : "<";
+                const sizing = getSizing(issue.origin);
+                if (sizing)
+                    return `גדול מדי: ${issue.origin ?? "value"} צריך להיות ${adj}${issue.maximum.toString()} ${sizing.unit ?? "elements"}`;
+                return `גדול מדי: ${issue.origin ?? "value"} צריך להיות ${adj}${issue.maximum.toString()}`;
+            }
+            case "too_small": {
+                const adj = issue.inclusive ? ">=" : ">";
+                const sizing = getSizing(issue.origin);
+                if (sizing) {
+                    return `קטן מדי: ${issue.origin} צריך להיות ${adj}${issue.minimum.toString()} ${sizing.unit}`;
+                }
+                return `קטן מדי: ${issue.origin} צריך להיות ${adj}${issue.minimum.toString()}`;
+            }
+            case "invalid_format": {
+                const _issue = issue;
+                if (_issue.format === "starts_with")
+                    return `מחרוזת לא תקינה: חייבת להתחיל ב"${_issue.prefix}"`;
+                if (_issue.format === "ends_with")
+                    return `מחרוזת לא תקינה: חייבת להסתיים ב "${_issue.suffix}"`;
+                if (_issue.format === "includes")
+                    return `מחרוזת לא תקינה: חייבת לכלול "${_issue.includes}"`;
+                if (_issue.format === "regex")
+                    return `מחרוזת לא תקינה: חייבת להתאים לתבנית ${_issue.pattern}`;
+                return `${Nouns[_issue.format] ?? issue.format} לא תקין`;
+            }
+            case "not_multiple_of":
+                return `מספר לא תקין: חייב להיות מכפלה של ${issue.divisor}`;
+            case "unrecognized_keys":
+                return `מפתח${issue.keys.length > 1 ? "ות" : ""} לא מזוה${issue.keys.length > 1 ? "ים" : "ה"}: ${joinValues(issue.keys, ", ")}`;
+            case "invalid_key":
+                return `מפתח לא תקין ב${issue.origin}`;
+            case "invalid_union":
+                return "קלט לא תקין";
+            case "invalid_element":
+                return `ערך לא תקין ב${issue.origin}`;
+            default:
+                return `קלט לא תקין`;
+        }
+    };
+};
+function he () {
+    return {
+        localeError: error$p(),
+    };
+}
+
+const error$o = () => {
+    const Sizable = {
+        string: { unit: "karakter", verb: "legyen" },
+        file: { unit: "byte", verb: "legyen" },
+        array: { unit: "elem", verb: "legyen" },
+        set: { unit: "elem", verb: "legyen" },
+    };
+    function getSizing(origin) {
+        return Sizable[origin] ?? null;
+    }
+    const parsedType = (data) => {
+        const t = typeof data;
+        switch (t) {
+            case "number": {
+                return Number.isNaN(data) ? "NaN" : "szám";
+            }
+            case "object": {
+                if (Array.isArray(data)) {
+                    return "tömb";
+                }
+                if (data === null) {
+                    return "null";
+                }
+                if (Object.getPrototypeOf(data) !== Object.prototype && data.constructor) {
+                    return data.constructor.name;
+                }
+            }
+        }
+        return t;
+    };
+    const Nouns = {
+        regex: "bemenet",
+        email: "email cím",
+        url: "URL",
+        emoji: "emoji",
+        uuid: "UUID",
+        uuidv4: "UUIDv4",
+        uuidv6: "UUIDv6",
+        nanoid: "nanoid",
+        guid: "GUID",
+        cuid: "cuid",
+        cuid2: "cuid2",
+        ulid: "ULID",
+        xid: "XID",
+        ksuid: "KSUID",
+        datetime: "ISO időbélyeg",
+        date: "ISO dátum",
+        time: "ISO idő",
+        duration: "ISO időintervallum",
+        ipv4: "IPv4 cím",
+        ipv6: "IPv6 cím",
+        cidrv4: "IPv4 tartomány",
+        cidrv6: "IPv6 tartomány",
+        base64: "base64-kódolt string",
+        base64url: "base64url-kódolt string",
+        json_string: "JSON string",
+        e164: "E.164 szám",
+        jwt: "JWT",
+        template_literal: "bemenet",
+    };
+    return (issue) => {
+        switch (issue.code) {
+            case "invalid_type":
+                return `Érvénytelen bemenet: a várt érték ${issue.expected}, a kapott érték ${parsedType(issue.input)}`;
+            // return `Invalid input: expected ${issue.expected}, received ${util.getParsedType(issue.input)}`;
+            case "invalid_value":
+                if (issue.values.length === 1)
+                    return `Érvénytelen bemenet: a várt érték ${stringifyPrimitive(issue.values[0])}`;
+                return `Érvénytelen opció: valamelyik érték várt ${joinValues(issue.values, "|")}`;
+            case "too_big": {
+                const adj = issue.inclusive ? "<=" : "<";
+                const sizing = getSizing(issue.origin);
+                if (sizing)
+                    return `Túl nagy: ${issue.origin ?? "érték"} mérete túl nagy ${adj}${issue.maximum.toString()} ${sizing.unit ?? "elem"}`;
+                return `Túl nagy: a bemeneti érték ${issue.origin ?? "érték"} túl nagy: ${adj}${issue.maximum.toString()}`;
+            }
+            case "too_small": {
+                const adj = issue.inclusive ? ">=" : ">";
+                const sizing = getSizing(issue.origin);
+                if (sizing) {
+                    return `Túl kicsi: a bemeneti érték ${issue.origin} mérete túl kicsi ${adj}${issue.minimum.toString()} ${sizing.unit}`;
+                }
+                return `Túl kicsi: a bemeneti érték ${issue.origin} túl kicsi ${adj}${issue.minimum.toString()}`;
+            }
+            case "invalid_format": {
+                const _issue = issue;
+                if (_issue.format === "starts_with")
+                    return `Érvénytelen string: "${_issue.prefix}" értékkel kell kezdődnie`;
+                if (_issue.format === "ends_with")
+                    return `Érvénytelen string: "${_issue.suffix}" értékkel kell végződnie`;
+                if (_issue.format === "includes")
+                    return `Érvénytelen string: "${_issue.includes}" értéket kell tartalmaznia`;
+                if (_issue.format === "regex")
+                    return `Érvénytelen string: ${_issue.pattern} mintának kell megfelelnie`;
+                return `Érvénytelen ${Nouns[_issue.format] ?? issue.format}`;
+            }
+            case "not_multiple_of":
+                return `Érvénytelen szám: ${issue.divisor} többszörösének kell lennie`;
+            case "unrecognized_keys":
+                return `Ismeretlen kulcs${issue.keys.length > 1 ? "s" : ""}: ${joinValues(issue.keys, ", ")}`;
+            case "invalid_key":
+                return `Érvénytelen kulcs ${issue.origin}`;
+            case "invalid_union":
+                return "Érvénytelen bemenet";
+            case "invalid_element":
+                return `Érvénytelen érték: ${issue.origin}`;
+            default:
+                return `Érvénytelen bemenet`;
+        }
+    };
+};
+function hu () {
+    return {
+        localeError: error$o(),
+    };
+}
+
+const error$n = () => {
+    const Sizable = {
+        string: { unit: "karakter", verb: "memiliki" },
+        file: { unit: "byte", verb: "memiliki" },
+        array: { unit: "item", verb: "memiliki" },
+        set: { unit: "item", verb: "memiliki" },
+    };
+    function getSizing(origin) {
+        return Sizable[origin] ?? null;
+    }
+    const parsedType = (data) => {
+        const t = typeof data;
+        switch (t) {
+            case "number": {
+                return Number.isNaN(data) ? "NaN" : "number";
+            }
+            case "object": {
+                if (Array.isArray(data)) {
+                    return "array";
+                }
+                if (data === null) {
+                    return "null";
+                }
+                if (Object.getPrototypeOf(data) !== Object.prototype && data.constructor) {
+                    return data.constructor.name;
+                }
+            }
+        }
+        return t;
+    };
+    const Nouns = {
+        regex: "input",
+        email: "alamat email",
+        url: "URL",
+        emoji: "emoji",
+        uuid: "UUID",
+        uuidv4: "UUIDv4",
+        uuidv6: "UUIDv6",
+        nanoid: "nanoid",
+        guid: "GUID",
+        cuid: "cuid",
+        cuid2: "cuid2",
+        ulid: "ULID",
+        xid: "XID",
+        ksuid: "KSUID",
+        datetime: "tanggal dan waktu format ISO",
+        date: "tanggal format ISO",
+        time: "jam format ISO",
+        duration: "durasi format ISO",
+        ipv4: "alamat IPv4",
+        ipv6: "alamat IPv6",
+        cidrv4: "rentang alamat IPv4",
+        cidrv6: "rentang alamat IPv6",
+        base64: "string dengan enkode base64",
+        base64url: "string dengan enkode base64url",
+        json_string: "string JSON",
+        e164: "angka E.164",
+        jwt: "JWT",
+        template_literal: "input",
+    };
+    return (issue) => {
+        switch (issue.code) {
+            case "invalid_type":
+                return `Input tidak valid: diharapkan ${issue.expected}, diterima ${parsedType(issue.input)}`;
+            case "invalid_value":
+                if (issue.values.length === 1)
+                    return `Input tidak valid: diharapkan ${stringifyPrimitive(issue.values[0])}`;
+                return `Pilihan tidak valid: diharapkan salah satu dari ${joinValues(issue.values, "|")}`;
+            case "too_big": {
+                const adj = issue.inclusive ? "<=" : "<";
+                const sizing = getSizing(issue.origin);
+                if (sizing)
+                    return `Terlalu besar: diharapkan ${issue.origin ?? "value"} memiliki ${adj}${issue.maximum.toString()} ${sizing.unit ?? "elemen"}`;
+                return `Terlalu besar: diharapkan ${issue.origin ?? "value"} menjadi ${adj}${issue.maximum.toString()}`;
+            }
+            case "too_small": {
+                const adj = issue.inclusive ? ">=" : ">";
+                const sizing = getSizing(issue.origin);
+                if (sizing) {
+                    return `Terlalu kecil: diharapkan ${issue.origin} memiliki ${adj}${issue.minimum.toString()} ${sizing.unit}`;
+                }
+                return `Terlalu kecil: diharapkan ${issue.origin} menjadi ${adj}${issue.minimum.toString()}`;
+            }
+            case "invalid_format": {
+                const _issue = issue;
+                if (_issue.format === "starts_with")
+                    return `String tidak valid: harus dimulai dengan "${_issue.prefix}"`;
+                if (_issue.format === "ends_with")
+                    return `String tidak valid: harus berakhir dengan "${_issue.suffix}"`;
+                if (_issue.format === "includes")
+                    return `String tidak valid: harus menyertakan "${_issue.includes}"`;
+                if (_issue.format === "regex")
+                    return `String tidak valid: harus sesuai pola ${_issue.pattern}`;
+                return `${Nouns[_issue.format] ?? issue.format} tidak valid`;
+            }
+            case "not_multiple_of":
+                return `Angka tidak valid: harus kelipatan dari ${issue.divisor}`;
+            case "unrecognized_keys":
+                return `Kunci tidak dikenali ${issue.keys.length > 1 ? "s" : ""}: ${joinValues(issue.keys, ", ")}`;
+            case "invalid_key":
+                return `Kunci tidak valid di ${issue.origin}`;
+            case "invalid_union":
+                return "Input tidak valid";
+            case "invalid_element":
+                return `Nilai tidak valid di ${issue.origin}`;
+            default:
+                return `Input tidak valid`;
+        }
+    };
+};
+function id () {
+    return {
+        localeError: error$n(),
+    };
+}
+
+const error$m = () => {
+    const Sizable = {
+        string: { unit: "caratteri", verb: "avere" },
+        file: { unit: "byte", verb: "avere" },
+        array: { unit: "elementi", verb: "avere" },
+        set: { unit: "elementi", verb: "avere" },
+    };
+    function getSizing(origin) {
+        return Sizable[origin] ?? null;
+    }
+    const parsedType = (data) => {
+        const t = typeof data;
+        switch (t) {
+            case "number": {
+                return Number.isNaN(data) ? "NaN" : "numero";
+            }
+            case "object": {
+                if (Array.isArray(data)) {
+                    return "vettore";
+                }
+                if (data === null) {
+                    return "null";
+                }
+                if (Object.getPrototypeOf(data) !== Object.prototype && data.constructor) {
+                    return data.constructor.name;
+                }
+            }
+        }
+        return t;
+    };
+    const Nouns = {
+        regex: "input",
+        email: "indirizzo email",
+        url: "URL",
+        emoji: "emoji",
+        uuid: "UUID",
+        uuidv4: "UUIDv4",
+        uuidv6: "UUIDv6",
+        nanoid: "nanoid",
+        guid: "GUID",
+        cuid: "cuid",
+        cuid2: "cuid2",
+        ulid: "ULID",
+        xid: "XID",
+        ksuid: "KSUID",
+        datetime: "data e ora ISO",
+        date: "data ISO",
+        time: "ora ISO",
+        duration: "durata ISO",
+        ipv4: "indirizzo IPv4",
+        ipv6: "indirizzo IPv6",
+        cidrv4: "intervallo IPv4",
+        cidrv6: "intervallo IPv6",
+        base64: "stringa codificata in base64",
+        base64url: "URL codificata in base64",
+        json_string: "stringa JSON",
+        e164: "numero E.164",
+        jwt: "JWT",
+        template_literal: "input",
+    };
+    return (issue) => {
+        switch (issue.code) {
+            case "invalid_type":
+                return `Input non valido: atteso ${issue.expected}, ricevuto ${parsedType(issue.input)}`;
+            // return `Input non valido: atteso ${issue.expected}, ricevuto ${util.getParsedType(issue.input)}`;
+            case "invalid_value":
+                if (issue.values.length === 1)
+                    return `Input non valido: atteso ${stringifyPrimitive(issue.values[0])}`;
+                return `Opzione non valida: atteso uno tra ${joinValues(issue.values, "|")}`;
+            case "too_big": {
+                const adj = issue.inclusive ? "<=" : "<";
+                const sizing = getSizing(issue.origin);
+                if (sizing)
+                    return `Troppo grande: ${issue.origin ?? "valore"} deve avere ${adj}${issue.maximum.toString()} ${sizing.unit ?? "elementi"}`;
+                return `Troppo grande: ${issue.origin ?? "valore"} deve essere ${adj}${issue.maximum.toString()}`;
+            }
+            case "too_small": {
+                const adj = issue.inclusive ? ">=" : ">";
+                const sizing = getSizing(issue.origin);
+                if (sizing) {
+                    return `Troppo piccolo: ${issue.origin} deve avere ${adj}${issue.minimum.toString()} ${sizing.unit}`;
+                }
+                return `Troppo piccolo: ${issue.origin} deve essere ${adj}${issue.minimum.toString()}`;
+            }
+            case "invalid_format": {
+                const _issue = issue;
+                if (_issue.format === "starts_with")
+                    return `Stringa non valida: deve iniziare con "${_issue.prefix}"`;
+                if (_issue.format === "ends_with")
+                    return `Stringa non valida: deve terminare con "${_issue.suffix}"`;
+                if (_issue.format === "includes")
+                    return `Stringa non valida: deve includere "${_issue.includes}"`;
+                if (_issue.format === "regex")
+                    return `Stringa non valida: deve corrispondere al pattern ${_issue.pattern}`;
+                return `Invalid ${Nouns[_issue.format] ?? issue.format}`;
+            }
+            case "not_multiple_of":
+                return `Numero non valido: deve essere un multiplo di ${issue.divisor}`;
+            case "unrecognized_keys":
+                return `Chiav${issue.keys.length > 1 ? "i" : "e"} non riconosciut${issue.keys.length > 1 ? "e" : "a"}: ${joinValues(issue.keys, ", ")}`;
+            case "invalid_key":
+                return `Chiave non valida in ${issue.origin}`;
+            case "invalid_union":
+                return "Input non valido";
+            case "invalid_element":
+                return `Valore non valido in ${issue.origin}`;
+            default:
+                return `Input non valido`;
+        }
+    };
+};
+function it () {
+    return {
+        localeError: error$m(),
+    };
+}
+
+const error$l = () => {
+    const Sizable = {
+        string: { unit: "文字", verb: "である" },
+        file: { unit: "バイト", verb: "である" },
+        array: { unit: "要素", verb: "である" },
+        set: { unit: "要素", verb: "である" },
+    };
+    function getSizing(origin) {
+        return Sizable[origin] ?? null;
+    }
+    const parsedType = (data) => {
+        const t = typeof data;
+        switch (t) {
+            case "number": {
+                return Number.isNaN(data) ? "NaN" : "数値";
+            }
+            case "object": {
+                if (Array.isArray(data)) {
+                    return "配列";
+                }
+                if (data === null) {
+                    return "null";
+                }
+                if (Object.getPrototypeOf(data) !== Object.prototype && data.constructor) {
+                    return data.constructor.name;
+                }
+            }
+        }
+        return t;
+    };
+    const Nouns = {
+        regex: "入力値",
+        email: "メールアドレス",
+        url: "URL",
+        emoji: "絵文字",
+        uuid: "UUID",
+        uuidv4: "UUIDv4",
+        uuidv6: "UUIDv6",
+        nanoid: "nanoid",
+        guid: "GUID",
+        cuid: "cuid",
+        cuid2: "cuid2",
+        ulid: "ULID",
+        xid: "XID",
+        ksuid: "KSUID",
+        datetime: "ISO日時",
+        date: "ISO日付",
+        time: "ISO時刻",
+        duration: "ISO期間",
+        ipv4: "IPv4アドレス",
+        ipv6: "IPv6アドレス",
+        cidrv4: "IPv4範囲",
+        cidrv6: "IPv6範囲",
+        base64: "base64エンコード文字列",
+        base64url: "base64urlエンコード文字列",
+        json_string: "JSON文字列",
+        e164: "E.164番号",
+        jwt: "JWT",
+        template_literal: "入力値",
+    };
+    return (issue) => {
+        switch (issue.code) {
+            case "invalid_type":
+                return `無効な入力: ${issue.expected}が期待されましたが、${parsedType(issue.input)}が入力されました`;
+            case "invalid_value":
+                if (issue.values.length === 1)
+                    return `無効な入力: ${stringifyPrimitive(issue.values[0])}が期待されました`;
+                return `無効な選択: ${joinValues(issue.values, "、")}のいずれかである必要があります`;
+            case "too_big": {
+                const adj = issue.inclusive ? "以下である" : "より小さい";
+                const sizing = getSizing(issue.origin);
+                if (sizing)
+                    return `大きすぎる値: ${issue.origin ?? "値"}は${issue.maximum.toString()}${sizing.unit ?? "要素"}${adj}必要があります`;
+                return `大きすぎる値: ${issue.origin ?? "値"}は${issue.maximum.toString()}${adj}必要があります`;
+            }
+            case "too_small": {
+                const adj = issue.inclusive ? "以上である" : "より大きい";
+                const sizing = getSizing(issue.origin);
+                if (sizing)
+                    return `小さすぎる値: ${issue.origin}は${issue.minimum.toString()}${sizing.unit}${adj}必要があります`;
+                return `小さすぎる値: ${issue.origin}は${issue.minimum.toString()}${adj}必要があります`;
+            }
+            case "invalid_format": {
+                const _issue = issue;
+                if (_issue.format === "starts_with")
+                    return `無効な文字列: "${_issue.prefix}"で始まる必要があります`;
+                if (_issue.format === "ends_with")
+                    return `無効な文字列: "${_issue.suffix}"で終わる必要があります`;
+                if (_issue.format === "includes")
+                    return `無効な文字列: "${_issue.includes}"を含む必要があります`;
+                if (_issue.format === "regex")
+                    return `無効な文字列: パターン${_issue.pattern}に一致する必要があります`;
+                return `無効な${Nouns[_issue.format] ?? issue.format}`;
+            }
+            case "not_multiple_of":
+                return `無効な数値: ${issue.divisor}の倍数である必要があります`;
+            case "unrecognized_keys":
+                return `認識されていないキー${issue.keys.length > 1 ? "群" : ""}: ${joinValues(issue.keys, "、")}`;
+            case "invalid_key":
+                return `${issue.origin}内の無効なキー`;
+            case "invalid_union":
+                return "無効な入力";
+            case "invalid_element":
+                return `${issue.origin}内の無効な値`;
+            default:
+                return `無効な入力`;
+        }
+    };
+};
+function ja () {
+    return {
+        localeError: error$l(),
+    };
+}
+
+const error$k = () => {
+    const Sizable = {
+        string: { unit: "តួអក្សរ", verb: "គួរមាន" },
+        file: { unit: "បៃ", verb: "គួរមាន" },
+        array: { unit: "ធាតុ", verb: "គួរមាន" },
+        set: { unit: "ធាតុ", verb: "គួរមាន" },
+    };
+    function getSizing(origin) {
+        return Sizable[origin] ?? null;
+    }
+    const parsedType = (data) => {
+        const t = typeof data;
+        switch (t) {
+            case "number": {
+                return Number.isNaN(data) ? "មិនមែនជាលេខ (NaN)" : "លេខ";
+            }
+            case "object": {
+                if (Array.isArray(data)) {
+                    return "អារេ (Array)";
+                }
+                if (data === null) {
+                    return "គ្មានតម្លៃ (null)";
+                }
+                if (Object.getPrototypeOf(data) !== Object.prototype && data.constructor) {
+                    return data.constructor.name;
+                }
+            }
+        }
+        return t;
+    };
+    const Nouns = {
+        regex: "ទិន្នន័យបញ្ចូល",
+        email: "អាសយដ្ឋានអ៊ីមែល",
+        url: "URL",
+        emoji: "សញ្ញាអារម្មណ៍",
+        uuid: "UUID",
+        uuidv4: "UUIDv4",
+        uuidv6: "UUIDv6",
+        nanoid: "nanoid",
+        guid: "GUID",
+        cuid: "cuid",
+        cuid2: "cuid2",
+        ulid: "ULID",
+        xid: "XID",
+        ksuid: "KSUID",
+        datetime: "កាលបរិច្ឆេទ និងម៉ោង ISO",
+        date: "កាលបរិច្ឆេទ ISO",
+        time: "ម៉ោង ISO",
+        duration: "រយៈពេល ISO",
+        ipv4: "អាសយដ្ឋាន IPv4",
+        ipv6: "អាសយដ្ឋាន IPv6",
+        cidrv4: "ដែនអាសយដ្ឋាន IPv4",
+        cidrv6: "ដែនអាសយដ្ឋាន IPv6",
+        base64: "ខ្សែអក្សរអ៊ិកូដ base64",
+        base64url: "ខ្សែអក្សរអ៊ិកូដ base64url",
+        json_string: "ខ្សែអក្សរ JSON",
+        e164: "លេខ E.164",
+        jwt: "JWT",
+        template_literal: "ទិន្នន័យបញ្ចូល",
+    };
+    return (issue) => {
+        switch (issue.code) {
+            case "invalid_type":
+                return `ទិន្នន័យបញ្ចូលមិនត្រឹមត្រូវ៖ ត្រូវការ ${issue.expected} ប៉ុន្តែទទួលបាន ${parsedType(issue.input)}`;
+            case "invalid_value":
+                if (issue.values.length === 1)
+                    return `ទិន្នន័យបញ្ចូលមិនត្រឹមត្រូវ៖ ត្រូវការ ${stringifyPrimitive(issue.values[0])}`;
+                return `ជម្រើសមិនត្រឹមត្រូវ៖ ត្រូវជាមួយក្នុងចំណោម ${joinValues(issue.values, "|")}`;
+            case "too_big": {
+                const adj = issue.inclusive ? "<=" : "<";
+                const sizing = getSizing(issue.origin);
+                if (sizing)
+                    return `ធំពេក៖ ត្រូវការ ${issue.origin ?? "តម្លៃ"} ${adj} ${issue.maximum.toString()} ${sizing.unit ?? "ធាតុ"}`;
+                return `ធំពេក៖ ត្រូវការ ${issue.origin ?? "តម្លៃ"} ${adj} ${issue.maximum.toString()}`;
+            }
+            case "too_small": {
+                const adj = issue.inclusive ? ">=" : ">";
+                const sizing = getSizing(issue.origin);
+                if (sizing) {
+                    return `តូចពេក៖ ត្រូវការ ${issue.origin} ${adj} ${issue.minimum.toString()} ${sizing.unit}`;
+                }
+                return `តូចពេក៖ ត្រូវការ ${issue.origin} ${adj} ${issue.minimum.toString()}`;
+            }
+            case "invalid_format": {
+                const _issue = issue;
+                if (_issue.format === "starts_with") {
+                    return `ខ្សែអក្សរមិនត្រឹមត្រូវ៖ ត្រូវចាប់ផ្តើមដោយ "${_issue.prefix}"`;
+                }
+                if (_issue.format === "ends_with")
+                    return `ខ្សែអក្សរមិនត្រឹមត្រូវ៖ ត្រូវបញ្ចប់ដោយ "${_issue.suffix}"`;
+                if (_issue.format === "includes")
+                    return `ខ្សែអក្សរមិនត្រឹមត្រូវ៖ ត្រូវមាន "${_issue.includes}"`;
+                if (_issue.format === "regex")
+                    return `ខ្សែអក្សរមិនត្រឹមត្រូវ៖ ត្រូវតែផ្គូផ្គងនឹងទម្រង់ដែលបានកំណត់ ${_issue.pattern}`;
+                return `មិនត្រឹមត្រូវ៖ ${Nouns[_issue.format] ?? issue.format}`;
+            }
+            case "not_multiple_of":
+                return `លេខមិនត្រឹមត្រូវ៖ ត្រូវតែជាពហុគុណនៃ ${issue.divisor}`;
+            case "unrecognized_keys":
+                return `រកឃើញសោមិនស្គាល់៖ ${joinValues(issue.keys, ", ")}`;
+            case "invalid_key":
+                return `សោមិនត្រឹមត្រូវនៅក្នុង ${issue.origin}`;
+            case "invalid_union":
+                return `ទិន្នន័យមិនត្រឹមត្រូវ`;
+            case "invalid_element":
+                return `ទិន្នន័យមិនត្រឹមត្រូវនៅក្នុង ${issue.origin}`;
+            default:
+                return `ទិន្នន័យមិនត្រឹមត្រូវ`;
+        }
+    };
+};
+function kh () {
+    return {
+        localeError: error$k(),
+    };
+}
+
+const error$j = () => {
+    const Sizable = {
+        string: { unit: "문자", verb: "to have" },
+        file: { unit: "바이트", verb: "to have" },
+        array: { unit: "개", verb: "to have" },
+        set: { unit: "개", verb: "to have" },
+    };
+    function getSizing(origin) {
+        return Sizable[origin] ?? null;
+    }
+    const parsedType = (data) => {
+        const t = typeof data;
+        switch (t) {
+            case "number": {
+                return Number.isNaN(data) ? "NaN" : "number";
+            }
+            case "object": {
+                if (Array.isArray(data)) {
+                    return "array";
+                }
+                if (data === null) {
+                    return "null";
+                }
+                if (Object.getPrototypeOf(data) !== Object.prototype && data.constructor) {
+                    return data.constructor.name;
+                }
+            }
+        }
+        return t;
+    };
+    const Nouns = {
+        regex: "입력",
+        email: "이메일 주소",
+        url: "URL",
+        emoji: "이모지",
+        uuid: "UUID",
+        uuidv4: "UUIDv4",
+        uuidv6: "UUIDv6",
+        nanoid: "nanoid",
+        guid: "GUID",
+        cuid: "cuid",
+        cuid2: "cuid2",
+        ulid: "ULID",
+        xid: "XID",
+        ksuid: "KSUID",
+        datetime: "ISO 날짜시간",
+        date: "ISO 날짜",
+        time: "ISO 시간",
+        duration: "ISO 기간",
+        ipv4: "IPv4 주소",
+        ipv6: "IPv6 주소",
+        cidrv4: "IPv4 범위",
+        cidrv6: "IPv6 범위",
+        base64: "base64 인코딩 문자열",
+        base64url: "base64url 인코딩 문자열",
+        json_string: "JSON 문자열",
+        e164: "E.164 번호",
+        jwt: "JWT",
+        template_literal: "입력",
+    };
+    return (issue) => {
+        switch (issue.code) {
+            case "invalid_type":
+                return `잘못된 입력: 예상 타입은 ${issue.expected}, 받은 타입은 ${parsedType(issue.input)}입니다`;
+            case "invalid_value":
+                if (issue.values.length === 1)
+                    return `잘못된 입력: 값은 ${stringifyPrimitive(issue.values[0])} 이어야 합니다`;
+                return `잘못된 옵션: ${joinValues(issue.values, "또는 ")} 중 하나여야 합니다`;
+            case "too_big": {
+                const adj = issue.inclusive ? "이하" : "미만";
+                const suffix = adj === "미만" ? "이어야 합니다" : "여야 합니다";
+                const sizing = getSizing(issue.origin);
+                const unit = sizing?.unit ?? "요소";
+                if (sizing)
+                    return `${issue.origin ?? "값"}이 너무 큽니다: ${issue.maximum.toString()}${unit} ${adj}${suffix}`;
+                return `${issue.origin ?? "값"}이 너무 큽니다: ${issue.maximum.toString()} ${adj}${suffix}`;
+            }
+            case "too_small": {
+                const adj = issue.inclusive ? "이상" : "초과";
+                const suffix = adj === "이상" ? "이어야 합니다" : "여야 합니다";
+                const sizing = getSizing(issue.origin);
+                const unit = sizing?.unit ?? "요소";
+                if (sizing) {
+                    return `${issue.origin ?? "값"}이 너무 작습니다: ${issue.minimum.toString()}${unit} ${adj}${suffix}`;
+                }
+                return `${issue.origin ?? "값"}이 너무 작습니다: ${issue.minimum.toString()} ${adj}${suffix}`;
+            }
+            case "invalid_format": {
+                const _issue = issue;
+                if (_issue.format === "starts_with") {
+                    return `잘못된 문자열: "${_issue.prefix}"(으)로 시작해야 합니다`;
+                }
+                if (_issue.format === "ends_with")
+                    return `잘못된 문자열: "${_issue.suffix}"(으)로 끝나야 합니다`;
+                if (_issue.format === "includes")
+                    return `잘못된 문자열: "${_issue.includes}"을(를) 포함해야 합니다`;
+                if (_issue.format === "regex")
+                    return `잘못된 문자열: 정규식 ${_issue.pattern} 패턴과 일치해야 합니다`;
+                return `잘못된 ${Nouns[_issue.format] ?? issue.format}`;
+            }
+            case "not_multiple_of":
+                return `잘못된 숫자: ${issue.divisor}의 배수여야 합니다`;
+            case "unrecognized_keys":
+                return `인식할 수 없는 키: ${joinValues(issue.keys, ", ")}`;
+            case "invalid_key":
+                return `잘못된 키: ${issue.origin}`;
+            case "invalid_union":
+                return `잘못된 입력`;
+            case "invalid_element":
+                return `잘못된 값: ${issue.origin}`;
+            default:
+                return `잘못된 입력`;
+        }
+    };
+};
+function ko () {
+    return {
+        localeError: error$j(),
+    };
+}
+
+const error$i = () => {
+    const Sizable = {
+        string: { unit: "знаци", verb: "да имаат" },
+        file: { unit: "бајти", verb: "да имаат" },
+        array: { unit: "ставки", verb: "да имаат" },
+        set: { unit: "ставки", verb: "да имаат" },
+    };
+    function getSizing(origin) {
+        return Sizable[origin] ?? null;
+    }
+    const parsedType = (data) => {
+        const t = typeof data;
+        switch (t) {
+            case "number": {
+                return Number.isNaN(data) ? "NaN" : "број";
+            }
+            case "object": {
+                if (Array.isArray(data)) {
+                    return "низа";
+                }
+                if (data === null) {
+                    return "null";
+                }
+                if (Object.getPrototypeOf(data) !== Object.prototype && data.constructor) {
+                    return data.constructor.name;
+                }
+            }
+        }
+        return t;
+    };
+    const Nouns = {
+        regex: "внес",
+        email: "адреса на е-пошта",
+        url: "URL",
+        emoji: "емоџи",
+        uuid: "UUID",
+        uuidv4: "UUIDv4",
+        uuidv6: "UUIDv6",
+        nanoid: "nanoid",
+        guid: "GUID",
+        cuid: "cuid",
+        cuid2: "cuid2",
+        ulid: "ULID",
+        xid: "XID",
+        ksuid: "KSUID",
+        datetime: "ISO датум и време",
+        date: "ISO датум",
+        time: "ISO време",
+        duration: "ISO времетраење",
+        ipv4: "IPv4 адреса",
+        ipv6: "IPv6 адреса",
+        cidrv4: "IPv4 опсег",
+        cidrv6: "IPv6 опсег",
+        base64: "base64-енкодирана низа",
+        base64url: "base64url-енкодирана низа",
+        json_string: "JSON низа",
+        e164: "E.164 број",
+        jwt: "JWT",
+        template_literal: "внес",
+    };
+    return (issue) => {
+        switch (issue.code) {
+            case "invalid_type":
+                return `Грешен внес: се очекува ${issue.expected}, примено ${parsedType(issue.input)}`;
+            // return `Invalid input: expected ${issue.expected}, received ${util.getParsedType(issue.input)}`;
+            case "invalid_value":
+                if (issue.values.length === 1)
+                    return `Invalid input: expected ${stringifyPrimitive(issue.values[0])}`;
+                return `Грешана опција: се очекува една ${joinValues(issue.values, "|")}`;
+            case "too_big": {
+                const adj = issue.inclusive ? "<=" : "<";
+                const sizing = getSizing(issue.origin);
+                if (sizing)
+                    return `Премногу голем: се очекува ${issue.origin ?? "вредноста"} да има ${adj}${issue.maximum.toString()} ${sizing.unit ?? "елементи"}`;
+                return `Премногу голем: се очекува ${issue.origin ?? "вредноста"} да биде ${adj}${issue.maximum.toString()}`;
+            }
+            case "too_small": {
+                const adj = issue.inclusive ? ">=" : ">";
+                const sizing = getSizing(issue.origin);
+                if (sizing) {
+                    return `Премногу мал: се очекува ${issue.origin} да има ${adj}${issue.minimum.toString()} ${sizing.unit}`;
+                }
+                return `Премногу мал: се очекува ${issue.origin} да биде ${adj}${issue.minimum.toString()}`;
+            }
+            case "invalid_format": {
+                const _issue = issue;
+                if (_issue.format === "starts_with") {
+                    return `Неважечка низа: мора да започнува со "${_issue.prefix}"`;
+                }
+                if (_issue.format === "ends_with")
+                    return `Неважечка низа: мора да завршува со "${_issue.suffix}"`;
+                if (_issue.format === "includes")
+                    return `Неважечка низа: мора да вклучува "${_issue.includes}"`;
+                if (_issue.format === "regex")
+                    return `Неважечка низа: мора да одгоара на патернот ${_issue.pattern}`;
+                return `Invalid ${Nouns[_issue.format] ?? issue.format}`;
+            }
+            case "not_multiple_of":
+                return `Грешен број: мора да биде делив со ${issue.divisor}`;
+            case "unrecognized_keys":
+                return `${issue.keys.length > 1 ? "Непрепознаени клучеви" : "Непрепознаен клуч"}: ${joinValues(issue.keys, ", ")}`;
+            case "invalid_key":
+                return `Грешен клуч во ${issue.origin}`;
+            case "invalid_union":
+                return "Грешен внес";
+            case "invalid_element":
+                return `Грешна вредност во ${issue.origin}`;
+            default:
+                return `Грешен внес`;
+        }
+    };
+};
+function mk () {
+    return {
+        localeError: error$i(),
+    };
+}
+
+const error$h = () => {
+    const Sizable = {
+        string: { unit: "aksara", verb: "mempunyai" },
+        file: { unit: "bait", verb: "mempunyai" },
+        array: { unit: "elemen", verb: "mempunyai" },
+        set: { unit: "elemen", verb: "mempunyai" },
+    };
+    function getSizing(origin) {
+        return Sizable[origin] ?? null;
+    }
+    const parsedType = (data) => {
+        const t = typeof data;
+        switch (t) {
+            case "number": {
+                return Number.isNaN(data) ? "NaN" : "nombor";
+            }
+            case "object": {
+                if (Array.isArray(data)) {
+                    return "array";
+                }
+                if (data === null) {
+                    return "null";
+                }
+                if (Object.getPrototypeOf(data) !== Object.prototype && data.constructor) {
+                    return data.constructor.name;
+                }
+            }
+        }
+        return t;
+    };
+    const Nouns = {
+        regex: "input",
+        email: "alamat e-mel",
+        url: "URL",
+        emoji: "emoji",
+        uuid: "UUID",
+        uuidv4: "UUIDv4",
+        uuidv6: "UUIDv6",
+        nanoid: "nanoid",
+        guid: "GUID",
+        cuid: "cuid",
+        cuid2: "cuid2",
+        ulid: "ULID",
+        xid: "XID",
+        ksuid: "KSUID",
+        datetime: "tarikh masa ISO",
+        date: "tarikh ISO",
+        time: "masa ISO",
+        duration: "tempoh ISO",
+        ipv4: "alamat IPv4",
+        ipv6: "alamat IPv6",
+        cidrv4: "julat IPv4",
+        cidrv6: "julat IPv6",
+        base64: "string dikodkan base64",
+        base64url: "string dikodkan base64url",
+        json_string: "string JSON",
+        e164: "nombor E.164",
+        jwt: "JWT",
+        template_literal: "input",
+    };
+    return (issue) => {
+        switch (issue.code) {
+            case "invalid_type":
+                return `Input tidak sah: dijangka ${issue.expected}, diterima ${parsedType(issue.input)}`;
+            case "invalid_value":
+                if (issue.values.length === 1)
+                    return `Input tidak sah: dijangka ${stringifyPrimitive(issue.values[0])}`;
+                return `Pilihan tidak sah: dijangka salah satu daripada ${joinValues(issue.values, "|")}`;
+            case "too_big": {
+                const adj = issue.inclusive ? "<=" : "<";
+                const sizing = getSizing(issue.origin);
+                if (sizing)
+                    return `Terlalu besar: dijangka ${issue.origin ?? "nilai"} ${sizing.verb} ${adj}${issue.maximum.toString()} ${sizing.unit ?? "elemen"}`;
+                return `Terlalu besar: dijangka ${issue.origin ?? "nilai"} adalah ${adj}${issue.maximum.toString()}`;
+            }
+            case "too_small": {
+                const adj = issue.inclusive ? ">=" : ">";
+                const sizing = getSizing(issue.origin);
+                if (sizing) {
+                    return `Terlalu kecil: dijangka ${issue.origin} ${sizing.verb} ${adj}${issue.minimum.toString()} ${sizing.unit}`;
+                }
+                return `Terlalu kecil: dijangka ${issue.origin} adalah ${adj}${issue.minimum.toString()}`;
+            }
+            case "invalid_format": {
+                const _issue = issue;
+                if (_issue.format === "starts_with")
+                    return `String tidak sah: mesti bermula dengan "${_issue.prefix}"`;
+                if (_issue.format === "ends_with")
+                    return `String tidak sah: mesti berakhir dengan "${_issue.suffix}"`;
+                if (_issue.format === "includes")
+                    return `String tidak sah: mesti mengandungi "${_issue.includes}"`;
+                if (_issue.format === "regex")
+                    return `String tidak sah: mesti sepadan dengan corak ${_issue.pattern}`;
+                return `${Nouns[_issue.format] ?? issue.format} tidak sah`;
+            }
+            case "not_multiple_of":
+                return `Nombor tidak sah: perlu gandaan ${issue.divisor}`;
+            case "unrecognized_keys":
+                return `Kunci tidak dikenali: ${joinValues(issue.keys, ", ")}`;
+            case "invalid_key":
+                return `Kunci tidak sah dalam ${issue.origin}`;
+            case "invalid_union":
+                return "Input tidak sah";
+            case "invalid_element":
+                return `Nilai tidak sah dalam ${issue.origin}`;
+            default:
+                return `Input tidak sah`;
+        }
+    };
+};
+function ms () {
+    return {
+        localeError: error$h(),
+    };
+}
+
+const error$g = () => {
+    const Sizable = {
+        string: { unit: "tekens" },
+        file: { unit: "bytes" },
+        array: { unit: "elementen" },
+        set: { unit: "elementen" },
+    };
+    function getSizing(origin) {
+        return Sizable[origin] ?? null;
+    }
+    const parsedType = (data) => {
+        const t = typeof data;
+        switch (t) {
+            case "number": {
+                return Number.isNaN(data) ? "NaN" : "getal";
+            }
+            case "object": {
+                if (Array.isArray(data)) {
+                    return "array";
+                }
+                if (data === null) {
+                    return "null";
+                }
+                if (Object.getPrototypeOf(data) !== Object.prototype && data.constructor) {
+                    return data.constructor.name;
+                }
+            }
+        }
+        return t;
+    };
+    const Nouns = {
+        regex: "invoer",
+        email: "emailadres",
+        url: "URL",
+        emoji: "emoji",
+        uuid: "UUID",
+        uuidv4: "UUIDv4",
+        uuidv6: "UUIDv6",
+        nanoid: "nanoid",
+        guid: "GUID",
+        cuid: "cuid",
+        cuid2: "cuid2",
+        ulid: "ULID",
+        xid: "XID",
+        ksuid: "KSUID",
+        datetime: "ISO datum en tijd",
+        date: "ISO datum",
+        time: "ISO tijd",
+        duration: "ISO duur",
+        ipv4: "IPv4-adres",
+        ipv6: "IPv6-adres",
+        cidrv4: "IPv4-bereik",
+        cidrv6: "IPv6-bereik",
+        base64: "base64-gecodeerde tekst",
+        base64url: "base64 URL-gecodeerde tekst",
+        json_string: "JSON string",
+        e164: "E.164-nummer",
+        jwt: "JWT",
+        template_literal: "invoer",
+    };
+    return (issue) => {
+        switch (issue.code) {
+            case "invalid_type":
+                return `Ongeldige invoer: verwacht ${issue.expected}, ontving ${parsedType(issue.input)}`;
+            case "invalid_value":
+                if (issue.values.length === 1)
+                    return `Ongeldige invoer: verwacht ${stringifyPrimitive(issue.values[0])}`;
+                return `Ongeldige optie: verwacht één van ${joinValues(issue.values, "|")}`;
+            case "too_big": {
+                const adj = issue.inclusive ? "<=" : "<";
+                const sizing = getSizing(issue.origin);
+                if (sizing)
+                    return `Te lang: verwacht dat ${issue.origin ?? "waarde"} ${adj}${issue.maximum.toString()} ${sizing.unit ?? "elementen"} bevat`;
+                return `Te lang: verwacht dat ${issue.origin ?? "waarde"} ${adj}${issue.maximum.toString()} is`;
+            }
+            case "too_small": {
+                const adj = issue.inclusive ? ">=" : ">";
+                const sizing = getSizing(issue.origin);
+                if (sizing) {
+                    return `Te kort: verwacht dat ${issue.origin} ${adj}${issue.minimum.toString()} ${sizing.unit} bevat`;
+                }
+                return `Te kort: verwacht dat ${issue.origin} ${adj}${issue.minimum.toString()} is`;
+            }
+            case "invalid_format": {
+                const _issue = issue;
+                if (_issue.format === "starts_with") {
+                    return `Ongeldige tekst: moet met "${_issue.prefix}" beginnen`;
+                }
+                if (_issue.format === "ends_with")
+                    return `Ongeldige tekst: moet op "${_issue.suffix}" eindigen`;
+                if (_issue.format === "includes")
+                    return `Ongeldige tekst: moet "${_issue.includes}" bevatten`;
+                if (_issue.format === "regex")
+                    return `Ongeldige tekst: moet overeenkomen met patroon ${_issue.pattern}`;
+                return `Ongeldig: ${Nouns[_issue.format] ?? issue.format}`;
+            }
+            case "not_multiple_of":
+                return `Ongeldig getal: moet een veelvoud van ${issue.divisor} zijn`;
+            case "unrecognized_keys":
+                return `Onbekende key${issue.keys.length > 1 ? "s" : ""}: ${joinValues(issue.keys, ", ")}`;
+            case "invalid_key":
+                return `Ongeldige key in ${issue.origin}`;
+            case "invalid_union":
+                return "Ongeldige invoer";
+            case "invalid_element":
+                return `Ongeldige waarde in ${issue.origin}`;
+            default:
+                return `Ongeldige invoer`;
+        }
+    };
+};
+function nl () {
+    return {
+        localeError: error$g(),
+    };
+}
+
+const error$f = () => {
+    const Sizable = {
+        string: { unit: "tegn", verb: "å ha" },
+        file: { unit: "bytes", verb: "å ha" },
+        array: { unit: "elementer", verb: "å inneholde" },
+        set: { unit: "elementer", verb: "å inneholde" },
+    };
+    function getSizing(origin) {
+        return Sizable[origin] ?? null;
+    }
+    const parsedType = (data) => {
+        const t = typeof data;
+        switch (t) {
+            case "number": {
+                return Number.isNaN(data) ? "NaN" : "tall";
+            }
+            case "object": {
+                if (Array.isArray(data)) {
+                    return "liste";
+                }
+                if (data === null) {
+                    return "null";
+                }
+                if (Object.getPrototypeOf(data) !== Object.prototype && data.constructor) {
+                    return data.constructor.name;
+                }
+            }
+        }
+        return t;
+    };
+    const Nouns = {
+        regex: "input",
+        email: "e-postadresse",
+        url: "URL",
+        emoji: "emoji",
+        uuid: "UUID",
+        uuidv4: "UUIDv4",
+        uuidv6: "UUIDv6",
+        nanoid: "nanoid",
+        guid: "GUID",
+        cuid: "cuid",
+        cuid2: "cuid2",
+        ulid: "ULID",
+        xid: "XID",
+        ksuid: "KSUID",
+        datetime: "ISO dato- og klokkeslett",
+        date: "ISO-dato",
+        time: "ISO-klokkeslett",
+        duration: "ISO-varighet",
+        ipv4: "IPv4-område",
+        ipv6: "IPv6-område",
+        cidrv4: "IPv4-spekter",
+        cidrv6: "IPv6-spekter",
+        base64: "base64-enkodet streng",
+        base64url: "base64url-enkodet streng",
+        json_string: "JSON-streng",
+        e164: "E.164-nummer",
+        jwt: "JWT",
+        template_literal: "input",
+    };
+    return (issue) => {
+        switch (issue.code) {
+            case "invalid_type":
+                return `Ugyldig input: forventet ${issue.expected}, fikk ${parsedType(issue.input)}`;
+            case "invalid_value":
+                if (issue.values.length === 1)
+                    return `Ugyldig verdi: forventet ${stringifyPrimitive(issue.values[0])}`;
+                return `Ugyldig valg: forventet en av ${joinValues(issue.values, "|")}`;
+            case "too_big": {
+                const adj = issue.inclusive ? "<=" : "<";
+                const sizing = getSizing(issue.origin);
+                if (sizing)
+                    return `For stor(t): forventet ${issue.origin ?? "value"} til å ha ${adj}${issue.maximum.toString()} ${sizing.unit ?? "elementer"}`;
+                return `For stor(t): forventet ${issue.origin ?? "value"} til å ha ${adj}${issue.maximum.toString()}`;
+            }
+            case "too_small": {
+                const adj = issue.inclusive ? ">=" : ">";
+                const sizing = getSizing(issue.origin);
+                if (sizing) {
+                    return `For lite(n): forventet ${issue.origin} til å ha ${adj}${issue.minimum.toString()} ${sizing.unit}`;
+                }
+                return `For lite(n): forventet ${issue.origin} til å ha ${adj}${issue.minimum.toString()}`;
+            }
+            case "invalid_format": {
+                const _issue = issue;
+                if (_issue.format === "starts_with")
+                    return `Ugyldig streng: må starte med "${_issue.prefix}"`;
+                if (_issue.format === "ends_with")
+                    return `Ugyldig streng: må ende med "${_issue.suffix}"`;
+                if (_issue.format === "includes")
+                    return `Ugyldig streng: må inneholde "${_issue.includes}"`;
+                if (_issue.format === "regex")
+                    return `Ugyldig streng: må matche mønsteret ${_issue.pattern}`;
+                return `Ugyldig ${Nouns[_issue.format] ?? issue.format}`;
+            }
+            case "not_multiple_of":
+                return `Ugyldig tall: må være et multiplum av ${issue.divisor}`;
+            case "unrecognized_keys":
+                return `${issue.keys.length > 1 ? "Ukjente nøkler" : "Ukjent nøkkel"}: ${joinValues(issue.keys, ", ")}`;
+            case "invalid_key":
+                return `Ugyldig nøkkel i ${issue.origin}`;
+            case "invalid_union":
+                return "Ugyldig input";
+            case "invalid_element":
+                return `Ugyldig verdi i ${issue.origin}`;
+            default:
+                return `Ugyldig input`;
+        }
+    };
+};
+function no () {
+    return {
+        localeError: error$f(),
+    };
+}
+
+const error$e = () => {
+    const Sizable = {
+        string: { unit: "harf", verb: "olmalıdır" },
+        file: { unit: "bayt", verb: "olmalıdır" },
+        array: { unit: "unsur", verb: "olmalıdır" },
+        set: { unit: "unsur", verb: "olmalıdır" },
+    };
+    function getSizing(origin) {
+        return Sizable[origin] ?? null;
+    }
+    const parsedType = (data) => {
+        const t = typeof data;
+        switch (t) {
+            case "number": {
+                return Number.isNaN(data) ? "NaN" : "numara";
+            }
+            case "object": {
+                if (Array.isArray(data)) {
+                    return "saf";
+                }
+                if (data === null) {
+                    return "gayb";
+                }
+                if (Object.getPrototypeOf(data) !== Object.prototype && data.constructor) {
+                    return data.constructor.name;
+                }
+            }
+        }
+        return t;
+    };
+    const Nouns = {
+        regex: "giren",
+        email: "epostagâh",
+        url: "URL",
+        emoji: "emoji",
+        uuid: "UUID",
+        uuidv4: "UUIDv4",
+        uuidv6: "UUIDv6",
+        nanoid: "nanoid",
+        guid: "GUID",
+        cuid: "cuid",
+        cuid2: "cuid2",
+        ulid: "ULID",
+        xid: "XID",
+        ksuid: "KSUID",
+        datetime: "ISO hengâmı",
+        date: "ISO tarihi",
+        time: "ISO zamanı",
+        duration: "ISO müddeti",
+        ipv4: "IPv4 nişânı",
+        ipv6: "IPv6 nişânı",
+        cidrv4: "IPv4 menzili",
+        cidrv6: "IPv6 menzili",
+        base64: "base64-şifreli metin",
+        base64url: "base64url-şifreli metin",
+        json_string: "JSON metin",
+        e164: "E.164 sayısı",
+        jwt: "JWT",
+        template_literal: "giren",
+    };
+    return (issue) => {
+        switch (issue.code) {
+            case "invalid_type":
+                return `Fâsit giren: umulan ${issue.expected}, alınan ${parsedType(issue.input)}`;
+            // return `Fâsit giren: umulan ${issue.expected}, alınan ${util.getParsedType(issue.input)}`;
+            case "invalid_value":
+                if (issue.values.length === 1)
+                    return `Fâsit giren: umulan ${stringifyPrimitive(issue.values[0])}`;
+                return `Fâsit tercih: mûteberler ${joinValues(issue.values, "|")}`;
+            case "too_big": {
+                const adj = issue.inclusive ? "<=" : "<";
+                const sizing = getSizing(issue.origin);
+                if (sizing)
+                    return `Fazla büyük: ${issue.origin ?? "value"}, ${adj}${issue.maximum.toString()} ${sizing.unit ?? "elements"} sahip olmalıydı.`;
+                return `Fazla büyük: ${issue.origin ?? "value"}, ${adj}${issue.maximum.toString()} olmalıydı.`;
+            }
+            case "too_small": {
+                const adj = issue.inclusive ? ">=" : ">";
+                const sizing = getSizing(issue.origin);
+                if (sizing) {
+                    return `Fazla küçük: ${issue.origin}, ${adj}${issue.minimum.toString()} ${sizing.unit} sahip olmalıydı.`;
+                }
+                return `Fazla küçük: ${issue.origin}, ${adj}${issue.minimum.toString()} olmalıydı.`;
+            }
+            case "invalid_format": {
+                const _issue = issue;
+                if (_issue.format === "starts_with")
+                    return `Fâsit metin: "${_issue.prefix}" ile başlamalı.`;
+                if (_issue.format === "ends_with")
+                    return `Fâsit metin: "${_issue.suffix}" ile bitmeli.`;
+                if (_issue.format === "includes")
+                    return `Fâsit metin: "${_issue.includes}" ihtivâ etmeli.`;
+                if (_issue.format === "regex")
+                    return `Fâsit metin: ${_issue.pattern} nakşına uymalı.`;
+                return `Fâsit ${Nouns[_issue.format] ?? issue.format}`;
+            }
+            case "not_multiple_of":
+                return `Fâsit sayı: ${issue.divisor} katı olmalıydı.`;
+            case "unrecognized_keys":
+                return `Tanınmayan anahtar ${issue.keys.length > 1 ? "s" : ""}: ${joinValues(issue.keys, ", ")}`;
+            case "invalid_key":
+                return `${issue.origin} için tanınmayan anahtar var.`;
+            case "invalid_union":
+                return "Giren tanınamadı.";
+            case "invalid_element":
+                return `${issue.origin} için tanınmayan kıymet var.`;
+            default:
+                return `Kıymet tanınamadı.`;
+        }
+    };
+};
+function ota () {
+    return {
+        localeError: error$e(),
+    };
+}
+
+const error$d = () => {
+    const Sizable = {
+        string: { unit: "توکي", verb: "ولري" },
+        file: { unit: "بایټس", verb: "ولري" },
+        array: { unit: "توکي", verb: "ولري" },
+        set: { unit: "توکي", verb: "ولري" },
+    };
+    function getSizing(origin) {
+        return Sizable[origin] ?? null;
+    }
+    const parsedType = (data) => {
+        const t = typeof data;
+        switch (t) {
+            case "number": {
+                return Number.isNaN(data) ? "NaN" : "عدد";
+            }
+            case "object": {
+                if (Array.isArray(data)) {
+                    return "ارې";
+                }
+                if (data === null) {
+                    return "null";
+                }
+                if (Object.getPrototypeOf(data) !== Object.prototype && data.constructor) {
+                    return data.constructor.name;
+                }
+            }
+        }
+        return t;
+    };
+    const Nouns = {
+        regex: "ورودي",
+        email: "بریښنالیک",
+        url: "یو آر ال",
+        emoji: "ایموجي",
+        uuid: "UUID",
+        uuidv4: "UUIDv4",
+        uuidv6: "UUIDv6",
+        nanoid: "nanoid",
+        guid: "GUID",
+        cuid: "cuid",
+        cuid2: "cuid2",
+        ulid: "ULID",
+        xid: "XID",
+        ksuid: "KSUID",
+        datetime: "نیټه او وخت",
+        date: "نېټه",
+        time: "وخت",
+        duration: "موده",
+        ipv4: "د IPv4 پته",
+        ipv6: "د IPv6 پته",
+        cidrv4: "د IPv4 ساحه",
+        cidrv6: "د IPv6 ساحه",
+        base64: "base64-encoded متن",
+        base64url: "base64url-encoded متن",
+        json_string: "JSON متن",
+        e164: "د E.164 شمېره",
+        jwt: "JWT",
+        template_literal: "ورودي",
+    };
+    return (issue) => {
+        switch (issue.code) {
+            case "invalid_type":
+                return `ناسم ورودي: باید ${issue.expected} وای, مګر ${parsedType(issue.input)} ترلاسه شو`;
+            case "invalid_value":
+                if (issue.values.length === 1) {
+                    return `ناسم ورودي: باید ${stringifyPrimitive(issue.values[0])} وای`;
+                }
+                return `ناسم انتخاب: باید یو له ${joinValues(issue.values, "|")} څخه وای`;
+            case "too_big": {
+                const adj = issue.inclusive ? "<=" : "<";
+                const sizing = getSizing(issue.origin);
+                if (sizing) {
+                    return `ډیر لوی: ${issue.origin ?? "ارزښت"} باید ${adj}${issue.maximum.toString()} ${sizing.unit ?? "عنصرونه"} ولري`;
+                }
+                return `ډیر لوی: ${issue.origin ?? "ارزښت"} باید ${adj}${issue.maximum.toString()} وي`;
+            }
+            case "too_small": {
+                const adj = issue.inclusive ? ">=" : ">";
+                const sizing = getSizing(issue.origin);
+                if (sizing) {
+                    return `ډیر کوچنی: ${issue.origin} باید ${adj}${issue.minimum.toString()} ${sizing.unit} ولري`;
+                }
+                return `ډیر کوچنی: ${issue.origin} باید ${adj}${issue.minimum.toString()} وي`;
+            }
+            case "invalid_format": {
+                const _issue = issue;
+                if (_issue.format === "starts_with") {
+                    return `ناسم متن: باید د "${_issue.prefix}" سره پیل شي`;
+                }
+                if (_issue.format === "ends_with") {
+                    return `ناسم متن: باید د "${_issue.suffix}" سره پای ته ورسيږي`;
+                }
+                if (_issue.format === "includes") {
+                    return `ناسم متن: باید "${_issue.includes}" ولري`;
+                }
+                if (_issue.format === "regex") {
+                    return `ناسم متن: باید د ${_issue.pattern} سره مطابقت ولري`;
+                }
+                return `${Nouns[_issue.format] ?? issue.format} ناسم دی`;
+            }
+            case "not_multiple_of":
+                return `ناسم عدد: باید د ${issue.divisor} مضرب وي`;
+            case "unrecognized_keys":
+                return `ناسم ${issue.keys.length > 1 ? "کلیډونه" : "کلیډ"}: ${joinValues(issue.keys, ", ")}`;
+            case "invalid_key":
+                return `ناسم کلیډ په ${issue.origin} کې`;
+            case "invalid_union":
+                return `ناسمه ورودي`;
+            case "invalid_element":
+                return `ناسم عنصر په ${issue.origin} کې`;
+            default:
+                return `ناسمه ورودي`;
+        }
+    };
+};
+function ps () {
+    return {
+        localeError: error$d(),
+    };
+}
+
+const error$c = () => {
+    const Sizable = {
+        string: { unit: "znaków", verb: "mieć" },
+        file: { unit: "bajtów", verb: "mieć" },
+        array: { unit: "elementów", verb: "mieć" },
+        set: { unit: "elementów", verb: "mieć" },
+    };
+    function getSizing(origin) {
+        return Sizable[origin] ?? null;
+    }
+    const parsedType = (data) => {
+        const t = typeof data;
+        switch (t) {
+            case "number": {
+                return Number.isNaN(data) ? "NaN" : "liczba";
+            }
+            case "object": {
+                if (Array.isArray(data)) {
+                    return "tablica";
+                }
+                if (data === null) {
+                    return "null";
+                }
+                if (Object.getPrototypeOf(data) !== Object.prototype && data.constructor) {
+                    return data.constructor.name;
+                }
+            }
+        }
+        return t;
+    };
+    const Nouns = {
+        regex: "wyrażenie",
+        email: "adres email",
+        url: "URL",
+        emoji: "emoji",
+        uuid: "UUID",
+        uuidv4: "UUIDv4",
+        uuidv6: "UUIDv6",
+        nanoid: "nanoid",
+        guid: "GUID",
+        cuid: "cuid",
+        cuid2: "cuid2",
+        ulid: "ULID",
+        xid: "XID",
+        ksuid: "KSUID",
+        datetime: "data i godzina w formacie ISO",
+        date: "data w formacie ISO",
+        time: "godzina w formacie ISO",
+        duration: "czas trwania ISO",
+        ipv4: "adres IPv4",
+        ipv6: "adres IPv6",
+        cidrv4: "zakres IPv4",
+        cidrv6: "zakres IPv6",
+        base64: "ciąg znaków zakodowany w formacie base64",
+        base64url: "ciąg znaków zakodowany w formacie base64url",
+        json_string: "ciąg znaków w formacie JSON",
+        e164: "liczba E.164",
+        jwt: "JWT",
+        template_literal: "wejście",
+    };
+    return (issue) => {
+        switch (issue.code) {
+            case "invalid_type":
+                return `Nieprawidłowe dane wejściowe: oczekiwano ${issue.expected}, otrzymano ${parsedType(issue.input)}`;
+            case "invalid_value":
+                if (issue.values.length === 1)
+                    return `Nieprawidłowe dane wejściowe: oczekiwano ${stringifyPrimitive(issue.values[0])}`;
+                return `Nieprawidłowa opcja: oczekiwano jednej z wartości ${joinValues(issue.values, "|")}`;
+            case "too_big": {
+                const adj = issue.inclusive ? "<=" : "<";
+                const sizing = getSizing(issue.origin);
+                if (sizing) {
+                    return `Za duża wartość: oczekiwano, że ${issue.origin ?? "wartość"} będzie mieć ${adj}${issue.maximum.toString()} ${sizing.unit ?? "elementów"}`;
+                }
+                return `Zbyt duż(y/a/e): oczekiwano, że ${issue.origin ?? "wartość"} będzie wynosić ${adj}${issue.maximum.toString()}`;
+            }
+            case "too_small": {
+                const adj = issue.inclusive ? ">=" : ">";
+                const sizing = getSizing(issue.origin);
+                if (sizing) {
+                    return `Za mała wartość: oczekiwano, że ${issue.origin ?? "wartość"} będzie mieć ${adj}${issue.minimum.toString()} ${sizing.unit ?? "elementów"}`;
+                }
+                return `Zbyt mał(y/a/e): oczekiwano, że ${issue.origin ?? "wartość"} będzie wynosić ${adj}${issue.minimum.toString()}`;
+            }
+            case "invalid_format": {
+                const _issue = issue;
+                if (_issue.format === "starts_with")
+                    return `Nieprawidłowy ciąg znaków: musi zaczynać się od "${_issue.prefix}"`;
+                if (_issue.format === "ends_with")
+                    return `Nieprawidłowy ciąg znaków: musi kończyć się na "${_issue.suffix}"`;
+                if (_issue.format === "includes")
+                    return `Nieprawidłowy ciąg znaków: musi zawierać "${_issue.includes}"`;
+                if (_issue.format === "regex")
+                    return `Nieprawidłowy ciąg znaków: musi odpowiadać wzorcowi ${_issue.pattern}`;
+                return `Nieprawidłow(y/a/e) ${Nouns[_issue.format] ?? issue.format}`;
+            }
+            case "not_multiple_of":
+                return `Nieprawidłowa liczba: musi być wielokrotnością ${issue.divisor}`;
+            case "unrecognized_keys":
+                return `Nierozpoznane klucze${issue.keys.length > 1 ? "s" : ""}: ${joinValues(issue.keys, ", ")}`;
+            case "invalid_key":
+                return `Nieprawidłowy klucz w ${issue.origin}`;
+            case "invalid_union":
+                return "Nieprawidłowe dane wejściowe";
+            case "invalid_element":
+                return `Nieprawidłowa wartość w ${issue.origin}`;
+            default:
+                return `Nieprawidłowe dane wejściowe`;
+        }
+    };
+};
+function pl () {
+    return {
+        localeError: error$c(),
+    };
+}
+
+const error$b = () => {
+    const Sizable = {
+        string: { unit: "caracteres", verb: "ter" },
+        file: { unit: "bytes", verb: "ter" },
+        array: { unit: "itens", verb: "ter" },
+        set: { unit: "itens", verb: "ter" },
+    };
+    function getSizing(origin) {
+        return Sizable[origin] ?? null;
+    }
+    const parsedType = (data) => {
+        const t = typeof data;
+        switch (t) {
+            case "number": {
+                return Number.isNaN(data) ? "NaN" : "número";
+            }
+            case "object": {
+                if (Array.isArray(data)) {
+                    return "array";
+                }
+                if (data === null) {
+                    return "nulo";
+                }
+                if (Object.getPrototypeOf(data) !== Object.prototype && data.constructor) {
+                    return data.constructor.name;
+                }
+            }
+        }
+        return t;
+    };
+    const Nouns = {
+        regex: "padrão",
+        email: "endereço de e-mail",
+        url: "URL",
+        emoji: "emoji",
+        uuid: "UUID",
+        uuidv4: "UUIDv4",
+        uuidv6: "UUIDv6",
+        nanoid: "nanoid",
+        guid: "GUID",
+        cuid: "cuid",
+        cuid2: "cuid2",
+        ulid: "ULID",
+        xid: "XID",
+        ksuid: "KSUID",
+        datetime: "data e hora ISO",
+        date: "data ISO",
+        time: "hora ISO",
+        duration: "duração ISO",
+        ipv4: "endereço IPv4",
+        ipv6: "endereço IPv6",
+        cidrv4: "faixa de IPv4",
+        cidrv6: "faixa de IPv6",
+        base64: "texto codificado em base64",
+        base64url: "URL codificada em base64",
+        json_string: "texto JSON",
+        e164: "número E.164",
+        jwt: "JWT",
+        template_literal: "entrada",
+    };
+    return (issue) => {
+        switch (issue.code) {
+            case "invalid_type":
+                return `Tipo inválido: esperado ${issue.expected}, recebido ${parsedType(issue.input)}`;
+            case "invalid_value":
+                if (issue.values.length === 1)
+                    return `Entrada inválida: esperado ${stringifyPrimitive(issue.values[0])}`;
+                return `Opção inválida: esperada uma das ${joinValues(issue.values, "|")}`;
+            case "too_big": {
+                const adj = issue.inclusive ? "<=" : "<";
+                const sizing = getSizing(issue.origin);
+                if (sizing)
+                    return `Muito grande: esperado que ${issue.origin ?? "valor"} tivesse ${adj}${issue.maximum.toString()} ${sizing.unit ?? "elementos"}`;
+                return `Muito grande: esperado que ${issue.origin ?? "valor"} fosse ${adj}${issue.maximum.toString()}`;
+            }
+            case "too_small": {
+                const adj = issue.inclusive ? ">=" : ">";
+                const sizing = getSizing(issue.origin);
+                if (sizing) {
+                    return `Muito pequeno: esperado que ${issue.origin} tivesse ${adj}${issue.minimum.toString()} ${sizing.unit}`;
+                }
+                return `Muito pequeno: esperado que ${issue.origin} fosse ${adj}${issue.minimum.toString()}`;
+            }
+            case "invalid_format": {
+                const _issue = issue;
+                if (_issue.format === "starts_with")
+                    return `Texto inválido: deve começar com "${_issue.prefix}"`;
+                if (_issue.format === "ends_with")
+                    return `Texto inválido: deve terminar com "${_issue.suffix}"`;
+                if (_issue.format === "includes")
+                    return `Texto inválido: deve incluir "${_issue.includes}"`;
+                if (_issue.format === "regex")
+                    return `Texto inválido: deve corresponder ao padrão ${_issue.pattern}`;
+                return `${Nouns[_issue.format] ?? issue.format} inválido`;
+            }
+            case "not_multiple_of":
+                return `Número inválido: deve ser múltiplo de ${issue.divisor}`;
+            case "unrecognized_keys":
+                return `Chave${issue.keys.length > 1 ? "s" : ""} desconhecida${issue.keys.length > 1 ? "s" : ""}: ${joinValues(issue.keys, ", ")}`;
+            case "invalid_key":
+                return `Chave inválida em ${issue.origin}`;
+            case "invalid_union":
+                return "Entrada inválida";
+            case "invalid_element":
+                return `Valor inválido em ${issue.origin}`;
+            default:
+                return `Campo inválido`;
+        }
+    };
+};
+function pt () {
+    return {
+        localeError: error$b(),
+    };
+}
+
+function getRussianPlural(count, one, few, many) {
+    const absCount = Math.abs(count);
+    const lastDigit = absCount % 10;
+    const lastTwoDigits = absCount % 100;
+    if (lastTwoDigits >= 11 && lastTwoDigits <= 19) {
+        return many;
+    }
+    if (lastDigit === 1) {
+        return one;
+    }
+    if (lastDigit >= 2 && lastDigit <= 4) {
+        return few;
+    }
+    return many;
+}
+const error$a = () => {
+    const Sizable = {
+        string: {
+            unit: {
+                one: "символ",
+                few: "символа",
+                many: "символов",
+            },
+            verb: "иметь",
+        },
+        file: {
+            unit: {
+                one: "байт",
+                few: "байта",
+                many: "байт",
+            },
+            verb: "иметь",
+        },
+        array: {
+            unit: {
+                one: "элемент",
+                few: "элемента",
+                many: "элементов",
+            },
+            verb: "иметь",
+        },
+        set: {
+            unit: {
+                one: "элемент",
+                few: "элемента",
+                many: "элементов",
+            },
+            verb: "иметь",
+        },
+    };
+    function getSizing(origin) {
+        return Sizable[origin] ?? null;
+    }
+    const parsedType = (data) => {
+        const t = typeof data;
+        switch (t) {
+            case "number": {
+                return Number.isNaN(data) ? "NaN" : "число";
+            }
+            case "object": {
+                if (Array.isArray(data)) {
+                    return "массив";
+                }
+                if (data === null) {
+                    return "null";
+                }
+                if (Object.getPrototypeOf(data) !== Object.prototype && data.constructor) {
+                    return data.constructor.name;
+                }
+            }
+        }
+        return t;
+    };
+    const Nouns = {
+        regex: "ввод",
+        email: "email адрес",
+        url: "URL",
+        emoji: "эмодзи",
+        uuid: "UUID",
+        uuidv4: "UUIDv4",
+        uuidv6: "UUIDv6",
+        nanoid: "nanoid",
+        guid: "GUID",
+        cuid: "cuid",
+        cuid2: "cuid2",
+        ulid: "ULID",
+        xid: "XID",
+        ksuid: "KSUID",
+        datetime: "ISO дата и время",
+        date: "ISO дата",
+        time: "ISO время",
+        duration: "ISO длительность",
+        ipv4: "IPv4 адрес",
+        ipv6: "IPv6 адрес",
+        cidrv4: "IPv4 диапазон",
+        cidrv6: "IPv6 диапазон",
+        base64: "строка в формате base64",
+        base64url: "строка в формате base64url",
+        json_string: "JSON строка",
+        e164: "номер E.164",
+        jwt: "JWT",
+        template_literal: "ввод",
+    };
+    return (issue) => {
+        switch (issue.code) {
+            case "invalid_type":
+                return `Неверный ввод: ожидалось ${issue.expected}, получено ${parsedType(issue.input)}`;
+            case "invalid_value":
+                if (issue.values.length === 1)
+                    return `Неверный ввод: ожидалось ${stringifyPrimitive(issue.values[0])}`;
+                return `Неверный вариант: ожидалось одно из ${joinValues(issue.values, "|")}`;
+            case "too_big": {
+                const adj = issue.inclusive ? "<=" : "<";
+                const sizing = getSizing(issue.origin);
+                if (sizing) {
+                    const maxValue = Number(issue.maximum);
+                    const unit = getRussianPlural(maxValue, sizing.unit.one, sizing.unit.few, sizing.unit.many);
+                    return `Слишком большое значение: ожидалось, что ${issue.origin ?? "значение"} будет иметь ${adj}${issue.maximum.toString()} ${unit}`;
+                }
+                return `Слишком большое значение: ожидалось, что ${issue.origin ?? "значение"} будет ${adj}${issue.maximum.toString()}`;
+            }
+            case "too_small": {
+                const adj = issue.inclusive ? ">=" : ">";
+                const sizing = getSizing(issue.origin);
+                if (sizing) {
+                    const minValue = Number(issue.minimum);
+                    const unit = getRussianPlural(minValue, sizing.unit.one, sizing.unit.few, sizing.unit.many);
+                    return `Слишком маленькое значение: ожидалось, что ${issue.origin} будет иметь ${adj}${issue.minimum.toString()} ${unit}`;
+                }
+                return `Слишком маленькое значение: ожидалось, что ${issue.origin} будет ${adj}${issue.minimum.toString()}`;
+            }
+            case "invalid_format": {
+                const _issue = issue;
+                if (_issue.format === "starts_with")
+                    return `Неверная строка: должна начинаться с "${_issue.prefix}"`;
+                if (_issue.format === "ends_with")
+                    return `Неверная строка: должна заканчиваться на "${_issue.suffix}"`;
+                if (_issue.format === "includes")
+                    return `Неверная строка: должна содержать "${_issue.includes}"`;
+                if (_issue.format === "regex")
+                    return `Неверная строка: должна соответствовать шаблону ${_issue.pattern}`;
+                return `Неверный ${Nouns[_issue.format] ?? issue.format}`;
+            }
+            case "not_multiple_of":
+                return `Неверное число: должно быть кратным ${issue.divisor}`;
+            case "unrecognized_keys":
+                return `Нераспознанн${issue.keys.length > 1 ? "ые" : "ый"} ключ${issue.keys.length > 1 ? "и" : ""}: ${joinValues(issue.keys, ", ")}`;
+            case "invalid_key":
+                return `Неверный ключ в ${issue.origin}`;
+            case "invalid_union":
+                return "Неверные входные данные";
+            case "invalid_element":
+                return `Неверное значение в ${issue.origin}`;
+            default:
+                return `Неверные входные данные`;
+        }
+    };
+};
+function ru () {
+    return {
+        localeError: error$a(),
+    };
+}
+
+const error$9 = () => {
+    const Sizable = {
+        string: { unit: "znakov", verb: "imeti" },
+        file: { unit: "bajtov", verb: "imeti" },
+        array: { unit: "elementov", verb: "imeti" },
+        set: { unit: "elementov", verb: "imeti" },
+    };
+    function getSizing(origin) {
+        return Sizable[origin] ?? null;
+    }
+    const parsedType = (data) => {
+        const t = typeof data;
+        switch (t) {
+            case "number": {
+                return Number.isNaN(data) ? "NaN" : "število";
+            }
+            case "object": {
+                if (Array.isArray(data)) {
+                    return "tabela";
+                }
+                if (data === null) {
+                    return "null";
+                }
+                if (Object.getPrototypeOf(data) !== Object.prototype && data.constructor) {
+                    return data.constructor.name;
+                }
+            }
+        }
+        return t;
+    };
+    const Nouns = {
+        regex: "vnos",
+        email: "e-poštni naslov",
+        url: "URL",
+        emoji: "emoji",
+        uuid: "UUID",
+        uuidv4: "UUIDv4",
+        uuidv6: "UUIDv6",
+        nanoid: "nanoid",
+        guid: "GUID",
+        cuid: "cuid",
+        cuid2: "cuid2",
+        ulid: "ULID",
+        xid: "XID",
+        ksuid: "KSUID",
+        datetime: "ISO datum in čas",
+        date: "ISO datum",
+        time: "ISO čas",
+        duration: "ISO trajanje",
+        ipv4: "IPv4 naslov",
+        ipv6: "IPv6 naslov",
+        cidrv4: "obseg IPv4",
+        cidrv6: "obseg IPv6",
+        base64: "base64 kodiran niz",
+        base64url: "base64url kodiran niz",
+        json_string: "JSON niz",
+        e164: "E.164 številka",
+        jwt: "JWT",
+        template_literal: "vnos",
+    };
+    return (issue) => {
+        switch (issue.code) {
+            case "invalid_type":
+                return `Neveljaven vnos: pričakovano ${issue.expected}, prejeto ${parsedType(issue.input)}`;
+            case "invalid_value":
+                if (issue.values.length === 1)
+                    return `Neveljaven vnos: pričakovano ${stringifyPrimitive(issue.values[0])}`;
+                return `Neveljavna možnost: pričakovano eno izmed ${joinValues(issue.values, "|")}`;
+            case "too_big": {
+                const adj = issue.inclusive ? "<=" : "<";
+                const sizing = getSizing(issue.origin);
+                if (sizing)
+                    return `Preveliko: pričakovano, da bo ${issue.origin ?? "vrednost"} imelo ${adj}${issue.maximum.toString()} ${sizing.unit ?? "elementov"}`;
+                return `Preveliko: pričakovano, da bo ${issue.origin ?? "vrednost"} ${adj}${issue.maximum.toString()}`;
+            }
+            case "too_small": {
+                const adj = issue.inclusive ? ">=" : ">";
+                const sizing = getSizing(issue.origin);
+                if (sizing) {
+                    return `Premajhno: pričakovano, da bo ${issue.origin} imelo ${adj}${issue.minimum.toString()} ${sizing.unit}`;
+                }
+                return `Premajhno: pričakovano, da bo ${issue.origin} ${adj}${issue.minimum.toString()}`;
+            }
+            case "invalid_format": {
+                const _issue = issue;
+                if (_issue.format === "starts_with") {
+                    return `Neveljaven niz: mora se začeti z "${_issue.prefix}"`;
+                }
+                if (_issue.format === "ends_with")
+                    return `Neveljaven niz: mora se končati z "${_issue.suffix}"`;
+                if (_issue.format === "includes")
+                    return `Neveljaven niz: mora vsebovati "${_issue.includes}"`;
+                if (_issue.format === "regex")
+                    return `Neveljaven niz: mora ustrezati vzorcu ${_issue.pattern}`;
+                return `Neveljaven ${Nouns[_issue.format] ?? issue.format}`;
+            }
+            case "not_multiple_of":
+                return `Neveljavno število: mora biti večkratnik ${issue.divisor}`;
+            case "unrecognized_keys":
+                return `Neprepoznan${issue.keys.length > 1 ? "i ključi" : " ključ"}: ${joinValues(issue.keys, ", ")}`;
+            case "invalid_key":
+                return `Neveljaven ključ v ${issue.origin}`;
+            case "invalid_union":
+                return "Neveljaven vnos";
+            case "invalid_element":
+                return `Neveljavna vrednost v ${issue.origin}`;
+            default:
+                return "Neveljaven vnos";
+        }
+    };
+};
+function sl () {
+    return {
+        localeError: error$9(),
+    };
+}
+
+const error$8 = () => {
+    const Sizable = {
+        string: { unit: "tecken", verb: "att ha" },
+        file: { unit: "bytes", verb: "att ha" },
+        array: { unit: "objekt", verb: "att innehålla" },
+        set: { unit: "objekt", verb: "att innehålla" },
+    };
+    function getSizing(origin) {
+        return Sizable[origin] ?? null;
+    }
+    const parsedType = (data) => {
+        const t = typeof data;
+        switch (t) {
+            case "number": {
+                return Number.isNaN(data) ? "NaN" : "antal";
+            }
+            case "object": {
+                if (Array.isArray(data)) {
+                    return "lista";
+                }
+                if (data === null) {
+                    return "null";
+                }
+                if (Object.getPrototypeOf(data) !== Object.prototype && data.constructor) {
+                    return data.constructor.name;
+                }
+            }
+        }
+        return t;
+    };
+    const Nouns = {
+        regex: "reguljärt uttryck",
+        email: "e-postadress",
+        url: "URL",
+        emoji: "emoji",
+        uuid: "UUID",
+        uuidv4: "UUIDv4",
+        uuidv6: "UUIDv6",
+        nanoid: "nanoid",
+        guid: "GUID",
+        cuid: "cuid",
+        cuid2: "cuid2",
+        ulid: "ULID",
+        xid: "XID",
+        ksuid: "KSUID",
+        datetime: "ISO-datum och tid",
+        date: "ISO-datum",
+        time: "ISO-tid",
+        duration: "ISO-varaktighet",
+        ipv4: "IPv4-intervall",
+        ipv6: "IPv6-intervall",
+        cidrv4: "IPv4-spektrum",
+        cidrv6: "IPv6-spektrum",
+        base64: "base64-kodad sträng",
+        base64url: "base64url-kodad sträng",
+        json_string: "JSON-sträng",
+        e164: "E.164-nummer",
+        jwt: "JWT",
+        template_literal: "mall-literal",
+    };
+    return (issue) => {
+        switch (issue.code) {
+            case "invalid_type":
+                return `Ogiltig inmatning: förväntat ${issue.expected}, fick ${parsedType(issue.input)}`;
+            case "invalid_value":
+                if (issue.values.length === 1)
+                    return `Ogiltig inmatning: förväntat ${stringifyPrimitive(issue.values[0])}`;
+                return `Ogiltigt val: förväntade en av ${joinValues(issue.values, "|")}`;
+            case "too_big": {
+                const adj = issue.inclusive ? "<=" : "<";
+                const sizing = getSizing(issue.origin);
+                if (sizing) {
+                    return `För stor(t): förväntade ${issue.origin ?? "värdet"} att ha ${adj}${issue.maximum.toString()} ${sizing.unit ?? "element"}`;
+                }
+                return `För stor(t): förväntat ${issue.origin ?? "värdet"} att ha ${adj}${issue.maximum.toString()}`;
+            }
+            case "too_small": {
+                const adj = issue.inclusive ? ">=" : ">";
+                const sizing = getSizing(issue.origin);
+                if (sizing) {
+                    return `För lite(t): förväntade ${issue.origin ?? "värdet"} att ha ${adj}${issue.minimum.toString()} ${sizing.unit}`;
+                }
+                return `För lite(t): förväntade ${issue.origin ?? "värdet"} att ha ${adj}${issue.minimum.toString()}`;
+            }
+            case "invalid_format": {
+                const _issue = issue;
+                if (_issue.format === "starts_with") {
+                    return `Ogiltig sträng: måste börja med "${_issue.prefix}"`;
+                }
+                if (_issue.format === "ends_with")
+                    return `Ogiltig sträng: måste sluta med "${_issue.suffix}"`;
+                if (_issue.format === "includes")
+                    return `Ogiltig sträng: måste innehålla "${_issue.includes}"`;
+                if (_issue.format === "regex")
+                    return `Ogiltig sträng: måste matcha mönstret "${_issue.pattern}"`;
+                return `Ogiltig(t) ${Nouns[_issue.format] ?? issue.format}`;
+            }
+            case "not_multiple_of":
+                return `Ogiltigt tal: måste vara en multipel av ${issue.divisor}`;
+            case "unrecognized_keys":
+                return `${issue.keys.length > 1 ? "Okända nycklar" : "Okänd nyckel"}: ${joinValues(issue.keys, ", ")}`;
+            case "invalid_key":
+                return `Ogiltig nyckel i ${issue.origin ?? "värdet"}`;
+            case "invalid_union":
+                return "Ogiltig input";
+            case "invalid_element":
+                return `Ogiltigt värde i ${issue.origin ?? "värdet"}`;
+            default:
+                return `Ogiltig input`;
+        }
+    };
+};
+function sv () {
+    return {
+        localeError: error$8(),
+    };
+}
+
+const error$7 = () => {
+    const Sizable = {
+        string: { unit: "எழுத்துக்கள்", verb: "கொண்டிருக்க வேண்டும்" },
+        file: { unit: "பைட்டுகள்", verb: "கொண்டிருக்க வேண்டும்" },
+        array: { unit: "உறுப்புகள்", verb: "கொண்டிருக்க வேண்டும்" },
+        set: { unit: "உறுப்புகள்", verb: "கொண்டிருக்க வேண்டும்" },
+    };
+    function getSizing(origin) {
+        return Sizable[origin] ?? null;
+    }
+    const parsedType = (data) => {
+        const t = typeof data;
+        switch (t) {
+            case "number": {
+                return Number.isNaN(data) ? "எண் அல்லாதது" : "எண்";
+            }
+            case "object": {
+                if (Array.isArray(data)) {
+                    return "அணி";
+                }
+                if (data === null) {
+                    return "வெறுமை";
+                }
+                if (Object.getPrototypeOf(data) !== Object.prototype && data.constructor) {
+                    return data.constructor.name;
+                }
+            }
+        }
+        return t;
+    };
+    const Nouns = {
+        regex: "உள்ளீடு",
+        email: "மின்னஞ்சல் முகவரி",
+        url: "URL",
+        emoji: "emoji",
+        uuid: "UUID",
+        uuidv4: "UUIDv4",
+        uuidv6: "UUIDv6",
+        nanoid: "nanoid",
+        guid: "GUID",
+        cuid: "cuid",
+        cuid2: "cuid2",
+        ulid: "ULID",
+        xid: "XID",
+        ksuid: "KSUID",
+        datetime: "ISO தேதி நேரம்",
+        date: "ISO தேதி",
+        time: "ISO நேரம்",
+        duration: "ISO கால அளவு",
+        ipv4: "IPv4 முகவரி",
+        ipv6: "IPv6 முகவரி",
+        cidrv4: "IPv4 வரம்பு",
+        cidrv6: "IPv6 வரம்பு",
+        base64: "base64-encoded சரம்",
+        base64url: "base64url-encoded சரம்",
+        json_string: "JSON சரம்",
+        e164: "E.164 எண்",
+        jwt: "JWT",
+        template_literal: "input",
+    };
+    return (issue) => {
+        switch (issue.code) {
+            case "invalid_type":
+                return `தவறான உள்ளீடு: எதிர்பார்க்கப்பட்டது ${issue.expected}, பெறப்பட்டது ${parsedType(issue.input)}`;
+            case "invalid_value":
+                if (issue.values.length === 1)
+                    return `தவறான உள்ளீடு: எதிர்பார்க்கப்பட்டது ${stringifyPrimitive(issue.values[0])}`;
+                return `தவறான விருப்பம்: எதிர்பார்க்கப்பட்டது ${joinValues(issue.values, "|")} இல் ஒன்று`;
+            case "too_big": {
+                const adj = issue.inclusive ? "<=" : "<";
+                const sizing = getSizing(issue.origin);
+                if (sizing) {
+                    return `மிக பெரியது: எதிர்பார்க்கப்பட்டது ${issue.origin ?? "மதிப்பு"} ${adj}${issue.maximum.toString()} ${sizing.unit ?? "உறுப்புகள்"} ஆக இருக்க வேண்டும்`;
+                }
+                return `மிக பெரியது: எதிர்பார்க்கப்பட்டது ${issue.origin ?? "மதிப்பு"} ${adj}${issue.maximum.toString()} ஆக இருக்க வேண்டும்`;
+            }
+            case "too_small": {
+                const adj = issue.inclusive ? ">=" : ">";
+                const sizing = getSizing(issue.origin);
+                if (sizing) {
+                    return `மிகச் சிறியது: எதிர்பார்க்கப்பட்டது ${issue.origin} ${adj}${issue.minimum.toString()} ${sizing.unit} ஆக இருக்க வேண்டும்`; //
+                }
+                return `மிகச் சிறியது: எதிர்பார்க்கப்பட்டது ${issue.origin} ${adj}${issue.minimum.toString()} ஆக இருக்க வேண்டும்`;
+            }
+            case "invalid_format": {
+                const _issue = issue;
+                if (_issue.format === "starts_with")
+                    return `தவறான சரம்: "${_issue.prefix}" இல் தொடங்க வேண்டும்`;
+                if (_issue.format === "ends_with")
+                    return `தவறான சரம்: "${_issue.suffix}" இல் முடிவடைய வேண்டும்`;
+                if (_issue.format === "includes")
+                    return `தவறான சரம்: "${_issue.includes}" ஐ உள்ளடக்க வேண்டும்`;
+                if (_issue.format === "regex")
+                    return `தவறான சரம்: ${_issue.pattern} முறைபாட்டுடன் பொருந்த வேண்டும்`;
+                return `தவறான ${Nouns[_issue.format] ?? issue.format}`;
+            }
+            case "not_multiple_of":
+                return `தவறான எண்: ${issue.divisor} இன் பலமாக இருக்க வேண்டும்`;
+            case "unrecognized_keys":
+                return `அடையாளம் தெரியாத விசை${issue.keys.length > 1 ? "கள்" : ""}: ${joinValues(issue.keys, ", ")}`;
+            case "invalid_key":
+                return `${issue.origin} இல் தவறான விசை`;
+            case "invalid_union":
+                return "தவறான உள்ளீடு";
+            case "invalid_element":
+                return `${issue.origin} இல் தவறான மதிப்பு`;
+            default:
+                return `தவறான உள்ளீடு`;
+        }
+    };
+};
+function ta () {
+    return {
+        localeError: error$7(),
+    };
+}
+
+const error$6 = () => {
+    const Sizable = {
+        string: { unit: "ตัวอักษร", verb: "ควรมี" },
+        file: { unit: "ไบต์", verb: "ควรมี" },
+        array: { unit: "รายการ", verb: "ควรมี" },
+        set: { unit: "รายการ", verb: "ควรมี" },
+    };
+    function getSizing(origin) {
+        return Sizable[origin] ?? null;
+    }
+    const parsedType = (data) => {
+        const t = typeof data;
+        switch (t) {
+            case "number": {
+                return Number.isNaN(data) ? "ไม่ใช่ตัวเลข (NaN)" : "ตัวเลข";
+            }
+            case "object": {
+                if (Array.isArray(data)) {
+                    return "อาร์เรย์ (Array)";
+                }
+                if (data === null) {
+                    return "ไม่มีค่า (null)";
+                }
+                if (Object.getPrototypeOf(data) !== Object.prototype && data.constructor) {
+                    return data.constructor.name;
+                }
+            }
+        }
+        return t;
+    };
+    const Nouns = {
+        regex: "ข้อมูลที่ป้อน",
+        email: "ที่อยู่อีเมล",
+        url: "URL",
+        emoji: "อิโมจิ",
+        uuid: "UUID",
+        uuidv4: "UUIDv4",
+        uuidv6: "UUIDv6",
+        nanoid: "nanoid",
+        guid: "GUID",
+        cuid: "cuid",
+        cuid2: "cuid2",
+        ulid: "ULID",
+        xid: "XID",
+        ksuid: "KSUID",
+        datetime: "วันที่เวลาแบบ ISO",
+        date: "วันที่แบบ ISO",
+        time: "เวลาแบบ ISO",
+        duration: "ช่วงเวลาแบบ ISO",
+        ipv4: "ที่อยู่ IPv4",
+        ipv6: "ที่อยู่ IPv6",
+        cidrv4: "ช่วง IP แบบ IPv4",
+        cidrv6: "ช่วง IP แบบ IPv6",
+        base64: "ข้อความแบบ Base64",
+        base64url: "ข้อความแบบ Base64 สำหรับ URL",
+        json_string: "ข้อความแบบ JSON",
+        e164: "เบอร์โทรศัพท์ระหว่างประเทศ (E.164)",
+        jwt: "โทเคน JWT",
+        template_literal: "ข้อมูลที่ป้อน",
+    };
+    return (issue) => {
+        switch (issue.code) {
+            case "invalid_type":
+                return `ประเภทข้อมูลไม่ถูกต้อง: ควรเป็น ${issue.expected} แต่ได้รับ ${parsedType(issue.input)}`;
+            case "invalid_value":
+                if (issue.values.length === 1)
+                    return `ค่าไม่ถูกต้อง: ควรเป็น ${stringifyPrimitive(issue.values[0])}`;
+                return `ตัวเลือกไม่ถูกต้อง: ควรเป็นหนึ่งใน ${joinValues(issue.values, "|")}`;
+            case "too_big": {
+                const adj = issue.inclusive ? "ไม่เกิน" : "น้อยกว่า";
+                const sizing = getSizing(issue.origin);
+                if (sizing)
+                    return `เกินกำหนด: ${issue.origin ?? "ค่า"} ควรมี${adj} ${issue.maximum.toString()} ${sizing.unit ?? "รายการ"}`;
+                return `เกินกำหนด: ${issue.origin ?? "ค่า"} ควรมี${adj} ${issue.maximum.toString()}`;
+            }
+            case "too_small": {
+                const adj = issue.inclusive ? "อย่างน้อย" : "มากกว่า";
+                const sizing = getSizing(issue.origin);
+                if (sizing) {
+                    return `น้อยกว่ากำหนด: ${issue.origin} ควรมี${adj} ${issue.minimum.toString()} ${sizing.unit}`;
+                }
+                return `น้อยกว่ากำหนด: ${issue.origin} ควรมี${adj} ${issue.minimum.toString()}`;
+            }
+            case "invalid_format": {
+                const _issue = issue;
+                if (_issue.format === "starts_with") {
+                    return `รูปแบบไม่ถูกต้อง: ข้อความต้องขึ้นต้นด้วย "${_issue.prefix}"`;
+                }
+                if (_issue.format === "ends_with")
+                    return `รูปแบบไม่ถูกต้อง: ข้อความต้องลงท้ายด้วย "${_issue.suffix}"`;
+                if (_issue.format === "includes")
+                    return `รูปแบบไม่ถูกต้อง: ข้อความต้องมี "${_issue.includes}" อยู่ในข้อความ`;
+                if (_issue.format === "regex")
+                    return `รูปแบบไม่ถูกต้อง: ต้องตรงกับรูปแบบที่กำหนด ${_issue.pattern}`;
+                return `รูปแบบไม่ถูกต้อง: ${Nouns[_issue.format] ?? issue.format}`;
+            }
+            case "not_multiple_of":
+                return `ตัวเลขไม่ถูกต้อง: ต้องเป็นจำนวนที่หารด้วย ${issue.divisor} ได้ลงตัว`;
+            case "unrecognized_keys":
+                return `พบคีย์ที่ไม่รู้จัก: ${joinValues(issue.keys, ", ")}`;
+            case "invalid_key":
+                return `คีย์ไม่ถูกต้องใน ${issue.origin}`;
+            case "invalid_union":
+                return "ข้อมูลไม่ถูกต้อง: ไม่ตรงกับรูปแบบยูเนียนที่กำหนดไว้";
+            case "invalid_element":
+                return `ข้อมูลไม่ถูกต้องใน ${issue.origin}`;
+            default:
+                return `ข้อมูลไม่ถูกต้อง`;
+        }
+    };
+};
+function th () {
+    return {
+        localeError: error$6(),
+    };
+}
+
+const parsedType = (data) => {
+    const t = typeof data;
+    switch (t) {
+        case "number": {
+            return Number.isNaN(data) ? "NaN" : "number";
+        }
+        case "object": {
+            if (Array.isArray(data)) {
+                return "array";
+            }
+            if (data === null) {
+                return "null";
+            }
+            if (Object.getPrototypeOf(data) !== Object.prototype && data.constructor) {
+                return data.constructor.name;
+            }
+        }
+    }
+    return t;
+};
+const error$5 = () => {
+    const Sizable = {
+        string: { unit: "karakter", verb: "olmalı" },
+        file: { unit: "bayt", verb: "olmalı" },
+        array: { unit: "öğe", verb: "olmalı" },
+        set: { unit: "öğe", verb: "olmalı" },
+    };
+    function getSizing(origin) {
+        return Sizable[origin] ?? null;
+    }
+    const Nouns = {
+        regex: "girdi",
+        email: "e-posta adresi",
+        url: "URL",
+        emoji: "emoji",
+        uuid: "UUID",
+        uuidv4: "UUIDv4",
+        uuidv6: "UUIDv6",
+        nanoid: "nanoid",
+        guid: "GUID",
+        cuid: "cuid",
+        cuid2: "cuid2",
+        ulid: "ULID",
+        xid: "XID",
+        ksuid: "KSUID",
+        datetime: "ISO tarih ve saat",
+        date: "ISO tarih",
+        time: "ISO saat",
+        duration: "ISO süre",
+        ipv4: "IPv4 adresi",
+        ipv6: "IPv6 adresi",
+        cidrv4: "IPv4 aralığı",
+        cidrv6: "IPv6 aralığı",
+        base64: "base64 ile şifrelenmiş metin",
+        base64url: "base64url ile şifrelenmiş metin",
+        json_string: "JSON dizesi",
+        e164: "E.164 sayısı",
+        jwt: "JWT",
+        template_literal: "Şablon dizesi",
+    };
+    return (issue) => {
+        switch (issue.code) {
+            case "invalid_type":
+                return `Geçersiz değer: beklenen ${issue.expected}, alınan ${parsedType(issue.input)}`;
+            case "invalid_value":
+                if (issue.values.length === 1)
+                    return `Geçersiz değer: beklenen ${stringifyPrimitive(issue.values[0])}`;
+                return `Geçersiz seçenek: aşağıdakilerden biri olmalı: ${joinValues(issue.values, "|")}`;
+            case "too_big": {
+                const adj = issue.inclusive ? "<=" : "<";
+                const sizing = getSizing(issue.origin);
+                if (sizing)
+                    return `Çok büyük: beklenen ${issue.origin ?? "değer"} ${adj}${issue.maximum.toString()} ${sizing.unit ?? "öğe"}`;
+                return `Çok büyük: beklenen ${issue.origin ?? "değer"} ${adj}${issue.maximum.toString()}`;
+            }
+            case "too_small": {
+                const adj = issue.inclusive ? ">=" : ">";
+                const sizing = getSizing(issue.origin);
+                if (sizing)
+                    return `Çok küçük: beklenen ${issue.origin} ${adj}${issue.minimum.toString()} ${sizing.unit}`;
+                return `Çok küçük: beklenen ${issue.origin} ${adj}${issue.minimum.toString()}`;
+            }
+            case "invalid_format": {
+                const _issue = issue;
+                if (_issue.format === "starts_with")
+                    return `Geçersiz metin: "${_issue.prefix}" ile başlamalı`;
+                if (_issue.format === "ends_with")
+                    return `Geçersiz metin: "${_issue.suffix}" ile bitmeli`;
+                if (_issue.format === "includes")
+                    return `Geçersiz metin: "${_issue.includes}" içermeli`;
+                if (_issue.format === "regex")
+                    return `Geçersiz metin: ${_issue.pattern} desenine uymalı`;
+                return `Geçersiz ${Nouns[_issue.format] ?? issue.format}`;
+            }
+            case "not_multiple_of":
+                return `Geçersiz sayı: ${issue.divisor} ile tam bölünebilmeli`;
+            case "unrecognized_keys":
+                return `Tanınmayan anahtar${issue.keys.length > 1 ? "lar" : ""}: ${joinValues(issue.keys, ", ")}`;
+            case "invalid_key":
+                return `${issue.origin} içinde geçersiz anahtar`;
+            case "invalid_union":
+                return "Geçersiz değer";
+            case "invalid_element":
+                return `${issue.origin} içinde geçersiz değer`;
+            default:
+                return `Geçersiz değer`;
+        }
+    };
+};
+function tr () {
+    return {
+        localeError: error$5(),
+    };
+}
+
+const error$4 = () => {
+    const Sizable = {
+        string: { unit: "символів", verb: "матиме" },
+        file: { unit: "байтів", verb: "матиме" },
+        array: { unit: "елементів", verb: "матиме" },
+        set: { unit: "елементів", verb: "матиме" },
+    };
+    function getSizing(origin) {
+        return Sizable[origin] ?? null;
+    }
+    const parsedType = (data) => {
+        const t = typeof data;
+        switch (t) {
+            case "number": {
+                return Number.isNaN(data) ? "NaN" : "число";
+            }
+            case "object": {
+                if (Array.isArray(data)) {
+                    return "масив";
+                }
+                if (data === null) {
+                    return "null";
+                }
+                if (Object.getPrototypeOf(data) !== Object.prototype && data.constructor) {
+                    return data.constructor.name;
+                }
+            }
+        }
+        return t;
+    };
+    const Nouns = {
+        regex: "вхідні дані",
+        email: "адреса електронної пошти",
+        url: "URL",
+        emoji: "емодзі",
+        uuid: "UUID",
+        uuidv4: "UUIDv4",
+        uuidv6: "UUIDv6",
+        nanoid: "nanoid",
+        guid: "GUID",
+        cuid: "cuid",
+        cuid2: "cuid2",
+        ulid: "ULID",
+        xid: "XID",
+        ksuid: "KSUID",
+        datetime: "дата та час ISO",
+        date: "дата ISO",
+        time: "час ISO",
+        duration: "тривалість ISO",
+        ipv4: "адреса IPv4",
+        ipv6: "адреса IPv6",
+        cidrv4: "діапазон IPv4",
+        cidrv6: "діапазон IPv6",
+        base64: "рядок у кодуванні base64",
+        base64url: "рядок у кодуванні base64url",
+        json_string: "рядок JSON",
+        e164: "номер E.164",
+        jwt: "JWT",
+        template_literal: "вхідні дані",
+    };
+    return (issue) => {
+        switch (issue.code) {
+            case "invalid_type":
+                return `Неправильні вхідні дані: очікується ${issue.expected}, отримано ${parsedType(issue.input)}`;
+            // return `Неправильні вхідні дані: очікується ${issue.expected}, отримано ${util.getParsedType(issue.input)}`;
+            case "invalid_value":
+                if (issue.values.length === 1)
+                    return `Неправильні вхідні дані: очікується ${stringifyPrimitive(issue.values[0])}`;
+                return `Неправильна опція: очікується одне з ${joinValues(issue.values, "|")}`;
+            case "too_big": {
+                const adj = issue.inclusive ? "<=" : "<";
+                const sizing = getSizing(issue.origin);
+                if (sizing)
+                    return `Занадто велике: очікується, що ${issue.origin ?? "значення"} ${sizing.verb} ${adj}${issue.maximum.toString()} ${sizing.unit ?? "елементів"}`;
+                return `Занадто велике: очікується, що ${issue.origin ?? "значення"} буде ${adj}${issue.maximum.toString()}`;
+            }
+            case "too_small": {
+                const adj = issue.inclusive ? ">=" : ">";
+                const sizing = getSizing(issue.origin);
+                if (sizing) {
+                    return `Занадто мале: очікується, що ${issue.origin} ${sizing.verb} ${adj}${issue.minimum.toString()} ${sizing.unit}`;
+                }
+                return `Занадто мале: очікується, що ${issue.origin} буде ${adj}${issue.minimum.toString()}`;
+            }
+            case "invalid_format": {
+                const _issue = issue;
+                if (_issue.format === "starts_with")
+                    return `Неправильний рядок: повинен починатися з "${_issue.prefix}"`;
+                if (_issue.format === "ends_with")
+                    return `Неправильний рядок: повинен закінчуватися на "${_issue.suffix}"`;
+                if (_issue.format === "includes")
+                    return `Неправильний рядок: повинен містити "${_issue.includes}"`;
+                if (_issue.format === "regex")
+                    return `Неправильний рядок: повинен відповідати шаблону ${_issue.pattern}`;
+                return `Неправильний ${Nouns[_issue.format] ?? issue.format}`;
+            }
+            case "not_multiple_of":
+                return `Неправильне число: повинно бути кратним ${issue.divisor}`;
+            case "unrecognized_keys":
+                return `Нерозпізнаний ключ${issue.keys.length > 1 ? "і" : ""}: ${joinValues(issue.keys, ", ")}`;
+            case "invalid_key":
+                return `Неправильний ключ у ${issue.origin}`;
+            case "invalid_union":
+                return "Неправильні вхідні дані";
+            case "invalid_element":
+                return `Неправильне значення у ${issue.origin}`;
+            default:
+                return `Неправильні вхідні дані`;
+        }
+    };
+};
+function ua () {
+    return {
+        localeError: error$4(),
+    };
+}
+
+const error$3 = () => {
+    const Sizable = {
+        string: { unit: "حروف", verb: "ہونا" },
+        file: { unit: "بائٹس", verb: "ہونا" },
+        array: { unit: "آئٹمز", verb: "ہونا" },
+        set: { unit: "آئٹمز", verb: "ہونا" },
+    };
+    function getSizing(origin) {
+        return Sizable[origin] ?? null;
+    }
+    const parsedType = (data) => {
+        const t = typeof data;
+        switch (t) {
+            case "number": {
+                return Number.isNaN(data) ? "NaN" : "نمبر";
+            }
+            case "object": {
+                if (Array.isArray(data)) {
+                    return "آرے";
+                }
+                if (data === null) {
+                    return "نل";
+                }
+                if (Object.getPrototypeOf(data) !== Object.prototype && data.constructor) {
+                    return data.constructor.name;
+                }
+            }
+        }
+        return t;
+    };
+    const Nouns = {
+        regex: "ان پٹ",
+        email: "ای میل ایڈریس",
+        url: "یو آر ایل",
+        emoji: "ایموجی",
+        uuid: "یو یو آئی ڈی",
+        uuidv4: "یو یو آئی ڈی وی 4",
+        uuidv6: "یو یو آئی ڈی وی 6",
+        nanoid: "نینو آئی ڈی",
+        guid: "جی یو آئی ڈی",
+        cuid: "سی یو آئی ڈی",
+        cuid2: "سی یو آئی ڈی 2",
+        ulid: "یو ایل آئی ڈی",
+        xid: "ایکس آئی ڈی",
+        ksuid: "کے ایس یو آئی ڈی",
+        datetime: "آئی ایس او ڈیٹ ٹائم",
+        date: "آئی ایس او تاریخ",
+        time: "آئی ایس او وقت",
+        duration: "آئی ایس او مدت",
+        ipv4: "آئی پی وی 4 ایڈریس",
+        ipv6: "آئی پی وی 6 ایڈریس",
+        cidrv4: "آئی پی وی 4 رینج",
+        cidrv6: "آئی پی وی 6 رینج",
+        base64: "بیس 64 ان کوڈڈ سٹرنگ",
+        base64url: "بیس 64 یو آر ایل ان کوڈڈ سٹرنگ",
+        json_string: "جے ایس او این سٹرنگ",
+        e164: "ای 164 نمبر",
+        jwt: "جے ڈبلیو ٹی",
+        template_literal: "ان پٹ",
+    };
+    return (issue) => {
+        switch (issue.code) {
+            case "invalid_type":
+                return `غلط ان پٹ: ${issue.expected} متوقع تھا، ${parsedType(issue.input)} موصول ہوا`;
+            case "invalid_value":
+                if (issue.values.length === 1)
+                    return `غلط ان پٹ: ${stringifyPrimitive(issue.values[0])} متوقع تھا`;
+                return `غلط آپشن: ${joinValues(issue.values, "|")} میں سے ایک متوقع تھا`;
+            case "too_big": {
+                const adj = issue.inclusive ? "<=" : "<";
+                const sizing = getSizing(issue.origin);
+                if (sizing)
+                    return `بہت بڑا: ${issue.origin ?? "ویلیو"} کے ${adj}${issue.maximum.toString()} ${sizing.unit ?? "عناصر"} ہونے متوقع تھے`;
+                return `بہت بڑا: ${issue.origin ?? "ویلیو"} کا ${adj}${issue.maximum.toString()} ہونا متوقع تھا`;
+            }
+            case "too_small": {
+                const adj = issue.inclusive ? ">=" : ">";
+                const sizing = getSizing(issue.origin);
+                if (sizing) {
+                    return `بہت چھوٹا: ${issue.origin} کے ${adj}${issue.minimum.toString()} ${sizing.unit} ہونے متوقع تھے`;
+                }
+                return `بہت چھوٹا: ${issue.origin} کا ${adj}${issue.minimum.toString()} ہونا متوقع تھا`;
+            }
+            case "invalid_format": {
+                const _issue = issue;
+                if (_issue.format === "starts_with") {
+                    return `غلط سٹرنگ: "${_issue.prefix}" سے شروع ہونا چاہیے`;
+                }
+                if (_issue.format === "ends_with")
+                    return `غلط سٹرنگ: "${_issue.suffix}" پر ختم ہونا چاہیے`;
+                if (_issue.format === "includes")
+                    return `غلط سٹرنگ: "${_issue.includes}" شامل ہونا چاہیے`;
+                if (_issue.format === "regex")
+                    return `غلط سٹرنگ: پیٹرن ${_issue.pattern} سے میچ ہونا چاہیے`;
+                return `غلط ${Nouns[_issue.format] ?? issue.format}`;
+            }
+            case "not_multiple_of":
+                return `غلط نمبر: ${issue.divisor} کا مضاعف ہونا چاہیے`;
+            case "unrecognized_keys":
+                return `غیر تسلیم شدہ کی${issue.keys.length > 1 ? "ز" : ""}: ${joinValues(issue.keys, "، ")}`;
+            case "invalid_key":
+                return `${issue.origin} میں غلط کی`;
+            case "invalid_union":
+                return "غلط ان پٹ";
+            case "invalid_element":
+                return `${issue.origin} میں غلط ویلیو`;
+            default:
+                return `غلط ان پٹ`;
+        }
+    };
+};
+function ur () {
+    return {
+        localeError: error$3(),
+    };
+}
+
+const error$2 = () => {
+    const Sizable = {
+        string: { unit: "ký tự", verb: "có" },
+        file: { unit: "byte", verb: "có" },
+        array: { unit: "phần tử", verb: "có" },
+        set: { unit: "phần tử", verb: "có" },
+    };
+    function getSizing(origin) {
+        return Sizable[origin] ?? null;
+    }
+    const parsedType = (data) => {
+        const t = typeof data;
+        switch (t) {
+            case "number": {
+                return Number.isNaN(data) ? "NaN" : "số";
+            }
+            case "object": {
+                if (Array.isArray(data)) {
+                    return "mảng";
+                }
+                if (data === null) {
+                    return "null";
+                }
+                if (Object.getPrototypeOf(data) !== Object.prototype && data.constructor) {
+                    return data.constructor.name;
+                }
+            }
+        }
+        return t;
+    };
+    const Nouns = {
+        regex: "đầu vào",
+        email: "địa chỉ email",
+        url: "URL",
+        emoji: "emoji",
+        uuid: "UUID",
+        uuidv4: "UUIDv4",
+        uuidv6: "UUIDv6",
+        nanoid: "nanoid",
+        guid: "GUID",
+        cuid: "cuid",
+        cuid2: "cuid2",
+        ulid: "ULID",
+        xid: "XID",
+        ksuid: "KSUID",
+        datetime: "ngày giờ ISO",
+        date: "ngày ISO",
+        time: "giờ ISO",
+        duration: "khoảng thời gian ISO",
+        ipv4: "địa chỉ IPv4",
+        ipv6: "địa chỉ IPv6",
+        cidrv4: "dải IPv4",
+        cidrv6: "dải IPv6",
+        base64: "chuỗi mã hóa base64",
+        base64url: "chuỗi mã hóa base64url",
+        json_string: "chuỗi JSON",
+        e164: "số E.164",
+        jwt: "JWT",
+        template_literal: "đầu vào",
+    };
+    return (issue) => {
+        switch (issue.code) {
+            case "invalid_type":
+                return `Đầu vào không hợp lệ: mong đợi ${issue.expected}, nhận được ${parsedType(issue.input)}`;
+            case "invalid_value":
+                if (issue.values.length === 1)
+                    return `Đầu vào không hợp lệ: mong đợi ${stringifyPrimitive(issue.values[0])}`;
+                return `Tùy chọn không hợp lệ: mong đợi một trong các giá trị ${joinValues(issue.values, "|")}`;
+            case "too_big": {
+                const adj = issue.inclusive ? "<=" : "<";
+                const sizing = getSizing(issue.origin);
+                if (sizing)
+                    return `Quá lớn: mong đợi ${issue.origin ?? "giá trị"} ${sizing.verb} ${adj}${issue.maximum.toString()} ${sizing.unit ?? "phần tử"}`;
+                return `Quá lớn: mong đợi ${issue.origin ?? "giá trị"} ${adj}${issue.maximum.toString()}`;
+            }
+            case "too_small": {
+                const adj = issue.inclusive ? ">=" : ">";
+                const sizing = getSizing(issue.origin);
+                if (sizing) {
+                    return `Quá nhỏ: mong đợi ${issue.origin} ${sizing.verb} ${adj}${issue.minimum.toString()} ${sizing.unit}`;
+                }
+                return `Quá nhỏ: mong đợi ${issue.origin} ${adj}${issue.minimum.toString()}`;
+            }
+            case "invalid_format": {
+                const _issue = issue;
+                if (_issue.format === "starts_with")
+                    return `Chuỗi không hợp lệ: phải bắt đầu bằng "${_issue.prefix}"`;
+                if (_issue.format === "ends_with")
+                    return `Chuỗi không hợp lệ: phải kết thúc bằng "${_issue.suffix}"`;
+                if (_issue.format === "includes")
+                    return `Chuỗi không hợp lệ: phải bao gồm "${_issue.includes}"`;
+                if (_issue.format === "regex")
+                    return `Chuỗi không hợp lệ: phải khớp với mẫu ${_issue.pattern}`;
+                return `${Nouns[_issue.format] ?? issue.format} không hợp lệ`;
+            }
+            case "not_multiple_of":
+                return `Số không hợp lệ: phải là bội số của ${issue.divisor}`;
+            case "unrecognized_keys":
+                return `Khóa không được nhận dạng: ${joinValues(issue.keys, ", ")}`;
+            case "invalid_key":
+                return `Khóa không hợp lệ trong ${issue.origin}`;
+            case "invalid_union":
+                return "Đầu vào không hợp lệ";
+            case "invalid_element":
+                return `Giá trị không hợp lệ trong ${issue.origin}`;
+            default:
+                return `Đầu vào không hợp lệ`;
+        }
+    };
+};
+function vi () {
+    return {
+        localeError: error$2(),
+    };
+}
+
+const error$1 = () => {
+    const Sizable = {
+        string: { unit: "字符", verb: "包含" },
+        file: { unit: "字节", verb: "包含" },
+        array: { unit: "项", verb: "包含" },
+        set: { unit: "项", verb: "包含" },
+    };
+    function getSizing(origin) {
+        return Sizable[origin] ?? null;
+    }
+    const parsedType = (data) => {
+        const t = typeof data;
+        switch (t) {
+            case "number": {
+                return Number.isNaN(data) ? "非数字(NaN)" : "数字";
+            }
+            case "object": {
+                if (Array.isArray(data)) {
+                    return "数组";
+                }
+                if (data === null) {
+                    return "空值(null)";
+                }
+                if (Object.getPrototypeOf(data) !== Object.prototype && data.constructor) {
+                    return data.constructor.name;
+                }
+            }
+        }
+        return t;
+    };
+    const Nouns = {
+        regex: "输入",
+        email: "电子邮件",
+        url: "URL",
+        emoji: "表情符号",
+        uuid: "UUID",
+        uuidv4: "UUIDv4",
+        uuidv6: "UUIDv6",
+        nanoid: "nanoid",
+        guid: "GUID",
+        cuid: "cuid",
+        cuid2: "cuid2",
+        ulid: "ULID",
+        xid: "XID",
+        ksuid: "KSUID",
+        datetime: "ISO日期时间",
+        date: "ISO日期",
+        time: "ISO时间",
+        duration: "ISO时长",
+        ipv4: "IPv4地址",
+        ipv6: "IPv6地址",
+        cidrv4: "IPv4网段",
+        cidrv6: "IPv6网段",
+        base64: "base64编码字符串",
+        base64url: "base64url编码字符串",
+        json_string: "JSON字符串",
+        e164: "E.164号码",
+        jwt: "JWT",
+        template_literal: "输入",
+    };
+    return (issue) => {
+        switch (issue.code) {
+            case "invalid_type":
+                return `无效输入：期望 ${issue.expected}，实际接收 ${parsedType(issue.input)}`;
+            case "invalid_value":
+                if (issue.values.length === 1)
+                    return `无效输入：期望 ${stringifyPrimitive(issue.values[0])}`;
+                return `无效选项：期望以下之一 ${joinValues(issue.values, "|")}`;
+            case "too_big": {
+                const adj = issue.inclusive ? "<=" : "<";
+                const sizing = getSizing(issue.origin);
+                if (sizing)
+                    return `数值过大：期望 ${issue.origin ?? "值"} ${adj}${issue.maximum.toString()} ${sizing.unit ?? "个元素"}`;
+                return `数值过大：期望 ${issue.origin ?? "值"} ${adj}${issue.maximum.toString()}`;
+            }
+            case "too_small": {
+                const adj = issue.inclusive ? ">=" : ">";
+                const sizing = getSizing(issue.origin);
+                if (sizing) {
+                    return `数值过小：期望 ${issue.origin} ${adj}${issue.minimum.toString()} ${sizing.unit}`;
+                }
+                return `数值过小：期望 ${issue.origin} ${adj}${issue.minimum.toString()}`;
+            }
+            case "invalid_format": {
+                const _issue = issue;
+                if (_issue.format === "starts_with")
+                    return `无效字符串：必须以 "${_issue.prefix}" 开头`;
+                if (_issue.format === "ends_with")
+                    return `无效字符串：必须以 "${_issue.suffix}" 结尾`;
+                if (_issue.format === "includes")
+                    return `无效字符串：必须包含 "${_issue.includes}"`;
+                if (_issue.format === "regex")
+                    return `无效字符串：必须满足正则表达式 ${_issue.pattern}`;
+                return `无效${Nouns[_issue.format] ?? issue.format}`;
+            }
+            case "not_multiple_of":
+                return `无效数字：必须是 ${issue.divisor} 的倍数`;
+            case "unrecognized_keys":
+                return `出现未知的键(key): ${joinValues(issue.keys, ", ")}`;
+            case "invalid_key":
+                return `${issue.origin} 中的键(key)无效`;
+            case "invalid_union":
+                return "无效输入";
+            case "invalid_element":
+                return `${issue.origin} 中包含无效值(value)`;
+            default:
+                return `无效输入`;
+        }
+    };
+};
+function zhCN () {
+    return {
+        localeError: error$1(),
+    };
+}
+
+const error$D = () => {
+    const Sizable = {
+        string: { unit: "字元", verb: "擁有" },
+        file: { unit: "位元組", verb: "擁有" },
+        array: { unit: "項目", verb: "擁有" },
+        set: { unit: "項目", verb: "擁有" },
+    };
+    function getSizing(origin) {
+        return Sizable[origin] ?? null;
+    }
+    const parsedType = (data) => {
+        const t = typeof data;
+        switch (t) {
+            case "number": {
+                return Number.isNaN(data) ? "NaN" : "number";
+            }
+            case "object": {
+                if (Array.isArray(data)) {
+                    return "array";
+                }
+                if (data === null) {
+                    return "null";
+                }
+                if (Object.getPrototypeOf(data) !== Object.prototype && data.constructor) {
+                    return data.constructor.name;
+                }
+            }
+        }
+        return t;
+    };
+    const Nouns = {
+        regex: "輸入",
+        email: "郵件地址",
+        url: "URL",
+        emoji: "emoji",
+        uuid: "UUID",
+        uuidv4: "UUIDv4",
+        uuidv6: "UUIDv6",
+        nanoid: "nanoid",
+        guid: "GUID",
+        cuid: "cuid",
+        cuid2: "cuid2",
+        ulid: "ULID",
+        xid: "XID",
+        ksuid: "KSUID",
+        datetime: "ISO 日期時間",
+        date: "ISO 日期",
+        time: "ISO 時間",
+        duration: "ISO 期間",
+        ipv4: "IPv4 位址",
+        ipv6: "IPv6 位址",
+        cidrv4: "IPv4 範圍",
+        cidrv6: "IPv6 範圍",
+        base64: "base64 編碼字串",
+        base64url: "base64url 編碼字串",
+        json_string: "JSON 字串",
+        e164: "E.164 數值",
+        jwt: "JWT",
+        template_literal: "輸入",
+    };
+    return (issue) => {
+        switch (issue.code) {
+            case "invalid_type":
+                return `無效的輸入值：預期為 ${issue.expected}，但收到 ${parsedType(issue.input)}`;
+            case "invalid_value":
+                if (issue.values.length === 1)
+                    return `無效的輸入值：預期為 ${stringifyPrimitive(issue.values[0])}`;
+                return `無效的選項：預期為以下其中之一 ${joinValues(issue.values, "|")}`;
+            case "too_big": {
+                const adj = issue.inclusive ? "<=" : "<";
+                const sizing = getSizing(issue.origin);
+                if (sizing)
+                    return `數值過大：預期 ${issue.origin ?? "值"} 應為 ${adj}${issue.maximum.toString()} ${sizing.unit ?? "個元素"}`;
+                return `數值過大：預期 ${issue.origin ?? "值"} 應為 ${adj}${issue.maximum.toString()}`;
+            }
+            case "too_small": {
+                const adj = issue.inclusive ? ">=" : ">";
+                const sizing = getSizing(issue.origin);
+                if (sizing) {
+                    return `數值過小：預期 ${issue.origin} 應為 ${adj}${issue.minimum.toString()} ${sizing.unit}`;
+                }
+                return `數值過小：預期 ${issue.origin} 應為 ${adj}${issue.minimum.toString()}`;
+            }
+            case "invalid_format": {
+                const _issue = issue;
+                if (_issue.format === "starts_with") {
+                    return `無效的字串：必須以 "${_issue.prefix}" 開頭`;
+                }
+                if (_issue.format === "ends_with")
+                    return `無效的字串：必須以 "${_issue.suffix}" 結尾`;
+                if (_issue.format === "includes")
+                    return `無效的字串：必須包含 "${_issue.includes}"`;
+                if (_issue.format === "regex")
+                    return `無效的字串：必須符合格式 ${_issue.pattern}`;
+                return `無效的 ${Nouns[_issue.format] ?? issue.format}`;
+            }
+            case "not_multiple_of":
+                return `無效的數字：必須為 ${issue.divisor} 的倍數`;
+            case "unrecognized_keys":
+                return `無法識別的鍵值${issue.keys.length > 1 ? "們" : ""}：${joinValues(issue.keys, "、")}`;
+            case "invalid_key":
+                return `${issue.origin} 中有無效的鍵值`;
+            case "invalid_union":
+                return "無效的輸入值";
+            case "invalid_element":
+                return `${issue.origin} 中有無效的值`;
+            default:
+                return `無效的輸入值`;
+        }
+    };
+};
+function zhTW () {
+    return {
+        localeError: error$D(),
+    };
+}
+
+var index$1 = /*#__PURE__*/Object.freeze({
+    __proto__: null,
+    ar: ar,
+    az: az,
+    be: be,
+    ca: ca,
+    cs: cs,
+    de: de,
+    en: en,
+    eo: eo,
+    es: es,
+    fa: fa,
+    fi: fi,
+    fr: fr,
+    frCA: frCA,
+    he: he,
+    hu: hu,
+    id: id,
+    it: it,
+    ja: ja,
+    kh: kh,
+    ko: ko,
+    mk: mk,
+    ms: ms,
+    nl: nl,
+    no: no,
+    ota: ota,
+    pl: pl,
+    ps: ps,
+    pt: pt,
+    ru: ru,
+    sl: sl,
+    sv: sv,
+    ta: ta,
+    th: th,
+    tr: tr,
+    ua: ua,
+    ur: ur,
+    vi: vi,
+    zhCN: zhCN,
+    zhTW: zhTW
+});
+
+class $ZodFunction {
+    constructor(def) {
+        this._def = def;
+        this.def = def;
+    }
+    implement(func) {
+        if (typeof func !== "function") {
+            throw new Error("implement() must be called with a function");
+        }
+        const impl = ((...args) => {
+            const parsedArgs = this._def.input ? parse$1(this._def.input, args, undefined, { callee: impl }) : args;
+            if (!Array.isArray(parsedArgs)) {
+                throw new Error("Invalid arguments schema: not an array or tuple schema.");
+            }
+            const output = func(...parsedArgs);
+            return this._def.output ? parse$1(this._def.output, output, undefined, { callee: impl }) : output;
+        });
+        return impl;
+    }
+    implementAsync(func) {
+        if (typeof func !== "function") {
+            throw new Error("implement() must be called with a function");
+        }
+        const impl = (async (...args) => {
+            const parsedArgs = this._def.input ? await parseAsync$1(this._def.input, args, undefined, { callee: impl }) : args;
+            if (!Array.isArray(parsedArgs)) {
+                throw new Error("Invalid arguments schema: not an array or tuple schema.");
+            }
+            const output = await func(...parsedArgs);
+            return this._def.output ? parseAsync$1(this._def.output, output, undefined, { callee: impl }) : output;
+        });
+        return impl;
+    }
+    input(...args) {
+        const F = this.constructor;
+        if (Array.isArray(args[0])) {
+            return new F({
+                type: "function",
+                input: new $ZodTuple({
+                    type: "tuple",
+                    items: args[0],
+                    rest: args[1],
+                }),
+                output: this._def.output,
+            });
+        }
+        return new F({
+            type: "function",
+            input: args[0],
+            output: this._def.output,
+        });
+    }
+    output(output) {
+        const F = this.constructor;
+        return new F({
+            type: "function",
+            input: this._def.input,
+            output,
+        });
+    }
+}
+function _function(params) {
+    return new $ZodFunction({
+        type: "function",
+        input: Array.isArray(params?.input)
+            ? _tuple($ZodTuple, params?.input)
+            : (params?.input ?? _array($ZodArray, _unknown($ZodUnknown))),
+        output: params?.output ?? _unknown($ZodUnknown),
+    });
+}
+
+var jsonSchema = /*#__PURE__*/Object.freeze({
+    __proto__: null
+});
+
+var index = /*#__PURE__*/Object.freeze({
+    __proto__: null,
+    $ZodAny: $ZodAny,
+    $ZodArray: $ZodArray,
+    $ZodAsyncError: $ZodAsyncError,
+    $ZodBase64: $ZodBase64,
+    $ZodBase64URL: $ZodBase64URL,
+    $ZodBigInt: $ZodBigInt,
+    $ZodBigIntFormat: $ZodBigIntFormat,
+    $ZodBoolean: $ZodBoolean,
+    $ZodCIDRv4: $ZodCIDRv4,
+    $ZodCIDRv6: $ZodCIDRv6,
+    $ZodCUID: $ZodCUID,
+    $ZodCUID2: $ZodCUID2,
+    $ZodCatch: $ZodCatch,
+    $ZodCheck: $ZodCheck,
+    $ZodCheckBigIntFormat: $ZodCheckBigIntFormat,
+    $ZodCheckEndsWith: $ZodCheckEndsWith,
+    $ZodCheckGreaterThan: $ZodCheckGreaterThan,
+    $ZodCheckIncludes: $ZodCheckIncludes,
+    $ZodCheckLengthEquals: $ZodCheckLengthEquals,
+    $ZodCheckLessThan: $ZodCheckLessThan,
+    $ZodCheckLowerCase: $ZodCheckLowerCase,
+    $ZodCheckMaxLength: $ZodCheckMaxLength,
+    $ZodCheckMaxSize: $ZodCheckMaxSize,
+    $ZodCheckMimeType: $ZodCheckMimeType,
+    $ZodCheckMinLength: $ZodCheckMinLength,
+    $ZodCheckMinSize: $ZodCheckMinSize,
+    $ZodCheckMultipleOf: $ZodCheckMultipleOf,
+    $ZodCheckNumberFormat: $ZodCheckNumberFormat,
+    $ZodCheckOverwrite: $ZodCheckOverwrite,
+    $ZodCheckProperty: $ZodCheckProperty,
+    $ZodCheckRegex: $ZodCheckRegex,
+    $ZodCheckSizeEquals: $ZodCheckSizeEquals,
+    $ZodCheckStartsWith: $ZodCheckStartsWith,
+    $ZodCheckStringFormat: $ZodCheckStringFormat,
+    $ZodCheckUpperCase: $ZodCheckUpperCase,
+    $ZodCustom: $ZodCustom,
+    $ZodCustomStringFormat: $ZodCustomStringFormat,
+    $ZodDate: $ZodDate,
+    $ZodDefault: $ZodDefault,
+    $ZodDiscriminatedUnion: $ZodDiscriminatedUnion,
+    $ZodE164: $ZodE164,
+    $ZodEmail: $ZodEmail,
+    $ZodEmoji: $ZodEmoji,
+    $ZodEnum: $ZodEnum,
+    $ZodError: $ZodError,
+    $ZodFile: $ZodFile,
+    $ZodFunction: $ZodFunction,
+    $ZodGUID: $ZodGUID,
+    $ZodIPv4: $ZodIPv4,
+    $ZodIPv6: $ZodIPv6,
+    $ZodISODate: $ZodISODate,
+    $ZodISODateTime: $ZodISODateTime,
+    $ZodISODuration: $ZodISODuration,
+    $ZodISOTime: $ZodISOTime,
+    $ZodIntersection: $ZodIntersection,
+    $ZodJWT: $ZodJWT,
+    $ZodKSUID: $ZodKSUID,
+    $ZodLazy: $ZodLazy,
+    $ZodLiteral: $ZodLiteral,
+    $ZodMap: $ZodMap,
+    $ZodNaN: $ZodNaN,
+    $ZodNanoID: $ZodNanoID,
+    $ZodNever: $ZodNever,
+    $ZodNonOptional: $ZodNonOptional,
+    $ZodNull: $ZodNull,
+    $ZodNullable: $ZodNullable,
+    $ZodNumber: $ZodNumber,
+    $ZodNumberFormat: $ZodNumberFormat,
+    $ZodObject: $ZodObject,
+    $ZodOptional: $ZodOptional,
+    $ZodPipe: $ZodPipe,
+    $ZodPrefault: $ZodPrefault,
+    $ZodPromise: $ZodPromise,
+    $ZodReadonly: $ZodReadonly,
+    $ZodRealError: $ZodRealError,
+    $ZodRecord: $ZodRecord,
+    $ZodRegistry: $ZodRegistry,
+    $ZodSet: $ZodSet,
+    $ZodString: $ZodString,
+    $ZodStringFormat: $ZodStringFormat,
+    $ZodSuccess: $ZodSuccess,
+    $ZodSymbol: $ZodSymbol,
+    $ZodTemplateLiteral: $ZodTemplateLiteral,
+    $ZodTransform: $ZodTransform,
+    $ZodTuple: $ZodTuple,
+    $ZodType: $ZodType,
+    $ZodULID: $ZodULID,
+    $ZodURL: $ZodURL,
+    $ZodUUID: $ZodUUID,
+    $ZodUndefined: $ZodUndefined,
+    $ZodUnion: $ZodUnion,
+    $ZodUnknown: $ZodUnknown,
+    $ZodVoid: $ZodVoid,
+    $ZodXID: $ZodXID,
+    $brand: $brand,
+    $constructor: $constructor,
+    $input: $input,
+    $output: $output,
+    Doc: Doc,
+    JSONSchema: jsonSchema,
+    JSONSchemaGenerator: JSONSchemaGenerator,
+    NEVER: NEVER,
+    TimePrecision: TimePrecision,
+    _any: _any,
+    _array: _array,
+    _base64: _base64,
+    _base64url: _base64url,
+    _bigint: _bigint,
+    _boolean: _boolean,
+    _catch: _catch$1,
+    _cidrv4: _cidrv4,
+    _cidrv6: _cidrv6,
+    _coercedBigint: _coercedBigint,
+    _coercedBoolean: _coercedBoolean,
+    _coercedDate: _coercedDate,
+    _coercedNumber: _coercedNumber,
+    _coercedString: _coercedString,
+    _cuid: _cuid,
+    _cuid2: _cuid2,
+    _custom: _custom,
+    _date: _date,
+    _default: _default$1,
+    _discriminatedUnion: _discriminatedUnion,
+    _e164: _e164,
+    _email: _email,
+    _emoji: _emoji,
+    _endsWith: _endsWith,
+    _enum: _enum$1,
+    _file: _file,
+    _float32: _float32,
+    _float64: _float64,
+    _gt: _gt,
+    _gte: _gte,
+    _guid: _guid,
+    _includes: _includes,
+    _int: _int,
+    _int32: _int32,
+    _int64: _int64,
+    _intersection: _intersection,
+    _ipv4: _ipv4,
+    _ipv6: _ipv6,
+    _isoDate: _isoDate,
+    _isoDateTime: _isoDateTime,
+    _isoDuration: _isoDuration,
+    _isoTime: _isoTime,
+    _jwt: _jwt,
+    _ksuid: _ksuid,
+    _lazy: _lazy,
+    _length: _length,
+    _literal: _literal,
+    _lowercase: _lowercase,
+    _lt: _lt,
+    _lte: _lte,
+    _map: _map,
+    _max: _lte,
+    _maxLength: _maxLength,
+    _maxSize: _maxSize,
+    _mime: _mime,
+    _min: _gte,
+    _minLength: _minLength,
+    _minSize: _minSize,
+    _multipleOf: _multipleOf,
+    _nan: _nan,
+    _nanoid: _nanoid,
+    _nativeEnum: _nativeEnum,
+    _negative: _negative,
+    _never: _never,
+    _nonnegative: _nonnegative,
+    _nonoptional: _nonoptional,
+    _nonpositive: _nonpositive,
+    _normalize: _normalize,
+    _null: _null$1,
+    _nullable: _nullable,
+    _number: _number,
+    _optional: _optional,
+    _overwrite: _overwrite,
+    _parse: _parse$1,
+    _parseAsync: _parseAsync,
+    _pipe: _pipe,
+    _positive: _positive,
+    _promise: _promise,
+    _property: _property,
+    _readonly: _readonly,
+    _record: _record,
+    _refine: _refine,
+    _regex: _regex,
+    _safeParse: _safeParse,
+    _safeParseAsync: _safeParseAsync,
+    _set: _set,
+    _size: _size,
+    _startsWith: _startsWith,
+    _string: _string,
+    _stringFormat: _stringFormat,
+    _stringbool: _stringbool,
+    _success: _success,
+    _symbol: _symbol,
+    _templateLiteral: _templateLiteral,
+    _toLowerCase: _toLowerCase,
+    _toUpperCase: _toUpperCase,
+    _transform: _transform,
+    _trim: _trim,
+    _tuple: _tuple,
+    _uint32: _uint32,
+    _uint64: _uint64,
+    _ulid: _ulid,
+    _undefined: _undefined$1,
+    _union: _union,
+    _unknown: _unknown,
+    _uppercase: _uppercase,
+    _url: _url,
+    _uuid: _uuid,
+    _uuidv4: _uuidv4,
+    _uuidv6: _uuidv6,
+    _uuidv7: _uuidv7,
+    _void: _void$1,
+    _xid: _xid,
+    clone: clone,
+    config: config,
+    flattenError: flattenError,
+    formatError: formatError,
+    function: _function,
+    globalConfig: globalConfig,
+    globalRegistry: globalRegistry,
+    isValidBase64: isValidBase64,
+    isValidBase64URL: isValidBase64URL,
+    isValidJWT: isValidJWT,
+    locales: index$1,
+    parse: parse$1,
+    parseAsync: parseAsync$1,
+    prettifyError: prettifyError,
+    regexes: regexes,
+    registry: registry,
+    safeParse: safeParse$1,
+    safeParseAsync: safeParseAsync$1,
+    toDotPath: toDotPath,
+    toJSONSchema: toJSONSchema,
+    treeifyError: treeifyError,
+    util: util,
+    version: version
+});
+
+// Zod 3 compat layer
+/** @deprecated Use the raw string literal codes instead, e.g. "invalid_type". */
+const ZodIssueCode = {
+    invalid_type: "invalid_type",
+    too_big: "too_big",
+    too_small: "too_small",
+    invalid_format: "invalid_format",
+    not_multiple_of: "not_multiple_of",
+    unrecognized_keys: "unrecognized_keys",
+    invalid_union: "invalid_union",
+    invalid_key: "invalid_key",
+    invalid_element: "invalid_element",
+    invalid_value: "invalid_value",
+    custom: "custom",
+};
+/** @deprecated Use `z.config(params)` instead. */
+function setErrorMap(map) {
+    config({
+        customError: map,
+    });
+}
+/** @deprecated Use `z.config()` instead. */
+function getErrorMap() {
+    return config().customError;
+}
+
+function string(params) {
+    return _coercedString(ZodString, params);
+}
+function number(params) {
+    return _coercedNumber(ZodNumber, params);
+}
+function boolean(params) {
+    return _coercedBoolean(ZodBoolean, params);
+}
+function bigint(params) {
+    return _coercedBigint(ZodBigInt, params);
+}
+function date(params) {
+    return _coercedDate(ZodDate, params);
+}
+
+var coerce = /*#__PURE__*/Object.freeze({
+    __proto__: null,
+    bigint: bigint,
+    boolean: boolean,
+    date: date,
+    number: number,
+    string: string
+});
+
+config(en());
+
+var z = /*#__PURE__*/Object.freeze({
+    __proto__: null,
+    $brand: $brand,
+    $input: $input,
+    $output: $output,
+    NEVER: NEVER,
+    TimePrecision: TimePrecision,
+    ZodAny: ZodAny,
+    ZodArray: ZodArray,
+    ZodBase64: ZodBase64,
+    ZodBase64URL: ZodBase64URL,
+    ZodBigInt: ZodBigInt,
+    ZodBigIntFormat: ZodBigIntFormat,
+    ZodBoolean: ZodBoolean,
+    ZodCIDRv4: ZodCIDRv4,
+    ZodCIDRv6: ZodCIDRv6,
+    ZodCUID: ZodCUID,
+    ZodCUID2: ZodCUID2,
+    ZodCatch: ZodCatch,
+    ZodCustom: ZodCustom,
+    ZodCustomStringFormat: ZodCustomStringFormat,
+    ZodDate: ZodDate,
+    ZodDefault: ZodDefault,
+    ZodDiscriminatedUnion: ZodDiscriminatedUnion,
+    ZodE164: ZodE164,
+    ZodEmail: ZodEmail,
+    ZodEmoji: ZodEmoji,
+    ZodEnum: ZodEnum,
+    ZodError: ZodError,
+    ZodFile: ZodFile,
+    ZodGUID: ZodGUID,
+    ZodIPv4: ZodIPv4,
+    ZodIPv6: ZodIPv6,
+    ZodISODate: ZodISODate,
+    ZodISODateTime: ZodISODateTime,
+    ZodISODuration: ZodISODuration,
+    ZodISOTime: ZodISOTime,
+    ZodIntersection: ZodIntersection,
+    ZodIssueCode: ZodIssueCode,
+    ZodJWT: ZodJWT,
+    ZodKSUID: ZodKSUID,
+    ZodLazy: ZodLazy,
+    ZodLiteral: ZodLiteral,
+    ZodMap: ZodMap,
+    ZodNaN: ZodNaN,
+    ZodNanoID: ZodNanoID,
+    ZodNever: ZodNever,
+    ZodNonOptional: ZodNonOptional,
+    ZodNull: ZodNull,
+    ZodNullable: ZodNullable,
+    ZodNumber: ZodNumber,
+    ZodNumberFormat: ZodNumberFormat,
+    ZodObject: ZodObject,
+    ZodOptional: ZodOptional,
+    ZodPipe: ZodPipe,
+    ZodPrefault: ZodPrefault,
+    ZodPromise: ZodPromise,
+    ZodReadonly: ZodReadonly,
+    ZodRealError: ZodRealError,
+    ZodRecord: ZodRecord,
+    ZodSet: ZodSet,
+    ZodString: ZodString,
+    ZodStringFormat: ZodStringFormat,
+    ZodSuccess: ZodSuccess,
+    ZodSymbol: ZodSymbol,
+    ZodTemplateLiteral: ZodTemplateLiteral,
+    ZodTransform: ZodTransform,
+    ZodTuple: ZodTuple,
+    ZodType: ZodType,
+    ZodULID: ZodULID,
+    ZodURL: ZodURL,
+    ZodUUID: ZodUUID,
+    ZodUndefined: ZodUndefined,
+    ZodUnion: ZodUnion,
+    ZodUnknown: ZodUnknown,
+    ZodVoid: ZodVoid,
+    ZodXID: ZodXID,
+    _ZodString: _ZodString,
+    _default: _default,
+    any: any,
+    array: array,
+    base64: base64,
+    base64url: base64url,
+    bigint: bigint$1,
+    boolean: boolean$1,
+    catch: _catch,
+    check: check,
+    cidrv4: cidrv4,
+    cidrv6: cidrv6,
+    clone: clone,
+    coerce: coerce,
+    config: config,
+    core: index,
+    cuid: cuid,
+    cuid2: cuid2,
+    custom: custom,
+    date: date$1,
+    discriminatedUnion: discriminatedUnion,
+    e164: e164,
+    email: email,
+    emoji: emoji,
+    endsWith: _endsWith,
+    enum: _enum,
+    file: file,
+    flattenError: flattenError,
+    float32: float32,
+    float64: float64,
+    formatError: formatError,
+    function: _function,
+    getErrorMap: getErrorMap,
+    globalRegistry: globalRegistry,
+    gt: _gt,
+    gte: _gte,
+    guid: guid,
+    includes: _includes,
+    instanceof: _instanceof,
+    int: int,
+    int32: int32,
+    int64: int64,
+    intersection: intersection,
+    ipv4: ipv4,
+    ipv6: ipv6,
+    iso: iso,
+    json: json,
+    jwt: jwt,
+    keyof: keyof,
+    ksuid: ksuid,
+    lazy: lazy,
+    length: _length,
+    literal: literal,
+    locales: index$1,
+    looseObject: looseObject,
+    lowercase: _lowercase,
+    lt: _lt,
+    lte: _lte,
+    map: map,
+    maxLength: _maxLength,
+    maxSize: _maxSize,
+    mime: _mime,
+    minLength: _minLength,
+    minSize: _minSize,
+    multipleOf: _multipleOf,
+    nan: nan,
+    nanoid: nanoid,
+    nativeEnum: nativeEnum,
+    negative: _negative,
+    never: never,
+    nonnegative: _nonnegative,
+    nonoptional: nonoptional,
+    nonpositive: _nonpositive,
+    normalize: _normalize,
+    null: _null,
+    nullable: nullable,
+    nullish: nullish,
+    number: number$1,
+    object: object,
+    optional: optional,
+    overwrite: _overwrite,
+    parse: parse,
+    parseAsync: parseAsync,
+    partialRecord: partialRecord,
+    pipe: pipe,
+    positive: _positive,
+    prefault: prefault,
+    preprocess: preprocess,
+    prettifyError: prettifyError,
+    promise: promise,
+    property: _property,
+    readonly: readonly,
+    record: record,
+    refine: refine,
+    regex: _regex,
+    regexes: regexes,
+    registry: registry,
+    safeParse: safeParse,
+    safeParseAsync: safeParseAsync,
+    set: set,
+    setErrorMap: setErrorMap,
+    size: _size,
+    startsWith: _startsWith,
+    strictObject: strictObject,
+    string: string$1,
+    stringFormat: stringFormat,
+    stringbool: stringbool,
+    success: success,
+    superRefine: superRefine,
+    symbol: symbol$1,
+    templateLiteral: templateLiteral,
+    toJSONSchema: toJSONSchema,
+    toLowerCase: _toLowerCase,
+    toUpperCase: _toUpperCase,
+    transform: transform,
+    treeifyError: treeifyError,
+    trim: _trim,
+    tuple: tuple,
+    uint32: uint32,
+    uint64: uint64,
+    ulid: ulid,
+    undefined: _undefined,
+    union: union,
+    unknown: unknown,
+    uppercase: _uppercase,
+    url: url,
+    uuid: uuid,
+    uuidv4: uuidv4,
+    uuidv6: uuidv6,
+    uuidv7: uuidv7,
+    void: _void,
+    xid: xid
+});
+
 // ../../node_modules/.pnpm/secure-json-parse@2.7.0/node_modules/secure-json-parse/index.js
 var require_secure_json_parse = __commonJS({
   "../../node_modules/.pnpm/secure-json-parse@2.7.0/node_modules/secure-json-parse/index.js"(exports, module) {
@@ -4577,11 +9851,11 @@ function convertUint8ArrayToBase64(array) {
 function withoutTrailingSlash(url) {
   return url == null ? void 0 : url.replace(/\/$/, "");
 }
-var anthropicErrorDataSchema = z.object({
-  type: z.literal("error"),
-  error: z.object({
-    type: z.string(),
-    message: z.string()
+var anthropicErrorDataSchema = z$1.object({
+  type: z$1.literal("error"),
+  error: z$1.object({
+    type: z$1.string(),
+    message: z$1.string()
   })
 });
 var anthropicFailedResponseHandler = createJsonErrorResponseHandler({
@@ -5413,132 +10687,132 @@ var AnthropicMessagesLanguageModel = class {
     };
   }
 };
-var anthropicMessagesResponseSchema = z.object({
-  type: z.literal("message"),
-  id: z.string().nullish(),
-  model: z.string().nullish(),
-  content: z.array(
-    z.discriminatedUnion("type", [
-      z.object({
-        type: z.literal("text"),
-        text: z.string()
+var anthropicMessagesResponseSchema = z$1.object({
+  type: z$1.literal("message"),
+  id: z$1.string().nullish(),
+  model: z$1.string().nullish(),
+  content: z$1.array(
+    z$1.discriminatedUnion("type", [
+      z$1.object({
+        type: z$1.literal("text"),
+        text: z$1.string()
       }),
-      z.object({
-        type: z.literal("thinking"),
-        thinking: z.string(),
-        signature: z.string()
+      z$1.object({
+        type: z$1.literal("thinking"),
+        thinking: z$1.string(),
+        signature: z$1.string()
       }),
-      z.object({
-        type: z.literal("redacted_thinking"),
-        data: z.string()
+      z$1.object({
+        type: z$1.literal("redacted_thinking"),
+        data: z$1.string()
       }),
-      z.object({
-        type: z.literal("tool_use"),
-        id: z.string(),
-        name: z.string(),
-        input: z.unknown()
+      z$1.object({
+        type: z$1.literal("tool_use"),
+        id: z$1.string(),
+        name: z$1.string(),
+        input: z$1.unknown()
       })
     ])
   ),
-  stop_reason: z.string().nullish(),
-  usage: z.object({
-    input_tokens: z.number(),
-    output_tokens: z.number(),
-    cache_creation_input_tokens: z.number().nullish(),
-    cache_read_input_tokens: z.number().nullish()
+  stop_reason: z$1.string().nullish(),
+  usage: z$1.object({
+    input_tokens: z$1.number(),
+    output_tokens: z$1.number(),
+    cache_creation_input_tokens: z$1.number().nullish(),
+    cache_read_input_tokens: z$1.number().nullish()
   })
 });
-var anthropicMessagesChunkSchema = z.discriminatedUnion("type", [
-  z.object({
-    type: z.literal("message_start"),
-    message: z.object({
-      id: z.string().nullish(),
-      model: z.string().nullish(),
-      usage: z.object({
-        input_tokens: z.number(),
-        output_tokens: z.number(),
-        cache_creation_input_tokens: z.number().nullish(),
-        cache_read_input_tokens: z.number().nullish()
+var anthropicMessagesChunkSchema = z$1.discriminatedUnion("type", [
+  z$1.object({
+    type: z$1.literal("message_start"),
+    message: z$1.object({
+      id: z$1.string().nullish(),
+      model: z$1.string().nullish(),
+      usage: z$1.object({
+        input_tokens: z$1.number(),
+        output_tokens: z$1.number(),
+        cache_creation_input_tokens: z$1.number().nullish(),
+        cache_read_input_tokens: z$1.number().nullish()
       })
     })
   }),
-  z.object({
-    type: z.literal("content_block_start"),
-    index: z.number(),
-    content_block: z.discriminatedUnion("type", [
-      z.object({
-        type: z.literal("text"),
-        text: z.string()
+  z$1.object({
+    type: z$1.literal("content_block_start"),
+    index: z$1.number(),
+    content_block: z$1.discriminatedUnion("type", [
+      z$1.object({
+        type: z$1.literal("text"),
+        text: z$1.string()
       }),
-      z.object({
-        type: z.literal("thinking"),
-        thinking: z.string()
+      z$1.object({
+        type: z$1.literal("thinking"),
+        thinking: z$1.string()
       }),
-      z.object({
-        type: z.literal("tool_use"),
-        id: z.string(),
-        name: z.string()
+      z$1.object({
+        type: z$1.literal("tool_use"),
+        id: z$1.string(),
+        name: z$1.string()
       }),
-      z.object({
-        type: z.literal("redacted_thinking"),
-        data: z.string()
+      z$1.object({
+        type: z$1.literal("redacted_thinking"),
+        data: z$1.string()
       })
     ])
   }),
-  z.object({
-    type: z.literal("content_block_delta"),
-    index: z.number(),
-    delta: z.discriminatedUnion("type", [
-      z.object({
-        type: z.literal("input_json_delta"),
-        partial_json: z.string()
+  z$1.object({
+    type: z$1.literal("content_block_delta"),
+    index: z$1.number(),
+    delta: z$1.discriminatedUnion("type", [
+      z$1.object({
+        type: z$1.literal("input_json_delta"),
+        partial_json: z$1.string()
       }),
-      z.object({
-        type: z.literal("text_delta"),
-        text: z.string()
+      z$1.object({
+        type: z$1.literal("text_delta"),
+        text: z$1.string()
       }),
-      z.object({
-        type: z.literal("thinking_delta"),
-        thinking: z.string()
+      z$1.object({
+        type: z$1.literal("thinking_delta"),
+        thinking: z$1.string()
       }),
-      z.object({
-        type: z.literal("signature_delta"),
-        signature: z.string()
+      z$1.object({
+        type: z$1.literal("signature_delta"),
+        signature: z$1.string()
       })
     ])
   }),
-  z.object({
-    type: z.literal("content_block_stop"),
-    index: z.number()
+  z$1.object({
+    type: z$1.literal("content_block_stop"),
+    index: z$1.number()
   }),
-  z.object({
-    type: z.literal("error"),
-    error: z.object({
-      type: z.string(),
-      message: z.string()
+  z$1.object({
+    type: z$1.literal("error"),
+    error: z$1.object({
+      type: z$1.string(),
+      message: z$1.string()
     })
   }),
-  z.object({
-    type: z.literal("message_delta"),
-    delta: z.object({ stop_reason: z.string().nullish() }),
-    usage: z.object({ output_tokens: z.number() })
+  z$1.object({
+    type: z$1.literal("message_delta"),
+    delta: z$1.object({ stop_reason: z$1.string().nullish() }),
+    usage: z$1.object({ output_tokens: z$1.number() })
   }),
-  z.object({
-    type: z.literal("message_stop")
+  z$1.object({
+    type: z$1.literal("message_stop")
   }),
-  z.object({
-    type: z.literal("ping")
+  z$1.object({
+    type: z$1.literal("ping")
   })
 ]);
-var anthropicProviderOptionsSchema = z.object({
-  thinking: z.object({
-    type: z.union([z.literal("enabled"), z.literal("disabled")]),
-    budgetTokens: z.number().optional()
+var anthropicProviderOptionsSchema = z$1.object({
+  thinking: z$1.object({
+    type: z$1.union([z$1.literal("enabled"), z$1.literal("disabled")]),
+    budgetTokens: z$1.number().optional()
   }).optional()
 });
-var Bash20241022Parameters = z.object({
-  command: z.string(),
-  restart: z.boolean().optional()
+var Bash20241022Parameters = z$1.object({
+  command: z$1.string(),
+  restart: z$1.boolean().optional()
 });
 function bashTool_20241022(options = {}) {
   return {
@@ -5550,9 +10824,9 @@ function bashTool_20241022(options = {}) {
     experimental_toToolResultContent: options.experimental_toToolResultContent
   };
 }
-var Bash20250124Parameters = z.object({
-  command: z.string(),
-  restart: z.boolean().optional()
+var Bash20250124Parameters = z$1.object({
+  command: z$1.string(),
+  restart: z$1.boolean().optional()
 });
 function bashTool_20250124(options = {}) {
   return {
@@ -5564,14 +10838,14 @@ function bashTool_20250124(options = {}) {
     experimental_toToolResultContent: options.experimental_toToolResultContent
   };
 }
-var TextEditor20241022Parameters = z.object({
-  command: z.enum(["view", "create", "str_replace", "insert", "undo_edit"]),
-  path: z.string(),
-  file_text: z.string().optional(),
-  insert_line: z.number().int().optional(),
-  new_str: z.string().optional(),
-  old_str: z.string().optional(),
-  view_range: z.array(z.number().int()).optional()
+var TextEditor20241022Parameters = z$1.object({
+  command: z$1.enum(["view", "create", "str_replace", "insert", "undo_edit"]),
+  path: z$1.string(),
+  file_text: z$1.string().optional(),
+  insert_line: z$1.number().int().optional(),
+  new_str: z$1.string().optional(),
+  old_str: z$1.string().optional(),
+  view_range: z$1.array(z$1.number().int()).optional()
 });
 function textEditorTool_20241022(options = {}) {
   return {
@@ -5583,14 +10857,14 @@ function textEditorTool_20241022(options = {}) {
     experimental_toToolResultContent: options.experimental_toToolResultContent
   };
 }
-var TextEditor20250124Parameters = z.object({
-  command: z.enum(["view", "create", "str_replace", "insert", "undo_edit"]),
-  path: z.string(),
-  file_text: z.string().optional(),
-  insert_line: z.number().int().optional(),
-  new_str: z.string().optional(),
-  old_str: z.string().optional(),
-  view_range: z.array(z.number().int()).optional()
+var TextEditor20250124Parameters = z$1.object({
+  command: z$1.enum(["view", "create", "str_replace", "insert", "undo_edit"]),
+  path: z$1.string(),
+  file_text: z$1.string().optional(),
+  insert_line: z$1.number().int().optional(),
+  new_str: z$1.string().optional(),
+  old_str: z$1.string().optional(),
+  view_range: z$1.array(z$1.number().int()).optional()
 });
 function textEditorTool_20250124(options = {}) {
   return {
@@ -5602,8 +10876,8 @@ function textEditorTool_20250124(options = {}) {
     experimental_toToolResultContent: options.experimental_toToolResultContent
   };
 }
-var Computer20241022Parameters = z.object({
-  action: z.enum([
+var Computer20241022Parameters = z$1.object({
+  action: z$1.enum([
     "key",
     "type",
     "mouse_move",
@@ -5615,8 +10889,8 @@ var Computer20241022Parameters = z.object({
     "screenshot",
     "cursor_position"
   ]),
-  coordinate: z.array(z.number().int()).optional(),
-  text: z.string().optional()
+  coordinate: z$1.array(z$1.number().int()).optional(),
+  text: z$1.string().optional()
 });
 function computerTool_20241022(options) {
   return {
@@ -5632,8 +10906,8 @@ function computerTool_20241022(options) {
     experimental_toToolResultContent: options.experimental_toToolResultContent
   };
 }
-var Computer20250124Parameters = z.object({
-  action: z.enum([
+var Computer20250124Parameters = z$1.object({
+  action: z$1.enum([
     "key",
     "hold_key",
     "type",
@@ -5651,12 +10925,12 @@ var Computer20250124Parameters = z.object({
     "wait",
     "screenshot"
   ]),
-  coordinate: z.tuple([z.number().int(), z.number().int()]).optional(),
-  duration: z.number().optional(),
-  scroll_amount: z.number().optional(),
-  scroll_direction: z.enum(["up", "down", "left", "right"]).optional(),
-  start_coordinate: z.tuple([z.number().int(), z.number().int()]).optional(),
-  text: z.string().optional()
+  coordinate: z$1.tuple([z$1.number().int(), z$1.number().int()]).optional(),
+  duration: z$1.number().optional(),
+  scroll_amount: z$1.number().optional(),
+  scroll_direction: z$1.enum(["up", "down", "left", "right"]).optional(),
+  start_coordinate: z$1.tuple([z$1.number().int(), z$1.number().int()]).optional(),
+  text: z$1.string().optional()
 });
 function computerTool_20250124(options) {
   return {
@@ -6733,51 +12007,51 @@ function convertToBase64(value) {
 function withoutTrailingSlash2(url) {
   return url == null ? void 0 : url.replace(/\/$/, "");
 }
-var anthropicErrorDataSchema2 = z$1.object({
-  type: z$1.literal("error"),
-  error: z$1.object({
-    type: z$1.string(),
-    message: z$1.string()
+var anthropicErrorDataSchema2 = z.object({
+  type: z.literal("error"),
+  error: z.object({
+    type: z.string(),
+    message: z.string()
   })
 });
 var anthropicFailedResponseHandler2 = createJsonErrorResponseHandler2({
   errorSchema: anthropicErrorDataSchema2,
   errorToMessage: (data) => data.error.message
 });
-var anthropicFilePartProviderOptions = z$1.object({
+var anthropicFilePartProviderOptions = z.object({
   /**
    * Citation configuration for this document.
    * When enabled, this document will generate citations in the response.
    */
-  citations: z$1.object({
+  citations: z.object({
     /**
      * Enable citations for this document
      */
-    enabled: z$1.boolean()
+    enabled: z.boolean()
   }).optional(),
   /**
    * Custom title for the document.
    * If not provided, the filename will be used.
    */
-  title: z$1.string().optional(),
+  title: z.string().optional(),
   /**
    * Context about the document that will be passed to the model
    * but not used towards cited content.
    * Useful for storing document metadata as text or stringified JSON.
    */
-  context: z$1.string().optional()
+  context: z.string().optional()
 });
-var anthropicProviderOptions = z$1.object({
-  sendReasoning: z$1.boolean().optional(),
-  thinking: z$1.object({
-    type: z$1.union([z$1.literal("enabled"), z$1.literal("disabled")]),
-    budgetTokens: z$1.number().optional()
+var anthropicProviderOptions = z.object({
+  sendReasoning: z.boolean().optional(),
+  thinking: z.object({
+    type: z.union([z.literal("enabled"), z.literal("disabled")]),
+    budgetTokens: z.number().optional()
   }).optional(),
   /**
    * Whether to disable parallel function calling during tool use. Default is false.
    * When set to true, Claude will use at most one tool per response.
    */
-  disableParallelToolUse: z$1.boolean().optional()
+  disableParallelToolUse: z.boolean().optional()
 });
 function getCacheControl(providerMetadata) {
   var _a16;
@@ -6785,44 +12059,44 @@ function getCacheControl(providerMetadata) {
   const cacheControlValue = (_a16 = anthropic22 == null ? void 0 : anthropic22.cacheControl) != null ? _a16 : anthropic22 == null ? void 0 : anthropic22.cache_control;
   return cacheControlValue;
 }
-var webSearch_20250305ArgsSchema = z$1.object({
+var webSearch_20250305ArgsSchema = z.object({
   /**
    * Maximum number of web searches Claude can perform during the conversation.
    */
-  maxUses: z$1.number().optional(),
+  maxUses: z.number().optional(),
   /**
    * Optional list of domains that Claude is allowed to search.
    */
-  allowedDomains: z$1.array(z$1.string()).optional(),
+  allowedDomains: z.array(z.string()).optional(),
   /**
    * Optional list of domains that Claude should avoid when searching.
    */
-  blockedDomains: z$1.array(z$1.string()).optional(),
+  blockedDomains: z.array(z.string()).optional(),
   /**
    * Optional user location information to provide geographically relevant search results.
    */
-  userLocation: z$1.object({
-    type: z$1.literal("approximate"),
-    city: z$1.string().optional(),
-    region: z$1.string().optional(),
-    country: z$1.string().optional(),
-    timezone: z$1.string().optional()
+  userLocation: z.object({
+    type: z.literal("approximate"),
+    city: z.string().optional(),
+    region: z.string().optional(),
+    country: z.string().optional(),
+    timezone: z.string().optional()
   }).optional()
 });
-var webSearch_20250305OutputSchema = z$1.array(
-  z$1.object({
-    url: z$1.string(),
-    title: z$1.string(),
-    pageAge: z$1.string().nullable(),
-    encryptedContent: z$1.string(),
-    type: z$1.string()
+var webSearch_20250305OutputSchema = z.array(
+  z.object({
+    url: z.string(),
+    title: z.string(),
+    pageAge: z.string().nullable(),
+    encryptedContent: z.string(),
+    type: z.string()
   })
 );
 var factory = createProviderDefinedToolFactoryWithOutputSchema({
   id: "anthropic.web_search_20250305",
   name: "web_search",
-  inputSchema: z$1.object({
-    query: z$1.string()
+  inputSchema: z.object({
+    query: z.string()
   }),
   outputSchema: webSearch_20250305OutputSchema
 });
@@ -6997,17 +12271,17 @@ function prepareTools2({
     }
   }
 }
-var codeExecution_20250522OutputSchema = z$1.object({
-  type: z$1.literal("code_execution_result"),
-  stdout: z$1.string(),
-  stderr: z$1.string(),
-  return_code: z$1.number()
+var codeExecution_20250522OutputSchema = z.object({
+  type: z.literal("code_execution_result"),
+  stdout: z.string(),
+  stderr: z.string(),
+  return_code: z.number()
 });
 var factory2 = createProviderDefinedToolFactoryWithOutputSchema({
   id: "anthropic.code_execution_20250522",
   name: "code_execution",
-  inputSchema: z$1.object({
-    code: z$1.string()
+  inputSchema: z.object({
+    code: z.string()
   }),
   outputSchema: codeExecution_20250522OutputSchema
 });
@@ -7474,36 +12748,36 @@ function mapAnthropicStopReason2({
   }
 }
 var citationSchemas = {
-  webSearchResult: z$1.object({
-    type: z$1.literal("web_search_result_location"),
-    cited_text: z$1.string(),
-    url: z$1.string(),
-    title: z$1.string(),
-    encrypted_index: z$1.string()
+  webSearchResult: z.object({
+    type: z.literal("web_search_result_location"),
+    cited_text: z.string(),
+    url: z.string(),
+    title: z.string(),
+    encrypted_index: z.string()
   }),
-  pageLocation: z$1.object({
-    type: z$1.literal("page_location"),
-    cited_text: z$1.string(),
-    document_index: z$1.number(),
-    document_title: z$1.string().nullable(),
-    start_page_number: z$1.number(),
-    end_page_number: z$1.number()
+  pageLocation: z.object({
+    type: z.literal("page_location"),
+    cited_text: z.string(),
+    document_index: z.number(),
+    document_title: z.string().nullable(),
+    start_page_number: z.number(),
+    end_page_number: z.number()
   }),
-  charLocation: z$1.object({
-    type: z$1.literal("char_location"),
-    cited_text: z$1.string(),
-    document_index: z$1.number(),
-    document_title: z$1.string().nullable(),
-    start_char_index: z$1.number(),
-    end_char_index: z$1.number()
+  charLocation: z.object({
+    type: z.literal("char_location"),
+    cited_text: z.string(),
+    document_index: z.number(),
+    document_title: z.string().nullable(),
+    start_char_index: z.number(),
+    end_char_index: z.number()
   })
 };
-var citationSchema = z$1.discriminatedUnion("type", [
+var citationSchema = z.discriminatedUnion("type", [
   citationSchemas.webSearchResult,
   citationSchemas.pageLocation,
   citationSchemas.charLocation
 ]);
-z$1.discriminatedUnion("type", [
+z.discriminatedUnion("type", [
   citationSchemas.pageLocation,
   citationSchemas.charLocation
 ]);
@@ -8307,235 +13581,235 @@ var AnthropicMessagesLanguageModel2 = class {
     };
   }
 };
-var anthropicMessagesResponseSchema2 = z$1.object({
-  type: z$1.literal("message"),
-  id: z$1.string().nullish(),
-  model: z$1.string().nullish(),
-  content: z$1.array(
-    z$1.discriminatedUnion("type", [
-      z$1.object({
-        type: z$1.literal("text"),
-        text: z$1.string(),
-        citations: z$1.array(citationSchema).optional()
+var anthropicMessagesResponseSchema2 = z.object({
+  type: z.literal("message"),
+  id: z.string().nullish(),
+  model: z.string().nullish(),
+  content: z.array(
+    z.discriminatedUnion("type", [
+      z.object({
+        type: z.literal("text"),
+        text: z.string(),
+        citations: z.array(citationSchema).optional()
       }),
-      z$1.object({
-        type: z$1.literal("thinking"),
-        thinking: z$1.string(),
-        signature: z$1.string()
+      z.object({
+        type: z.literal("thinking"),
+        thinking: z.string(),
+        signature: z.string()
       }),
-      z$1.object({
-        type: z$1.literal("redacted_thinking"),
-        data: z$1.string()
+      z.object({
+        type: z.literal("redacted_thinking"),
+        data: z.string()
       }),
-      z$1.object({
-        type: z$1.literal("tool_use"),
-        id: z$1.string(),
-        name: z$1.string(),
-        input: z$1.unknown()
+      z.object({
+        type: z.literal("tool_use"),
+        id: z.string(),
+        name: z.string(),
+        input: z.unknown()
       }),
-      z$1.object({
-        type: z$1.literal("server_tool_use"),
-        id: z$1.string(),
-        name: z$1.string(),
-        input: z$1.record(z$1.string(), z$1.unknown()).nullish()
+      z.object({
+        type: z.literal("server_tool_use"),
+        id: z.string(),
+        name: z.string(),
+        input: z.record(z.string(), z.unknown()).nullish()
       }),
-      z$1.object({
-        type: z$1.literal("web_search_tool_result"),
-        tool_use_id: z$1.string(),
-        content: z$1.union([
-          z$1.array(
-            z$1.object({
-              type: z$1.literal("web_search_result"),
-              url: z$1.string(),
-              title: z$1.string(),
-              encrypted_content: z$1.string(),
-              page_age: z$1.string().nullish()
+      z.object({
+        type: z.literal("web_search_tool_result"),
+        tool_use_id: z.string(),
+        content: z.union([
+          z.array(
+            z.object({
+              type: z.literal("web_search_result"),
+              url: z.string(),
+              title: z.string(),
+              encrypted_content: z.string(),
+              page_age: z.string().nullish()
             })
           ),
-          z$1.object({
-            type: z$1.literal("web_search_tool_result_error"),
-            error_code: z$1.string()
+          z.object({
+            type: z.literal("web_search_tool_result_error"),
+            error_code: z.string()
           })
         ])
       }),
-      z$1.object({
-        type: z$1.literal("code_execution_tool_result"),
-        tool_use_id: z$1.string(),
-        content: z$1.union([
-          z$1.object({
-            type: z$1.literal("code_execution_result"),
-            stdout: z$1.string(),
-            stderr: z$1.string(),
-            return_code: z$1.number()
+      z.object({
+        type: z.literal("code_execution_tool_result"),
+        tool_use_id: z.string(),
+        content: z.union([
+          z.object({
+            type: z.literal("code_execution_result"),
+            stdout: z.string(),
+            stderr: z.string(),
+            return_code: z.number()
           }),
-          z$1.object({
-            type: z$1.literal("code_execution_tool_result_error"),
-            error_code: z$1.string()
+          z.object({
+            type: z.literal("code_execution_tool_result_error"),
+            error_code: z.string()
           })
         ])
       })
     ])
   ),
-  stop_reason: z$1.string().nullish(),
-  usage: z$1.looseObject({
-    input_tokens: z$1.number(),
-    output_tokens: z$1.number(),
-    cache_creation_input_tokens: z$1.number().nullish(),
-    cache_read_input_tokens: z$1.number().nullish()
+  stop_reason: z.string().nullish(),
+  usage: z.looseObject({
+    input_tokens: z.number(),
+    output_tokens: z.number(),
+    cache_creation_input_tokens: z.number().nullish(),
+    cache_read_input_tokens: z.number().nullish()
   })
 });
-var anthropicMessagesChunkSchema2 = z$1.discriminatedUnion("type", [
-  z$1.object({
-    type: z$1.literal("message_start"),
-    message: z$1.object({
-      id: z$1.string().nullish(),
-      model: z$1.string().nullish(),
-      usage: z$1.looseObject({
-        input_tokens: z$1.number(),
-        output_tokens: z$1.number(),
-        cache_creation_input_tokens: z$1.number().nullish(),
-        cache_read_input_tokens: z$1.number().nullish()
+var anthropicMessagesChunkSchema2 = z.discriminatedUnion("type", [
+  z.object({
+    type: z.literal("message_start"),
+    message: z.object({
+      id: z.string().nullish(),
+      model: z.string().nullish(),
+      usage: z.looseObject({
+        input_tokens: z.number(),
+        output_tokens: z.number(),
+        cache_creation_input_tokens: z.number().nullish(),
+        cache_read_input_tokens: z.number().nullish()
       })
     })
   }),
-  z$1.object({
-    type: z$1.literal("content_block_start"),
-    index: z$1.number(),
-    content_block: z$1.discriminatedUnion("type", [
-      z$1.object({
-        type: z$1.literal("text"),
-        text: z$1.string()
+  z.object({
+    type: z.literal("content_block_start"),
+    index: z.number(),
+    content_block: z.discriminatedUnion("type", [
+      z.object({
+        type: z.literal("text"),
+        text: z.string()
       }),
-      z$1.object({
-        type: z$1.literal("thinking"),
-        thinking: z$1.string()
+      z.object({
+        type: z.literal("thinking"),
+        thinking: z.string()
       }),
-      z$1.object({
-        type: z$1.literal("tool_use"),
-        id: z$1.string(),
-        name: z$1.string()
+      z.object({
+        type: z.literal("tool_use"),
+        id: z.string(),
+        name: z.string()
       }),
-      z$1.object({
-        type: z$1.literal("redacted_thinking"),
-        data: z$1.string()
+      z.object({
+        type: z.literal("redacted_thinking"),
+        data: z.string()
       }),
-      z$1.object({
-        type: z$1.literal("server_tool_use"),
-        id: z$1.string(),
-        name: z$1.string(),
-        input: z$1.record(z$1.string(), z$1.unknown()).nullish()
+      z.object({
+        type: z.literal("server_tool_use"),
+        id: z.string(),
+        name: z.string(),
+        input: z.record(z.string(), z.unknown()).nullish()
       }),
-      z$1.object({
-        type: z$1.literal("web_search_tool_result"),
-        tool_use_id: z$1.string(),
-        content: z$1.union([
-          z$1.array(
-            z$1.object({
-              type: z$1.literal("web_search_result"),
-              url: z$1.string(),
-              title: z$1.string(),
-              encrypted_content: z$1.string(),
-              page_age: z$1.string().nullish()
+      z.object({
+        type: z.literal("web_search_tool_result"),
+        tool_use_id: z.string(),
+        content: z.union([
+          z.array(
+            z.object({
+              type: z.literal("web_search_result"),
+              url: z.string(),
+              title: z.string(),
+              encrypted_content: z.string(),
+              page_age: z.string().nullish()
             })
           ),
-          z$1.object({
-            type: z$1.literal("web_search_tool_result_error"),
-            error_code: z$1.string()
+          z.object({
+            type: z.literal("web_search_tool_result_error"),
+            error_code: z.string()
           })
         ])
       }),
-      z$1.object({
-        type: z$1.literal("code_execution_tool_result"),
-        tool_use_id: z$1.string(),
-        content: z$1.union([
-          z$1.object({
-            type: z$1.literal("code_execution_result"),
-            stdout: z$1.string(),
-            stderr: z$1.string(),
-            return_code: z$1.number()
+      z.object({
+        type: z.literal("code_execution_tool_result"),
+        tool_use_id: z.string(),
+        content: z.union([
+          z.object({
+            type: z.literal("code_execution_result"),
+            stdout: z.string(),
+            stderr: z.string(),
+            return_code: z.number()
           }),
-          z$1.object({
-            type: z$1.literal("code_execution_tool_result_error"),
-            error_code: z$1.string()
+          z.object({
+            type: z.literal("code_execution_tool_result_error"),
+            error_code: z.string()
           })
         ])
       })
     ])
   }),
-  z$1.object({
-    type: z$1.literal("content_block_delta"),
-    index: z$1.number(),
-    delta: z$1.discriminatedUnion("type", [
-      z$1.object({
-        type: z$1.literal("input_json_delta"),
-        partial_json: z$1.string()
+  z.object({
+    type: z.literal("content_block_delta"),
+    index: z.number(),
+    delta: z.discriminatedUnion("type", [
+      z.object({
+        type: z.literal("input_json_delta"),
+        partial_json: z.string()
       }),
-      z$1.object({
-        type: z$1.literal("text_delta"),
-        text: z$1.string()
+      z.object({
+        type: z.literal("text_delta"),
+        text: z.string()
       }),
-      z$1.object({
-        type: z$1.literal("thinking_delta"),
-        thinking: z$1.string()
+      z.object({
+        type: z.literal("thinking_delta"),
+        thinking: z.string()
       }),
-      z$1.object({
-        type: z$1.literal("signature_delta"),
-        signature: z$1.string()
+      z.object({
+        type: z.literal("signature_delta"),
+        signature: z.string()
       }),
-      z$1.object({
-        type: z$1.literal("citations_delta"),
+      z.object({
+        type: z.literal("citations_delta"),
         citation: citationSchema
       })
     ])
   }),
-  z$1.object({
-    type: z$1.literal("content_block_stop"),
-    index: z$1.number()
+  z.object({
+    type: z.literal("content_block_stop"),
+    index: z.number()
   }),
-  z$1.object({
-    type: z$1.literal("error"),
-    error: z$1.object({
-      type: z$1.string(),
-      message: z$1.string()
+  z.object({
+    type: z.literal("error"),
+    error: z.object({
+      type: z.string(),
+      message: z.string()
     })
   }),
-  z$1.object({
-    type: z$1.literal("message_delta"),
-    delta: z$1.object({ stop_reason: z$1.string().nullish() }),
-    usage: z$1.object({ output_tokens: z$1.number() })
+  z.object({
+    type: z.literal("message_delta"),
+    delta: z.object({ stop_reason: z.string().nullish() }),
+    usage: z.object({ output_tokens: z.number() })
   }),
-  z$1.object({
-    type: z$1.literal("message_stop")
+  z.object({
+    type: z.literal("message_stop")
   }),
-  z$1.object({
-    type: z$1.literal("ping")
+  z.object({
+    type: z.literal("ping")
   })
 ]);
-var anthropicReasoningMetadataSchema = z$1.object({
-  signature: z$1.string().optional(),
-  redactedData: z$1.string().optional()
+var anthropicReasoningMetadataSchema = z.object({
+  signature: z.string().optional(),
+  redactedData: z.string().optional()
 });
 var bash_20241022 = createProviderDefinedToolFactory({
   id: "anthropic.bash_20241022",
   name: "bash",
-  inputSchema: z62.object({
-    command: z62.string(),
-    restart: z62.boolean().optional()
+  inputSchema: z.object({
+    command: z.string(),
+    restart: z.boolean().optional()
   })
 });
 var bash_20250124 = createProviderDefinedToolFactory({
   id: "anthropic.bash_20250124",
   name: "bash",
-  inputSchema: z62.object({
-    command: z62.string(),
-    restart: z62.boolean().optional()
+  inputSchema: z.object({
+    command: z.string(),
+    restart: z.boolean().optional()
   })
 });
 var computer_20241022 = createProviderDefinedToolFactory({
   id: "anthropic.computer_20241022",
   name: "computer",
-  inputSchema: z$1.object({
-    action: z$1.enum([
+  inputSchema: z.object({
+    action: z.enum([
       "key",
       "type",
       "mouse_move",
@@ -8547,15 +13821,15 @@ var computer_20241022 = createProviderDefinedToolFactory({
       "screenshot",
       "cursor_position"
     ]),
-    coordinate: z$1.array(z$1.number().int()).optional(),
-    text: z$1.string().optional()
+    coordinate: z.array(z.number().int()).optional(),
+    text: z.string().optional()
   })
 });
 var computer_20250124 = createProviderDefinedToolFactory({
   id: "anthropic.computer_20250124",
   name: "computer",
-  inputSchema: z$1.object({
-    action: z$1.enum([
+  inputSchema: z.object({
+    action: z.enum([
       "key",
       "hold_key",
       "type",
@@ -8573,51 +13847,51 @@ var computer_20250124 = createProviderDefinedToolFactory({
       "wait",
       "screenshot"
     ]),
-    coordinate: z$1.tuple([z$1.number().int(), z$1.number().int()]).optional(),
-    duration: z$1.number().optional(),
-    scroll_amount: z$1.number().optional(),
-    scroll_direction: z$1.enum(["up", "down", "left", "right"]).optional(),
-    start_coordinate: z$1.tuple([z$1.number().int(), z$1.number().int()]).optional(),
-    text: z$1.string().optional()
+    coordinate: z.tuple([z.number().int(), z.number().int()]).optional(),
+    duration: z.number().optional(),
+    scroll_amount: z.number().optional(),
+    scroll_direction: z.enum(["up", "down", "left", "right"]).optional(),
+    start_coordinate: z.tuple([z.number().int(), z.number().int()]).optional(),
+    text: z.string().optional()
   })
 });
 var textEditor_20241022 = createProviderDefinedToolFactory({
   id: "anthropic.text_editor_20241022",
   name: "str_replace_editor",
-  inputSchema: z$1.object({
-    command: z$1.enum(["view", "create", "str_replace", "insert", "undo_edit"]),
-    path: z$1.string(),
-    file_text: z$1.string().optional(),
-    insert_line: z$1.number().int().optional(),
-    new_str: z$1.string().optional(),
-    old_str: z$1.string().optional(),
-    view_range: z$1.array(z$1.number().int()).optional()
+  inputSchema: z.object({
+    command: z.enum(["view", "create", "str_replace", "insert", "undo_edit"]),
+    path: z.string(),
+    file_text: z.string().optional(),
+    insert_line: z.number().int().optional(),
+    new_str: z.string().optional(),
+    old_str: z.string().optional(),
+    view_range: z.array(z.number().int()).optional()
   })
 });
 var textEditor_20250124 = createProviderDefinedToolFactory({
   id: "anthropic.text_editor_20250124",
   name: "str_replace_editor",
-  inputSchema: z$1.object({
-    command: z$1.enum(["view", "create", "str_replace", "insert", "undo_edit"]),
-    path: z$1.string(),
-    file_text: z$1.string().optional(),
-    insert_line: z$1.number().int().optional(),
-    new_str: z$1.string().optional(),
-    old_str: z$1.string().optional(),
-    view_range: z$1.array(z$1.number().int()).optional()
+  inputSchema: z.object({
+    command: z.enum(["view", "create", "str_replace", "insert", "undo_edit"]),
+    path: z.string(),
+    file_text: z.string().optional(),
+    insert_line: z.number().int().optional(),
+    new_str: z.string().optional(),
+    old_str: z.string().optional(),
+    view_range: z.array(z.number().int()).optional()
   })
 });
 var textEditor_20250429 = createProviderDefinedToolFactory({
   id: "anthropic.text_editor_20250429",
   name: "str_replace_based_edit_tool",
-  inputSchema: z$1.object({
-    command: z$1.enum(["view", "create", "str_replace", "insert"]),
-    path: z$1.string(),
-    file_text: z$1.string().optional(),
-    insert_line: z$1.number().int().optional(),
-    new_str: z$1.string().optional(),
-    old_str: z$1.string().optional(),
-    view_range: z$1.array(z$1.number().int()).optional()
+  inputSchema: z.object({
+    command: z.enum(["view", "create", "str_replace", "insert"]),
+    path: z.string(),
+    file_text: z.string().optional(),
+    insert_line: z.number().int().optional(),
+    new_str: z.string().optional(),
+    old_str: z.string().optional(),
+    view_range: z.array(z.number().int()).optional()
   })
 });
 var anthropicTools2 = {
@@ -8955,11 +14229,11 @@ function convertToGoogleGenerativeAIMessages(prompt) {
 function getModelPath(modelId) {
   return modelId.includes("/") ? modelId : `models/${modelId}`;
 }
-var googleErrorDataSchema = z.object({
-  error: z.object({
-    code: z.number().nullable(),
-    message: z.string(),
-    status: z.string()
+var googleErrorDataSchema = z$1.object({
+  error: z$1.object({
+    code: z$1.number().nullable(),
+    message: z$1.string(),
+    status: z$1.string()
   })
 });
 var googleFailedResponseHandler = createJsonErrorResponseHandler({
@@ -9455,102 +14729,102 @@ function extractSources({
     title: chunk.web.title
   }));
 }
-var contentSchema = z.object({
-  parts: z.array(
-    z.union([
+var contentSchema = z$1.object({
+  parts: z$1.array(
+    z$1.union([
       // note: order matters since text can be fully empty
-      z.object({
-        functionCall: z.object({
-          name: z.string(),
-          args: z.unknown()
+      z$1.object({
+        functionCall: z$1.object({
+          name: z$1.string(),
+          args: z$1.unknown()
         })
       }),
-      z.object({
-        inlineData: z.object({
-          mimeType: z.string(),
-          data: z.string()
+      z$1.object({
+        inlineData: z$1.object({
+          mimeType: z$1.string(),
+          data: z$1.string()
         })
       }),
-      z.object({
-        text: z.string().nullish(),
-        thought: z.boolean().nullish()
+      z$1.object({
+        text: z$1.string().nullish(),
+        thought: z$1.boolean().nullish()
       })
     ])
   ).nullish()
 });
-var groundingChunkSchema = z.object({
-  web: z.object({ uri: z.string(), title: z.string() }).nullish(),
-  retrievedContext: z.object({ uri: z.string(), title: z.string() }).nullish()
+var groundingChunkSchema = z$1.object({
+  web: z$1.object({ uri: z$1.string(), title: z$1.string() }).nullish(),
+  retrievedContext: z$1.object({ uri: z$1.string(), title: z$1.string() }).nullish()
 });
-var groundingMetadataSchema = z.object({
-  webSearchQueries: z.array(z.string()).nullish(),
-  retrievalQueries: z.array(z.string()).nullish(),
-  searchEntryPoint: z.object({ renderedContent: z.string() }).nullish(),
-  groundingChunks: z.array(groundingChunkSchema).nullish(),
-  groundingSupports: z.array(
-    z.object({
-      segment: z.object({
-        startIndex: z.number().nullish(),
-        endIndex: z.number().nullish(),
-        text: z.string().nullish()
+var groundingMetadataSchema = z$1.object({
+  webSearchQueries: z$1.array(z$1.string()).nullish(),
+  retrievalQueries: z$1.array(z$1.string()).nullish(),
+  searchEntryPoint: z$1.object({ renderedContent: z$1.string() }).nullish(),
+  groundingChunks: z$1.array(groundingChunkSchema).nullish(),
+  groundingSupports: z$1.array(
+    z$1.object({
+      segment: z$1.object({
+        startIndex: z$1.number().nullish(),
+        endIndex: z$1.number().nullish(),
+        text: z$1.string().nullish()
       }),
-      segment_text: z.string().nullish(),
-      groundingChunkIndices: z.array(z.number()).nullish(),
-      supportChunkIndices: z.array(z.number()).nullish(),
-      confidenceScores: z.array(z.number()).nullish(),
-      confidenceScore: z.array(z.number()).nullish()
+      segment_text: z$1.string().nullish(),
+      groundingChunkIndices: z$1.array(z$1.number()).nullish(),
+      supportChunkIndices: z$1.array(z$1.number()).nullish(),
+      confidenceScores: z$1.array(z$1.number()).nullish(),
+      confidenceScore: z$1.array(z$1.number()).nullish()
     })
   ).nullish(),
-  retrievalMetadata: z.union([
-    z.object({
-      webDynamicRetrievalScore: z.number()
+  retrievalMetadata: z$1.union([
+    z$1.object({
+      webDynamicRetrievalScore: z$1.number()
     }),
-    z.object({})
+    z$1.object({})
   ]).nullish()
 });
-var safetyRatingSchema = z.object({
-  category: z.string().nullish(),
-  probability: z.string().nullish(),
-  probabilityScore: z.number().nullish(),
-  severity: z.string().nullish(),
-  severityScore: z.number().nullish(),
-  blocked: z.boolean().nullish()
+var safetyRatingSchema = z$1.object({
+  category: z$1.string().nullish(),
+  probability: z$1.string().nullish(),
+  probabilityScore: z$1.number().nullish(),
+  severity: z$1.string().nullish(),
+  severityScore: z$1.number().nullish(),
+  blocked: z$1.boolean().nullish()
 });
-var responseSchema = z.object({
-  candidates: z.array(
-    z.object({
-      content: contentSchema.nullish().or(z.object({}).strict()),
-      finishReason: z.string().nullish(),
-      safetyRatings: z.array(safetyRatingSchema).nullish(),
+var responseSchema = z$1.object({
+  candidates: z$1.array(
+    z$1.object({
+      content: contentSchema.nullish().or(z$1.object({}).strict()),
+      finishReason: z$1.string().nullish(),
+      safetyRatings: z$1.array(safetyRatingSchema).nullish(),
       groundingMetadata: groundingMetadataSchema.nullish()
     })
   ),
-  usageMetadata: z.object({
-    promptTokenCount: z.number().nullish(),
-    candidatesTokenCount: z.number().nullish(),
-    totalTokenCount: z.number().nullish()
+  usageMetadata: z$1.object({
+    promptTokenCount: z$1.number().nullish(),
+    candidatesTokenCount: z$1.number().nullish(),
+    totalTokenCount: z$1.number().nullish()
   }).nullish()
 });
-var chunkSchema = z.object({
-  candidates: z.array(
-    z.object({
+var chunkSchema = z$1.object({
+  candidates: z$1.array(
+    z$1.object({
       content: contentSchema.nullish(),
-      finishReason: z.string().nullish(),
-      safetyRatings: z.array(safetyRatingSchema).nullish(),
+      finishReason: z$1.string().nullish(),
+      safetyRatings: z$1.array(safetyRatingSchema).nullish(),
       groundingMetadata: groundingMetadataSchema.nullish()
     })
   ).nullish(),
-  usageMetadata: z.object({
-    promptTokenCount: z.number().nullish(),
-    candidatesTokenCount: z.number().nullish(),
-    totalTokenCount: z.number().nullish()
+  usageMetadata: z$1.object({
+    promptTokenCount: z$1.number().nullish(),
+    candidatesTokenCount: z$1.number().nullish(),
+    totalTokenCount: z$1.number().nullish()
   }).nullish()
 });
-var googleGenerativeAIProviderOptionsSchema = z.object({
-  responseModalities: z.array(z.enum(["TEXT", "IMAGE"])).nullish(),
-  thinkingConfig: z.object({
-    thinkingBudget: z.number().nullish(),
-    includeThoughts: z.boolean().nullish()
+var googleGenerativeAIProviderOptionsSchema = z$1.object({
+  responseModalities: z$1.array(z$1.enum(["TEXT", "IMAGE"])).nullish(),
+  thinkingConfig: z$1.object({
+    thinkingBudget: z$1.number().nullish(),
+    includeThoughts: z$1.boolean().nullish()
   }).nullish()
 });
 var GoogleGenerativeAIEmbeddingModel = class {
@@ -9611,8 +14885,8 @@ var GoogleGenerativeAIEmbeddingModel = class {
     };
   }
 };
-var googleGenerativeAITextEmbeddingResponseSchema = z.object({
-  embeddings: z.array(z.object({ values: z.array(z.number()) }))
+var googleGenerativeAITextEmbeddingResponseSchema = z$1.object({
+  embeddings: z$1.array(z$1.object({ values: z$1.array(z$1.number()) }))
 });
 function isSupportedFileUrl(url) {
   return url.toString().startsWith("https://generativelanguage.googleapis.com/v1beta/files/");
@@ -9662,23 +14936,23 @@ function createGoogleGenerativeAI(options = {}) {
   return provider;
 }
 var google = createGoogleGenerativeAI();
-var googleErrorDataSchema2 = z$1.object({
-  error: z$1.object({
-    code: z$1.number().nullable(),
-    message: z$1.string(),
-    status: z$1.string()
+var googleErrorDataSchema2 = z.object({
+  error: z.object({
+    code: z.number().nullable(),
+    message: z.string(),
+    status: z.string()
   })
 });
 var googleFailedResponseHandler2 = createJsonErrorResponseHandler2({
   errorSchema: googleErrorDataSchema2,
   errorToMessage: (data) => data.error.message
 });
-var googleGenerativeAIEmbeddingProviderOptions = z$1.object({
+var googleGenerativeAIEmbeddingProviderOptions = z.object({
   /**
    * Optional. Optional reduced dimension for the output embedding.
    * If set, excessive values in the output embedding are truncated from the end.
    */
-  outputDimensionality: z$1.number().optional(),
+  outputDimensionality: z.number().optional(),
   /**
    * Optional. Specifies the task type for generating embeddings.
    * Supported task types:
@@ -9691,7 +14965,7 @@ var googleGenerativeAIEmbeddingProviderOptions = z$1.object({
    * - FACT_VERIFICATION: Optimized for verifying factual information.
    * - CODE_RETRIEVAL_QUERY: Optimized for retrieving code blocks based on natural language queries.
    */
-  taskType: z$1.enum([
+  taskType: z.enum([
     "SEMANTIC_SIMILARITY",
     "CLASSIFICATION",
     "CLUSTERING",
@@ -9794,11 +15068,11 @@ var GoogleGenerativeAIEmbeddingModel2 = class {
     };
   }
 };
-var googleGenerativeAITextEmbeddingResponseSchema2 = z$1.object({
-  embeddings: z$1.array(z$1.object({ values: z$1.array(z$1.number()) }))
+var googleGenerativeAITextEmbeddingResponseSchema2 = z.object({
+  embeddings: z.array(z.object({ values: z.array(z.number()) }))
 });
-var googleGenerativeAISingleEmbeddingResponseSchema = z$1.object({
-  embedding: z$1.object({ values: z$1.array(z$1.number()) })
+var googleGenerativeAISingleEmbeddingResponseSchema = z.object({
+  embedding: z.object({ values: z.array(z.number()) })
 });
 function convertJSONSchemaToOpenAPISchema2(jsonSchema) {
   if (jsonSchema == null || isEmptyObjectSchema2(jsonSchema)) {
@@ -10025,18 +15299,18 @@ function convertToGoogleGenerativeAIMessages2(prompt, options) {
 function getModelPath2(modelId) {
   return modelId.includes("/") ? modelId : `models/${modelId}`;
 }
-var googleGenerativeAIProviderOptions = z$1.object({
-  responseModalities: z$1.array(z$1.enum(["TEXT", "IMAGE"])).optional(),
-  thinkingConfig: z$1.object({
-    thinkingBudget: z$1.number().optional(),
-    includeThoughts: z$1.boolean().optional()
+var googleGenerativeAIProviderOptions = z.object({
+  responseModalities: z.array(z.enum(["TEXT", "IMAGE"])).optional(),
+  thinkingConfig: z.object({
+    thinkingBudget: z.number().optional(),
+    includeThoughts: z.boolean().optional()
   }).optional(),
   /**
   Optional.
   The name of the cached content used as context to serve the prediction.
   Format: cachedContents/{cachedContent}
      */
-  cachedContent: z$1.string().optional(),
+  cachedContent: z.string().optional(),
   /**
    * Optional. Enable structured output. Default is true.
    *
@@ -10045,13 +15319,13 @@ var googleGenerativeAIProviderOptions = z$1.object({
    * Google Generative AI uses. You can use this to disable
    * structured outputs if you need to.
    */
-  structuredOutputs: z$1.boolean().optional(),
+  structuredOutputs: z.boolean().optional(),
   /**
   Optional. A list of unique safety settings for blocking unsafe content.
    */
-  safetySettings: z$1.array(
-    z$1.object({
-      category: z$1.enum([
+  safetySettings: z.array(
+    z.object({
+      category: z.enum([
         "HARM_CATEGORY_UNSPECIFIED",
         "HARM_CATEGORY_HATE_SPEECH",
         "HARM_CATEGORY_DANGEROUS_CONTENT",
@@ -10059,7 +15333,7 @@ var googleGenerativeAIProviderOptions = z$1.object({
         "HARM_CATEGORY_SEXUALLY_EXPLICIT",
         "HARM_CATEGORY_CIVIC_INTEGRITY"
       ]),
-      threshold: z$1.enum([
+      threshold: z.enum([
         "HARM_BLOCK_THRESHOLD_UNSPECIFIED",
         "BLOCK_LOW_AND_ABOVE",
         "BLOCK_MEDIUM_AND_ABOVE",
@@ -10069,7 +15343,7 @@ var googleGenerativeAIProviderOptions = z$1.object({
       ])
     })
   ).optional(),
-  threshold: z$1.enum([
+  threshold: z.enum([
     "HARM_BLOCK_THRESHOLD_UNSPECIFIED",
     "BLOCK_LOW_AND_ABOVE",
     "BLOCK_MEDIUM_AND_ABOVE",
@@ -10082,13 +15356,13 @@ var googleGenerativeAIProviderOptions = z$1.object({
    *
    * https://cloud.google.com/vertex-ai/generative-ai/docs/multimodal/audio-understanding
    */
-  audioTimestamp: z$1.boolean().optional(),
+  audioTimestamp: z.boolean().optional(),
   /**
    * Optional. Defines labels used in billing reports. Available on Vertex AI only.
    *
    * https://cloud.google.com/vertex-ai/generative-ai/docs/multimodal/add-labels-to-api-calls
    */
-  labels: z$1.record(z$1.string(), z$1.string()).optional()
+  labels: z.record(z.string(), z.string()).optional()
 });
 function prepareTools4({
   tools,
@@ -10254,55 +15528,55 @@ function mapGoogleGenerativeAIFinishReason2({
       return "unknown";
   }
 }
-var groundingChunkSchema2 = z$1.object({
-  web: z$1.object({ uri: z$1.string(), title: z$1.string() }).nullish(),
-  retrievedContext: z$1.object({ uri: z$1.string(), title: z$1.string() }).nullish()
+var groundingChunkSchema2 = z.object({
+  web: z.object({ uri: z.string(), title: z.string() }).nullish(),
+  retrievedContext: z.object({ uri: z.string(), title: z.string() }).nullish()
 });
-var groundingMetadataSchema2 = z$1.object({
-  webSearchQueries: z$1.array(z$1.string()).nullish(),
-  retrievalQueries: z$1.array(z$1.string()).nullish(),
-  searchEntryPoint: z$1.object({ renderedContent: z$1.string() }).nullish(),
-  groundingChunks: z$1.array(groundingChunkSchema2).nullish(),
-  groundingSupports: z$1.array(
-    z$1.object({
-      segment: z$1.object({
-        startIndex: z$1.number().nullish(),
-        endIndex: z$1.number().nullish(),
-        text: z$1.string().nullish()
+var groundingMetadataSchema2 = z.object({
+  webSearchQueries: z.array(z.string()).nullish(),
+  retrievalQueries: z.array(z.string()).nullish(),
+  searchEntryPoint: z.object({ renderedContent: z.string() }).nullish(),
+  groundingChunks: z.array(groundingChunkSchema2).nullish(),
+  groundingSupports: z.array(
+    z.object({
+      segment: z.object({
+        startIndex: z.number().nullish(),
+        endIndex: z.number().nullish(),
+        text: z.string().nullish()
       }),
-      segment_text: z$1.string().nullish(),
-      groundingChunkIndices: z$1.array(z$1.number()).nullish(),
-      supportChunkIndices: z$1.array(z$1.number()).nullish(),
-      confidenceScores: z$1.array(z$1.number()).nullish(),
-      confidenceScore: z$1.array(z$1.number()).nullish()
+      segment_text: z.string().nullish(),
+      groundingChunkIndices: z.array(z.number()).nullish(),
+      supportChunkIndices: z.array(z.number()).nullish(),
+      confidenceScores: z.array(z.number()).nullish(),
+      confidenceScore: z.array(z.number()).nullish()
     })
   ).nullish(),
-  retrievalMetadata: z$1.union([
-    z$1.object({
-      webDynamicRetrievalScore: z$1.number()
+  retrievalMetadata: z.union([
+    z.object({
+      webDynamicRetrievalScore: z.number()
     }),
-    z$1.object({})
+    z.object({})
   ]).nullish()
 });
 var googleSearch = createProviderDefinedToolFactory({
   id: "google.google_search",
   name: "google_search",
-  inputSchema: z$1.object({
-    mode: z$1.enum(["MODE_DYNAMIC", "MODE_UNSPECIFIED"]).default("MODE_UNSPECIFIED"),
-    dynamicThreshold: z$1.number().default(1)
+  inputSchema: z.object({
+    mode: z.enum(["MODE_DYNAMIC", "MODE_UNSPECIFIED"]).default("MODE_UNSPECIFIED"),
+    dynamicThreshold: z.number().default(1)
   })
 });
-var urlMetadataSchema = z$1.object({
-  retrievedUrl: z$1.string(),
-  urlRetrievalStatus: z$1.string()
+var urlMetadataSchema = z.object({
+  retrievedUrl: z.string(),
+  urlRetrievalStatus: z.string()
 });
-var urlContextMetadataSchema = z$1.object({
-  urlMetadata: z$1.array(urlMetadataSchema)
+var urlContextMetadataSchema = z.object({
+  urlMetadata: z.array(urlMetadataSchema)
 });
 var urlContext = createProviderDefinedToolFactory({
   id: "google.url_context",
   name: "url_context",
-  inputSchema: z$1.object({})
+  inputSchema: z.object({})
 });
 var GoogleGenerativeAILanguageModel2 = class {
   constructor(modelId, config) {
@@ -10793,72 +16067,72 @@ function extractSources2({
     title: chunk.web.title
   }));
 }
-var contentSchema2 = z$1.object({
-  parts: z$1.array(
-    z$1.union([
+var contentSchema2 = z.object({
+  parts: z.array(
+    z.union([
       // note: order matters since text can be fully empty
-      z$1.object({
-        functionCall: z$1.object({
-          name: z$1.string(),
-          args: z$1.unknown()
+      z.object({
+        functionCall: z.object({
+          name: z.string(),
+          args: z.unknown()
         }),
-        thoughtSignature: z$1.string().nullish()
+        thoughtSignature: z.string().nullish()
       }),
-      z$1.object({
-        inlineData: z$1.object({
-          mimeType: z$1.string(),
-          data: z$1.string()
+      z.object({
+        inlineData: z.object({
+          mimeType: z.string(),
+          data: z.string()
         })
       }),
-      z$1.object({
-        executableCode: z$1.object({
-          language: z$1.string(),
-          code: z$1.string()
+      z.object({
+        executableCode: z.object({
+          language: z.string(),
+          code: z.string()
         }).nullish(),
-        codeExecutionResult: z$1.object({
-          outcome: z$1.string(),
-          output: z$1.string()
+        codeExecutionResult: z.object({
+          outcome: z.string(),
+          output: z.string()
         }).nullish(),
-        text: z$1.string().nullish(),
-        thought: z$1.boolean().nullish(),
-        thoughtSignature: z$1.string().nullish()
+        text: z.string().nullish(),
+        thought: z.boolean().nullish(),
+        thoughtSignature: z.string().nullish()
       })
     ])
   ).nullish()
 });
-var safetyRatingSchema2 = z$1.object({
-  category: z$1.string().nullish(),
-  probability: z$1.string().nullish(),
-  probabilityScore: z$1.number().nullish(),
-  severity: z$1.string().nullish(),
-  severityScore: z$1.number().nullish(),
-  blocked: z$1.boolean().nullish()
+var safetyRatingSchema2 = z.object({
+  category: z.string().nullish(),
+  probability: z.string().nullish(),
+  probabilityScore: z.number().nullish(),
+  severity: z.string().nullish(),
+  severityScore: z.number().nullish(),
+  blocked: z.boolean().nullish()
 });
-var usageSchema = z$1.object({
-  cachedContentTokenCount: z$1.number().nullish(),
-  thoughtsTokenCount: z$1.number().nullish(),
-  promptTokenCount: z$1.number().nullish(),
-  candidatesTokenCount: z$1.number().nullish(),
-  totalTokenCount: z$1.number().nullish()
+var usageSchema = z.object({
+  cachedContentTokenCount: z.number().nullish(),
+  thoughtsTokenCount: z.number().nullish(),
+  promptTokenCount: z.number().nullish(),
+  candidatesTokenCount: z.number().nullish(),
+  totalTokenCount: z.number().nullish()
 });
-var responseSchema2 = z$1.object({
-  candidates: z$1.array(
-    z$1.object({
-      content: contentSchema2.nullish().or(z$1.object({}).strict()),
-      finishReason: z$1.string().nullish(),
-      safetyRatings: z$1.array(safetyRatingSchema2).nullish(),
+var responseSchema2 = z.object({
+  candidates: z.array(
+    z.object({
+      content: contentSchema2.nullish().or(z.object({}).strict()),
+      finishReason: z.string().nullish(),
+      safetyRatings: z.array(safetyRatingSchema2).nullish(),
       groundingMetadata: groundingMetadataSchema2.nullish(),
       urlContextMetadata: urlContextMetadataSchema.nullish()
     })
   ),
   usageMetadata: usageSchema.nullish()
 });
-var chunkSchema2 = z$1.object({
-  candidates: z$1.array(
-    z$1.object({
+var chunkSchema2 = z.object({
+  candidates: z.array(
+    z.object({
       content: contentSchema2.nullish(),
-      finishReason: z$1.string().nullish(),
-      safetyRatings: z$1.array(safetyRatingSchema2).nullish(),
+      finishReason: z.string().nullish(),
+      safetyRatings: z.array(safetyRatingSchema2).nullish(),
       groundingMetadata: groundingMetadataSchema2.nullish(),
       urlContextMetadata: urlContextMetadataSchema.nullish()
     })
@@ -10868,13 +16142,13 @@ var chunkSchema2 = z$1.object({
 var codeExecution = createProviderDefinedToolFactoryWithOutputSchema({
   id: "google.code_execution",
   name: "code_execution",
-  inputSchema: z$1.object({
-    language: z$1.string().describe("The programming language of the code."),
-    code: z$1.string().describe("The code to be executed.")
+  inputSchema: z.object({
+    language: z.string().describe("The programming language of the code."),
+    code: z.string().describe("The code to be executed.")
   }),
-  outputSchema: z$1.object({
-    outcome: z$1.string().describe('The outcome of the execution (e.g., "OUTCOME_OK").'),
-    output: z$1.string().describe("The output from the code execution.")
+  outputSchema: z.object({
+    outcome: z.string().describe('The outcome of the execution (e.g., "OUTCOME_OK").'),
+    output: z.string().describe("The output from the code execution.")
   })
 });
 var googleTools = {
@@ -10991,12 +16265,12 @@ var GoogleGenerativeAIImageModel = class {
     };
   }
 };
-var googleImageResponseSchema = z$1.object({
-  predictions: z$1.array(z$1.object({ bytesBase64Encoded: z$1.string() })).default([])
+var googleImageResponseSchema = z.object({
+  predictions: z.array(z.object({ bytesBase64Encoded: z.string() })).default([])
 });
-var googleImageProviderOptionsSchema = z$1.object({
-  personGeneration: z$1.enum(["dont_allow", "allow_adult", "allow_all"]).nullish(),
-  aspectRatio: z$1.enum(["1:1", "3:4", "4:3", "9:16", "16:9"]).nullish()
+var googleImageProviderOptionsSchema = z.object({
+  personGeneration: z.enum(["dont_allow", "allow_adult", "allow_all"]).nullish(),
+  aspectRatio: z.enum(["1:1", "3:4", "4:3", "9:16", "16:9"]).nullish()
 });
 function createGoogleGenerativeAI2(options = {}) {
   var _a16;
@@ -11160,10 +16434,10 @@ function getResponseMetadata({
     timestamp: created != null ? new Date(created * 1e3) : void 0
   };
 }
-var groqErrorDataSchema = z.object({
-  error: z.object({
-    message: z.string(),
-    type: z.string()
+var groqErrorDataSchema = z$1.object({
+  error: z$1.object({
+    message: z$1.string(),
+    type: z$1.string()
   })
 });
 var groqFailedResponseHandler = createJsonErrorResponseHandler({
@@ -11286,8 +16560,8 @@ var GroqChatLanguageModel = class {
     const groqOptions = parseProviderOptions({
       provider: "groq",
       providerOptions: providerMetadata,
-      schema: z.object({
-        reasoningFormat: z.enum(["parsed", "raw", "hidden"]).nullish()
+      schema: z$1.object({
+        reasoningFormat: z$1.enum(["parsed", "raw", "hidden"]).nullish()
       })
     });
     const baseArgs = {
@@ -11592,76 +16866,76 @@ var GroqChatLanguageModel = class {
     };
   }
 };
-var groqChatResponseSchema = z.object({
-  id: z.string().nullish(),
-  created: z.number().nullish(),
-  model: z.string().nullish(),
-  choices: z.array(
-    z.object({
-      message: z.object({
-        content: z.string().nullish(),
-        reasoning: z.string().nullish(),
-        tool_calls: z.array(
-          z.object({
-            id: z.string().nullish(),
-            type: z.literal("function"),
-            function: z.object({
-              name: z.string(),
-              arguments: z.string()
+var groqChatResponseSchema = z$1.object({
+  id: z$1.string().nullish(),
+  created: z$1.number().nullish(),
+  model: z$1.string().nullish(),
+  choices: z$1.array(
+    z$1.object({
+      message: z$1.object({
+        content: z$1.string().nullish(),
+        reasoning: z$1.string().nullish(),
+        tool_calls: z$1.array(
+          z$1.object({
+            id: z$1.string().nullish(),
+            type: z$1.literal("function"),
+            function: z$1.object({
+              name: z$1.string(),
+              arguments: z$1.string()
             })
           })
         ).nullish()
       }),
-      index: z.number(),
-      finish_reason: z.string().nullish()
+      index: z$1.number(),
+      finish_reason: z$1.string().nullish()
     })
   ),
-  usage: z.object({
-    prompt_tokens: z.number().nullish(),
-    completion_tokens: z.number().nullish()
+  usage: z$1.object({
+    prompt_tokens: z$1.number().nullish(),
+    completion_tokens: z$1.number().nullish()
   }).nullish()
 });
-var groqChatChunkSchema = z.union([
-  z.object({
-    id: z.string().nullish(),
-    created: z.number().nullish(),
-    model: z.string().nullish(),
-    choices: z.array(
-      z.object({
-        delta: z.object({
-          content: z.string().nullish(),
-          reasoning: z.string().nullish(),
-          tool_calls: z.array(
-            z.object({
-              index: z.number(),
-              id: z.string().nullish(),
-              type: z.literal("function").optional(),
-              function: z.object({
-                name: z.string().nullish(),
-                arguments: z.string().nullish()
+var groqChatChunkSchema = z$1.union([
+  z$1.object({
+    id: z$1.string().nullish(),
+    created: z$1.number().nullish(),
+    model: z$1.string().nullish(),
+    choices: z$1.array(
+      z$1.object({
+        delta: z$1.object({
+          content: z$1.string().nullish(),
+          reasoning: z$1.string().nullish(),
+          tool_calls: z$1.array(
+            z$1.object({
+              index: z$1.number(),
+              id: z$1.string().nullish(),
+              type: z$1.literal("function").optional(),
+              function: z$1.object({
+                name: z$1.string().nullish(),
+                arguments: z$1.string().nullish()
               })
             })
           ).nullish()
         }).nullish(),
-        finish_reason: z.string().nullable().optional(),
-        index: z.number()
+        finish_reason: z$1.string().nullable().optional(),
+        index: z$1.number()
       })
     ),
-    x_groq: z.object({
-      usage: z.object({
-        prompt_tokens: z.number().nullish(),
-        completion_tokens: z.number().nullish()
+    x_groq: z$1.object({
+      usage: z$1.object({
+        prompt_tokens: z$1.number().nullish(),
+        completion_tokens: z$1.number().nullish()
       }).nullish()
     }).nullish()
   }),
   groqErrorDataSchema
 ]);
-var groqProviderOptionsSchema = z.object({
-  language: z.string().nullish(),
-  prompt: z.string().nullish(),
-  responseFormat: z.string().nullish(),
-  temperature: z.number().min(0).max(1).nullish(),
-  timestampGranularities: z.array(z.string()).nullish()
+var groqProviderOptionsSchema = z$1.object({
+  language: z$1.string().nullish(),
+  prompt: z$1.string().nullish(),
+  responseFormat: z$1.string().nullish(),
+  temperature: z$1.number().min(0).max(1).nullish(),
+  timestampGranularities: z$1.array(z$1.string()).nullish()
 });
 var GroqTranscriptionModel = class {
   constructor(modelId, config) {
@@ -11749,27 +17023,27 @@ var GroqTranscriptionModel = class {
     };
   }
 };
-var groqTranscriptionResponseSchema = z.object({
-  task: z.string(),
-  language: z.string(),
-  duration: z.number(),
-  text: z.string(),
-  segments: z.array(
-    z.object({
-      id: z.number(),
-      seek: z.number(),
-      start: z.number(),
-      end: z.number(),
-      text: z.string(),
-      tokens: z.array(z.number()),
-      temperature: z.number(),
-      avg_logprob: z.number(),
-      compression_ratio: z.number(),
-      no_speech_prob: z.number()
+var groqTranscriptionResponseSchema = z$1.object({
+  task: z$1.string(),
+  language: z$1.string(),
+  duration: z$1.number(),
+  text: z$1.string(),
+  segments: z$1.array(
+    z$1.object({
+      id: z$1.number(),
+      seek: z$1.number(),
+      start: z$1.number(),
+      end: z$1.number(),
+      text: z$1.string(),
+      tokens: z$1.array(z$1.number()),
+      temperature: z$1.number(),
+      avg_logprob: z$1.number(),
+      compression_ratio: z$1.number(),
+      no_speech_prob: z$1.number()
     })
   ),
-  x_groq: z.object({
-    id: z.string()
+  x_groq: z$1.object({
+    id: z$1.string()
   })
 });
 function createGroq(options = {}) {
@@ -11935,29 +17209,29 @@ function getResponseMetadata2({
     timestamp: created != null ? new Date(created * 1e3) : void 0
   };
 }
-var groqProviderOptions = z$1.object({
-  reasoningFormat: z$1.enum(["parsed", "raw", "hidden"]).optional(),
-  reasoningEffort: z$1.string().optional(),
+var groqProviderOptions = z.object({
+  reasoningFormat: z.enum(["parsed", "raw", "hidden"]).optional(),
+  reasoningEffort: z.string().optional(),
   /**
    * Whether to enable parallel function calling during tool use. Default to true.
    */
-  parallelToolCalls: z$1.boolean().optional(),
+  parallelToolCalls: z.boolean().optional(),
   /**
    * A unique identifier representing your end-user, which can help OpenAI to
    * monitor and detect abuse. Learn more.
    */
-  user: z$1.string().optional(),
+  user: z.string().optional(),
   /**
    * Whether to use structured outputs.
    *
    * @default true
    */
-  structuredOutputs: z$1.boolean().optional()
+  structuredOutputs: z.boolean().optional()
 });
-var groqErrorDataSchema2 = z$1.object({
-  error: z$1.object({
-    message: z$1.string(),
-    type: z$1.string()
+var groqErrorDataSchema2 = z.object({
+  error: z.object({
+    message: z.string(),
+    type: z.string()
   })
 });
 var groqFailedResponseHandler2 = createJsonErrorResponseHandler2({
@@ -12416,78 +17690,78 @@ var GroqChatLanguageModel2 = class {
     };
   }
 };
-var groqChatResponseSchema2 = z$1.object({
-  id: z$1.string().nullish(),
-  created: z$1.number().nullish(),
-  model: z$1.string().nullish(),
-  choices: z$1.array(
-    z$1.object({
-      message: z$1.object({
-        content: z$1.string().nullish(),
-        reasoning: z$1.string().nullish(),
-        tool_calls: z$1.array(
-          z$1.object({
-            id: z$1.string().nullish(),
-            type: z$1.literal("function"),
-            function: z$1.object({
-              name: z$1.string(),
-              arguments: z$1.string()
+var groqChatResponseSchema2 = z.object({
+  id: z.string().nullish(),
+  created: z.number().nullish(),
+  model: z.string().nullish(),
+  choices: z.array(
+    z.object({
+      message: z.object({
+        content: z.string().nullish(),
+        reasoning: z.string().nullish(),
+        tool_calls: z.array(
+          z.object({
+            id: z.string().nullish(),
+            type: z.literal("function"),
+            function: z.object({
+              name: z.string(),
+              arguments: z.string()
             })
           })
         ).nullish()
       }),
-      index: z$1.number(),
-      finish_reason: z$1.string().nullish()
+      index: z.number(),
+      finish_reason: z.string().nullish()
     })
   ),
-  usage: z$1.object({
-    prompt_tokens: z$1.number().nullish(),
-    completion_tokens: z$1.number().nullish(),
-    total_tokens: z$1.number().nullish()
+  usage: z.object({
+    prompt_tokens: z.number().nullish(),
+    completion_tokens: z.number().nullish(),
+    total_tokens: z.number().nullish()
   }).nullish()
 });
-var groqChatChunkSchema2 = z$1.union([
-  z$1.object({
-    id: z$1.string().nullish(),
-    created: z$1.number().nullish(),
-    model: z$1.string().nullish(),
-    choices: z$1.array(
-      z$1.object({
-        delta: z$1.object({
-          content: z$1.string().nullish(),
-          reasoning: z$1.string().nullish(),
-          tool_calls: z$1.array(
-            z$1.object({
-              index: z$1.number(),
-              id: z$1.string().nullish(),
-              type: z$1.literal("function").optional(),
-              function: z$1.object({
-                name: z$1.string().nullish(),
-                arguments: z$1.string().nullish()
+var groqChatChunkSchema2 = z.union([
+  z.object({
+    id: z.string().nullish(),
+    created: z.number().nullish(),
+    model: z.string().nullish(),
+    choices: z.array(
+      z.object({
+        delta: z.object({
+          content: z.string().nullish(),
+          reasoning: z.string().nullish(),
+          tool_calls: z.array(
+            z.object({
+              index: z.number(),
+              id: z.string().nullish(),
+              type: z.literal("function").optional(),
+              function: z.object({
+                name: z.string().nullish(),
+                arguments: z.string().nullish()
               })
             })
           ).nullish()
         }).nullish(),
-        finish_reason: z$1.string().nullable().optional(),
-        index: z$1.number()
+        finish_reason: z.string().nullable().optional(),
+        index: z.number()
       })
     ),
-    x_groq: z$1.object({
-      usage: z$1.object({
-        prompt_tokens: z$1.number().nullish(),
-        completion_tokens: z$1.number().nullish(),
-        total_tokens: z$1.number().nullish()
+    x_groq: z.object({
+      usage: z.object({
+        prompt_tokens: z.number().nullish(),
+        completion_tokens: z.number().nullish(),
+        total_tokens: z.number().nullish()
       }).nullish()
     }).nullish()
   }),
   groqErrorDataSchema2
 ]);
-var groqProviderOptionsSchema2 = z$1.object({
-  language: z$1.string().nullish(),
-  prompt: z$1.string().nullish(),
-  responseFormat: z$1.string().nullish(),
-  temperature: z$1.number().min(0).max(1).nullish(),
-  timestampGranularities: z$1.array(z$1.string()).nullish()
+var groqProviderOptionsSchema2 = z.object({
+  language: z.string().nullish(),
+  prompt: z.string().nullish(),
+  responseFormat: z.string().nullish(),
+  temperature: z.number().min(0).max(1).nullish(),
+  timestampGranularities: z.array(z.string()).nullish()
 });
 var GroqTranscriptionModel2 = class {
   constructor(modelId, config) {
@@ -12575,33 +17849,33 @@ var GroqTranscriptionModel2 = class {
     };
   }
 };
-var groqTranscriptionResponseSchema2 = z$1.object({
-  task: z$1.string(),
-  language: z$1.string(),
-  duration: z$1.number(),
-  text: z$1.string(),
-  segments: z$1.array(
-    z$1.object({
-      id: z$1.number(),
-      seek: z$1.number(),
-      start: z$1.number(),
-      end: z$1.number(),
-      text: z$1.string(),
-      tokens: z$1.array(z$1.number()),
-      temperature: z$1.number(),
-      avg_logprob: z$1.number(),
-      compression_ratio: z$1.number(),
-      no_speech_prob: z$1.number()
+var groqTranscriptionResponseSchema2 = z.object({
+  task: z.string(),
+  language: z.string(),
+  duration: z.number(),
+  text: z.string(),
+  segments: z.array(
+    z.object({
+      id: z.number(),
+      seek: z.number(),
+      start: z.number(),
+      end: z.number(),
+      text: z.string(),
+      tokens: z.array(z.number()),
+      temperature: z.number(),
+      avg_logprob: z.number(),
+      compression_ratio: z.number(),
+      no_speech_prob: z.number()
     })
   ),
-  x_groq: z$1.object({
-    id: z$1.string()
+  x_groq: z.object({
+    id: z.string()
   })
 });
 var browserSearch = createProviderDefinedToolFactory({
   id: "groq.browser_search",
   name: "browser_search",
-  inputSchema: z$1.object({})
+  inputSchema: z.object({})
 });
 var groqTools = {
   browserSearch
@@ -12848,15 +18122,15 @@ function mapOpenAIFinishReason(finishReason) {
       return "unknown";
   }
 }
-var openaiErrorDataSchema = z.object({
-  error: z.object({
-    message: z.string(),
+var openaiErrorDataSchema = z$1.object({
+  error: z$1.object({
+    message: z$1.string(),
     // The additional information below is handled loosely to support
     // OpenAI-compatible providers that have slightly different error
     // responses:
-    type: z.string().nullish(),
-    param: z.any().nullish(),
-    code: z.union([z.string(), z.number()]).nullish()
+    type: z$1.string().nullish(),
+    param: z$1.any().nullish(),
+    code: z$1.union([z$1.string(), z$1.number()]).nullish()
   })
 });
 var openaiFailedResponseHandler = createJsonErrorResponseHandler({
@@ -13552,104 +18826,104 @@ var OpenAIChatLanguageModel = class {
     };
   }
 };
-var openaiTokenUsageSchema = z.object({
-  prompt_tokens: z.number().nullish(),
-  completion_tokens: z.number().nullish(),
-  prompt_tokens_details: z.object({
-    cached_tokens: z.number().nullish()
+var openaiTokenUsageSchema = z$1.object({
+  prompt_tokens: z$1.number().nullish(),
+  completion_tokens: z$1.number().nullish(),
+  prompt_tokens_details: z$1.object({
+    cached_tokens: z$1.number().nullish()
   }).nullish(),
-  completion_tokens_details: z.object({
-    reasoning_tokens: z.number().nullish(),
-    accepted_prediction_tokens: z.number().nullish(),
-    rejected_prediction_tokens: z.number().nullish()
+  completion_tokens_details: z$1.object({
+    reasoning_tokens: z$1.number().nullish(),
+    accepted_prediction_tokens: z$1.number().nullish(),
+    rejected_prediction_tokens: z$1.number().nullish()
   }).nullish()
 }).nullish();
-var openaiChatResponseSchema = z.object({
-  id: z.string().nullish(),
-  created: z.number().nullish(),
-  model: z.string().nullish(),
-  choices: z.array(
-    z.object({
-      message: z.object({
-        role: z.literal("assistant").nullish(),
-        content: z.string().nullish(),
-        function_call: z.object({
-          arguments: z.string(),
-          name: z.string()
+var openaiChatResponseSchema = z$1.object({
+  id: z$1.string().nullish(),
+  created: z$1.number().nullish(),
+  model: z$1.string().nullish(),
+  choices: z$1.array(
+    z$1.object({
+      message: z$1.object({
+        role: z$1.literal("assistant").nullish(),
+        content: z$1.string().nullish(),
+        function_call: z$1.object({
+          arguments: z$1.string(),
+          name: z$1.string()
         }).nullish(),
-        tool_calls: z.array(
-          z.object({
-            id: z.string().nullish(),
-            type: z.literal("function"),
-            function: z.object({
-              name: z.string(),
-              arguments: z.string()
+        tool_calls: z$1.array(
+          z$1.object({
+            id: z$1.string().nullish(),
+            type: z$1.literal("function"),
+            function: z$1.object({
+              name: z$1.string(),
+              arguments: z$1.string()
             })
           })
         ).nullish()
       }),
-      index: z.number(),
-      logprobs: z.object({
-        content: z.array(
-          z.object({
-            token: z.string(),
-            logprob: z.number(),
-            top_logprobs: z.array(
-              z.object({
-                token: z.string(),
-                logprob: z.number()
+      index: z$1.number(),
+      logprobs: z$1.object({
+        content: z$1.array(
+          z$1.object({
+            token: z$1.string(),
+            logprob: z$1.number(),
+            top_logprobs: z$1.array(
+              z$1.object({
+                token: z$1.string(),
+                logprob: z$1.number()
               })
             )
           })
         ).nullable()
       }).nullish(),
-      finish_reason: z.string().nullish()
+      finish_reason: z$1.string().nullish()
     })
   ),
   usage: openaiTokenUsageSchema
 });
-var openaiChatChunkSchema = z.union([
-  z.object({
-    id: z.string().nullish(),
-    created: z.number().nullish(),
-    model: z.string().nullish(),
-    choices: z.array(
-      z.object({
-        delta: z.object({
-          role: z.enum(["assistant"]).nullish(),
-          content: z.string().nullish(),
-          function_call: z.object({
-            name: z.string().optional(),
-            arguments: z.string().optional()
+var openaiChatChunkSchema = z$1.union([
+  z$1.object({
+    id: z$1.string().nullish(),
+    created: z$1.number().nullish(),
+    model: z$1.string().nullish(),
+    choices: z$1.array(
+      z$1.object({
+        delta: z$1.object({
+          role: z$1.enum(["assistant"]).nullish(),
+          content: z$1.string().nullish(),
+          function_call: z$1.object({
+            name: z$1.string().optional(),
+            arguments: z$1.string().optional()
           }).nullish(),
-          tool_calls: z.array(
-            z.object({
-              index: z.number(),
-              id: z.string().nullish(),
-              type: z.literal("function").nullish(),
-              function: z.object({
-                name: z.string().nullish(),
-                arguments: z.string().nullish()
+          tool_calls: z$1.array(
+            z$1.object({
+              index: z$1.number(),
+              id: z$1.string().nullish(),
+              type: z$1.literal("function").nullish(),
+              function: z$1.object({
+                name: z$1.string().nullish(),
+                arguments: z$1.string().nullish()
               })
             })
           ).nullish()
         }).nullish(),
-        logprobs: z.object({
-          content: z.array(
-            z.object({
-              token: z.string(),
-              logprob: z.number(),
-              top_logprobs: z.array(
-                z.object({
-                  token: z.string(),
-                  logprob: z.number()
+        logprobs: z$1.object({
+          content: z$1.array(
+            z$1.object({
+              token: z$1.string(),
+              logprob: z$1.number(),
+              top_logprobs: z$1.array(
+                z$1.object({
+                  token: z$1.string(),
+                  logprob: z$1.number()
                 })
               )
             })
           ).nullable()
         }).nullish(),
-        finish_reason: z.string().nullish(),
-        index: z.number()
+        finish_reason: z$1.string().nullish(),
+        index: z$1.number()
       })
     ),
     usage: openaiTokenUsageSchema
@@ -14018,46 +19292,46 @@ var OpenAICompletionLanguageModel = class {
     };
   }
 };
-var openaiCompletionResponseSchema = z.object({
-  id: z.string().nullish(),
-  created: z.number().nullish(),
-  model: z.string().nullish(),
-  choices: z.array(
-    z.object({
-      text: z.string(),
-      finish_reason: z.string(),
-      logprobs: z.object({
-        tokens: z.array(z.string()),
-        token_logprobs: z.array(z.number()),
-        top_logprobs: z.array(z.record(z.string(), z.number())).nullable()
+var openaiCompletionResponseSchema = z$1.object({
+  id: z$1.string().nullish(),
+  created: z$1.number().nullish(),
+  model: z$1.string().nullish(),
+  choices: z$1.array(
+    z$1.object({
+      text: z$1.string(),
+      finish_reason: z$1.string(),
+      logprobs: z$1.object({
+        tokens: z$1.array(z$1.string()),
+        token_logprobs: z$1.array(z$1.number()),
+        top_logprobs: z$1.array(z$1.record(z$1.string(), z$1.number())).nullable()
       }).nullish()
     })
   ),
-  usage: z.object({
-    prompt_tokens: z.number(),
-    completion_tokens: z.number()
+  usage: z$1.object({
+    prompt_tokens: z$1.number(),
+    completion_tokens: z$1.number()
   })
 });
-var openaiCompletionChunkSchema = z.union([
-  z.object({
-    id: z.string().nullish(),
-    created: z.number().nullish(),
-    model: z.string().nullish(),
-    choices: z.array(
-      z.object({
-        text: z.string(),
-        finish_reason: z.string().nullish(),
-        index: z.number(),
-        logprobs: z.object({
-          tokens: z.array(z.string()),
-          token_logprobs: z.array(z.number()),
-          top_logprobs: z.array(z.record(z.string(), z.number())).nullable()
+var openaiCompletionChunkSchema = z$1.union([
+  z$1.object({
+    id: z$1.string().nullish(),
+    created: z$1.number().nullish(),
+    model: z$1.string().nullish(),
+    choices: z$1.array(
+      z$1.object({
+        text: z$1.string(),
+        finish_reason: z$1.string().nullish(),
+        index: z$1.number(),
+        logprobs: z$1.object({
+          tokens: z$1.array(z$1.string()),
+          token_logprobs: z$1.array(z$1.number()),
+          top_logprobs: z$1.array(z$1.record(z$1.string(), z$1.number())).nullable()
         }).nullish()
       })
     ),
-    usage: z.object({
-      prompt_tokens: z.number(),
-      completion_tokens: z.number()
+    usage: z$1.object({
+      prompt_tokens: z$1.number(),
+      completion_tokens: z$1.number()
     }).nullish()
   }),
   openaiErrorDataSchema
@@ -14120,9 +19394,9 @@ var OpenAIEmbeddingModel = class {
     };
   }
 };
-var openaiTextEmbeddingResponseSchema = z.object({
-  data: z.array(z.object({ embedding: z.array(z.number()) })),
-  usage: z.object({ prompt_tokens: z.number() }).nullish()
+var openaiTextEmbeddingResponseSchema = z$1.object({
+  data: z$1.array(z$1.object({ embedding: z$1.array(z$1.number()) })),
+  usage: z$1.object({ prompt_tokens: z$1.number() }).nullish()
 });
 var modelMaxImagesPerCall = {
   "dall-e-3": 1,
@@ -14199,15 +19473,15 @@ var OpenAIImageModel = class {
     };
   }
 };
-var openaiImageResponseSchema = z.object({
-  data: z.array(z.object({ b64_json: z.string() }))
+var openaiImageResponseSchema = z$1.object({
+  data: z$1.array(z$1.object({ b64_json: z$1.string() }))
 });
-var openAIProviderOptionsSchema = z.object({
-  include: z.array(z.string()).nullish(),
-  language: z.string().nullish(),
-  prompt: z.string().nullish(),
-  temperature: z.number().min(0).max(1).nullish().default(0),
-  timestampGranularities: z.array(z.enum(["word", "segment"])).nullish().default(["segment"])
+var openAIProviderOptionsSchema = z$1.object({
+  include: z$1.array(z$1.string()).nullish(),
+  language: z$1.string().nullish(),
+  prompt: z$1.string().nullish(),
+  temperature: z$1.number().min(0).max(1).nullish().default(0),
+  timestampGranularities: z$1.array(z$1.enum(["word", "segment"])).nullish().default(["segment"])
 });
 var languageMap = {
   afrikaans: "af",
@@ -14355,15 +19629,15 @@ var OpenAITranscriptionModel = class {
     };
   }
 };
-var openaiTranscriptionResponseSchema = z.object({
-  text: z.string(),
-  language: z.string().nullish(),
-  duration: z.number().nullish(),
-  words: z.array(
-    z.object({
-      word: z.string(),
-      start: z.number(),
-      end: z.number()
+var openaiTranscriptionResponseSchema = z$1.object({
+  text: z$1.string(),
+  language: z$1.string().nullish(),
+  duration: z$1.number().nullish(),
+  words: z$1.array(
+    z$1.object({
+      word: z$1.string(),
+      start: z$1.number(),
+      end: z$1.number()
     })
   ).nullish()
 });
@@ -14780,59 +20054,59 @@ var OpenAIResponsesLanguageModel = class {
       body,
       failedResponseHandler: openaiFailedResponseHandler,
       successfulResponseHandler: createJsonResponseHandler(
-        z.object({
-          id: z.string(),
-          created_at: z.number(),
-          error: z.object({
-            message: z.string(),
-            code: z.string()
+        z$1.object({
+          id: z$1.string(),
+          created_at: z$1.number(),
+          error: z$1.object({
+            message: z$1.string(),
+            code: z$1.string()
           }).nullish(),
-          model: z.string(),
-          output: z.array(
-            z.discriminatedUnion("type", [
-              z.object({
-                type: z.literal("message"),
-                role: z.literal("assistant"),
-                content: z.array(
-                  z.object({
-                    type: z.literal("output_text"),
-                    text: z.string(),
-                    annotations: z.array(
-                      z.object({
-                        type: z.literal("url_citation"),
-                        start_index: z.number(),
-                        end_index: z.number(),
-                        url: z.string(),
-                        title: z.string()
+          model: z$1.string(),
+          output: z$1.array(
+            z$1.discriminatedUnion("type", [
+              z$1.object({
+                type: z$1.literal("message"),
+                role: z$1.literal("assistant"),
+                content: z$1.array(
+                  z$1.object({
+                    type: z$1.literal("output_text"),
+                    text: z$1.string(),
+                    annotations: z$1.array(
+                      z$1.object({
+                        type: z$1.literal("url_citation"),
+                        start_index: z$1.number(),
+                        end_index: z$1.number(),
+                        url: z$1.string(),
+                        title: z$1.string()
                       })
                     )
                   })
                 )
               }),
-              z.object({
-                type: z.literal("function_call"),
-                call_id: z.string(),
-                name: z.string(),
-                arguments: z.string()
+              z$1.object({
+                type: z$1.literal("function_call"),
+                call_id: z$1.string(),
+                name: z$1.string(),
+                arguments: z$1.string()
               }),
-              z.object({
-                type: z.literal("web_search_call")
+              z$1.object({
+                type: z$1.literal("web_search_call")
               }),
-              z.object({
-                type: z.literal("computer_call")
+              z$1.object({
+                type: z$1.literal("computer_call")
               }),
-              z.object({
-                type: z.literal("reasoning"),
-                summary: z.array(
-                  z.object({
-                    type: z.literal("summary_text"),
-                    text: z.string()
+              z$1.object({
+                type: z$1.literal("reasoning"),
+                summary: z$1.array(
+                  z$1.object({
+                    type: z$1.literal("summary_text"),
+                    text: z$1.string()
                   })
                 )
               })
             ])
           ),
-          incomplete_details: z.object({ reason: z.string() }).nullable(),
+          incomplete_details: z$1.object({ reason: z$1.string() }).nullable(),
           usage: usageSchema2
         })
       ),
@@ -15053,93 +20327,93 @@ var OpenAIResponsesLanguageModel = class {
     };
   }
 };
-var usageSchema2 = z.object({
-  input_tokens: z.number(),
-  input_tokens_details: z.object({ cached_tokens: z.number().nullish() }).nullish(),
-  output_tokens: z.number(),
-  output_tokens_details: z.object({ reasoning_tokens: z.number().nullish() }).nullish()
+var usageSchema2 = z$1.object({
+  input_tokens: z$1.number(),
+  input_tokens_details: z$1.object({ cached_tokens: z$1.number().nullish() }).nullish(),
+  output_tokens: z$1.number(),
+  output_tokens_details: z$1.object({ reasoning_tokens: z$1.number().nullish() }).nullish()
 });
-var textDeltaChunkSchema = z.object({
-  type: z.literal("response.output_text.delta"),
-  delta: z.string()
+var textDeltaChunkSchema = z$1.object({
+  type: z$1.literal("response.output_text.delta"),
+  delta: z$1.string()
 });
-var responseFinishedChunkSchema = z.object({
-  type: z.enum(["response.completed", "response.incomplete"]),
-  response: z.object({
-    incomplete_details: z.object({ reason: z.string() }).nullish(),
+var responseFinishedChunkSchema = z$1.object({
+  type: z$1.enum(["response.completed", "response.incomplete"]),
+  response: z$1.object({
+    incomplete_details: z$1.object({ reason: z$1.string() }).nullish(),
     usage: usageSchema2
   })
 });
-var responseCreatedChunkSchema = z.object({
-  type: z.literal("response.created"),
-  response: z.object({
-    id: z.string(),
-    created_at: z.number(),
-    model: z.string()
+var responseCreatedChunkSchema = z$1.object({
+  type: z$1.literal("response.created"),
+  response: z$1.object({
+    id: z$1.string(),
+    created_at: z$1.number(),
+    model: z$1.string()
   })
 });
-var responseOutputItemDoneSchema = z.object({
-  type: z.literal("response.output_item.done"),
-  output_index: z.number(),
-  item: z.discriminatedUnion("type", [
-    z.object({
-      type: z.literal("message")
+var responseOutputItemDoneSchema = z$1.object({
+  type: z$1.literal("response.output_item.done"),
+  output_index: z$1.number(),
+  item: z$1.discriminatedUnion("type", [
+    z$1.object({
+      type: z$1.literal("message")
     }),
-    z.object({
-      type: z.literal("function_call"),
-      id: z.string(),
-      call_id: z.string(),
-      name: z.string(),
-      arguments: z.string(),
-      status: z.literal("completed")
+    z$1.object({
+      type: z$1.literal("function_call"),
+      id: z$1.string(),
+      call_id: z$1.string(),
+      name: z$1.string(),
+      arguments: z$1.string(),
+      status: z$1.literal("completed")
     })
   ])
 });
-var responseFunctionCallArgumentsDeltaSchema = z.object({
-  type: z.literal("response.function_call_arguments.delta"),
-  item_id: z.string(),
-  output_index: z.number(),
-  delta: z.string()
+var responseFunctionCallArgumentsDeltaSchema = z$1.object({
+  type: z$1.literal("response.function_call_arguments.delta"),
+  item_id: z$1.string(),
+  output_index: z$1.number(),
+  delta: z$1.string()
 });
-var responseOutputItemAddedSchema = z.object({
-  type: z.literal("response.output_item.added"),
-  output_index: z.number(),
-  item: z.discriminatedUnion("type", [
-    z.object({
-      type: z.literal("message")
+var responseOutputItemAddedSchema = z$1.object({
+  type: z$1.literal("response.output_item.added"),
+  output_index: z$1.number(),
+  item: z$1.discriminatedUnion("type", [
+    z$1.object({
+      type: z$1.literal("message")
     }),
-    z.object({
-      type: z.literal("function_call"),
-      id: z.string(),
-      call_id: z.string(),
-      name: z.string(),
-      arguments: z.string()
+    z$1.object({
+      type: z$1.literal("function_call"),
+      id: z$1.string(),
+      call_id: z$1.string(),
+      name: z$1.string(),
+      arguments: z$1.string()
     })
   ])
 });
-var responseAnnotationAddedSchema = z.object({
-  type: z.literal("response.output_text.annotation.added"),
-  annotation: z.object({
-    type: z.literal("url_citation"),
-    url: z.string(),
-    title: z.string()
+var responseAnnotationAddedSchema = z$1.object({
+  type: z$1.literal("response.output_text.annotation.added"),
+  annotation: z$1.object({
+    type: z$1.literal("url_citation"),
+    url: z$1.string(),
+    title: z$1.string()
   })
 });
-var responseReasoningSummaryTextDeltaSchema = z.object({
-  type: z.literal("response.reasoning_summary_text.delta"),
-  item_id: z.string(),
-  output_index: z.number(),
-  summary_index: z.number(),
-  delta: z.string()
+var responseReasoningSummaryTextDeltaSchema = z$1.object({
+  type: z$1.literal("response.reasoning_summary_text.delta"),
+  item_id: z$1.string(),
+  output_index: z$1.number(),
+  summary_index: z$1.number(),
+  delta: z$1.string()
 });
-var errorChunkSchema = z.object({
-  type: z.literal("error"),
-  code: z.string(),
-  message: z.string(),
-  param: z.string().nullish(),
-  sequence_number: z.number()
+var errorChunkSchema = z$1.object({
+  type: z$1.literal("error"),
+  code: z$1.string(),
+  message: z$1.string(),
+  param: z$1.string().nullish(),
+  sequence_number: z$1.number()
 });
-var openaiResponsesChunkSchema = z.union([
+var openaiResponsesChunkSchema = z$1.union([
   textDeltaChunkSchema,
   responseFinishedChunkSchema,
   responseCreatedChunkSchema,
@@ -15149,7 +20423,7 @@ var openaiResponsesChunkSchema = z.union([
   responseAnnotationAddedSchema,
   responseReasoningSummaryTextDeltaSchema,
   errorChunkSchema,
-  z.object({ type: z.string() }).passthrough()
+  z$1.object({ type: z$1.string() }).passthrough()
   // fallback for unknown chunks
 ]);
 function isTextDeltaChunk(chunk) {
@@ -15200,18 +20474,18 @@ function getResponsesModelConfig(modelId) {
     requiredAutoTruncation: false
   };
 }
-var openaiResponsesProviderOptionsSchema = z.object({
-  metadata: z.any().nullish(),
-  parallelToolCalls: z.boolean().nullish(),
-  previousResponseId: z.string().nullish(),
-  store: z.boolean().nullish(),
-  user: z.string().nullish(),
-  reasoningEffort: z.string().nullish(),
-  strictSchemas: z.boolean().nullish(),
-  instructions: z.string().nullish(),
-  reasoningSummary: z.string().nullish()
+var openaiResponsesProviderOptionsSchema = z$1.object({
+  metadata: z$1.any().nullish(),
+  parallelToolCalls: z$1.boolean().nullish(),
+  previousResponseId: z$1.string().nullish(),
+  store: z$1.boolean().nullish(),
+  user: z$1.string().nullish(),
+  reasoningEffort: z$1.string().nullish(),
+  strictSchemas: z$1.boolean().nullish(),
+  instructions: z$1.string().nullish(),
+  reasoningSummary: z$1.string().nullish()
 });
-var WebSearchPreviewParameters = z.object({});
+var WebSearchPreviewParameters = z$1.object({});
 function webSearchPreviewTool({
   searchContextSize,
   userLocation
@@ -15229,9 +20503,9 @@ function webSearchPreviewTool({
 var openaiTools = {
   webSearchPreview: webSearchPreviewTool
 };
-var OpenAIProviderOptionsSchema = z.object({
-  instructions: z.string().nullish(),
-  speed: z.number().min(0.25).max(4).default(1).nullish()
+var OpenAIProviderOptionsSchema = z$1.object({
+  instructions: z$1.string().nullish(),
+  speed: z$1.number().min(0.25).max(4).default(1).nullish()
 });
 var OpenAISpeechModel = class {
   constructor(modelId, config) {
@@ -15422,15 +20696,15 @@ var openai = createOpenAI({
   compatibility: "strict"
   // strict for OpenAI API
 });
-var openaiErrorDataSchema2 = z$1.object({
-  error: z$1.object({
-    message: z$1.string(),
+var openaiErrorDataSchema2 = z.object({
+  error: z.object({
+    message: z.string(),
     // The additional information below is handled loosely to support
     // OpenAI-compatible providers that have slightly different error
     // responses:
-    type: z$1.string().nullish(),
-    param: z$1.any().nullish(),
-    code: z$1.union([z$1.string(), z$1.number()]).nullish()
+    type: z.string().nullish(),
+    param: z.any().nullish(),
+    code: z.union([z.string(), z.number()]).nullish()
   })
 });
 var openaiFailedResponseHandler2 = createJsonErrorResponseHandler2({
@@ -15637,14 +20911,14 @@ function mapOpenAIFinishReason2(finishReason) {
       return "unknown";
   }
 }
-var openaiProviderOptions = z$1.object({
+var openaiProviderOptions = z.object({
   /**
    * Modify the likelihood of specified tokens appearing in the completion.
    *
    * Accepts a JSON object that maps tokens (specified by their token ID in
    * the GPT tokenizer) to an associated bias value from -100 to 100.
    */
-  logitBias: z$1.record(z$1.coerce.number(), z$1.number()).optional(),
+  logitBias: z.record(z.coerce.number(), z.number()).optional(),
   /**
    * Return the log probabilities of the tokens.
    *
@@ -15654,42 +20928,42 @@ var openaiProviderOptions = z$1.object({
    * Setting to a number will return the log probabilities of the top n
    * tokens that were generated.
    */
-  logprobs: z$1.union([z$1.boolean(), z$1.number()]).optional(),
+  logprobs: z.union([z.boolean(), z.number()]).optional(),
   /**
    * Whether to enable parallel function calling during tool use. Default to true.
    */
-  parallelToolCalls: z$1.boolean().optional(),
+  parallelToolCalls: z.boolean().optional(),
   /**
    * A unique identifier representing your end-user, which can help OpenAI to
    * monitor and detect abuse.
    */
-  user: z$1.string().optional(),
+  user: z.string().optional(),
   /**
    * Reasoning effort for reasoning models. Defaults to `medium`.
    */
-  reasoningEffort: z$1.enum(["minimal", "low", "medium", "high"]).optional(),
+  reasoningEffort: z.enum(["minimal", "low", "medium", "high"]).optional(),
   /**
    * Maximum number of completion tokens to generate. Useful for reasoning models.
    */
-  maxCompletionTokens: z$1.number().optional(),
+  maxCompletionTokens: z.number().optional(),
   /**
    * Whether to enable persistence in responses API.
    */
-  store: z$1.boolean().optional(),
+  store: z.boolean().optional(),
   /**
    * Metadata to associate with the request.
    */
-  metadata: z$1.record(z$1.string().max(64), z$1.string().max(512)).optional(),
+  metadata: z.record(z.string().max(64), z.string().max(512)).optional(),
   /**
    * Parameters for prediction mode.
    */
-  prediction: z$1.record(z$1.string(), z$1.any()).optional(),
+  prediction: z.record(z.string(), z.any()).optional(),
   /**
    * Whether to use structured outputs.
    *
    * @default true
    */
-  structuredOutputs: z$1.boolean().optional(),
+  structuredOutputs: z.boolean().optional(),
   /**
    * Service tier for the request.
    * - 'auto': Default service tier
@@ -15698,23 +20972,23 @@ var openaiProviderOptions = z$1.object({
    *
    * @default 'auto'
    */
-  serviceTier: z$1.enum(["auto", "flex", "priority"]).optional(),
+  serviceTier: z.enum(["auto", "flex", "priority"]).optional(),
   /**
    * Whether to use strict JSON schema validation.
    *
    * @default false
    */
-  strictJsonSchema: z$1.boolean().optional(),
+  strictJsonSchema: z.boolean().optional(),
   /**
    * Controls the verbosity of the model's responses.
    * Lower values will result in more concise responses, while higher values will result in more verbose responses.
    */
-  textVerbosity: z$1.enum(["low", "medium", "high"]).optional(),
+  textVerbosity: z.enum(["low", "medium", "high"]).optional(),
   /**
    * A cache key for prompt caching. Allows manual control over prompt caching behavior.
    * Useful for improving cache hit rates and working around automatic caching issues.
    */
-  promptCacheKey: z$1.string().optional(),
+  promptCacheKey: z.string().optional(),
   /**
    * A stable identifier used to help detect users of your application
    * that may be violating OpenAI's usage policies. The IDs should be a
@@ -15722,34 +20996,34 @@ var openaiProviderOptions = z$1.object({
    * username or email address, in order to avoid sending us any identifying
    * information.
    */
-  safetyIdentifier: z$1.string().optional()
+  safetyIdentifier: z.string().optional()
 });
-var comparisonFilterSchema = z$1.object({
-  key: z$1.string(),
-  type: z$1.enum(["eq", "ne", "gt", "gte", "lt", "lte"]),
-  value: z$1.union([z$1.string(), z$1.number(), z$1.boolean()])
+var comparisonFilterSchema = z.object({
+  key: z.string(),
+  type: z.enum(["eq", "ne", "gt", "gte", "lt", "lte"]),
+  value: z.union([z.string(), z.number(), z.boolean()])
 });
-var compoundFilterSchema = z$1.object({
-  type: z$1.enum(["and", "or"]),
-  filters: z$1.array(
-    z$1.union([comparisonFilterSchema, z$1.lazy(() => compoundFilterSchema)])
+var compoundFilterSchema = z.object({
+  type: z.enum(["and", "or"]),
+  filters: z.array(
+    z.union([comparisonFilterSchema, z.lazy(() => compoundFilterSchema)])
   )
 });
-var filtersSchema = z$1.union([comparisonFilterSchema, compoundFilterSchema]);
-var fileSearchArgsSchema = z$1.object({
+var filtersSchema = z.union([comparisonFilterSchema, compoundFilterSchema]);
+var fileSearchArgsSchema = z.object({
   /**
    * List of vector store IDs to search through. If not provided, searches all available vector stores.
    */
-  vectorStoreIds: z$1.array(z$1.string()).optional(),
+  vectorStoreIds: z.array(z.string()).optional(),
   /**
    * Maximum number of search results to return. Defaults to 10.
    */
-  maxNumResults: z$1.number().optional(),
+  maxNumResults: z.number().optional(),
   /**
    * Ranking options for the search.
    */
-  ranking: z$1.object({
-    ranker: z$1.enum(["auto", "default-2024-08-21"]).optional()
+  ranking: z.object({
+    ranker: z.enum(["auto", "default-2024-08-21"]).optional()
   }).optional(),
   /**
    * A filter to apply based on file attributes.
@@ -15759,48 +21033,48 @@ var fileSearchArgsSchema = z$1.object({
 var fileSearch = createProviderDefinedToolFactory({
   id: "openai.file_search",
   name: "file_search",
-  inputSchema: z$1.object({
-    query: z$1.string()
+  inputSchema: z.object({
+    query: z.string()
   })
 });
-var webSearchPreviewArgsSchema = z$1.object({
+var webSearchPreviewArgsSchema = z.object({
   /**
    * Search context size to use for the web search.
    * - high: Most comprehensive context, highest cost, slower response
    * - medium: Balanced context, cost, and latency (default)
    * - low: Least context, lowest cost, fastest response
    */
-  searchContextSize: z$1.enum(["low", "medium", "high"]).optional(),
+  searchContextSize: z.enum(["low", "medium", "high"]).optional(),
   /**
    * User location information to provide geographically relevant search results.
    */
-  userLocation: z$1.object({
+  userLocation: z.object({
     /**
      * Type of location (always 'approximate')
      */
-    type: z$1.literal("approximate"),
+    type: z.literal("approximate"),
     /**
      * Two-letter ISO country code (e.g., 'US', 'GB')
      */
-    country: z$1.string().optional(),
+    country: z.string().optional(),
     /**
      * City name (free text, e.g., 'Minneapolis')
      */
-    city: z$1.string().optional(),
+    city: z.string().optional(),
     /**
      * Region name (free text, e.g., 'Minnesota')
      */
-    region: z$1.string().optional(),
+    region: z.string().optional(),
     /**
      * IANA timezone (e.g., 'America/Chicago')
      */
-    timezone: z$1.string().optional()
+    timezone: z.string().optional()
   }).optional()
 });
 var webSearchPreview = createProviderDefinedToolFactory({
   id: "openai.web_search_preview",
   name: "web_search_preview",
-  inputSchema: z$1.object({})
+  inputSchema: z.object({})
 });
 function prepareChatTools({
   tools,
@@ -16379,115 +21653,115 @@ var OpenAIChatLanguageModel2 = class {
     };
   }
 };
-var openaiTokenUsageSchema2 = z$1.object({
-  prompt_tokens: z$1.number().nullish(),
-  completion_tokens: z$1.number().nullish(),
-  total_tokens: z$1.number().nullish(),
-  prompt_tokens_details: z$1.object({
-    cached_tokens: z$1.number().nullish()
+var openaiTokenUsageSchema2 = z.object({
+  prompt_tokens: z.number().nullish(),
+  completion_tokens: z.number().nullish(),
+  total_tokens: z.number().nullish(),
+  prompt_tokens_details: z.object({
+    cached_tokens: z.number().nullish()
   }).nullish(),
-  completion_tokens_details: z$1.object({
-    reasoning_tokens: z$1.number().nullish(),
-    accepted_prediction_tokens: z$1.number().nullish(),
-    rejected_prediction_tokens: z$1.number().nullish()
+  completion_tokens_details: z.object({
+    reasoning_tokens: z.number().nullish(),
+    accepted_prediction_tokens: z.number().nullish(),
+    rejected_prediction_tokens: z.number().nullish()
   }).nullish()
 }).nullish();
-var openaiChatResponseSchema2 = z$1.object({
-  id: z$1.string().nullish(),
-  created: z$1.number().nullish(),
-  model: z$1.string().nullish(),
-  choices: z$1.array(
-    z$1.object({
-      message: z$1.object({
-        role: z$1.literal("assistant").nullish(),
-        content: z$1.string().nullish(),
-        tool_calls: z$1.array(
-          z$1.object({
-            id: z$1.string().nullish(),
-            type: z$1.literal("function"),
-            function: z$1.object({
-              name: z$1.string(),
-              arguments: z$1.string()
+var openaiChatResponseSchema2 = z.object({
+  id: z.string().nullish(),
+  created: z.number().nullish(),
+  model: z.string().nullish(),
+  choices: z.array(
+    z.object({
+      message: z.object({
+        role: z.literal("assistant").nullish(),
+        content: z.string().nullish(),
+        tool_calls: z.array(
+          z.object({
+            id: z.string().nullish(),
+            type: z.literal("function"),
+            function: z.object({
+              name: z.string(),
+              arguments: z.string()
             })
           })
         ).nullish(),
-        annotations: z$1.array(
-          z$1.object({
-            type: z$1.literal("url_citation"),
-            start_index: z$1.number(),
-            end_index: z$1.number(),
-            url: z$1.string(),
-            title: z$1.string()
+        annotations: z.array(
+          z.object({
+            type: z.literal("url_citation"),
+            start_index: z.number(),
+            end_index: z.number(),
+            url: z.string(),
+            title: z.string()
           })
         ).nullish()
       }),
-      index: z$1.number(),
-      logprobs: z$1.object({
-        content: z$1.array(
-          z$1.object({
-            token: z$1.string(),
-            logprob: z$1.number(),
-            top_logprobs: z$1.array(
-              z$1.object({
-                token: z$1.string(),
-                logprob: z$1.number()
+      index: z.number(),
+      logprobs: z.object({
+        content: z.array(
+          z.object({
+            token: z.string(),
+            logprob: z.number(),
+            top_logprobs: z.array(
+              z.object({
+                token: z.string(),
+                logprob: z.number()
               })
             )
           })
         ).nullish()
       }).nullish(),
-      finish_reason: z$1.string().nullish()
+      finish_reason: z.string().nullish()
     })
   ),
   usage: openaiTokenUsageSchema2
 });
-var openaiChatChunkSchema2 = z$1.union([
-  z$1.object({
-    id: z$1.string().nullish(),
-    created: z$1.number().nullish(),
-    model: z$1.string().nullish(),
-    choices: z$1.array(
-      z$1.object({
-        delta: z$1.object({
-          role: z$1.enum(["assistant"]).nullish(),
-          content: z$1.string().nullish(),
-          tool_calls: z$1.array(
-            z$1.object({
-              index: z$1.number(),
-              id: z$1.string().nullish(),
-              type: z$1.literal("function").nullish(),
-              function: z$1.object({
-                name: z$1.string().nullish(),
-                arguments: z$1.string().nullish()
+var openaiChatChunkSchema2 = z.union([
+  z.object({
+    id: z.string().nullish(),
+    created: z.number().nullish(),
+    model: z.string().nullish(),
+    choices: z.array(
+      z.object({
+        delta: z.object({
+          role: z.enum(["assistant"]).nullish(),
+          content: z.string().nullish(),
+          tool_calls: z.array(
+            z.object({
+              index: z.number(),
+              id: z.string().nullish(),
+              type: z.literal("function").nullish(),
+              function: z.object({
+                name: z.string().nullish(),
+                arguments: z.string().nullish()
               })
             })
           ).nullish(),
-          annotations: z$1.array(
-            z$1.object({
-              type: z$1.literal("url_citation"),
-              start_index: z$1.number(),
-              end_index: z$1.number(),
-              url: z$1.string(),
-              title: z$1.string()
+          annotations: z.array(
+            z.object({
+              type: z.literal("url_citation"),
+              start_index: z.number(),
+              end_index: z.number(),
+              url: z.string(),
+              title: z.string()
             })
           ).nullish()
         }).nullish(),
-        logprobs: z$1.object({
-          content: z$1.array(
-            z$1.object({
-              token: z$1.string(),
-              logprob: z$1.number(),
-              top_logprobs: z$1.array(
-                z$1.object({
-                  token: z$1.string(),
-                  logprob: z$1.number()
+        logprobs: z.object({
+          content: z.array(
+            z.object({
+              token: z.string(),
+              logprob: z.number(),
+              top_logprobs: z.array(
+                z.object({
+                  token: z.string(),
+                  logprob: z.number()
                 })
               )
             })
           ).nullish()
         }).nullish(),
-        finish_reason: z$1.string().nullish(),
-        index: z$1.number()
+        finish_reason: z.string().nullish(),
+        index: z.number()
       })
     ),
     usage: openaiTokenUsageSchema2
@@ -16640,11 +21914,11 @@ function mapOpenAIFinishReason22(finishReason) {
       return "unknown";
   }
 }
-var openaiCompletionProviderOptions = z$1.object({
+var openaiCompletionProviderOptions = z.object({
   /**
   Echo back the prompt in addition to the completion.
      */
-  echo: z$1.boolean().optional(),
+  echo: z.boolean().optional(),
   /**
   Modify the likelihood of specified tokens appearing in the completion.
   
@@ -16659,16 +21933,16 @@ var openaiCompletionProviderOptions = z$1.object({
   As an example, you can pass {"50256": -100} to prevent the <|endoftext|>
   token from being generated.
    */
-  logitBias: z$1.record(z$1.string(), z$1.number()).optional(),
+  logitBias: z.record(z.string(), z.number()).optional(),
   /**
   The suffix that comes after a completion of inserted text.
    */
-  suffix: z$1.string().optional(),
+  suffix: z.string().optional(),
   /**
   A unique identifier representing your end-user, which can help OpenAI to
   monitor and detect abuse. Learn more.
    */
-  user: z$1.string().optional(),
+  user: z.string().optional(),
   /**
   Return the log probabilities of the tokens. Including logprobs will increase
   the response size and can slow down response times. However, it can
@@ -16678,7 +21952,7 @@ var openaiCompletionProviderOptions = z$1.object({
   Setting to a number will return the log probabilities of the top n
   tokens that were generated.
      */
-  logprobs: z$1.union([z$1.boolean(), z$1.number()]).optional()
+  logprobs: z.union([z.boolean(), z.number()]).optional()
 });
 var OpenAICompletionLanguageModel2 = class {
   constructor(modelId, config) {
@@ -16908,42 +22182,42 @@ var OpenAICompletionLanguageModel2 = class {
     };
   }
 };
-var usageSchema3 = z$1.object({
-  prompt_tokens: z$1.number(),
-  completion_tokens: z$1.number(),
-  total_tokens: z$1.number()
+var usageSchema3 = z.object({
+  prompt_tokens: z.number(),
+  completion_tokens: z.number(),
+  total_tokens: z.number()
 });
-var openaiCompletionResponseSchema2 = z$1.object({
-  id: z$1.string().nullish(),
-  created: z$1.number().nullish(),
-  model: z$1.string().nullish(),
-  choices: z$1.array(
-    z$1.object({
-      text: z$1.string(),
-      finish_reason: z$1.string(),
-      logprobs: z$1.object({
-        tokens: z$1.array(z$1.string()),
-        token_logprobs: z$1.array(z$1.number()),
-        top_logprobs: z$1.array(z$1.record(z$1.string(), z$1.number())).nullish()
+var openaiCompletionResponseSchema2 = z.object({
+  id: z.string().nullish(),
+  created: z.number().nullish(),
+  model: z.string().nullish(),
+  choices: z.array(
+    z.object({
+      text: z.string(),
+      finish_reason: z.string(),
+      logprobs: z.object({
+        tokens: z.array(z.string()),
+        token_logprobs: z.array(z.number()),
+        top_logprobs: z.array(z.record(z.string(), z.number())).nullish()
       }).nullish()
     })
   ),
   usage: usageSchema3.nullish()
 });
-var openaiCompletionChunkSchema2 = z$1.union([
-  z$1.object({
-    id: z$1.string().nullish(),
-    created: z$1.number().nullish(),
-    model: z$1.string().nullish(),
-    choices: z$1.array(
-      z$1.object({
-        text: z$1.string(),
-        finish_reason: z$1.string().nullish(),
-        index: z$1.number(),
-        logprobs: z$1.object({
-          tokens: z$1.array(z$1.string()),
-          token_logprobs: z$1.array(z$1.number()),
-          top_logprobs: z$1.array(z$1.record(z$1.string(), z$1.number())).nullish()
+var openaiCompletionChunkSchema2 = z.union([
+  z.object({
+    id: z.string().nullish(),
+    created: z.number().nullish(),
+    model: z.string().nullish(),
+    choices: z.array(
+      z.object({
+        text: z.string(),
+        finish_reason: z.string().nullish(),
+        index: z.number(),
+        logprobs: z.object({
+          tokens: z.array(z.string()),
+          token_logprobs: z.array(z.number()),
+          top_logprobs: z.array(z.record(z.string(), z.number())).nullish()
         }).nullish()
       })
     ),
@@ -16951,17 +22225,17 @@ var openaiCompletionChunkSchema2 = z$1.union([
   }),
   openaiErrorDataSchema2
 ]);
-var openaiEmbeddingProviderOptions = z$1.object({
+var openaiEmbeddingProviderOptions = z.object({
   /**
   The number of dimensions the resulting output embeddings should have.
   Only supported in text-embedding-3 and later models.
      */
-  dimensions: z$1.number().optional(),
+  dimensions: z.number().optional(),
   /**
   A unique identifier representing your end-user, which can help OpenAI to
   monitor and detect abuse. Learn more.
   */
-  user: z$1.string().optional()
+  user: z.string().optional()
 });
 var OpenAIEmbeddingModel2 = class {
   constructor(modelId, config) {
@@ -17025,9 +22299,9 @@ var OpenAIEmbeddingModel2 = class {
     };
   }
 };
-var openaiTextEmbeddingResponseSchema2 = z$1.object({
-  data: z$1.array(z$1.object({ embedding: z$1.array(z$1.number()) })),
-  usage: z$1.object({ prompt_tokens: z$1.number() }).nullish()
+var openaiTextEmbeddingResponseSchema2 = z.object({
+  data: z.array(z.object({ embedding: z.array(z.number()) })),
+  usage: z.object({ prompt_tokens: z.number() }).nullish()
 });
 var modelMaxImagesPerCall2 = {
   "dall-e-3": 1,
@@ -17112,23 +22386,23 @@ var OpenAIImageModel2 = class {
     };
   }
 };
-var openaiImageResponseSchema2 = z$1.object({
-  data: z$1.array(
-    z$1.object({ b64_json: z$1.string(), revised_prompt: z$1.string().optional() })
+var openaiImageResponseSchema2 = z.object({
+  data: z.array(
+    z.object({ b64_json: z.string(), revised_prompt: z.string().optional() })
   )
 });
-var codeInterpreterArgsSchema = z$1.object({
-  container: z$1.union([
-    z$1.string(),
-    z$1.object({
-      fileIds: z$1.array(z$1.string()).optional()
+var codeInterpreterArgsSchema = z.object({
+  container: z.union([
+    z.string(),
+    z.object({
+      fileIds: z.array(z.string()).optional()
     })
   ]).optional()
 });
 var codeInterpreter = createProviderDefinedToolFactory({
   id: "openai.code_interpreter",
   name: "code_interpreter",
-  inputSchema: z$1.object({})
+  inputSchema: z.object({})
 });
 var openaiTools2 = {
   codeInterpreter,
@@ -17322,9 +22596,9 @@ async function convertToOpenAIResponsesMessages2({
   }
   return { messages, warnings };
 }
-var openaiResponsesReasoningProviderOptionsSchema = z$1.object({
-  itemId: z$1.string().nullish(),
-  reasoningEncryptedContent: z$1.string().nullish()
+var openaiResponsesReasoningProviderOptionsSchema = z.object({
+  itemId: z.string().nullish(),
+  reasoningEncryptedContent: z.string().nullish()
 });
 function mapOpenAIResponseFinishReason2({
   finishReason,
@@ -17430,14 +22704,14 @@ function prepareResponsesTools2({
   }
 }
 var TOP_LOGPROBS_MAX = 20;
-var LOGPROBS_SCHEMA = z$1.array(
-  z$1.object({
-    token: z$1.string(),
-    logprob: z$1.number(),
-    top_logprobs: z$1.array(
-      z$1.object({
-        token: z$1.string(),
-        logprob: z$1.number()
+var LOGPROBS_SCHEMA = z.array(
+  z.object({
+    token: z.string(),
+    logprob: z.number(),
+    top_logprobs: z.array(
+      z.object({
+        token: z.string(),
+        logprob: z.number()
       })
     )
   })
@@ -17640,97 +22914,97 @@ var OpenAIResponsesLanguageModel2 = class {
       body,
       failedResponseHandler: openaiFailedResponseHandler2,
       successfulResponseHandler: createJsonResponseHandler2(
-        z$1.object({
-          id: z$1.string(),
-          created_at: z$1.number(),
-          error: z$1.object({
-            code: z$1.string(),
-            message: z$1.string()
+        z.object({
+          id: z.string(),
+          created_at: z.number(),
+          error: z.object({
+            code: z.string(),
+            message: z.string()
           }).nullish(),
-          model: z$1.string(),
-          output: z$1.array(
-            z$1.discriminatedUnion("type", [
-              z$1.object({
-                type: z$1.literal("message"),
-                role: z$1.literal("assistant"),
-                id: z$1.string(),
-                content: z$1.array(
-                  z$1.object({
-                    type: z$1.literal("output_text"),
-                    text: z$1.string(),
+          model: z.string(),
+          output: z.array(
+            z.discriminatedUnion("type", [
+              z.object({
+                type: z.literal("message"),
+                role: z.literal("assistant"),
+                id: z.string(),
+                content: z.array(
+                  z.object({
+                    type: z.literal("output_text"),
+                    text: z.string(),
                     logprobs: LOGPROBS_SCHEMA.nullish(),
-                    annotations: z$1.array(
-                      z$1.discriminatedUnion("type", [
-                        z$1.object({
-                          type: z$1.literal("url_citation"),
-                          start_index: z$1.number(),
-                          end_index: z$1.number(),
-                          url: z$1.string(),
-                          title: z$1.string()
+                    annotations: z.array(
+                      z.discriminatedUnion("type", [
+                        z.object({
+                          type: z.literal("url_citation"),
+                          start_index: z.number(),
+                          end_index: z.number(),
+                          url: z.string(),
+                          title: z.string()
                         }),
-                        z$1.object({
-                          type: z$1.literal("file_citation"),
-                          start_index: z$1.number(),
-                          end_index: z$1.number(),
-                          file_id: z$1.string(),
-                          quote: z$1.string()
+                        z.object({
+                          type: z.literal("file_citation"),
+                          start_index: z.number(),
+                          end_index: z.number(),
+                          file_id: z.string(),
+                          quote: z.string()
                         })
                       ])
                     )
                   })
                 )
               }),
-              z$1.object({
-                type: z$1.literal("function_call"),
-                call_id: z$1.string(),
-                name: z$1.string(),
-                arguments: z$1.string(),
-                id: z$1.string()
+              z.object({
+                type: z.literal("function_call"),
+                call_id: z.string(),
+                name: z.string(),
+                arguments: z.string(),
+                id: z.string()
               }),
-              z$1.object({
-                type: z$1.literal("web_search_call"),
-                id: z$1.string(),
-                status: z$1.string().optional(),
-                action: z$1.object({
-                  type: z$1.literal("search"),
-                  query: z$1.string().optional()
+              z.object({
+                type: z.literal("web_search_call"),
+                id: z.string(),
+                status: z.string().optional(),
+                action: z.object({
+                  type: z.literal("search"),
+                  query: z.string().optional()
                 }).nullish()
               }),
-              z$1.object({
-                type: z$1.literal("computer_call"),
-                id: z$1.string(),
-                status: z$1.string().optional()
+              z.object({
+                type: z.literal("computer_call"),
+                id: z.string(),
+                status: z.string().optional()
               }),
-              z$1.object({
-                type: z$1.literal("file_search_call"),
-                id: z$1.string(),
-                status: z$1.string().optional(),
-                queries: z$1.array(z$1.string()).nullish(),
-                results: z$1.array(
-                  z$1.object({
-                    attributes: z$1.object({
-                      file_id: z$1.string(),
-                      filename: z$1.string(),
-                      score: z$1.number(),
-                      text: z$1.string()
+              z.object({
+                type: z.literal("file_search_call"),
+                id: z.string(),
+                status: z.string().optional(),
+                queries: z.array(z.string()).nullish(),
+                results: z.array(
+                  z.object({
+                    attributes: z.object({
+                      file_id: z.string(),
+                      filename: z.string(),
+                      score: z.number(),
+                      text: z.string()
                     })
                   })
                 ).nullish()
               }),
-              z$1.object({
-                type: z$1.literal("reasoning"),
-                id: z$1.string(),
-                encrypted_content: z$1.string().nullish(),
-                summary: z$1.array(
-                  z$1.object({
-                    type: z$1.literal("summary_text"),
-                    text: z$1.string()
+              z.object({
+                type: z.literal("reasoning"),
+                id: z.string(),
+                encrypted_content: z.string().nullish(),
+                summary: z.array(
+                  z.object({
+                    type: z.literal("summary_text"),
+                    text: z.string()
                   })
                 )
               })
             ])
           ),
-          incomplete_details: z$1.object({ reason: z$1.string() }).nullable(),
+          incomplete_details: z.object({ reason: z.string() }).nullable(),
           usage: usageSchema22
         })
       ),
@@ -18257,178 +23531,178 @@ var OpenAIResponsesLanguageModel2 = class {
     };
   }
 };
-var usageSchema22 = z$1.object({
-  input_tokens: z$1.number(),
-  input_tokens_details: z$1.object({ cached_tokens: z$1.number().nullish() }).nullish(),
-  output_tokens: z$1.number(),
-  output_tokens_details: z$1.object({ reasoning_tokens: z$1.number().nullish() }).nullish()
+var usageSchema22 = z.object({
+  input_tokens: z.number(),
+  input_tokens_details: z.object({ cached_tokens: z.number().nullish() }).nullish(),
+  output_tokens: z.number(),
+  output_tokens_details: z.object({ reasoning_tokens: z.number().nullish() }).nullish()
 });
-var textDeltaChunkSchema2 = z$1.object({
-  type: z$1.literal("response.output_text.delta"),
-  item_id: z$1.string(),
-  delta: z$1.string(),
+var textDeltaChunkSchema2 = z.object({
+  type: z.literal("response.output_text.delta"),
+  item_id: z.string(),
+  delta: z.string(),
   logprobs: LOGPROBS_SCHEMA.nullish()
 });
-var errorChunkSchema2 = z$1.object({
-  type: z$1.literal("error"),
-  code: z$1.string(),
-  message: z$1.string(),
-  param: z$1.string().nullish(),
-  sequence_number: z$1.number()
+var errorChunkSchema2 = z.object({
+  type: z.literal("error"),
+  code: z.string(),
+  message: z.string(),
+  param: z.string().nullish(),
+  sequence_number: z.number()
 });
-var responseFinishedChunkSchema2 = z$1.object({
-  type: z$1.enum(["response.completed", "response.incomplete"]),
-  response: z$1.object({
-    incomplete_details: z$1.object({ reason: z$1.string() }).nullish(),
+var responseFinishedChunkSchema2 = z.object({
+  type: z.enum(["response.completed", "response.incomplete"]),
+  response: z.object({
+    incomplete_details: z.object({ reason: z.string() }).nullish(),
     usage: usageSchema22
   })
 });
-var responseCreatedChunkSchema2 = z$1.object({
-  type: z$1.literal("response.created"),
-  response: z$1.object({
-    id: z$1.string(),
-    created_at: z$1.number(),
-    model: z$1.string()
+var responseCreatedChunkSchema2 = z.object({
+  type: z.literal("response.created"),
+  response: z.object({
+    id: z.string(),
+    created_at: z.number(),
+    model: z.string()
   })
 });
-var responseOutputItemAddedSchema2 = z$1.object({
-  type: z$1.literal("response.output_item.added"),
-  output_index: z$1.number(),
-  item: z$1.discriminatedUnion("type", [
-    z$1.object({
-      type: z$1.literal("message"),
-      id: z$1.string()
+var responseOutputItemAddedSchema2 = z.object({
+  type: z.literal("response.output_item.added"),
+  output_index: z.number(),
+  item: z.discriminatedUnion("type", [
+    z.object({
+      type: z.literal("message"),
+      id: z.string()
     }),
-    z$1.object({
-      type: z$1.literal("reasoning"),
-      id: z$1.string(),
-      encrypted_content: z$1.string().nullish()
+    z.object({
+      type: z.literal("reasoning"),
+      id: z.string(),
+      encrypted_content: z.string().nullish()
     }),
-    z$1.object({
-      type: z$1.literal("function_call"),
-      id: z$1.string(),
-      call_id: z$1.string(),
-      name: z$1.string(),
-      arguments: z$1.string()
+    z.object({
+      type: z.literal("function_call"),
+      id: z.string(),
+      call_id: z.string(),
+      name: z.string(),
+      arguments: z.string()
     }),
-    z$1.object({
-      type: z$1.literal("web_search_call"),
-      id: z$1.string(),
-      status: z$1.string(),
-      action: z$1.object({
-        type: z$1.literal("search"),
-        query: z$1.string().optional()
+    z.object({
+      type: z.literal("web_search_call"),
+      id: z.string(),
+      status: z.string(),
+      action: z.object({
+        type: z.literal("search"),
+        query: z.string().optional()
       }).nullish()
     }),
-    z$1.object({
-      type: z$1.literal("computer_call"),
-      id: z$1.string(),
-      status: z$1.string()
+    z.object({
+      type: z.literal("computer_call"),
+      id: z.string(),
+      status: z.string()
     }),
-    z$1.object({
-      type: z$1.literal("file_search_call"),
-      id: z$1.string(),
-      status: z$1.string(),
-      queries: z$1.array(z$1.string()).nullish(),
-      results: z$1.array(
-        z$1.object({
-          attributes: z$1.object({
-            file_id: z$1.string(),
-            filename: z$1.string(),
-            score: z$1.number(),
-            text: z$1.string()
+    z.object({
+      type: z.literal("file_search_call"),
+      id: z.string(),
+      status: z.string(),
+      queries: z.array(z.string()).nullish(),
+      results: z.array(
+        z.object({
+          attributes: z.object({
+            file_id: z.string(),
+            filename: z.string(),
+            score: z.number(),
+            text: z.string()
           })
         })
       ).optional()
     })
   ])
 });
-var responseOutputItemDoneSchema2 = z$1.object({
-  type: z$1.literal("response.output_item.done"),
-  output_index: z$1.number(),
-  item: z$1.discriminatedUnion("type", [
-    z$1.object({
-      type: z$1.literal("message"),
-      id: z$1.string()
+var responseOutputItemDoneSchema2 = z.object({
+  type: z.literal("response.output_item.done"),
+  output_index: z.number(),
+  item: z.discriminatedUnion("type", [
+    z.object({
+      type: z.literal("message"),
+      id: z.string()
     }),
-    z$1.object({
-      type: z$1.literal("reasoning"),
-      id: z$1.string(),
-      encrypted_content: z$1.string().nullish()
+    z.object({
+      type: z.literal("reasoning"),
+      id: z.string(),
+      encrypted_content: z.string().nullish()
     }),
-    z$1.object({
-      type: z$1.literal("function_call"),
-      id: z$1.string(),
-      call_id: z$1.string(),
-      name: z$1.string(),
-      arguments: z$1.string(),
-      status: z$1.literal("completed")
+    z.object({
+      type: z.literal("function_call"),
+      id: z.string(),
+      call_id: z.string(),
+      name: z.string(),
+      arguments: z.string(),
+      status: z.literal("completed")
     }),
-    z$1.object({
-      type: z$1.literal("web_search_call"),
-      id: z$1.string(),
-      status: z$1.literal("completed"),
-      action: z$1.object({
-        type: z$1.literal("search"),
-        query: z$1.string().optional()
+    z.object({
+      type: z.literal("web_search_call"),
+      id: z.string(),
+      status: z.literal("completed"),
+      action: z.object({
+        type: z.literal("search"),
+        query: z.string().optional()
       }).nullish()
     }),
-    z$1.object({
-      type: z$1.literal("computer_call"),
-      id: z$1.string(),
-      status: z$1.literal("completed")
+    z.object({
+      type: z.literal("computer_call"),
+      id: z.string(),
+      status: z.literal("completed")
     }),
-    z$1.object({
-      type: z$1.literal("file_search_call"),
-      id: z$1.string(),
-      status: z$1.literal("completed"),
-      queries: z$1.array(z$1.string()).nullish(),
-      results: z$1.array(
-        z$1.object({
-          attributes: z$1.object({
-            file_id: z$1.string(),
-            filename: z$1.string(),
-            score: z$1.number(),
-            text: z$1.string()
+    z.object({
+      type: z.literal("file_search_call"),
+      id: z.string(),
+      status: z.literal("completed"),
+      queries: z.array(z.string()).nullish(),
+      results: z.array(
+        z.object({
+          attributes: z.object({
+            file_id: z.string(),
+            filename: z.string(),
+            score: z.number(),
+            text: z.string()
           })
         })
       ).nullish()
     })
   ])
 });
-var responseFunctionCallArgumentsDeltaSchema2 = z$1.object({
-  type: z$1.literal("response.function_call_arguments.delta"),
-  item_id: z$1.string(),
-  output_index: z$1.number(),
-  delta: z$1.string()
+var responseFunctionCallArgumentsDeltaSchema2 = z.object({
+  type: z.literal("response.function_call_arguments.delta"),
+  item_id: z.string(),
+  output_index: z.number(),
+  delta: z.string()
 });
-var responseAnnotationAddedSchema2 = z$1.object({
-  type: z$1.literal("response.output_text.annotation.added"),
-  annotation: z$1.discriminatedUnion("type", [
-    z$1.object({
-      type: z$1.literal("url_citation"),
-      url: z$1.string(),
-      title: z$1.string()
+var responseAnnotationAddedSchema2 = z.object({
+  type: z.literal("response.output_text.annotation.added"),
+  annotation: z.discriminatedUnion("type", [
+    z.object({
+      type: z.literal("url_citation"),
+      url: z.string(),
+      title: z.string()
     }),
-    z$1.object({
-      type: z$1.literal("file_citation"),
-      file_id: z$1.string(),
-      quote: z$1.string()
+    z.object({
+      type: z.literal("file_citation"),
+      file_id: z.string(),
+      quote: z.string()
     })
   ])
 });
-var responseReasoningSummaryPartAddedSchema = z$1.object({
-  type: z$1.literal("response.reasoning_summary_part.added"),
-  item_id: z$1.string(),
-  summary_index: z$1.number()
+var responseReasoningSummaryPartAddedSchema = z.object({
+  type: z.literal("response.reasoning_summary_part.added"),
+  item_id: z.string(),
+  summary_index: z.number()
 });
-var responseReasoningSummaryTextDeltaSchema2 = z$1.object({
-  type: z$1.literal("response.reasoning_summary_text.delta"),
-  item_id: z$1.string(),
-  summary_index: z$1.number(),
-  delta: z$1.string()
+var responseReasoningSummaryTextDeltaSchema2 = z.object({
+  type: z.literal("response.reasoning_summary_text.delta"),
+  item_id: z.string(),
+  summary_index: z.number(),
+  delta: z.string()
 });
-var openaiResponsesChunkSchema2 = z$1.union([
+var openaiResponsesChunkSchema2 = z.union([
   textDeltaChunkSchema2,
   responseFinishedChunkSchema2,
   responseCreatedChunkSchema2,
@@ -18439,7 +23713,7 @@ var openaiResponsesChunkSchema2 = z$1.union([
   responseReasoningSummaryPartAddedSchema,
   responseReasoningSummaryTextDeltaSchema2,
   errorChunkSchema2,
-  z$1.object({ type: z$1.string() }).loose()
+  z.object({ type: z.string() }).loose()
   // fallback for unknown chunks
 ]);
 function isTextDeltaChunk2(chunk) {
@@ -18512,27 +23786,27 @@ function getResponsesModelConfig2(modelId) {
     isReasoningModel: false
   };
 }
-var openaiResponsesProviderOptionsSchema2 = z$1.object({
-  metadata: z$1.any().nullish(),
-  parallelToolCalls: z$1.boolean().nullish(),
-  previousResponseId: z$1.string().nullish(),
-  store: z$1.boolean().nullish(),
-  user: z$1.string().nullish(),
-  reasoningEffort: z$1.string().nullish(),
-  strictJsonSchema: z$1.boolean().nullish(),
-  instructions: z$1.string().nullish(),
-  reasoningSummary: z$1.string().nullish(),
-  serviceTier: z$1.enum(["auto", "flex", "priority"]).nullish(),
-  include: z$1.array(
-    z$1.enum([
+var openaiResponsesProviderOptionsSchema2 = z.object({
+  metadata: z.any().nullish(),
+  parallelToolCalls: z.boolean().nullish(),
+  previousResponseId: z.string().nullish(),
+  store: z.boolean().nullish(),
+  user: z.string().nullish(),
+  reasoningEffort: z.string().nullish(),
+  strictJsonSchema: z.boolean().nullish(),
+  instructions: z.string().nullish(),
+  reasoningSummary: z.string().nullish(),
+  serviceTier: z.enum(["auto", "flex", "priority"]).nullish(),
+  include: z.array(
+    z.enum([
       "reasoning.encrypted_content",
       "file_search_call.results",
       "message.output_text.logprobs"
     ])
   ).nullish(),
-  textVerbosity: z$1.enum(["low", "medium", "high"]).nullish(),
-  promptCacheKey: z$1.string().nullish(),
-  safetyIdentifier: z$1.string().nullish(),
+  textVerbosity: z.enum(["low", "medium", "high"]).nullish(),
+  promptCacheKey: z.string().nullish(),
+  safetyIdentifier: z.string().nullish(),
   /**
    * Return the log probabilities of the tokens.
    *
@@ -18545,11 +23819,11 @@ var openaiResponsesProviderOptionsSchema2 = z$1.object({
    * @see https://platform.openai.com/docs/api-reference/responses/create
    * @see https://cookbook.openai.com/examples/using_logprobs
    */
-  logprobs: z$1.union([z$1.boolean(), z$1.number().min(1).max(TOP_LOGPROBS_MAX)]).optional()
+  logprobs: z.union([z.boolean(), z.number().min(1).max(TOP_LOGPROBS_MAX)]).optional()
 });
-var OpenAIProviderOptionsSchema2 = z$1.object({
-  instructions: z$1.string().nullish(),
-  speed: z$1.number().min(0.25).max(4).default(1).nullish()
+var OpenAIProviderOptionsSchema2 = z.object({
+  instructions: z.string().nullish(),
+  speed: z.number().min(0.25).max(4).default(1).nullish()
 });
 var OpenAISpeechModel2 = class {
   constructor(modelId, config) {
@@ -18650,29 +23924,29 @@ var OpenAISpeechModel2 = class {
     };
   }
 };
-var openAITranscriptionProviderOptions = z$1.object({
+var openAITranscriptionProviderOptions = z.object({
   /**
    * Additional information to include in the transcription response.
    */
-  include: z$1.array(z$1.string()).optional(),
+  include: z.array(z.string()).optional(),
   /**
    * The language of the input audio in ISO-639-1 format.
    */
-  language: z$1.string().optional(),
+  language: z.string().optional(),
   /**
    * An optional text to guide the model's style or continue a previous audio segment.
    */
-  prompt: z$1.string().optional(),
+  prompt: z.string().optional(),
   /**
    * The sampling temperature, between 0 and 1.
    * @default 0
    */
-  temperature: z$1.number().min(0).max(1).default(0).optional(),
+  temperature: z.number().min(0).max(1).default(0).optional(),
   /**
    * The timestamp granularities to populate for this transcription.
    * @default ['segment']
    */
-  timestampGranularities: z$1.array(z$1.enum(["word", "segment"])).default(["segment"]).optional()
+  timestampGranularities: z.array(z.enum(["word", "segment"])).default(["segment"]).optional()
 });
 var languageMap2 = {
   afrikaans: "af",
@@ -18824,29 +24098,29 @@ var OpenAITranscriptionModel2 = class {
     };
   }
 };
-var openaiTranscriptionResponseSchema2 = z$1.object({
-  text: z$1.string(),
-  language: z$1.string().nullish(),
-  duration: z$1.number().nullish(),
-  words: z$1.array(
-    z$1.object({
-      word: z$1.string(),
-      start: z$1.number(),
-      end: z$1.number()
+var openaiTranscriptionResponseSchema2 = z.object({
+  text: z.string(),
+  language: z.string().nullish(),
+  duration: z.number().nullish(),
+  words: z.array(
+    z.object({
+      word: z.string(),
+      start: z.number(),
+      end: z.number()
     })
   ).nullish(),
-  segments: z$1.array(
-    z$1.object({
-      id: z$1.number(),
-      seek: z$1.number(),
-      start: z$1.number(),
-      end: z$1.number(),
-      text: z$1.string(),
-      tokens: z$1.array(z$1.number()),
-      temperature: z$1.number(),
-      avg_logprob: z$1.number(),
-      compression_ratio: z$1.number(),
-      no_speech_prob: z$1.number()
+  segments: z.array(
+    z.object({
+      id: z.number(),
+      seek: z.number(),
+      start: z.number(),
+      end: z.number(),
+      text: z.string(),
+      tokens: z.array(z.number()),
+      temperature: z.number(),
+      avg_logprob: z.number(),
+      compression_ratio: z.number(),
+      no_speech_prob: z.number()
     })
   ).nullish()
 });
@@ -19066,15 +24340,15 @@ function mapOpenAICompatibleFinishReason(finishReason) {
       return "unknown";
   }
 }
-var openaiCompatibleErrorDataSchema = z.object({
-  error: z.object({
-    message: z.string(),
+var openaiCompatibleErrorDataSchema = z$1.object({
+  error: z$1.object({
+    message: z$1.string(),
     // The additional information below is handled loosely to support
     // OpenAI-compatible providers that have slightly different error
     // responses:
-    type: z.string().nullish(),
-    param: z.any().nullish(),
-    code: z.union([z.string(), z.number()]).nullish()
+    type: z$1.string().nullish(),
+    param: z$1.any().nullish(),
+    code: z$1.union([z$1.string(), z$1.number()]).nullish()
   })
 });
 var defaultOpenAICompatibleErrorStructure = {
@@ -19621,92 +24895,92 @@ var OpenAICompatibleChatLanguageModel = class {
     };
   }
 };
-var openaiCompatibleTokenUsageSchema = z.object({
-  prompt_tokens: z.number().nullish(),
-  completion_tokens: z.number().nullish(),
-  prompt_tokens_details: z.object({
-    cached_tokens: z.number().nullish()
+var openaiCompatibleTokenUsageSchema = z$1.object({
+  prompt_tokens: z$1.number().nullish(),
+  completion_tokens: z$1.number().nullish(),
+  prompt_tokens_details: z$1.object({
+    cached_tokens: z$1.number().nullish()
   }).nullish(),
-  completion_tokens_details: z.object({
-    reasoning_tokens: z.number().nullish(),
-    accepted_prediction_tokens: z.number().nullish(),
-    rejected_prediction_tokens: z.number().nullish()
+  completion_tokens_details: z$1.object({
+    reasoning_tokens: z$1.number().nullish(),
+    accepted_prediction_tokens: z$1.number().nullish(),
+    rejected_prediction_tokens: z$1.number().nullish()
   }).nullish()
 }).nullish();
-var OpenAICompatibleChatResponseSchema = z.object({
-  id: z.string().nullish(),
-  created: z.number().nullish(),
-  model: z.string().nullish(),
-  choices: z.array(
-    z.object({
-      message: z.object({
-        role: z.literal("assistant").nullish(),
-        content: z.string().nullish(),
-        reasoning_content: z.string().nullish(),
-        tool_calls: z.array(
-          z.object({
-            id: z.string().nullish(),
-            type: z.literal("function"),
-            function: z.object({
-              name: z.string(),
-              arguments: z.string()
+var OpenAICompatibleChatResponseSchema = z$1.object({
+  id: z$1.string().nullish(),
+  created: z$1.number().nullish(),
+  model: z$1.string().nullish(),
+  choices: z$1.array(
+    z$1.object({
+      message: z$1.object({
+        role: z$1.literal("assistant").nullish(),
+        content: z$1.string().nullish(),
+        reasoning_content: z$1.string().nullish(),
+        tool_calls: z$1.array(
+          z$1.object({
+            id: z$1.string().nullish(),
+            type: z$1.literal("function"),
+            function: z$1.object({
+              name: z$1.string(),
+              arguments: z$1.string()
             })
           })
         ).nullish()
       }),
-      finish_reason: z.string().nullish()
+      finish_reason: z$1.string().nullish()
     })
   ),
   usage: openaiCompatibleTokenUsageSchema
 });
-var createOpenAICompatibleChatChunkSchema = (errorSchema) => z.union([
-  z.object({
-    id: z.string().nullish(),
-    created: z.number().nullish(),
-    model: z.string().nullish(),
-    choices: z.array(
-      z.object({
-        delta: z.object({
-          role: z.enum(["assistant"]).nullish(),
-          content: z.string().nullish(),
-          reasoning_content: z.string().nullish(),
-          tool_calls: z.array(
-            z.object({
-              index: z.number().optional(),
-              id: z.string().nullish(),
-              type: z.literal("function").nullish(),
-              function: z.object({
-                name: z.string().nullish(),
-                arguments: z.string().nullish()
+var createOpenAICompatibleChatChunkSchema = (errorSchema) => z$1.union([
+  z$1.object({
+    id: z$1.string().nullish(),
+    created: z$1.number().nullish(),
+    model: z$1.string().nullish(),
+    choices: z$1.array(
+      z$1.object({
+        delta: z$1.object({
+          role: z$1.enum(["assistant"]).nullish(),
+          content: z$1.string().nullish(),
+          reasoning_content: z$1.string().nullish(),
+          tool_calls: z$1.array(
+            z$1.object({
+              index: z$1.number().optional(),
+              id: z$1.string().nullish(),
+              type: z$1.literal("function").nullish(),
+              function: z$1.object({
+                name: z$1.string().nullish(),
+                arguments: z$1.string().nullish()
               })
             })
           ).nullish()
         }).nullish(),
-        finish_reason: z.string().nullish()
+        finish_reason: z$1.string().nullish()
       })
     ),
     usage: openaiCompatibleTokenUsageSchema
   }),
   errorSchema
 ]);
-z.object({
-  id: z.string().nullish(),
-  created: z.number().nullish(),
-  model: z.string().nullish(),
-  choices: z.array(
-    z.object({
-      text: z.string(),
-      finish_reason: z.string()
+z$1.object({
+  id: z$1.string().nullish(),
+  created: z$1.number().nullish(),
+  model: z$1.string().nullish(),
+  choices: z$1.array(
+    z$1.object({
+      text: z$1.string(),
+      finish_reason: z$1.string()
     })
   ),
-  usage: z.object({
-    prompt_tokens: z.number(),
-    completion_tokens: z.number()
+  usage: z$1.object({
+    prompt_tokens: z$1.number(),
+    completion_tokens: z$1.number()
   }).nullish()
 });
-z.object({
-  data: z.array(z.object({ embedding: z.array(z.number()) })),
-  usage: z.object({ prompt_tokens: z.number() }).nullish()
+z$1.object({
+  data: z$1.array(z$1.object({ embedding: z$1.array(z$1.number()) })),
+  usage: z$1.object({ prompt_tokens: z$1.number() }).nullish()
 });
 var OpenAICompatibleImageModel = class {
   constructor(modelId, settings, config) {
@@ -19780,8 +25054,8 @@ var OpenAICompatibleImageModel = class {
     };
   }
 };
-var openaiCompatibleImageResponseSchema = z.object({
-  data: z.array(z.object({ b64_json: z.string() }))
+var openaiCompatibleImageResponseSchema = z$1.object({
+  data: z$1.array(z$1.object({ b64_json: z$1.string() }))
 });
 function supportsStructuredOutputs(modelId) {
   return [
@@ -19801,9 +25075,9 @@ function supportsStructuredOutputs(modelId) {
     "grok-2-vision-1212"
   ].includes(modelId);
 }
-var xaiErrorSchema = z.object({
-  code: z.string(),
-  error: z.string()
+var xaiErrorSchema = z$1.object({
+  code: z$1.string(),
+  error: z$1.string()
 });
 var xaiErrorStructure = {
   errorSchema: xaiErrorSchema,
@@ -19855,126 +25129,126 @@ function createXai(options = {}) {
   return provider;
 }
 var xai = createXai();
-z$1.object({
+z.object({
   /**
    * A unique identifier representing your end-user, which can help the provider to
    * monitor and detect abuse.
    */
-  user: z$1.string().optional(),
+  user: z.string().optional(),
   /**
    * Reasoning effort for reasoning models. Defaults to `medium`.
    */
-  reasoningEffort: z$1.string().optional()
+  reasoningEffort: z.string().optional()
 });
-var openaiCompatibleErrorDataSchema2 = z$1.object({
-  error: z$1.object({
-    message: z$1.string(),
+var openaiCompatibleErrorDataSchema2 = z.object({
+  error: z.object({
+    message: z.string(),
     // The additional information below is handled loosely to support
     // OpenAI-compatible providers that have slightly different error
     // responses:
-    type: z$1.string().nullish(),
-    param: z$1.any().nullish(),
-    code: z$1.union([z$1.string(), z$1.number()]).nullish()
+    type: z.string().nullish(),
+    param: z.any().nullish(),
+    code: z.union([z.string(), z.number()]).nullish()
   })
 });
 var defaultOpenAICompatibleErrorStructure2 = {
   errorSchema: openaiCompatibleErrorDataSchema2,
   errorToMessage: (data) => data.error.message
 };
-var openaiCompatibleTokenUsageSchema2 = z$1.object({
-  prompt_tokens: z$1.number().nullish(),
-  completion_tokens: z$1.number().nullish(),
-  total_tokens: z$1.number().nullish(),
-  prompt_tokens_details: z$1.object({
-    cached_tokens: z$1.number().nullish()
+var openaiCompatibleTokenUsageSchema2 = z.object({
+  prompt_tokens: z.number().nullish(),
+  completion_tokens: z.number().nullish(),
+  total_tokens: z.number().nullish(),
+  prompt_tokens_details: z.object({
+    cached_tokens: z.number().nullish()
   }).nullish(),
-  completion_tokens_details: z$1.object({
-    reasoning_tokens: z$1.number().nullish(),
-    accepted_prediction_tokens: z$1.number().nullish(),
-    rejected_prediction_tokens: z$1.number().nullish()
+  completion_tokens_details: z.object({
+    reasoning_tokens: z.number().nullish(),
+    accepted_prediction_tokens: z.number().nullish(),
+    rejected_prediction_tokens: z.number().nullish()
   }).nullish()
 }).nullish();
-z$1.object({
-  id: z$1.string().nullish(),
-  created: z$1.number().nullish(),
-  model: z$1.string().nullish(),
-  choices: z$1.array(
-    z$1.object({
-      message: z$1.object({
-        role: z$1.literal("assistant").nullish(),
-        content: z$1.string().nullish(),
-        reasoning_content: z$1.string().nullish(),
-        reasoning: z$1.string().nullish(),
-        tool_calls: z$1.array(
-          z$1.object({
-            id: z$1.string().nullish(),
-            function: z$1.object({
-              name: z$1.string(),
-              arguments: z$1.string()
+z.object({
+  id: z.string().nullish(),
+  created: z.number().nullish(),
+  model: z.string().nullish(),
+  choices: z.array(
+    z.object({
+      message: z.object({
+        role: z.literal("assistant").nullish(),
+        content: z.string().nullish(),
+        reasoning_content: z.string().nullish(),
+        reasoning: z.string().nullish(),
+        tool_calls: z.array(
+          z.object({
+            id: z.string().nullish(),
+            function: z.object({
+              name: z.string(),
+              arguments: z.string()
             })
           })
         ).nullish()
       }),
-      finish_reason: z$1.string().nullish()
+      finish_reason: z.string().nullish()
     })
   ),
   usage: openaiCompatibleTokenUsageSchema2
 });
-z$1.object({
+z.object({
   /**
    * Echo back the prompt in addition to the completion.
    */
-  echo: z$1.boolean().optional(),
+  echo: z.boolean().optional(),
   /**
    * Modify the likelihood of specified tokens appearing in the completion.
    *
    * Accepts a JSON object that maps tokens (specified by their token ID in
    * the GPT tokenizer) to an associated bias value from -100 to 100.
    */
-  logitBias: z$1.record(z$1.string(), z$1.number()).optional(),
+  logitBias: z.record(z.string(), z.number()).optional(),
   /**
    * The suffix that comes after a completion of inserted text.
    */
-  suffix: z$1.string().optional(),
+  suffix: z.string().optional(),
   /**
    * A unique identifier representing your end-user, which can help providers to
    * monitor and detect abuse.
    */
-  user: z$1.string().optional()
+  user: z.string().optional()
 });
-var usageSchema4 = z$1.object({
-  prompt_tokens: z$1.number(),
-  completion_tokens: z$1.number(),
-  total_tokens: z$1.number()
+var usageSchema4 = z.object({
+  prompt_tokens: z.number(),
+  completion_tokens: z.number(),
+  total_tokens: z.number()
 });
-z$1.object({
-  id: z$1.string().nullish(),
-  created: z$1.number().nullish(),
-  model: z$1.string().nullish(),
-  choices: z$1.array(
-    z$1.object({
-      text: z$1.string(),
-      finish_reason: z$1.string()
+z.object({
+  id: z.string().nullish(),
+  created: z.number().nullish(),
+  model: z.string().nullish(),
+  choices: z.array(
+    z.object({
+      text: z.string(),
+      finish_reason: z.string()
     })
   ),
   usage: usageSchema4.nullish()
 });
-z$1.object({
+z.object({
   /**
    * The number of dimensions the resulting output embeddings should have.
    * Only supported in text-embedding-3 and later models.
    */
-  dimensions: z$1.number().optional(),
+  dimensions: z.number().optional(),
   /**
    * A unique identifier representing your end-user, which can help providers to
    * monitor and detect abuse.
    */
-  user: z$1.string().optional()
+  user: z.string().optional()
 });
-z$1.object({
-  data: z$1.array(z$1.object({ embedding: z$1.array(z$1.number()) })),
-  usage: z$1.object({ prompt_tokens: z$1.number() }).nullish(),
-  providerMetadata: z$1.record(z$1.string(), z$1.record(z$1.string(), z$1.any())).optional()
+z.object({
+  data: z.array(z.object({ embedding: z.array(z.number()) })),
+  usage: z.object({ prompt_tokens: z.number() }).nullish(),
+  providerMetadata: z.record(z.string(), z.record(z.string(), z.any())).optional()
 });
 var OpenAICompatibleImageModel2 = class {
   constructor(modelId, config) {
@@ -20043,8 +25317,8 @@ var OpenAICompatibleImageModel2 = class {
     };
   }
 };
-var openaiCompatibleImageResponseSchema2 = z$1.object({
-  data: z$1.array(z$1.object({ b64_json: z$1.string() }))
+var openaiCompatibleImageResponseSchema2 = z.object({
+  data: z.array(z.object({ b64_json: z.string() }))
 });
 function convertToXaiChatMessages(prompt) {
   const messages = [];
@@ -20173,79 +25447,79 @@ function mapXaiFinishReason(finishReason) {
       return "unknown";
   }
 }
-var webSourceSchema = z$1.object({
-  type: z$1.literal("web"),
-  country: z$1.string().length(2).optional(),
-  excludedWebsites: z$1.array(z$1.string()).max(5).optional(),
-  allowedWebsites: z$1.array(z$1.string()).max(5).optional(),
-  safeSearch: z$1.boolean().optional()
+var webSourceSchema = z.object({
+  type: z.literal("web"),
+  country: z.string().length(2).optional(),
+  excludedWebsites: z.array(z.string()).max(5).optional(),
+  allowedWebsites: z.array(z.string()).max(5).optional(),
+  safeSearch: z.boolean().optional()
 });
-var xSourceSchema = z$1.object({
-  type: z$1.literal("x"),
-  xHandles: z$1.array(z$1.string()).optional()
+var xSourceSchema = z.object({
+  type: z.literal("x"),
+  xHandles: z.array(z.string()).optional()
 });
-var newsSourceSchema = z$1.object({
-  type: z$1.literal("news"),
-  country: z$1.string().length(2).optional(),
-  excludedWebsites: z$1.array(z$1.string()).max(5).optional(),
-  safeSearch: z$1.boolean().optional()
+var newsSourceSchema = z.object({
+  type: z.literal("news"),
+  country: z.string().length(2).optional(),
+  excludedWebsites: z.array(z.string()).max(5).optional(),
+  safeSearch: z.boolean().optional()
 });
-var rssSourceSchema = z$1.object({
-  type: z$1.literal("rss"),
-  links: z$1.array(z$1.string().url()).max(1)
+var rssSourceSchema = z.object({
+  type: z.literal("rss"),
+  links: z.array(z.string().url()).max(1)
   // currently only supports one RSS link
 });
-var searchSourceSchema = z$1.discriminatedUnion("type", [
+var searchSourceSchema = z.discriminatedUnion("type", [
   webSourceSchema,
   xSourceSchema,
   newsSourceSchema,
   rssSourceSchema
 ]);
-var xaiProviderOptions = z$1.object({
+var xaiProviderOptions = z.object({
   /**
    * reasoning effort for reasoning models
    * only supported by grok-3-mini and grok-3-mini-fast models
    */
-  reasoningEffort: z$1.enum(["low", "high"]).optional(),
-  searchParameters: z$1.object({
+  reasoningEffort: z.enum(["low", "high"]).optional(),
+  searchParameters: z.object({
     /**
      * search mode preference
      * - "off": disables search completely
      * - "auto": model decides whether to search (default)
      * - "on": always enables search
      */
-    mode: z$1.enum(["off", "auto", "on"]),
+    mode: z.enum(["off", "auto", "on"]),
     /**
      * whether to return citations in the response
      * defaults to true
      */
-    returnCitations: z$1.boolean().optional(),
+    returnCitations: z.boolean().optional(),
     /**
      * start date for search data (ISO8601 format: YYYY-MM-DD)
      */
-    fromDate: z$1.string().optional(),
+    fromDate: z.string().optional(),
     /**
      * end date for search data (ISO8601 format: YYYY-MM-DD)
      */
-    toDate: z$1.string().optional(),
+    toDate: z.string().optional(),
     /**
      * maximum number of search results to consider
      * defaults to 20
      */
-    maxSearchResults: z$1.number().min(1).max(50).optional(),
+    maxSearchResults: z.number().min(1).max(50).optional(),
     /**
      * data sources to search from
      * defaults to ["web", "x"] if not specified
      */
-    sources: z$1.array(searchSourceSchema).optional()
+    sources: z.array(searchSourceSchema).optional()
   }).optional()
 });
-var xaiErrorDataSchema = z$1.object({
-  error: z$1.object({
-    message: z$1.string(),
-    type: z$1.string().nullish(),
-    param: z$1.any().nullish(),
-    code: z$1.union([z$1.string(), z$1.number()]).nullish()
+var xaiErrorDataSchema = z.object({
+  error: z.object({
+    message: z.string(),
+    type: z.string().nullish(),
+    param: z.any().nullish(),
+    code: z.union([z.string(), z.number()]).nullish()
   })
 });
 var xaiFailedResponseHandler = createJsonErrorResponseHandler2({
@@ -20668,70 +25942,70 @@ var XaiChatLanguageModel = class {
     };
   }
 };
-var xaiUsageSchema = z$1.object({
-  prompt_tokens: z$1.number(),
-  completion_tokens: z$1.number(),
-  total_tokens: z$1.number(),
-  completion_tokens_details: z$1.object({
-    reasoning_tokens: z$1.number().nullish()
+var xaiUsageSchema = z.object({
+  prompt_tokens: z.number(),
+  completion_tokens: z.number(),
+  total_tokens: z.number(),
+  completion_tokens_details: z.object({
+    reasoning_tokens: z.number().nullish()
   }).nullish()
 });
-var xaiChatResponseSchema = z$1.object({
-  id: z$1.string().nullish(),
-  created: z$1.number().nullish(),
-  model: z$1.string().nullish(),
-  choices: z$1.array(
-    z$1.object({
-      message: z$1.object({
-        role: z$1.literal("assistant"),
-        content: z$1.string().nullish(),
-        reasoning_content: z$1.string().nullish(),
-        tool_calls: z$1.array(
-          z$1.object({
-            id: z$1.string(),
-            type: z$1.literal("function"),
-            function: z$1.object({
-              name: z$1.string(),
-              arguments: z$1.string()
+var xaiChatResponseSchema = z.object({
+  id: z.string().nullish(),
+  created: z.number().nullish(),
+  model: z.string().nullish(),
+  choices: z.array(
+    z.object({
+      message: z.object({
+        role: z.literal("assistant"),
+        content: z.string().nullish(),
+        reasoning_content: z.string().nullish(),
+        tool_calls: z.array(
+          z.object({
+            id: z.string(),
+            type: z.literal("function"),
+            function: z.object({
+              name: z.string(),
+              arguments: z.string()
             })
           })
         ).nullish()
       }),
-      index: z$1.number(),
-      finish_reason: z$1.string().nullish()
+      index: z.number(),
+      finish_reason: z.string().nullish()
     })
   ),
-  object: z$1.literal("chat.completion"),
+  object: z.literal("chat.completion"),
   usage: xaiUsageSchema,
-  citations: z$1.array(z$1.string().url()).nullish()
+  citations: z.array(z.string().url()).nullish()
 });
-var xaiChatChunkSchema = z$1.object({
-  id: z$1.string().nullish(),
-  created: z$1.number().nullish(),
-  model: z$1.string().nullish(),
-  choices: z$1.array(
-    z$1.object({
-      delta: z$1.object({
-        role: z$1.enum(["assistant"]).optional(),
-        content: z$1.string().nullish(),
-        reasoning_content: z$1.string().nullish(),
-        tool_calls: z$1.array(
-          z$1.object({
-            id: z$1.string(),
-            type: z$1.literal("function"),
-            function: z$1.object({
-              name: z$1.string(),
-              arguments: z$1.string()
+var xaiChatChunkSchema = z.object({
+  id: z.string().nullish(),
+  created: z.number().nullish(),
+  model: z.string().nullish(),
+  choices: z.array(
+    z.object({
+      delta: z.object({
+        role: z.enum(["assistant"]).optional(),
+        content: z.string().nullish(),
+        reasoning_content: z.string().nullish(),
+        tool_calls: z.array(
+          z.object({
+            id: z.string(),
+            type: z.literal("function"),
+            function: z.object({
+              name: z.string(),
+              arguments: z.string()
             })
           })
         ).nullish()
       }),
-      finish_reason: z$1.string().nullish(),
-      index: z$1.number()
+      finish_reason: z.string().nullish(),
+      index: z.number()
     })
   ),
   usage: xaiUsageSchema.nullish(),
-  citations: z$1.array(z$1.string().url()).nullish()
+  citations: z.array(z.string().url()).nullish()
 });
 var xaiErrorStructure2 = {
   errorSchema: xaiErrorDataSchema,
@@ -21194,7 +26468,7 @@ var bodyLimit = (options) => {
     const res = new Response(ERROR_MESSAGE, {
       status: 413
     });
-    throw new HTTPException$1(413, { res });
+    throw new HTTPException$2(413, { res });
   });
   const maxSize = options.maxSize;
   return async function bodyLimit2(c, next) {
@@ -25286,9 +30560,9 @@ Evaluation Results:
 ${evalSummary}` : ""}
         `,
       {
-        output: z.object({
-          new_prompt: z.string(),
-          explanation: z.string()
+        output: z$1.object({
+          new_prompt: z$1.string(),
+          explanation: z$1.string()
         })
       }
     );
@@ -26649,9 +31923,9 @@ function determineSpecificType(value) {
     if (value.constructor?.name) {
       return `an instance of ${value.constructor.name}`;
     }
-    return `${util.inspect(value, { depth: -1 })}`;
+    return `${require$$0.inspect(value, { depth: -1 })}`;
   }
-  let inspected = util.inspect(value, { colors: false });
+  let inspected = require$$0.inspect(value, { colors: false });
   if (inspected.length > 28) {
     inspected = `${inspected.slice(0, 25)}...`;
   }
@@ -26674,7 +31948,7 @@ var ERR_HTTP_HEADERS_SENT = class extends Error {
 };
 var ERR_INVALID_ARG_VALUE = class extends TypeError {
   constructor(name, value, reason = "is invalid") {
-    let inspected = util.inspect(value);
+    let inspected = require$$0.inspect(value);
     if (inspected.length > 128) {
       inspected = `${inspected.slice(0, 128)}...`;
     }
@@ -33899,49 +39173,48 @@ async function createNodeServer(mastra, options = { tools: {} }) {
 }
 
 // @ts-ignore
-// @ts-ignore
-// @ts-ignore
-await createNodeServer(mastra, {
-  playground: true,
-  isDev: true,
-  tools: getToolExports(tools),
-});
+    await createNodeServer(mastra, { tools: getToolExports(tools) });
 
-registerHook(AvailableHooks.ON_GENERATION, ({ input, output, metric, runId, agentName, instructions }) => {
-  evaluate({
-    agentName,
-    input,
-    metric,
-    output,
-    runId,
-    globalRunId: runId,
-    instructions,
-  });
-});
-
-registerHook(AvailableHooks.ON_EVALUATION, async traceObject => {
-  const storage = mastra.getStorage();
-  if (storage) {
-    // Check for required fields
-    const logger = mastra?.getLogger();
-    const areFieldsValid = checkEvalStorageFields(traceObject, logger);
-    if (!areFieldsValid) return;
-
-    await storage.insert({
-      tableName: TABLE_EVALS,
-      record: {
-        input: traceObject.input,
-        output: traceObject.output,
-        result: JSON.stringify(traceObject.result || {}),
-        agent_name: traceObject.agentName,
-        metric_name: traceObject.metricName,
-        instructions: traceObject.instructions,
-        test_info: null,
-        global_run_id: traceObject.globalRunId,
-        run_id: traceObject.runId,
-        created_at: new Date().toISOString(),
-      },
+    registerHook(AvailableHooks.ON_GENERATION, ({ input, output, metric, runId, agentName, instructions }) => {
+      evaluate({
+        agentName,
+        input,
+        metric,
+        output,
+        runId,
+        globalRunId: runId,
+        instructions,
+      });
     });
-  }
-});
+
+    if (mastra.getStorage()) {
+      // start storage init in the background
+      mastra.getStorage().init();
+    }
+
+    registerHook(AvailableHooks.ON_EVALUATION, async traceObject => {
+      const storage = mastra.getStorage();
+      if (storage) {
+        // Check for required fields
+        const logger = mastra?.getLogger();
+        const areFieldsValid = checkEvalStorageFields(traceObject, logger);
+        if (!areFieldsValid) return;
+
+        await storage.insert({
+          tableName: TABLE_EVALS,
+          record: {
+            input: traceObject.input,
+            output: traceObject.output,
+            result: JSON.stringify(traceObject.result || {}),
+            agent_name: traceObject.agentName,
+            metric_name: traceObject.metricName,
+            instructions: traceObject.instructions,
+            test_info: null,
+            global_run_id: traceObject.globalRunId,
+            run_id: traceObject.runId,
+            created_at: new Date().toISOString(),
+          },
+        });
+      }
+    });
 //# sourceMappingURL=index.mjs.map
