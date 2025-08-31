@@ -15,6 +15,10 @@ export async function main() {
         throw new Error("TWITTER_API_KEY is not set");
     }
 
+    if (!process.env.DATABASE_URL) {
+        throw new Error("DATABASE_URL is not set");
+    }
+
     console.log("Starting ingestion");
 
     const userName = process.env.TWITTER_USERNAME
@@ -27,11 +31,14 @@ export async function main() {
 
     const mediaItems = await AnalyzerService.getMediaByAuthorUsername(userName);
 
-    for (const media of mediaItems) {
-        const description = await generateVisualDescription(media.type, media.url);
-        media.description = description;
-        await AnalyzerService.updateMediaDescriptions(media);
-    }
+    // Process all media descriptions in parallel
+    await Promise.all(
+        mediaItems.map(async (media) => {
+            const description = await generateVisualDescription(media.type, media.url);
+            media.description = description;
+            await AnalyzerService.updateMediaDescriptions(media);
+        })
+    );
 
     console.log("Media descriptions generated");
 }

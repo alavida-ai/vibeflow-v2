@@ -12,6 +12,6 @@
       { "path": "../../packages/ingestion" },
       { "path": "../../packages/replier" },
       { "path": "../../packages/database" },
-      { "path": "../../packages/agents" }
+      { "path": "../../packages/agent-sdk" }
     ]
   }

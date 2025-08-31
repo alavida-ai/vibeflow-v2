@@ -40,6 +40,10 @@
   "scripts": {
     "build": "turbo build",
     "dev": "turbo dev --filter=brand-listener",
+    "migrate": "turbo migrate",
+    "generate": "turbo generate",
+    "generate:db": "pnpm --filter=@brand-listener/database generate",
+    "migrate:db": "pnpm --filter=@brand-listener/database migrate",
     "lint": "turbo lint",
     "typecheck": "turbo typecheck",
     "clean": "turbo clean",

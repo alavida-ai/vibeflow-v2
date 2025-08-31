@@ -24,6 +24,9 @@ const transformTweetToAnalyzerDbFormat = (tweet: TwitterApiTweet): schema.Insert
   const mediaArr = tweet.extendedEntities?.media || [];
   const media = extractMedia(mediaArr);
   const evs = computeEvs(tweet);
+  
+  // Determine type based on media content
+  const type = media.length > 0 ? media[0].type as "text" | "image" | "video" : "text";
 
   return {
     apiId: tweet.id,
@@ -36,6 +39,7 @@ const transformTweetToAnalyzerDbFormat = (tweet: TwitterApiTweet): schema.Insert
     viewCount: tweet.viewCount,
     bookmarkCount: tweet.bookmarkCount,
     username: tweet.author.userName,
+    type,
     media,
     createdAt: new Date(tweet.createdAt),
     evs,

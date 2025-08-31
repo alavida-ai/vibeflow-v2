@@ -1,7 +1,18 @@
-import { pgTable, text, integer, timestamp, real } from 'drizzle-orm/pg-core';
+import { pgTable, text, integer, timestamp, real, pgEnum } from 'drizzle-orm/pg-core';
 import { relations } from 'drizzle-orm';
 import { createSelectSchema, createInsertSchema } from 'drizzle-zod';
 import { z } from 'zod';
+
+export const tweetMediaTypeEnumSchema = z.enum([
+  "text",         // error processing tweet
+  "photo",
+  "video",
+]);
+
+export const mediaTypeConstants = tweetMediaTypeEnumSchema.enum;
+
+export const tweetMediaTypeEnum = pgEnum("tweet_media_type", tweetMediaTypeEnumSchema.options as [string, ...string[]]);
+
 
 export const tweetsAnalyzer = pgTable('tweets_analyzer', {
   id: integer('id').primaryKey().generatedByDefaultAsIdentity(),
@@ -15,6 +26,7 @@ export const tweetsAnalyzer = pgTable('tweets_analyzer', {
   viewCount: integer('view_count').notNull().default(0),
   bookmarkCount: integer('bookmark_count').notNull().default(0),
   username: text('username').notNull(),
+  type: tweetMediaTypeEnum("type").notNull().default("text")  ,
   createdAt: timestamp('created_at').notNull(),
   evs: real('evs').notNull().default(0),
   scrapedAt: timestamp('scraped_at').notNull().defaultNow(),
@@ -29,7 +41,7 @@ export const tweetMediaAnalyzer = pgTable('tweet_media_analyzer', {
   id: integer('id').primaryKey().generatedByDefaultAsIdentity(),
   tweetId: integer('tweet_id').notNull().references(() => tweetsAnalyzer.id, { onDelete: 'cascade' }),
   url: text('url').notNull(),
-  type: text('type').notNull(),
+  type: tweetMediaTypeEnum("type").notNull().default("text"),
   description: text('description'),
   scrapedAt: timestamp('scraped_at').notNull().defaultNow(),
   updatedAt: timestamp('updated_at').notNull().defaultNow()

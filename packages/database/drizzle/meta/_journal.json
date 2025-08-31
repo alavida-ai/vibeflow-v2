@@ -85,6 +85,20 @@
       "when": 1756470537615,
       "tag": "0011_daffy_serpent_society",
       "breakpoints": true
+    },
+    {
+      "idx": 12,
+      "version": "7",
+      "when": 1756648154566,
+      "tag": "0012_freezing_wolf_cub",
+      "breakpoints": true
+    },
+    {
+      "idx": 13,
+      "version": "7",
+      "when": 1756648442010,
+      "tag": "0013_graceful_doctor_spectrum",
+      "breakpoints": true
     }
   ]
 }
