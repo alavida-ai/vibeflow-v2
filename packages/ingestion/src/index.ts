@@ -3,6 +3,8 @@ import * as TwitterTransformer from "./transformer";
 import { schema } from "@brand-listener/database";
 import * as AnalyticsService from "@brand-listener/core/services/analytics";
 import * as TwitterDatabaseService from "@brand-listener/core/services/database";
+import { generateVisualDescription } from "@brand-listener/visual-description";
+import { AnalyzerService } from "@brand-listener/core/services/database";
 
 /* -------------------------------------------------------------------------- */
 /*                              TYPES                                         */
@@ -30,8 +32,14 @@ export interface BrandListenerConfig {
     error?: string;
   }
 
+  export interface EnrichedIngestionResult extends IngestionResult {
+    totalMediaDescriptions: number;
+  }
+
   export type PaginatedFetchFunction = (cursor?: string) => Promise<TwitterApiResponse>;
   export type ProcessPageFunction = (tweets: schema.InsertTweet[], pageInfo: { pageCount: number; hasNextPage: boolean }) => Promise<number>;
+
+  export type MediaProgressCallback = (media: schema.TweetMediaAnalyzer) => void;
   
   /* -------------------------------------------------------------------------- */
   /*                              FUNCTIONS                                     */
@@ -301,7 +309,7 @@ export async function ingestUserLastTweets(config: UserLastTweetsConfig): Promis
       const transformed = TwitterTransformer.transformTwitterAnalyzerResponse(response);
 
       if (transformed.tweets.length > 0) {
-        const result = await TwitterDatabaseService.AnalyzerService.saveParsedTweets(transformed.tweets);
+        const result = await AnalyzerService.saveParsedTweets(transformed.tweets);
         console.log(`💾 Uploaded ${result.length} tweets`);
         totalTweets += transformed.tweets.length;
       } else {
@@ -336,6 +344,105 @@ export async function ingestUserLastTweets(config: UserLastTweetsConfig): Promis
     return {
       success: false,
       totalTweets: 0,
+      pagesProcessed: 0,
+      hasMorePages: false,
+      error: error instanceof Error ? error.message : 'Unknown error'
+    };
+  }
+}
+
+/**
+ * Enriches media items with visual descriptions, processing them one by one
+ * and providing progress feedback through an optional callback
+ */
+export async function enrichMediaDescriptions(
+  userName: string,
+  onProgress?: MediaProgressCallback
+): Promise<number> {
+  console.log(`🎨 Starting media description enrichment for @${userName}`);
+  
+  try {
+    const mediaItems = await AnalyzerService.getMediaByAuthorUsername(userName);
+    
+    if (mediaItems.length === 0) {
+      console.log("No media items found for description generation");
+      return 0;
+    }
+
+    console.log(`📸 Found ${mediaItems.length} media items to process`);
+
+    let processedCount = 0;
+    for (const media of mediaItems) {
+      try {
+        console.log(`🔄 Processing ${media.type}: ${media.url}`);
+        
+        const description = await generateVisualDescription(media.type, media.url);
+        media.description = description;
+        
+        await AnalyzerService.updateMediaDescriptions(media);
+        
+        console.log(`✅ Generated description for ${media.type}`);
+        processedCount++;
+        
+        // Call progress callback if provided
+        if (onProgress) {
+          onProgress(media);
+        }
+      } catch (error) {
+        console.error(`❌ Failed to generate description for media ${media.id}:`, error);
+        // Continue processing other media items even if one fails
+      }
+    }
+
+    console.log(`🎉 Media description enrichment complete for @${userName} - ${processedCount}/${mediaItems.length} processed`);
+    return processedCount;
+  } catch (error) {
+    console.error(`❌ Media description enrichment failed for @${userName}:`, error);
+    throw error;
+  }
+}
+
+/**
+ * Complete ingestion pipeline: ingests user's latest tweets and enriches media with descriptions
+ * Returns comprehensive results including both tweet and media processing counts
+ */
+export async function ingestUserLastTweetsWithEnrichment(
+  config: UserLastTweetsConfig,
+  onMediaProgress?: MediaProgressCallback
+): Promise<EnrichedIngestionResult> {
+  const { userName } = config;
+  
+  console.log(`🚀 Starting complete ingestion pipeline for @${userName}`);
+  
+  try {
+    // Step 1: Ingest tweets
+    const ingestionResult = await ingestUserLastTweets(config);
+    
+    if (!ingestionResult.success) {
+      return {
+        ...ingestionResult,
+        totalMediaDescriptions: 0
+      };
+    }
+    
+    console.log(`✅ Tweet ingestion complete: ${ingestionResult.totalTweets} tweets`);
+    
+    // Step 2: Enrich media descriptions
+    const totalMediaDescriptions = await enrichMediaDescriptions(userName, onMediaProgress);
+    
+    console.log(`🎉 Complete pipeline finished for @${userName}: ${ingestionResult.totalTweets} tweets, ${totalMediaDescriptions} media descriptions`);
+    
+    return {
+      ...ingestionResult,
+      totalMediaDescriptions
+    };
+    
+  } catch (error) {
+    console.error(`❌ Complete ingestion pipeline failed for @${userName}:`, error);
+    return {
+      success: false,
+      totalTweets: 0,
+      totalMediaDescriptions: 0,
       pagesProcessed: 0,
       hasMorePages: false,
       error: error instanceof Error ? error.message : 'Unknown error'
