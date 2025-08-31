@@ -1,0 +1,1 @@
+ALTER TYPE "public"."tweet_media_type" ADD VALUE 'animated_gif';

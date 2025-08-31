@@ -381,7 +381,6 @@ export async function enrichMediaDescriptions(
         
         await AnalyzerService.updateMediaDescriptions(media);
         
-        console.log(`✅ Generated description for ${media.type}`);
         processedCount++;
         
         // Call progress callback if provided
