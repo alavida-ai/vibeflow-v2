@@ -1,6 +1,7 @@
 import { createTool } from "@mastra/core";
 import { z } from "zod";
 import { startWorkflow, StartWorkflowResult, startWorkflowResultSchema } from "@brand-listener/agent-sdk";
+import { getAppSessionId } from "../../sessionStore";
 
 export const startWorkflowTool = createTool({
   id: "start-workflow",
@@ -9,7 +10,11 @@ export const startWorkflowTool = createTool({
     workflowId: z.string()
   }),
   outputSchema: startWorkflowResultSchema,
-  execute: async ({ context, runtimeContext }) => {
+  execute: async ({ context, runtimeContext }, options) => {
+    // @ts-ignore
+    const mcpSid = options?.extra?.sessionId;       // provided by MCP over Hono SSE
+    const appSid = getAppSessionId(mcpSid);  
+    console.log("appSid", appSid)
     try {
       const { workflowId } = context;
       
