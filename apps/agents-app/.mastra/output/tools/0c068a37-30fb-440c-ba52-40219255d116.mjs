@@ -1,6 +1,6 @@
 import { createTool } from '@mastra/core';
 import { z } from 'zod';
-import { s as startWorkflowResultSchema, a as startWorkflow } from '../@brand-listener-agent-sdk.mjs';
+import { s as startWorkflowResultSchema, a as getAppSessionId, c as startWorkflow } from '../sessionStore.mjs';
 import '@mastra/client-js';
 
 const startWorkflowTool = createTool({
@@ -10,7 +10,10 @@ const startWorkflowTool = createTool({
     workflowId: z.string()
   }),
   outputSchema: startWorkflowResultSchema,
-  execute: async ({ context, runtimeContext }) => {
+  execute: async ({ context, runtimeContext }, options) => {
+    const mcpSid = options?.extra?.sessionId;
+    const appSid = getAppSessionId(mcpSid);
+    console.log("appSid", appSid);
     try {
       const { workflowId } = context;
       const result = await startWorkflow(workflowId);

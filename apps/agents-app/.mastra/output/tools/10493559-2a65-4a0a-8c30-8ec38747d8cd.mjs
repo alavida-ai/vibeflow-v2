@@ -1,21 +1,7 @@
 import { createTool } from '@mastra/core';
 import { z } from 'zod';
-import { g as getNextStepResultSchema, b as getNextStep } from '../@brand-listener-agent-sdk.mjs';
+import { g as getNextStepResultSchema, a as getAppSessionId, b as getNextStep } from '../sessionStore.mjs';
 import '@mastra/client-js';
-
-const map = /* @__PURE__ */ new Map();
-function getAppSessionId(mcpSessionId) {
-  try {
-    if (!mcpSessionId) return crypto.randomUUID();
-    let appSid = map.get(mcpSessionId);
-    if (!appSid) {
-      throw new Error("No app session id found for mcp session id");
-    }
-    return appSid;
-  } catch (error) {
-    throw new Error("No app session id found for mcp session id");
-  }
-}
 
 const getNextStepTool = createTool({
   id: "get-next-step",
