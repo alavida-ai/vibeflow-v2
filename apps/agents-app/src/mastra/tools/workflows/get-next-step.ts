@@ -37,7 +37,7 @@ export const getNextStepTool: Tool = createTool({
       });
 
       if (result.status === "suspended") {
-        return result;
+        return result.suspendPayload.agentResponse;
       } else if (result.status === "success") {
         deleteSession(mcpSid);
         return result;

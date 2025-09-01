@@ -1,121 +1,214 @@
-// import { createWorkflow, createStep } from "@mastra/core/workflows";
-// import { z } from "zod";
-// import { RuntimeContext } from "@mastra/core/runtime-context";
- 
-// type WorkflowContext = {
-//   threadId: string;
-//   resourceId: string;
-// };
- 
-// const initialiseWorkflow = createStep({
-//   id: "initialise-workflow",
-//   inputSchema: z.object({}),
-//   description: "Initialise the workflow",
-//   outputSchema: z.object({}),
-//   execute: async ({ runtimeContext }: { runtimeContext: RuntimeContext<WorkflowContext> }) => {
-//     runtimeContext.set("threadId", "123");
-//     runtimeContext.set("resourceId", "user_123");
-//     console.log(`Thread ID: ${runtimeContext.get("threadId")}`);
-//     return {};
-//   }
-// });
- 
-// const strategyStep = createStep({
-//   id: "strategy-step",
-//   description: "Develop a brand strategy for a given brand",
-//   inputSchema: z.object({
-//     brandName: z.string(),
-//   }),
-//   resumeSchema: z.object({
-//     userMessage: z.string()
-//   }),
-//   suspendSchema: z.object({
-//     suspendResponse: z.string()
-//   }),
-//   outputSchema: z.object({
-//     agentResponse: z.string(),
-//     stepCompleted: z.boolean()
-//   }),
-//   execute: async ({ inputData, mastra, resumeData, suspend, runtimeContext }) => {
-//     let { brandName } = inputData;
-//     const { userMessage } = resumeData ?? {};
-//     let firstMessage = true;
+import { createWorkflow, createStep } from "@mastra/core/workflows";
+import { z } from "zod";
+import { workflowOrchestrationAgent } from "../agents/workflowOrchestationAgent";
 
-//     const threadId = runtimeContext.get("threadId") as string;
-//     const resourceId = runtimeContext.get("resourceId") as string;
+const foundationResearchStep = createStep({
+  id: "foundation-research-step",
+  description: "Foundation research",
+  inputSchema: z.object({}),
+  resumeSchema: z.object({
+    stepCompleted: z.boolean()
+  }),
+  suspendSchema: z.object({
+    agentResponse: z.string(),
+    stepCompleted: z.boolean()
+  }),
+  outputSchema: z.object({
+    stepCompleted: z.boolean()
+  }),
+  execute: async ({ resumeData, suspend }) => {
+    try {
+    const { stepCompleted } = resumeData ?? {};
 
-//     console.log("threadId", threadId);
-//     console.log("resourceId", resourceId);
+    const promptInstructions = `Use the perplexity mcp to research @[your-website-url] I want to understand their services, who they serve, key competitors in their local market as well as other competitors they could be competing against, identify other market leaders in their niche`;
 
-//     const acceptanceCriteria = "We have all the information we need to develop a brand strategy for a given brand, including the brand name, the target ICP, and the users website";
+    const acceptanceCriteria = "Output is consistent with desired target audience. Suggest tweaks or further research if necessary.";
  
-//     if (!userMessage) {
-//         console.log("No user message, suspending");
-//         await suspend({
-//           suspendResponse: "What is the brand name? Do you have a website? Do you have a logo?"
-//         });
-//         return { agentResponse: "", stepCompleted: false };
-//     }
+    if (!stepCompleted) {
+        const prompt = `
+        The prompt is:
+        ${promptInstructions}
+    
+        The acceptance criteria is:
+        ${acceptanceCriteria}
+    `;
+    const result = await workflowOrchestrationAgent.generate(prompt);
+
+      await suspend({
+        agentResponse: result.text,
+        stepCompleted: false,
+      });
+      return { agentResponse: result.text, stepCompleted: false };
+    }
+
+    return { stepCompleted: true };
+  } catch (error) {
+    console.error("Error in understandCompanyStep", error);
+    return { stepCompleted: false };
+  }
+  }
+});
+
+const digitalPresenceAuditStep = createStep({
+    id: "digital-presence-audit-step",
+    description: "Digital presence audit",
+    inputSchema: z.object({}),
+    resumeSchema: z.object({
+      stepCompleted: z.boolean()
+    }),
+    suspendSchema: z.object({
+      agentResponse: z.string(),
+      stepCompleted: z.boolean()
+    }),
+    outputSchema: z.object({
+      stepCompleted: z.boolean()
+    }),
+    execute: async ({ resumeData, suspend }) => {
+      try {
+      const { stepCompleted } = resumeData ?? {};
+  
+     const promptInstructions = `Okay, now analyse [Your Company Name]'s online presence including: 1) website design, UX and content strategy 2) Social media presence on Instagram, Facebook, Linkedin, Youtube, Twitter/X 3) SEO performance and search visibility 4) Content marketing efforts (blog, resources) 5) online reviews and reputation management. Use firecrawl mcp and perplexity mcp to research`;
+  
+      const acceptanceCriteria = "Audit highlights strengths and weaknesses with specific improvement opportunities identified.";
+   
+      if (!stepCompleted) {
+          const prompt = `
+          The prompt is:
+          ${promptInstructions}
+      
+          The acceptance criteria is:
+          ${acceptanceCriteria}
+      `;
+      const result = await workflowOrchestrationAgent.generate(prompt);
+  
+        await suspend({
+          agentResponse: result.text,
+          stepCompleted: false,
+        });
+        return { stepCompleted: false };
+      }
+  
+      return { stepCompleted: true };
+    } catch (error) {
+      console.error("Error in researchStep", error);
+      return { stepCompleted: false };
+    }
+    }
+  });
+  
+  const marketDynamicsAnalysisStep = createStep({
+    id: "market-dynamics-analysis-step",
+    description: "Market dynamics analysis",
+    inputSchema: z.object({}),
+    resumeSchema: z.object({
+      stepCompleted: z.boolean()
+    }),
+    suspendSchema: z.object({
+      agentResponse: z.string(),
+      stepCompleted: z.boolean()
+    }),
+    outputSchema: z.object({
+      stepCompleted: z.boolean()
+    }),
+    execute: async ({ resumeData, suspend }) => {
+      try {
+      const { stepCompleted } = resumeData ?? {};
+  
+     const promptInstructions = `What are the current market trends in [your specific industry]? What opportunities and challenges does [Your Company Name] face in competing with both local competitions and national online platforms?`;
+  
+      const acceptanceCriteria = "Analysis clearly identifies industry trends, growth opportunities, and competitive challenges.";
+   
+      if (!stepCompleted) {
+          const prompt = `
+          The prompt is:
+          ${promptInstructions}
+      
+          The acceptance criteria is:
+          ${acceptanceCriteria}
+      `;
+      const result = await workflowOrchestrationAgent.generate(prompt);
+  
+        await suspend({
+          agentResponse: result.text,
+          stepCompleted: false,
+        });
+        return { stepCompleted: false };
+      }
+  
+      return { stepCompleted: true };
+    } catch (error) {
+      console.error("Error in researchStep", error);
+      return { stepCompleted: false };
+    }
+    }
+  });
  
-//     const agent = mastra.getAgent("strategyAgent");
-//     const response = await agent.generate(
-//       `
-//         The user said: "${userMessage}"
-//         The acceptance criteria of the step is: ${acceptanceCriteria}
-//         Please respond appropriately.
-//       `,
-//       {
-//         memory: {
-//             thread: {
-//                 id: threadId,
-//             },
-//             resource: resourceId
-//         },
-//         output: z.object({
-//           response: z.string(),
-//           stepCompleted: z.boolean()
-//         })
-//       }
-//     );
- 
-//     const { response: agentResponse, stepCompleted } = response.object;
- 
-//     return { agentResponse, stepCompleted };
-//   }
-// });
- 
-// const winStep = createStep({
-//   id: "win-step",
-//   description: "Handle game win logic",
-//   inputSchema: z.object({
-//     agentResponse: z.string(),
-//     stepCompleted: z.boolean()
-//   }),
-//   outputSchema: z.object({
-//     agentResponse: z.string(),
-//     stepCompleted: z.boolean()
-//   }),
-//   execute: async ({ inputData }) => {
-//     const { agentResponse, stepCompleted } = inputData;
- 
-//     return { agentResponse, stepCompleted };
-//   }
-// });
- 
-// export const strategyWorkflow = createWorkflow({
-//   id: "strategy-workflow",
-//   description: "This is a 4-step process to develop a complete business strategy foundation for your brand",
-//   inputSchema: z.object({
-//     brandName: z.string()
-//   }),
-//   outputSchema: z.object({
-//     brandName: z.string(),
-//     workflowStepOutput: z.string(),
-//     stepCompleted: z.boolean()
-//   })  
-// })
-//   .then(initialiseWorkflow)
-//   .then(strategyStep)
-//   .then(winStep)
-//   .commit();
+
+  const strategyDocumentCreationStep = createStep({
+    id: "digital-presence-audit-step",
+    description: "Strategy document creation",
+    inputSchema: z.object({}),
+    resumeSchema: z.object({
+      stepCompleted: z.boolean()
+    }),
+    suspendSchema: z.object({
+      agentResponse: z.string(),
+      stepCompleted: z.boolean()
+    }),
+    outputSchema: z.object({
+      stepCompleted: z.boolean()
+    }),
+    execute: async ({ resumeData, suspend }) => {
+      try {
+      const { stepCompleted } = resumeData ?? {};
+  
+     const promptInstructions = `Condense all the information that you have on [Your Company Name] and its competitors into three separate reports: A target audience report, Tone of Voice, and Brand Analysis.`;
+  
+      const acceptanceCriteria = "Documents are comprehensive and serve as a foundation for future communications and content creation.";
+   
+      if (!stepCompleted) {
+          const prompt = `
+          The prompt is:
+          ${promptInstructions}
+      
+          The acceptance criteria is:
+          ${acceptanceCriteria}
+      `;
+      const result = await workflowOrchestrationAgent.generate(prompt);
+  
+        await suspend({
+          agentResponse: result.text,
+          stepCompleted: false,
+        });
+        return { stepCompleted: false };
+      }
+  
+      return { stepCompleted: true };
+    } catch (error) {
+      console.error("Error in researchStep", error);
+      return { stepCompleted: false };
+    }
+    }
+  });
+
+  
+export const businessStrategyWorkflow = createWorkflow({
+  id: "business-strategy-workflow",
+  description: "This is a business strategy workflow",
+  inputSchema: z.object({}),
+  outputSchema: z.object({
+    brandName: z.string(),
+    workflowStepOutput: z.string(),
+    stepCompleted: z.boolean()
+  })
+})
+  .dountil(foundationResearchStep, async ({ inputData: { stepCompleted } }) => stepCompleted)
+  .map(async () => ({})) // Clear output from initialiseWorkflow
+  .dountil(digitalPresenceAuditStep, async ({ inputData: { stepCompleted } }) => stepCompleted)
+  .map(async () => ({})) // Clear output from digitalPresenceAuditStep  
+  .dountil(marketDynamicsAnalysisStep, async ({ inputData: { stepCompleted } }) => stepCompleted)
+  .map(async () => ({})) // Clear output from marketDynamicsAnalysisStep  
+  .dountil(strategyDocumentCreationStep, async ({ inputData: { stepCompleted } }) => stepCompleted)
+  .map(async () => ({})) // Clear output from strategyDocumentCreationStep  
+  .commit();
  

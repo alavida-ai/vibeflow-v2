@@ -4,6 +4,7 @@ dotenv.config({path: "/Users/alexandergirardet/Code/vibeflow/vibeflow-projects/v
 import { Mastra } from "@mastra/core/mastra";
 import { server } from "./server";
 import { testWorkflow } from "./workflows/test-workflow";
+import { businessStrategyWorkflow } from "./workflows/business-strategy";
 import { createStorage } from "./storage";
 
 export const mastra = new Mastra({
@@ -12,6 +13,7 @@ export const mastra = new Mastra({
   },
   workflows: {
     testWorkflow,
+    businessStrategyWorkflow,
   },
   bundler: {
     transpilePackages: [

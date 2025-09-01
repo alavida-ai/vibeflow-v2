@@ -1,6 +1,7 @@
 import { createTool } from '@mastra/core';
 import { z } from 'zod';
-import { g as getNextStepResultSchema, a as getSession, b as getNextStep, d as deleteSession } from '../sessions.mjs';
+import { g as getNextStepResultSchema, a as getNextStep } from '../@brand-listener-agent-sdk.mjs';
+import { g as getSession, d as deleteSession } from '../sessions.mjs';
 import '@mastra/client-js';
 
 const getNextStepTool = createTool({
@@ -30,7 +31,7 @@ const getNextStepTool = createTool({
         workflowId
       });
       if (result.status === "suspended") {
-        return result;
+        return result.suspendPayload.agentResponse;
       } else if (result.status === "success") {
         deleteSession(mcpSid);
         return result;
@@ -46,4 +47,4 @@ const getNextStepTool = createTool({
 });
 
 export { getNextStepTool };
-//# sourceMappingURL=504824a5-84a6-46c9-aa37-66577deea609.mjs.map
+//# sourceMappingURL=b5c0852f-03f4-424c-a8d5-57619b93283d.mjs.map
