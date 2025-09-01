@@ -7,6 +7,7 @@ export const tweetMediaTypeEnumSchema = z.enum([
   "text",         // error processing tweet
   "photo",
   "video",
+  "animated_gif"
 ]);
 
 export const mediaTypeConstants = tweetMediaTypeEnumSchema.enum;

@@ -99,6 +99,13 @@
       "when": 1756648442010,
       "tag": "0013_graceful_doctor_spectrum",
       "breakpoints": true
+    },
+    {
+      "idx": 14,
+      "version": "7",
+      "when": 1756666572335,
+      "tag": "0014_heavy_spiral",
+      "breakpoints": true
     }
   ]
 }

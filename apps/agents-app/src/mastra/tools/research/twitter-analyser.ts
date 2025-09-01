@@ -16,21 +16,21 @@ export const twitterSearcherTool = createTool({
     })
   }),
   execute: async ({ context }) => {
-    try { 
-    const twitterAnalyser = new TwitterAnalyser({
-      userName: context.userName,
-      maxPages: context.numTweets / 20
-    });
-    const tweetsForOutput = await twitterAnalyser.run();
-    
-    return {
-      summary: {
-        totalTweets: tweetsForOutput.ingestionResult.totalTweets,
-        username: context.userName
-      }
-    };
-  } catch (error) {
-    throw new Error(`Failed to scrape tweets: ${error instanceof Error ? error.message : String(error)}`);
-  }
+    try {
+      const twitterAnalyser = new TwitterAnalyser({
+        userName: context.userName,
+        maxPages: context.numTweets / 20
+      });
+      const tweetsForOutput = await twitterAnalyser.run();
+
+      return {
+        summary: {
+          totalTweets: tweetsForOutput.ingestionResult.totalTweets,
+          username: context.userName
+        }
+      };
+    } catch (error) {
+      throw new Error(`Failed to scrape tweets: ${error instanceof Error ? error.message : String(error)}`);
+    }
   },
 });

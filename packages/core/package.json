@@ -4,10 +4,7 @@
   "type": "module",
   "dependencies": {
     "@brand-listener/database": "workspace:*",
-    "@google/genai": "^1.15.0",
     "drizzle-orm": "^0.44.5",
-    "googleapis": "^126.0.1",
-    "uuid": "^10.0.0",
     "yaml": "^2.3.2"
   },
   "scripts": {
