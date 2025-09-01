@@ -2,10 +2,11 @@ import { evaluate } from '@mastra/core/eval';
 import { registerHook, AvailableHooks } from '@mastra/core/hooks';
 import { TABLE_EVALS } from '@mastra/core/storage';
 import { generateEmptyFromSchema, checkEvalStorageFields } from '@mastra/core/utils';
+import dotenv from 'dotenv';
 import { Mastra } from '@mastra/core/mastra';
 import { MCPServer } from '@mastra/mcp';
-import { startWorkflowTool } from './tools/3055e1f4-d744-421f-9e5c-cf8b316919db.mjs';
-import { getNextStepTool } from './tools/a0a52b51-8957-4834-8653-96cfd114da9c.mjs';
+import { startWorkflowTool } from './tools/cb466e1b-1d88-4ab8-a307-dd8b3df7039c.mjs';
+import { getNextStepTool } from './tools/504824a5-84a6-46c9-aa37-66577deea609.mjs';
 import { createWorkflow, createStep } from '@mastra/core/workflows';
 import { z } from 'zod';
 import { Agent } from '@mastra/core/agent';
@@ -14,7 +15,6 @@ import { T as TEXT_EMBEDDING_3_SMALL, G as GPT_4O } from './constants.mjs';
 import { createOpenAI as createOpenAI$1 } from '@ai-sdk/openai';
 import { Memory } from '@mastra/memory';
 import { PgVector, PostgresStore } from '@mastra/pg';
-import dotenv from 'dotenv';
 import crypto$1, { randomUUID } from 'crypto';
 import { readFile } from 'fs/promises';
 import { join } from 'path/posix';
@@ -35,7 +35,7 @@ import z62, { z as z$1 } from 'zod/v4';
 import { ReadableStream as ReadableStream$1 } from 'stream/web';
 import { tools } from './tools.mjs';
 import '@mastra/core';
-import './@brand-listener-agent-sdk.mjs';
+import './sessions.mjs';
 import '@mastra/client-js';
 
 
@@ -267,6 +267,15 @@ const testWorkflow = createWorkflow({
   })
 }).then(initialiseWorkflow).map(async () => ({})).dountil(understandCompanyStep, async ({ inputData: { stepCompleted } }) => stepCompleted).map(async () => ({})).dountil(researchStep, async ({ inputData: { stepCompleted } }) => stepCompleted).commit();
 
+const createStorage = () => {
+  if (!process.env.DATABASE_URL) {
+    throw new Error("DATABASE_URL is not set");
+  }
+  return new PostgresStore({
+    connectionString: process.env.DATABASE_URL
+  });
+};
+
 dotenv.config({
   path: "/Users/alexandergirardet/Code/vibeflow/vibeflow-projects/vibeflow-v2/.env"
 });
@@ -284,7 +293,8 @@ const mastra = new Mastra({
   server: {
     port: 4111,
     host: "localhost"
-  }
+  },
+  storage: createStorage()
 });
 
 // src/utils/mime.ts

@@ -1,7 +1,192 @@
 import { createTool } from '@mastra/core/tools';
-import * as TwitterDatabaseService from '@brand-listener/core';
-import { AnalyzerService, generateVisualDescription } from '@brand-listener/core';
+import { getDb, schema } from '@brand-listener/database';
+import { eq, and, isNull } from 'drizzle-orm';
+import path from 'path';
+import fs from 'fs/promises';
+import os from 'os';
+import { v4 } from 'uuid';
+import { GoogleGenAI, createUserContent, createPartFromUri } from '@google/genai';
 import { z } from 'zod';
+
+var AnalyzerService = class {
+  /**
+   * Save parsed tweets with their media to the database
+   * Handles duplicates by updating existing records
+   * Returns the tweets enriched with their database IDs
+   */
+  static async saveParsedTweets(parsedTweets) {
+    if (parsedTweets.length === 0) return [];
+    const savedTweets = [];
+    try {
+      for (const parsedTweet of parsedTweets) {
+        const { media, ...tweetData } = parsedTweet;
+        const [tweet] = await getDb().insert(schema.tweetsAnalyzer).values(tweetData).onConflictDoUpdate({
+          target: schema.tweetsAnalyzer.apiId,
+          set: {
+            retweetCount: parsedTweet.retweetCount,
+            replyCount: parsedTweet.replyCount,
+            likeCount: parsedTweet.likeCount,
+            quoteCount: parsedTweet.quoteCount,
+            viewCount: parsedTweet.viewCount,
+            bookmarkCount: parsedTweet.bookmarkCount,
+            evs: parsedTweet.evs,
+            status: "scraped",
+            updatedAt: /* @__PURE__ */ new Date()
+          }
+        }).returning();
+        let savedMedia = [];
+        if (media && media.length > 0) {
+          savedMedia = await this.saveMediaForTweet(tweet.id, media);
+        }
+        const savedTweet = {
+          ...tweet,
+          media: savedMedia
+        };
+        savedTweets.push(savedTweet);
+      }
+      return savedTweets;
+    } catch (error) {
+      console.error("Error saving tweets to database:", error);
+      throw error;
+    }
+  }
+  /**
+   * Save media for a specific tweet
+   */
+  static async saveMediaForTweet(tweetId, mediaItems) {
+    await getDb().delete(schema.tweetMediaAnalyzer).where(eq(schema.tweetMediaAnalyzer.tweetId, tweetId));
+    const mediaToInsert = mediaItems.map((media) => ({
+      ...media,
+      tweetId
+    }));
+    if (mediaToInsert.length > 0) {
+      const result = await getDb().insert(schema.tweetMediaAnalyzer).values(mediaToInsert).returning();
+      return result;
+    }
+    return [];
+  }
+  /*
+   * Update media descriptions for a tweet after AI processing
+   */
+  static async updateMediaDescriptions(media) {
+    await getDb().update(schema.tweetMediaAnalyzer).set({
+      description: media.description,
+      updatedAt: media.updatedAt
+    }).where(eq(schema.tweetMediaAnalyzer.id, media.id));
+    const tweetId = media.tweetId;
+    await getDb().update(schema.tweetsAnalyzer).set({
+      status: "visual_processed",
+      updatedAt: /* @__PURE__ */ new Date()
+    }).where(eq(schema.tweetsAnalyzer.id, tweetId));
+  }
+  static async getMediaByAuthorUsername(username) {
+    return await getDb().select({
+      id: schema.tweetMediaAnalyzer.id,
+      tweetId: schema.tweetMediaAnalyzer.tweetId,
+      url: schema.tweetMediaAnalyzer.url,
+      type: schema.tweetMediaAnalyzer.type,
+      description: schema.tweetMediaAnalyzer.description,
+      scrapedAt: schema.tweetMediaAnalyzer.scrapedAt,
+      updatedAt: schema.tweetMediaAnalyzer.updatedAt
+    }).from(schema.tweetMediaAnalyzer).innerJoin(schema.tweetsAnalyzer, eq(schema.tweetMediaAnalyzer.tweetId, schema.tweetsAnalyzer.id)).where(and(eq(schema.tweetsAnalyzer.username, username), isNull(schema.tweetMediaAnalyzer.description))).orderBy(schema.tweetsAnalyzer.createdAt);
+  }
+  /**
+   * Get all tweets
+   */
+  static async getAllTweets() {
+    return await getDb().select().from(schema.tweetsAnalyzer).orderBy(schema.tweetsAnalyzer.createdAt);
+  }
+  /**
+   * Get tweet by database ID
+   */
+  static async getTweetById(id) {
+    const result = await getDb().select().from(schema.tweetsAnalyzer).where(eq(schema.tweetsAnalyzer.id, id)).limit(1);
+    return result[0] || null;
+  }
+  /**
+   * Get tweet by API ID (external tweet ID)
+   */
+  static async getTweetByApiId(apiId) {
+    const result = await getDb().select().from(schema.tweetsAnalyzer).where(eq(schema.tweetsAnalyzer.apiId, apiId)).limit(1);
+    return result[0] || null;
+  }
+};
+var generateVisualDescription = async (type, url) => {
+  if (!process.env.GOOGLE_API_KEY) {
+    throw new Error("Google API key is not set");
+  }
+  const ai = new GoogleGenAI({ apiKey: process.env.GOOGLE_API_KEY });
+  let prompt = "";
+  let mimeType = "";
+  if (type === "video") {
+    prompt = "Transcribe the audio from this video, giving timestamps for salient events in the video. Also provide visual descriptions.";
+    mimeType = "video/mp4";
+  } else if (type === "photo" || type === "image") {
+    prompt = "Detail this image in full";
+    mimeType = "image/jpeg";
+  } else {
+    prompt = "Describe this media in detail.";
+    mimeType = "";
+  }
+  const tempFile = await downloadToTemp(url);
+  try {
+    const file = await ai.files.upload({
+      file: tempFile,
+      config: { mimeType }
+    });
+    console.log("Uploaded file:", file);
+    if (!file.name) {
+      throw new Error("File name is required");
+    }
+    const activeFile = await waitForFileActive(ai, file.name);
+    const content = await ai.models.generateContent({
+      model: "gemini-2.0-flash",
+      contents: createUserContent([
+        createPartFromUri(
+          activeFile.uri,
+          activeFile.mimeType
+        ),
+        prompt
+      ])
+    });
+    console.log("result.text=", content.text);
+    if (!content.text) {
+      throw new Error("No text returned from Gemini");
+    }
+    return content.text;
+  } finally {
+    await fs.unlink(tempFile).catch(() => {
+    });
+  }
+};
+async function downloadToTemp(url) {
+  const ext = path.extname(url).split("?")[0] || "";
+  const tempFile = path.join(os.tmpdir(), `media-${v4()}${ext}`);
+  const res = await fetch(url);
+  if (!res.ok) throw new Error(`Failed to download file: ${url}`);
+  const buffer = await res.arrayBuffer();
+  await fs.writeFile(tempFile, Buffer.from(buffer));
+  return tempFile;
+}
+async function waitForFileActive(ai, fileName, maxWaitMs = 6e4) {
+  const startTime = Date.now();
+  let delay = 1e3;
+  const maxDelay = 1e4;
+  while (Date.now() - startTime < maxWaitMs) {
+    const file = await ai.files.get({ name: fileName });
+    console.log(`File state: ${file.state}`);
+    if (file.state === "ACTIVE") {
+      return file;
+    }
+    if (file.state === "FAILED") {
+      throw new Error(`File processing failed: ${fileName}`);
+    }
+    console.log(`Waiting ${delay}ms before next check...`);
+    await new Promise((resolve) => setTimeout(resolve, delay));
+    delay = Math.min(delay * 1.5, maxDelay);
+  }
+  throw new Error(`File processing timeout: ${fileName}`);
+}
 
 function transformTwitterAnalyzerResponse(apiResponse) {
   const transformedTweets = apiResponse.data.tweets.map(
@@ -244,7 +429,7 @@ async function ingestUserLastTweets(config) {
       const response = await client.getLastTweets(userName, cursor);
       const transformed = transformTwitterAnalyzerResponse(response);
       if (transformed.tweets.length > 0) {
-        const result = await TwitterDatabaseService.AnalyzerService.saveParsedTweets(transformed.tweets);
+        const result = await AnalyzerService.saveParsedTweets(transformed.tweets);
         console.log(`\u{1F4BE} Uploaded ${result.length} tweets`);
         totalTweets += transformed.tweets.length;
       } else {
@@ -466,4 +651,4 @@ const twitterSearcherTool = createTool({
 });
 
 export { twitterSearcherTool };
-//# sourceMappingURL=06a7f1f4-7169-43b3-b27c-5991f2eb6107.mjs.map
+//# sourceMappingURL=33dcecda-4cee-4c05-b7e9-d37383326edf.mjs.map

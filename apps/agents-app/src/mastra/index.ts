@@ -1,9 +1,10 @@
+import dotenv from "dotenv";
+dotenv.config({path: "/Users/alexandergirardet/Code/vibeflow/vibeflow-projects/vibeflow-v2/.env"});
+
 import { Mastra } from "@mastra/core/mastra";
 import { server } from "./server";
 import { testWorkflow } from "./workflows/test-workflow";
-import dotenv from "dotenv";
-
-dotenv.config({path: "/Users/alexandergirardet/Code/vibeflow/vibeflow-projects/vibeflow-v2/.env"});
+import { createStorage } from "./storage";
 
 export const mastra = new Mastra({
   mcpServers: {
@@ -24,5 +25,6 @@ export const mastra = new Mastra({
     port: 4111,
     host: "localhost",
   },
+  storage: createStorage()
 });
 

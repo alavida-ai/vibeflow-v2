@@ -2,9 +2,7 @@
 import { z } from 'zod';
 import { createTool } from '@mastra/core';
 import { P as PERPLEXITY_SONAR } from '../constants.mjs';
-import dotenv from 'dotenv';
 
-dotenv.config({ path: "/Users/alexandergirardet/Code/vibeflow-projects/brand-listener/packages/agents/.env" });
 const perplexityAskSchema = z.object({
   messages: z.array(z.object({
     role: z.string().describe("Role of the message (e.g., system, user, assistant)"),
@@ -80,4 +78,4 @@ ${errorText}`
 }
 
 export { perplexityAskTool };
-//# sourceMappingURL=50550c3c-dd26-4227-b24e-5ab86082c15a.mjs.map
+//# sourceMappingURL=674e0b6e-5c4e-445e-9114-3ab1b9d0e6be.mjs.map

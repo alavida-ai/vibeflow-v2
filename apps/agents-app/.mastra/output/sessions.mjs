@@ -4148,5 +4148,17 @@ async function getNextStep({
   }
 }
 
-export { getNextStep as a, startWorkflow as b, getNextStepResultSchema as g, startWorkflowResultSchema as s };
-//# sourceMappingURL=@brand-listener-agent-sdk.mjs.map
+const sessions = /* @__PURE__ */ new Map();
+const getSession = (sessionId) => {
+  return sessions.get(sessionId);
+};
+const setSession = (sessionId, sessionData) => {
+  sessions.set(sessionId, sessionData);
+  return sessionData;
+};
+const deleteSession = (sessionId) => {
+  sessions.delete(sessionId);
+};
+
+export { getSession as a, getNextStep as b, startWorkflow as c, deleteSession as d, setSession as e, getNextStepResultSchema as g, startWorkflowResultSchema as s };
+//# sourceMappingURL=sessions.mjs.map

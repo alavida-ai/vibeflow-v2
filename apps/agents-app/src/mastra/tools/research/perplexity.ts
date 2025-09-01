@@ -2,8 +2,6 @@
 import { z } from "zod";
 import { createTool } from "@mastra/core";
 import { PERPLEXITY_SONAR } from "../../constants";
-import dotenv from "dotenv";
-dotenv.config({path: "/Users/alexandergirardet/Code/vibeflow-projects/brand-listener/packages/agents/.env"});
 
 const perplexityAskSchema = z.object({
   messages: z.array(z.object({

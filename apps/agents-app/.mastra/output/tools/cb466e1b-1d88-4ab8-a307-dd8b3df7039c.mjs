@@ -1,6 +1,6 @@
 import { createTool } from '@mastra/core';
 import { z } from 'zod';
-import { s as startWorkflowResultSchema, b as startWorkflow } from '../@brand-listener-agent-sdk.mjs';
+import { s as startWorkflowResultSchema, c as startWorkflow, e as setSession } from '../sessions.mjs';
 import '@mastra/client-js';
 
 const startWorkflowTool = createTool({
@@ -13,12 +13,25 @@ const startWorkflowTool = createTool({
   execute: async ({ context, runtimeContext }, options) => {
     const mcpSid = options?.extra?.sessionId;
     console.log("appSid", mcpSid);
+    if (!mcpSid) {
+      throw new Error("Session ID is required but not provided. Make sure the MCP client is properly configured.");
+    }
     try {
       const { workflowId } = context;
       const result = await startWorkflow(workflowId);
       runtimeContext.set("current-run-id", result.runId);
       runtimeContext.set("workflowId", workflowId);
       console.log("result and set runId and workflowId", result);
+      if (!result.runId) {
+        throw new Error("No runId found from startWorkflow");
+      }
+      const session = setSession(mcpSid, {
+        workflow: {
+          runId: result.runId,
+          workflowId: context.workflowId
+        }
+      });
+      console.log("set session", session);
       return result;
     } catch (error) {
       throw new Error(`Failed to start workflow: ${error instanceof Error ? error.message : String(error)}`);
@@ -27,4 +40,4 @@ const startWorkflowTool = createTool({
 });
 
 export { startWorkflowTool };
-//# sourceMappingURL=3055e1f4-d744-421f-9e5c-cf8b316919db.mjs.map
+//# sourceMappingURL=cb466e1b-1d88-4ab8-a307-dd8b3df7039c.mjs.map

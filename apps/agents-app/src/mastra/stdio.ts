@@ -1,8 +1,6 @@
-import { createHonoServer } from "@mastra/deployer/server";
+
 import { server } from "./server";
-import { serve } from "bun";
-import { mastra } from "./index";
-import { streamSSE } from "hono/streaming";
+import { serve } from "bun"; // requires bun runtime
 
 import { Hono } from "hono";
 const app = new Hono();

@@ -12,7 +12,6 @@
       "@brand-listener/replier": "workspace:*",
       "@brand-listener/agent-sdk": "workspace:*",
       "@brand-listener/reporting": "workspace:*",
-      "@brand-listener/visual-description": "workspace:*",
       "dotenv": "^17.2.1"
     },
     "devDependencies": {

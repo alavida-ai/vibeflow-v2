@@ -1,6 +1,6 @@
 import { createTool } from '@mastra/core';
 import { z } from 'zod';
-import { g as getNextStepResultSchema, a as getNextStep } from '../@brand-listener-agent-sdk.mjs';
+import { g as getNextStepResultSchema, a as getSession, b as getNextStep, d as deleteSession } from '../sessions.mjs';
 import '@mastra/client-js';
 
 const getNextStepTool = createTool({
@@ -11,11 +11,17 @@ const getNextStepTool = createTool({
   outputSchema: getNextStepResultSchema,
   execute: async ({ runtimeContext }, options) => {
     console.log("options", options);
+    const mcpSid = options?.extra?.sessionId;
+    console.log("appSid", mcpSid);
+    if (!mcpSid) {
+      throw new Error("Session ID is required but not provided. Make sure the MCP client is properly configured.");
+    }
+    const session = getSession(mcpSid);
     try {
-      const runId = runtimeContext.get("current-run-id");
-      const workflowId = runtimeContext.get("workflowId");
+      const runId = session?.workflow?.runId;
+      const workflowId = session?.workflow?.workflowId;
       if (!runId || !workflowId) {
-        throw new Error("No runId or workflowId found");
+        throw new Error("No runId or workflowId found from session");
       }
       console.log("runId", runId);
       console.log("workflowId", workflowId);
@@ -26,12 +32,10 @@ const getNextStepTool = createTool({
       if (result.status === "suspended") {
         return result;
       } else if (result.status === "success") {
-        runtimeContext.delete("current-run-id");
-        runtimeContext.delete("workflowId");
+        deleteSession(mcpSid);
         return result;
       } else {
-        runtimeContext.delete("current-run-id");
-        runtimeContext.delete("workflowId");
+        deleteSession(mcpSid);
         return result;
       }
     } catch (error) {
@@ -42,4 +46,4 @@ const getNextStepTool = createTool({
 });
 
 export { getNextStepTool };
-//# sourceMappingURL=a0a52b51-8957-4834-8653-96cfd114da9c.mjs.map
+//# sourceMappingURL=504824a5-84a6-46c9-aa37-66577deea609.mjs.map

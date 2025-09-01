@@ -612,10 +612,7 @@ var TwitterAnalyser = class {
   }
 };
 async function createAndRunTwitterAnalyser(userName, maxPages) {
-  const targetUserName = userName || process.env.TWITTER_USERNAME;
-  if (!targetUserName) {
-    throw new Error("userName must be provided or TWITTER_USERNAME environment variable must be set");
-  }
+  const targetUserName = userName;
   const analyser = new TwitterAnalyser({
     userName: targetUserName,
     maxPages
@@ -646,4 +643,4 @@ if (import.meta.url === `file://${process.argv[1]}`) {
   });
 }
 
-export { LAST_TWEETS_ENDPOINT, REPLIES_ENDPOINT, TWITTER_API_BASE_URL, TwitterAnalyser, TwitterClient, USER_MENTIONS_ENDPOINT, batchCheckIfUserRepliedToTweet, batchCheckResponseStatus, batchFilterNonRespondedTweets, checkIfUserRepliedToTweet2 as checkIfUserRepliedToTweet, computeEvs, createAndRunTwitterAnalyser, hasUserRepliedToTweet, ingestMentions, ingestUserLastTweets, lastTweetsApiResponseSchema, main, transformTweetToDbFormat, transformTwitterAnalyzerResponse, transformTwitterResponse, twitterApiResponseSchema, twitterAuthorSchema, twitterTweetSchema };
+export { LAST_TWEETS_ENDPOINT, REPLIES_ENDPOINT, TWITTER_API_BASE_URL, TwitterAnalyser, TwitterClient, USER_MENTIONS_ENDPOINT, batchCheckIfUserRepliedToTweet, batchCheckResponseStatus, batchFilterNonRespondedTweets, checkIfUserRepliedToTweet2 as checkIfUserRepliedToTweet, computeEvs, hasUserRepliedToTweet, ingestMentions, ingestUserLastTweets, lastTweetsApiResponseSchema, transformTweetToDbFormat, transformTwitterAnalyzerResponse, transformTwitterResponse, twitterApiResponseSchema, twitterAuthorSchema, twitterTweetSchema };

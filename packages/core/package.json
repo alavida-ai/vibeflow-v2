@@ -4,7 +4,9 @@
   "type": "module",
   "dependencies": {
     "@brand-listener/database": "workspace:*",
+    "@google/genai": "^1.16.0",
     "drizzle-orm": "^0.44.5",
+    "uuid": "^11.1.0",
     "yaml": "^2.3.2"
   },
   "scripts": {
@@ -19,11 +21,13 @@
     "./package.json": "./package.json"
   },
   "main": "./dist/index.js",
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "devDependencies": {
     "@types/node": "^20.5.0",
     "@types/uuid": "^10.0.0",
-    "typescript": "^5.1.6",
-    "tsup": "^8.5.0"
+    "tsup": "^8.5.0",
+    "typescript": "^5.1.6"
   }
 }
