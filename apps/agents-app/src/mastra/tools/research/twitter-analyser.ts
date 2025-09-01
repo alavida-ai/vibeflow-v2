@@ -1,5 +1,5 @@
 import { createTool } from '@mastra/core/tools';
-import { TwitterAnalyser } from '@brand-listener/ingestion/tools';
+import { TwitterAnalyser } from '@brand-listener/ingestion';
 import { z } from 'zod';
 
 

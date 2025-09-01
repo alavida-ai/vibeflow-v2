@@ -7,7 +7,7 @@
     "tsBuildInfoFile": "./dist/ingestion.tsbuildinfo",
     "baseUrl": "../../",
     "paths": {
-      "@brand-listener/ingestion": ["src"]
+      "@brand-listener/ingestion": ["packages/ingestion/src"]
     }
   },
   "include": ["src/**/*"],

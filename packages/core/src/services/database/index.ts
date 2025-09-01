@@ -1,2 +1,2 @@
-export { AnalyzerService } from "./analyzerService";
+export * from "./analyzerService";
 export * from "./listenerService";

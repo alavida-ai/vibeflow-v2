@@ -1,5 +1,35 @@
 
-import { type SlackMessagePayload } from "../../types/sinks";
+/* -------------------------------------------------------------------------- */
+/*                              TYPES                                         */
+/* -------------------------------------------------------------------------- */
+
+export interface SlackMessagePayload {
+  text?: string;
+  blocks?: SlackBlock[];
+  channel?: string;
+  username?: string;
+  icon_emoji?: string;
+  icon_url?: string;
+}
+
+export interface SlackBlock {
+  type: 'section' | 'divider' | 'header' | 'actions' | 'context' | 'image';
+  text?: {
+    type: 'mrkdwn' | 'plain_text';
+    text: string;
+  };
+  fields?: Array<{
+    type: 'mrkdwn' | 'plain_text';
+    text: string;
+  }>;
+  accessory?: {
+    type: string;
+    [key: string]: any;
+  };
+  elements?: any[];
+  image_url?: string;
+  alt_text?: string;
+}
 
 /* -------------------------------------------------------------------------- */
 /*                              CLIENT                                         */

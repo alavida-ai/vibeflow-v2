@@ -2,10 +2,6 @@
   "name": "@brand-listener/core",
   "version": "0.0.0",
   "type": "module",
-  "scripts": {
-    "build": "tsc -p .",
-    "dev": "tsx src/index.ts --watch"
-  },
   "dependencies": {
     "@brand-listener/database": "workspace:*",
     "@google/genai": "^1.15.0",
@@ -14,16 +10,23 @@
     "uuid": "^10.0.0",
     "yaml": "^2.3.2"
   },
-  "exports": {
-    ".": "./src/index.ts",
-    "./services/analytics": "./src/services/analytics/index.ts",
-    "./services/database": "./src/services/database/index.ts",
-    "./services/slack": "./src/services/slack/index.ts",
-    "./services/media-files": "./src/services/media-files/index.ts"
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsup src/index.ts --format esm --sourcemap --out-dir dist"
   },
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "main": "./dist/index.js",
+  "files": ["dist"],
   "devDependencies": {
     "@types/node": "^20.5.0",
     "@types/uuid": "^10.0.0",
-    "typescript": "^5.1.6"
+    "typescript": "^5.1.6",
+    "tsup": "^8.5.0"
   }
 }

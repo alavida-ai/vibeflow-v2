@@ -1,5 +1,5 @@
-import { getMostRelevantTweetsToReplyTo } from "@brand-listener/core/services/database";
-import { SlackClient } from "@brand-listener/core/services/slack";
+import { getMostRelevantTweetsToReplyTo } from "@brand-listener/core";
+import { SlackClient } from "@brand-listener/core";
 import { buildMostRelevantTweetsReport } from "@brand-listener/reporting";
 import { type SlackMessagePayload } from "@brand-listener/core";
 

@@ -2,7 +2,7 @@
 
 import { schema } from '@brand-listener/database';
 import { type SlackMessagePayload } from '@brand-listener/core';
-import { TweetCandidate } from '@brand-listener/core/services/database';
+import { TweetCandidate } from '@brand-listener/core';
 
 /* -------------------------------------------------------------------------- */
 /*                       SLACK MESSAGE BUILDERS                               */

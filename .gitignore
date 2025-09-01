@@ -23,6 +23,8 @@ build/
 .env.test.local
 .env.production.local
 
+.cursor/mcp.json
+
 # State files
 .state/
 *.state.json

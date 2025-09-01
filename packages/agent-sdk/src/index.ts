@@ -1,5 +1,6 @@
 import { VibeflowAgentClient } from "./client";
 import { z } from "zod";
+export { VibeflowAgentClient };
 
 export const startWorkflowResultSchema = z.object({
   runId: z.string().optional(),

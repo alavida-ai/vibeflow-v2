@@ -1,9 +1,9 @@
 import { ingestMentions, batchCheckResponseStatus } from "@brand-listener/ingestion";
-import * as AnalyticsService from "@brand-listener/core/services/analytics";
-import * as TwitterDatabaseService from "@brand-listener/core/services/database";
+import * as AnalyticsService from "@brand-listener/core";
+import * as TwitterDatabaseService from "@brand-listener/core";
 import { batchReplyToTweets } from "@brand-listener/replier";
 import { config } from "dotenv";
-import { VibeflowAgentClient } from "@brand-listener/agent-sdk/client";
+import { VibeflowAgentClient } from "@brand-listener/agent-sdk";
 
 config();
 

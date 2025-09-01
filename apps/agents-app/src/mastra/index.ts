@@ -14,10 +14,9 @@ export const mastra = new Mastra({
   },
   bundler: {
     transpilePackages: [
-      "@brand-listener/agent-sdk",
       "@brand-listener/ingestion",
-      "@brand-listener/core",
-      "@brand-listener/database"
+      "@brand-listener/agent-sdk",
+      "@brand-listener/core"
     ],
     sourcemap: true,
   },

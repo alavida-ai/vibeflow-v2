@@ -1,5 +1,5 @@
 const bundler = {
-  transpilePackages: ["@brand-listener/agent-sdk", "@brand-listener/ingestion", "@brand-listener/core", "@brand-listener/database"],
+  transpilePackages: ["@brand-listener/ingestion", "@brand-listener/agent-sdk"],
   sourcemap: true
 };
 

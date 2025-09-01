@@ -4,7 +4,7 @@ import { z } from "zod";
 /*                              TYPES                                     */
 /* -------------------------------------------------------------------------- */
 
-export const twitterAuthorSchema = z.looseObject({
+export const twitterAuthorSchema = z.object({
   type: z.literal("user"),
   userName: z.string(),
   url: z.string(),
@@ -29,9 +29,9 @@ export const twitterAuthorSchema = z.looseObject({
       urls: z.array(z.unknown())
     })
   }),
-}); 
+}).passthrough(); 
 
-export const twitterTweetSchema = z.looseObject({
+export const twitterTweetSchema = z.object({
   type: z.literal("tweet"),
   id: z.string(),
   url: z.string(),
@@ -65,7 +65,7 @@ export const twitterTweetSchema = z.looseObject({
       }).optional()
     })).optional()
   })
-});
+}).passthrough();
 
 export const lastTweetsApiResponseSchema = z.object({
   data: z.object({

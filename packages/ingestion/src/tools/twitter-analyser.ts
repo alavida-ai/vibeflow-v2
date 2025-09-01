@@ -1,6 +1,6 @@
 import { ingestUserLastTweets, IngestionResult } from "@brand-listener/ingestion";
-import { AnalyzerService } from "@brand-listener/core/services/database";
-import { generateVisualDescription } from "@brand-listener/core/services/media-files";
+import { AnalyzerService } from "@brand-listener/core";
+import { generateVisualDescription } from "@brand-listener/core";
 
 /* -------------------------------------------------------------------------- */
 /*                              TYPES                                         */
