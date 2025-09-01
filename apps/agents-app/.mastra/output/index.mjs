@@ -4,8 +4,8 @@ import { TABLE_EVALS } from '@mastra/core/storage';
 import { generateEmptyFromSchema, checkEvalStorageFields } from '@mastra/core/utils';
 import { Mastra } from '@mastra/core/mastra';
 import { MCPServer } from '@mastra/mcp';
-import { startWorkflowTool } from './tools/0c068a37-30fb-440c-ba52-40219255d116.mjs';
-import { getNextStepTool } from './tools/10493559-2a65-4a0a-8c30-8ec38747d8cd.mjs';
+import { startWorkflowTool } from './tools/3055e1f4-d744-421f-9e5c-cf8b316919db.mjs';
+import { getNextStepTool } from './tools/a0a52b51-8957-4834-8653-96cfd114da9c.mjs';
 import { createWorkflow, createStep } from '@mastra/core/workflows';
 import { z } from 'zod';
 import { Agent } from '@mastra/core/agent';
@@ -35,7 +35,7 @@ import z62, { z as z$1 } from 'zod/v4';
 import { ReadableStream as ReadableStream$1 } from 'stream/web';
 import { tools } from './tools.mjs';
 import '@mastra/core';
-import './sessionStore.mjs';
+import './@brand-listener-agent-sdk.mjs';
 import '@mastra/client-js';
 
 
@@ -268,7 +268,7 @@ const testWorkflow = createWorkflow({
 }).then(initialiseWorkflow).map(async () => ({})).dountil(understandCompanyStep, async ({ inputData: { stepCompleted } }) => stepCompleted).map(async () => ({})).dountil(researchStep, async ({ inputData: { stepCompleted } }) => stepCompleted).commit();
 
 dotenv.config({
-  path: "/Users/alexandergirardet/Code/vibeflow-projects/brand-listener/apps/agents-app/.env"
+  path: "/Users/alexandergirardet/Code/vibeflow/vibeflow-projects/vibeflow-v2/.env"
 });
 const mastra = new Mastra({
   mcpServers: {
@@ -278,7 +278,7 @@ const mastra = new Mastra({
     testWorkflow
   },
   bundler: {
-    transpilePackages: ["@brand-listener/agent-sdk"],
+    transpilePackages: ["@brand-listener/ingestion", "@brand-listener/agent-sdk", "@brand-listener/core"],
     sourcemap: true
   },
   server: {

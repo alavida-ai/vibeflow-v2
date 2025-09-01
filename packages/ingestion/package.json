@@ -5,11 +5,17 @@
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "tsc -p ."
+    "build": "tsup src/index.ts --format esm --sourcemap --out-dir dist"
   },
   "exports": {
-    ".": "./src/index.ts"
+    ".": {
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    },
+    "./package.json": "./package.json"
   },
+  "main": "./dist/index.js",
+  "files": ["dist"],
   "keywords": [],
   "author": "",
   "license": "ISC",
@@ -17,6 +23,11 @@
   "dependencies": {
     "@brand-listener/core": "workspace:*",
     "@brand-listener/database": "workspace:*",
+    "dotenv": "^16.4.7",
+    "@brand-listener/visual-description": "workspace:*",
     "zod": "^4.1.3"
+  },
+  "devDependencies": {
+    "tsup": "^8.5.0"
   }
 }

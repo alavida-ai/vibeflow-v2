@@ -1,5 +1,5 @@
-import { VibeflowAgentClient } from '@brand-listener/agent-sdk/client';
-import * as TwitterDatabaseService from '@brand-listener/core/services/database';  
+import { VibeflowAgentClient } from '@brand-listener/agent-sdk';
+import * as TwitterDatabaseService from '@brand-listener/core';  
 import { schema } from '@brand-listener/database';
 
 const VIBEFLOW_BASE_URL = process.env.VIBEFLOW_BASE_URL || "http://localhost:4111/";

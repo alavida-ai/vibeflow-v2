@@ -1,9 +1,9 @@
 import { ingestMentions, batchCheckResponseStatus } from "@brand-listener/ingestion";
-import * as AnalyticsService from "@brand-listener/core/services/analytics";
-import * as TwitterDatabaseService from "@brand-listener/core/services/database";
+import * as AnalyticsService from "@brand-listener/core";
+import * as TwitterDatabaseService from "@brand-listener/core";
 import { batchReplyToTweets } from "@brand-listener/replier";
-import { createReplyGuyAgent } from "@brand-listener/agents";
 import { config } from "dotenv";
+import { VibeflowAgentClient } from "@brand-listener/agent-sdk";
 
 config();
 
@@ -21,12 +21,11 @@ export async function main() {
         throw new Error("TWITTER_API_KEY is not set");
     }
 
-    const replyGuyAgent = createReplyGuyAgent({
-        openRouter: {
-            apiKey: process.env.OPENROUTER_API_KEY!,
-            baseURL: "https://openrouter.ai/api/v1"
-        }
-    });
+    const vibeflowAgentClient = new VibeflowAgentClient(process.env.VIBEFLOW_BASE_URL!);
+    console.log("Created client");
+    const replyGuyAgent  = await vibeflowAgentClient.createMastraAgent("reply-guy");
+    console.log("Reply guy agent created");
+
 
     console.log("Starting ingestion");
     const mentions = await ingestMentions({
@@ -73,8 +72,7 @@ export async function main() {
 
 
     const replies = await batchReplyToTweets({
-        tweets: tweetsToReply.map(t => t.tweet),
-        replyGuyAgent
+        tweets: tweetsToReply.map(t => t.tweet)
     });
     for (const reply of replies) {
         console.log("Replied to tweet: " + reply.tweetId + " with reply: " + reply.reply + " and reasoning: " + reply.reasoning + "\n");

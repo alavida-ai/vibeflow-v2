@@ -1,15 +1,16 @@
 {
-    "extends": "../../tsconfig.base.json",
-    "compilerOptions": {
-      "outDir": "dist",
-      "rootDir": "src",
-      "composite": true
-    },
-    "include": ["src/**/*"],
-    "exclude": ["dist", "node_modules"],
-      "references": [
-    { "path": "../core" },
-    { "path": "../database" }
-  ]
-  }
-  
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "outDir": "dist",
+    "rootDir": "src",
+    "composite": true,
+    "tsBuildInfoFile": "./dist/ingestion.tsbuildinfo",
+    "baseUrl": "../../",
+    "paths": {
+      "@brand-listener/ingestion": ["packages/ingestion/src"]
+    }
+  },
+  "include": ["src/**/*"],
+  "exclude": ["dist", "node_modules"],
+  "references": []
+}
