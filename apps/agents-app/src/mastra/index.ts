@@ -6,8 +6,12 @@ import { server } from "./server";
 import { testWorkflow } from "./workflows/test-workflow";
 import { businessStrategyWorkflow } from "./workflows/business-strategy";
 import { createStorage } from "./storage";
+import { frameworkAgent } from "./agents/frameworkAgent";
 
 export const mastra = new Mastra({
+  agents: {
+    frameworkAgent
+  },
   mcpServers: {
        server,
   },

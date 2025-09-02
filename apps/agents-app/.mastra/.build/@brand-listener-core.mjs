@@ -101,12 +101,9 @@ var AnalyzerService = class {
     const result = await getDb().select().from(schema.tweetsAnalyzer).where(eq(schema.tweetsAnalyzer.id, id)).limit(1);
     return result[0] || null;
   }
-  /**
-   * Get tweet by API ID (external tweet ID)
-   */
-  static async getTweetByApiId(apiId) {
-    const result = await getDb().select().from(schema.tweetsAnalyzer).where(eq(schema.tweetsAnalyzer.apiId, apiId)).limit(1);
-    return result[0] || null;
+  static async getTweetsBySql(sql) {
+    const result = await getDb().execute(sql);
+    return result;
   }
 };
 var PENDING_TWEET_STATUS = schema.statusConstants.pending;

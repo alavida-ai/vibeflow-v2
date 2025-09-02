@@ -103,12 +103,9 @@ var AnalyzerService = class {
     const result = await getDb().select().from(schema.tweetsAnalyzer).where(eq(schema.tweetsAnalyzer.id, id)).limit(1);
     return result[0] || null;
   }
-  /**
-   * Get tweet by API ID (external tweet ID)
-   */
-  static async getTweetByApiId(apiId) {
-    const result = await getDb().select().from(schema.tweetsAnalyzer).where(eq(schema.tweetsAnalyzer.apiId, apiId)).limit(1);
-    return result[0] || null;
+  static async getTweetsBySql(sql) {
+    const result = await getDb().execute(sql);
+    return result;
   }
 };
 var generateVisualDescription = async (type, url) => {
@@ -627,28 +624,81 @@ const twitterSearcherTool = createTool({
     numTweets: z.number().describe("Number of tweets to analyze")
   }),
   outputSchema: z.object({
-    summary: z.object({
-      username: z.string()
-    })
+    totalTweets: z.number(),
+    username: z.string()
   }),
   execute: async ({ context }) => {
     try {
+      if (!context.userName) {
+        throw new Error("userName is required but not provided");
+      }
+      if (!context.numTweets || context.numTweets <= 0) {
+        throw new Error("numTweets must be a positive number");
+      }
+      console.log(`\u{1F50D} Starting Twitter analysis for user: ${context.userName}, pages: ${Math.ceil(context.numTweets / 20)}`);
       const twitterAnalyser = new TwitterAnalyser({
         userName: context.userName,
-        maxPages: context.numTweets / 20
+        maxPages: Math.ceil(context.numTweets / 20)
       });
       const tweetsForOutput = await twitterAnalyser.run();
+      if (!tweetsForOutput || !tweetsForOutput.ingestionResult) {
+        throw new Error("Twitter analysis returned invalid result");
+      }
+      const totalTweets = tweetsForOutput.ingestionResult.totalTweets ?? 0;
+      console.log(`\u2705 Twitter analysis completed. Total tweets: ${totalTweets}`);
       return {
-        summary: {
-          totalTweets: tweetsForOutput.ingestionResult.totalTweets,
-          username: context.userName
-        }
+        totalTweets,
+        username: context.userName
       };
     } catch (error) {
+      console.error("\u274C Twitter scraper tool failed:", error);
       throw new Error(`Failed to scrape tweets: ${error instanceof Error ? error.message : String(error)}`);
     }
   }
 });
+const twitterAnalyserTool = createTool({
+  id: "twitter-analyser",
+  description: `Analyze a user's tweets and get info on any media in the tweets. You need to write a SQL query to get the tweets to analyze. A username will be provided to analyze the tweets. If this returns empty it means we have not scraped the tweets yet. So you to use the twitter scraper tool to scrape the tweets.
+      SELECT 
+      t.id,
+      t.api_id,
+      t.url as tweet_url,
+      t.text,
+      t.username,
+      t.evs,
+      t.created_at,
+      t.retweet_count,
+      t.reply_count,
+      t.like_count,
+      t.quote_count,
+      t.view_count,
+      m.url as media_url,
+      m.type as media_type,
+      m.description as media_description
+    FROM tweets_analyzer t
+    INNER JOIN tweet_media_analyzer m ON t.id = m.tweet_id
+    WHERE m.type IN ('photo', 'video')
+    AND t.username = 'alexgirardet'
+    ORDER BY t.evs desc
+    LIMIT 10;
+  `,
+  inputSchema: z.object({
+    sql: z.string().describe("SQL query to get tweets to analyze")
+  }),
+  outputSchema: z.object({
+    tweets: z.array(z.any())
+  }),
+  execute: async ({ context }) => {
+    try {
+      const tweets = await AnalyzerService.getTweetsBySql(context.sql);
+      return {
+        tweets
+      };
+    } catch (error) {
+      throw new Error(`Failed to analyze tweets: ${error instanceof Error ? error.message : String(error)}`);
+    }
+  }
+});
 
-export { twitterSearcherTool };
-//# sourceMappingURL=f941601d-4dda-492f-8055-eec5a8ba6e2c.mjs.map
+export { twitterAnalyserTool, twitterSearcherTool };
+//# sourceMappingURL=a7bf6f34-fdb2-471c-a438-9e474e4caa7d.mjs.map

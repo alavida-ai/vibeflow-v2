@@ -5,6 +5,9 @@ import { serve } from "bun"; // requires bun runtime
 import { Hono } from "hono";
 const app = new Hono();
 
+import dotenv from "dotenv";
+dotenv.config({path: "/Users/alexandergirardet/Code/vibeflow/vibeflow-projects/vibeflow-v2/.env"});
+
 const makeUrl = (c: any) => new URL(c.req.url, `http://${c.req.header('host')}`);
 
 // const app = await createHonoServer(mastra);

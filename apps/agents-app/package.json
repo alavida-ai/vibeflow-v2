@@ -3,7 +3,7 @@
   "scripts": {
     "dev": "mastra dev",
     "build": "mastra build",
-    "dev:mcp": "bun run --hot src/mastra/stdio.ts",  
+    "dev:mcp": "bun run --hot src/mastra/stdio.ts",
     "build:mcp": "tsup src/mastra/stdio.ts --format esm --no-splitting --dts && chmod +x dist/stdio.js"
   },
   "bin": "dist/stdio.js",
@@ -30,6 +30,7 @@
     "ai": "^4.3.19",
     "bun": "^1.2.21",
     "dotenv": "^17.0.1",
+    "drizzle-orm": "^0.44.5",
     "hono": "^4.9.5",
     "replicate": "^1.0.1",
     "tsup": "^8.5.0",

@@ -31,7 +31,7 @@ const getNextStepTool = createTool({
         workflowId
       });
       if (result.status === "suspended") {
-        return result.suspendPayload.agentResponse;
+        return result;
       } else if (result.status === "success") {
         deleteSession(mcpSid);
         return result;
@@ -47,4 +47,4 @@ const getNextStepTool = createTool({
 });
 
 export { getNextStepTool };
-//# sourceMappingURL=b5c0852f-03f4-424c-a8d5-57619b93283d.mjs.map
+//# sourceMappingURL=903e0bc3-11a4-49c1-981a-205a7e82b52e.mjs.map
