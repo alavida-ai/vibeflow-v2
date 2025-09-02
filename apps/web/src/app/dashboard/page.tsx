@@ -1,12 +1,49 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { TwitterInput } from "@/components/TwitterInput";
 import { FrameworksList } from "@/components/FrameworksList";
 import { MetricsPanel } from "@/components/MetricsPanel";
+import {
+  SidebarProvider,
+  Sidebar,
+  SidebarContent,
+  SidebarHeader,
+  SidebarMenu,
+  SidebarMenuItem,
+  SidebarMenuButton,
+  SidebarGroup,
+  SidebarGroupLabel,
+  SidebarGroupContent,
+  SidebarInset,
+} from "@/components/ui/sidebar";
+import { Button } from "@/components/ui/button";
+import { Plus, User, Clock } from "lucide-react";
+
+// Types
+interface Framework {
+  id: string;
+  title: string;
+  description: string;
+  structure: string;
+  prompt: string;
+  metrics: {
+    avgViews: number;
+    avgLikes: number;
+    successRate: number;
+  };
+}
+
+interface AnalysisHistory {
+  id: string;
+  username: string;
+  frameworks: Framework[];
+  analyzedAt: Date;
+  totalPosts: number;
+}
 
 // Simplified mock data
-const mockFrameworks = [
+const mockFrameworks: Framework[] = [
   {
     id: "1",
     title: "Problem → Solution → Result",
@@ -46,54 +83,170 @@ const mockFrameworks = [
 ];
 
 const Index = () => {
-  const [frameworks, setFrameworks] = useState<typeof mockFrameworks>([]);
+  // State management
+  const [analysisHistory, setAnalysisHistory] = useState<AnalysisHistory[]>([]);
+  const [currentAnalysis, setCurrentAnalysis] = useState<AnalysisHistory | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [username, setUsername] = useState("");
+  const [showNewAnalysis, setShowNewAnalysis] = useState(true);
+
+  // Load history from localStorage on component mount
+  useEffect(() => {
+    const savedHistory = localStorage.getItem('twitter-analysis-history');
+    if (savedHistory) {
+      const parsedHistory = JSON.parse(savedHistory).map((item: any) => ({
+        ...item,
+        analyzedAt: new Date(item.analyzedAt)
+      }));
+      setAnalysisHistory(parsedHistory);
+    }
+  }, []);
+
+  // Save history to localStorage whenever it changes
+  useEffect(() => {
+    if (analysisHistory.length > 0) {
+      localStorage.setItem('twitter-analysis-history', JSON.stringify(analysisHistory));
+    }
+  }, [analysisHistory]);
 
   const handleAnalyze = async (inputUsername: string) => {
     setIsLoading(true);
-    setUsername(inputUsername);
+    setShowNewAnalysis(false);
     
+    // Simulate API call
     setTimeout(() => {
-      setFrameworks(mockFrameworks);
+      const newAnalysis: AnalysisHistory = {
+        id: Date.now().toString(),
+        username: inputUsername,
+        frameworks: mockFrameworks,
+        analyzedAt: new Date(),
+        totalPosts: 247
+      };
+
+      // Add to history (keep only last 10 analyses)
+      setAnalysisHistory(prev => [newAnalysis, ...prev].slice(0, 10));
+      setCurrentAnalysis(newAnalysis);
       setIsLoading(false);
     }, 1500);
   };
 
-  const avgEngagement = frameworks.reduce((acc, f) => acc + f.metrics.avgLikes, 0) / Math.max(frameworks.length, 1);
+  const handleSelectAnalysis = (analysis: AnalysisHistory) => {
+    setCurrentAnalysis(analysis);
+    setShowNewAnalysis(false);
+  };
+
+  const handleNewAnalysis = () => {
+    setCurrentAnalysis(null);
+    setShowNewAnalysis(true);
+  };
+
+  const formatDate = (date: Date) => {
+    const now = new Date();
+    const diffInHours = Math.floor((now.getTime() - date.getTime()) / (1000 * 60 * 60));
+    
+    if (diffInHours < 1) return 'Just now';
+    if (diffInHours < 24) return `${diffInHours}h ago`;
+    if (diffInHours < 48) return 'Yesterday';
+    return date.toLocaleDateString();
+  };
+
+  const avgEngagement = currentAnalysis 
+    ? currentAnalysis.frameworks.reduce((acc, f) => acc + f.metrics.avgLikes, 0) / Math.max(currentAnalysis.frameworks.length, 1)
+    : 0;
 
   return (
-    <div className="min-h-screen bg-background">
-      <div className="max-w-6xl mx-auto">
-        <div className="grid grid-cols-1 lg:grid-cols-4 min-h-screen">
-          {/* Input Section */}
-          <div className="lg:col-span-1 flex items-center justify-center p-6 border-r border-border">
-            <TwitterInput onAnalyze={handleAnalyze} isLoading={isLoading} />
-          </div>
+    <SidebarProvider defaultOpen={true}>
+      <div className="min-h-screen flex w-full bg-background">
+        {/* Sidebar */}
+        <Sidebar className="border-r border-border">
+          <SidebarHeader className="p-4">
+            <Button
+              onClick={handleNewAnalysis}
+              className="w-full justify-start gap-2"
+              variant={showNewAnalysis ? "default" : "outline"}
+            >
+              <Plus className="w-4 h-4" />
+              New Analysis
+            </Button>
+          </SidebarHeader>
           
-          {/* Frameworks Section */}
-          <div className="lg:col-span-2 p-6">
-            <div className="mb-6">
-              <h2 className="text-2xl font-light mb-2">Frameworks</h2>
-              <p className="text-sm text-muted-foreground font-light">
-                {frameworks.length > 0 ? `${frameworks.length} frameworks found` : "Discover content patterns"}
-              </p>
+          <SidebarContent className="px-2">
+            <SidebarGroup>
+              <SidebarGroupLabel className="px-2 text-xs font-medium text-muted-foreground">
+                Recent Analyses
+              </SidebarGroupLabel>
+              <SidebarGroupContent>
+                <SidebarMenu>
+                  {analysisHistory.length === 0 ? (
+                    <div className="px-2 py-4 text-center text-sm text-muted-foreground">
+                      No analyses yet
+                    </div>
+                  ) : (
+                    analysisHistory.map((analysis) => (
+                      <SidebarMenuItem key={analysis.id}>
+                        <SidebarMenuButton
+                          onClick={() => handleSelectAnalysis(analysis)}
+                          isActive={currentAnalysis?.id === analysis.id}
+                          className="w-full justify-start gap-2 p-2"
+                        >
+                          <User className="w-4 h-4 shrink-0" />
+                          <div className="flex flex-col items-start min-w-0 flex-1">
+                            <span className="font-medium truncate">@{analysis.username}</span>
+                            <div className="flex items-center gap-1 text-xs text-muted-foreground">
+                              <Clock className="w-3 h-3" />
+                              <span>{formatDate(analysis.analyzedAt)}</span>
+                            </div>
+                          </div>
+                        </SidebarMenuButton>
+                      </SidebarMenuItem>
+                    ))
+                  )}
+                </SidebarMenu>
+              </SidebarGroupContent>
+            </SidebarGroup>
+          </SidebarContent>
+        </Sidebar>
+
+        {/* Main Content */}
+        <SidebarInset className="flex-1">
+          {showNewAnalysis ? (
+            // New Analysis View
+            <div className="flex items-center justify-center min-h-screen p-6">
+              <TwitterInput onAnalyze={handleAnalyze} isLoading={isLoading} />
             </div>
-            <FrameworksList frameworks={frameworks} isLoading={isLoading} />
-          </div>
-          
-          {/* Metrics Section */}
-          <div className="lg:col-span-1">
-            <MetricsPanel 
-              username={username}
-              totalFrameworks={frameworks.length}
-              avgEngagement={Math.round(avgEngagement)}
-              totalPosts={247}
-            />
-          </div>
-        </div>
+          ) : (
+            // Results View
+            <div className="flex h-screen">
+              {/* Frameworks Section */}
+              <div className="flex-1 p-6 overflow-y-auto">
+                <div className="mb-6">
+                  <h2 className="text-2xl font-light mb-2">Frameworks</h2>
+                  <p className="text-sm text-muted-foreground font-light">
+                    {currentAnalysis?.username && (
+                      <>@{currentAnalysis.username} • </>
+                    )}
+                    {currentAnalysis?.frameworks.length || 0} frameworks found
+                  </p>
+                </div>
+                <FrameworksList 
+                  frameworks={currentAnalysis?.frameworks || []} 
+                  isLoading={isLoading} 
+                />
+              </div>
+              
+              {/* Metrics Section */}
+              <div className="w-80 shrink-0">
+                <MetricsPanel 
+                  username={currentAnalysis?.username}
+                  totalFrameworks={currentAnalysis?.frameworks.length || 0}
+                  avgEngagement={Math.round(avgEngagement)}
+                  totalPosts={currentAnalysis?.totalPosts || 0}
+                />
+              </div>
+            </div>
+          )}
+        </SidebarInset>
       </div>
-    </div>
+    </SidebarProvider>
   );
 };
 
