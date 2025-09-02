@@ -2,7 +2,7 @@ import { Agent } from "@mastra/core/agent";
 import { memory } from "../memory";
 import { createOpenRouterProvider } from "../router";
 import { CLAUDE_SONNET_4 } from "../constants";
-import { twitterAnalyserTool, twitterSearcherTool } from "../tools/research/twitter-analyser";
+import { userTweetsFetcherTool, userTweetsScraperTool } from "../tools/research/twitter-analyser";
 import { getMCPClient } from "../mcp/client";
 
 const router = createOpenRouterProvider({
@@ -192,8 +192,8 @@ Execute this analysis with the precision of a master craftsman dissecting the wo
   model: router(CLAUDE_SONNET_4),
   memory: memory,
   tools: {  
-    twitterSearcherTool,
-    twitterAnalyserTool,
+    userTweetsFetcherTool,
+    userTweetsScraperTool,
     ...(await getMCPClient().getTools())   
   }
 });

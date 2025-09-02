@@ -2,7 +2,24 @@ import {
     getDb,
     schema
 } from "@brand-listener/database";
-import { eq, and, isNull } from 'drizzle-orm';
+import { eq, and, isNull, desc, inArray } from 'drizzle-orm';
+
+// Type for the getBestPerformingTweetsByUsernameView return value
+export type TweetAnalysisView = {
+    type: schema.TweetAnalyzer['type'];
+    text: string;
+    retweetCount: number;
+    replyCount: number;
+    likeCount: number;
+    quoteCount: number;
+    viewCount: number;
+    bookmarkCount: number;
+    media: Array<{
+        type: schema.TweetMediaAnalyzer['type'];
+        description: string | null;
+    }>;
+};
+
 
 export class AnalyzerService {
     /**
@@ -86,6 +103,23 @@ export class AnalyzerService {
         return [];
     }
 
+    static async getMediaByAuthorUsername(username: string): Promise<schema.TweetMediaAnalyzer[]> {
+        return await getDb()
+            .select({
+                id: schema.tweetMediaAnalyzer.id,
+                tweetId: schema.tweetMediaAnalyzer.tweetId,
+                url: schema.tweetMediaAnalyzer.url,
+                type: schema.tweetMediaAnalyzer.type,
+                description: schema.tweetMediaAnalyzer.description,
+                scrapedAt: schema.tweetMediaAnalyzer.scrapedAt,
+                updatedAt: schema.tweetMediaAnalyzer.updatedAt
+            })
+            .from(schema.tweetMediaAnalyzer)
+            .innerJoin(schema.tweetsAnalyzer, eq(schema.tweetMediaAnalyzer.tweetId, schema.tweetsAnalyzer.id))
+            .where(and(eq(schema.tweetsAnalyzer.username, username), isNull(schema.tweetMediaAnalyzer.description)))
+            .orderBy(schema.tweetsAnalyzer.createdAt);
+    }
+
     /*
      * Update media descriptions for a tweet after AI processing
      */
@@ -109,48 +143,52 @@ export class AnalyzerService {
             .where(eq(schema.tweetsAnalyzer.id, tweetId));
     }
 
+    static async getTweetsAnalysisViewByUsername(username: string): Promise<TweetAnalysisView[]> {
+        const db = getDb();
 
-    static async getMediaByAuthorUsername(username: string): Promise<schema.TweetMediaAnalyzer[]> {
-        return await getDb()
+        // Get tweets with their media using a left join to include tweets without media
+        const bestTweets = await db
             .select({
-                id: schema.tweetMediaAnalyzer.id,
+                id: schema.tweetsAnalyzer.id,
+                tweetType: schema.tweetsAnalyzer.type,
+                text: schema.tweetsAnalyzer.text,
+                retweetCount: schema.tweetsAnalyzer.retweetCount,
+                replyCount: schema.tweetsAnalyzer.replyCount,
+                likeCount: schema.tweetsAnalyzer.likeCount,
+                quoteCount: schema.tweetsAnalyzer.quoteCount,
+                viewCount: schema.tweetsAnalyzer.viewCount,
+                bookmarkCount: schema.tweetsAnalyzer.bookmarkCount,
+            })
+            .from(schema.tweetsAnalyzer)
+            .where(eq(schema.tweetsAnalyzer.username, username))
+            .orderBy(desc(schema.tweetsAnalyzer.evs))
+            .limit(10);
+
+        // get media for each tweet
+        const media = await db
+            .select({
                 tweetId: schema.tweetMediaAnalyzer.tweetId,
-                url: schema.tweetMediaAnalyzer.url,
                 type: schema.tweetMediaAnalyzer.type,
                 description: schema.tweetMediaAnalyzer.description,
-                scrapedAt: schema.tweetMediaAnalyzer.scrapedAt,
-                updatedAt: schema.tweetMediaAnalyzer.updatedAt
             })
             .from(schema.tweetMediaAnalyzer)
-            .innerJoin(schema.tweetsAnalyzer, eq(schema.tweetMediaAnalyzer.tweetId, schema.tweetsAnalyzer.id))
-            .where(and(eq(schema.tweetsAnalyzer.username, username), isNull(schema.tweetMediaAnalyzer.description)))
-            .orderBy(schema.tweetsAnalyzer.createdAt);
-    }
+            .where(inArray(schema.tweetMediaAnalyzer.tweetId, bestTweets.map(tweet => tweet.id)));
 
-    /**
-     * Get all tweets
-     */
-    static async getAllTweets() {
-        return await getDb()
-            .select()
-            .from(schema.tweetsAnalyzer)
-            .orderBy(schema.tweetsAnalyzer.createdAt);
-    }
-
-    /**
-     * Get tweet by database ID
-     */
-    static async getTweetById(id: number) {
-        const result = await getDb()
-            .select()
-            .from(schema.tweetsAnalyzer)
-            .where(eq(schema.tweetsAnalyzer.id, id))
-            .limit(1);
-        return result[0] || null;
-    }
-
-    static async getTweetsBySql(sql: string) {
-        const result = await getDb().execute(sql);
-        return result;
+        return bestTweets.map(tweet => ({
+            type: tweet.tweetType,
+            text: tweet.text,
+            retweetCount: tweet.retweetCount,
+            replyCount: tweet.replyCount,
+            likeCount: tweet.likeCount,
+            quoteCount: tweet.quoteCount,
+            viewCount: tweet.viewCount,
+            bookmarkCount: tweet.bookmarkCount,
+            media: media
+                .filter(m => m.tweetId === tweet.id)
+                .map(m => ({
+                    type: m.type,
+                    description: m.description
+                }))
+        }));
     }
 }

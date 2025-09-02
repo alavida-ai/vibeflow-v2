@@ -4,8 +4,8 @@ import { z } from 'zod';
 import { AnalyzerService } from '@brand-listener/core';
 
 
-export const twitterSearcherTool = createTool({
-  id: 'twitter-scraper',
+export const userTweetsScraperTool = createTool({
+  id: 'user-tweets-scraper',
   description: 'Search for tweets from a user and get info on any media in the tweets',
   inputSchema: z.object({
     userName: z.string().describe('Twitter username to analyze'),
@@ -25,7 +25,7 @@ export const twitterSearcherTool = createTool({
         throw new Error('numTweets must be a positive number');
       }
 
-      console.log(`🔍 Starting Twitter analysis for user: ${context.userName}, pages: ${Math.ceil(context.numTweets / 20)}`);
+      console.log(`Scraping recent tweets for user: ${context.userName}, pages: ${Math.ceil(context.numTweets / 20)}`);
       
       const twitterAnalyser = new TwitterAnalyser({
         userName: context.userName,
@@ -54,41 +54,18 @@ export const twitterSearcherTool = createTool({
 });
 
 
-export const twitterAnalyserTool = createTool({
-  id: 'twitter-analyser',
-  description: `Analyze a user\'s tweets and get info on any media in the tweets. You need to write a SQL query to get the tweets to analyze. A username will be provided to analyze the tweets. If this returns empty it means we have not scraped the tweets yet. So you to use the twitter scraper tool to scrape the tweets.
-      SELECT 
-      t.id,
-      t.api_id,
-      t.url as tweet_url,
-      t.text,
-      t.username,
-      t.evs,
-      t.created_at,
-      t.retweet_count,
-      t.reply_count,
-      t.like_count,
-      t.quote_count,
-      t.view_count,
-      m.url as media_url,
-      m.type as media_type,
-      m.description as media_description
-    FROM tweets_analyzer t
-    INNER JOIN tweet_media_analyzer m ON t.id = m.tweet_id
-    WHERE m.type IN ('photo', 'video')
-    AND t.username = 'alexgirardet'
-    ORDER BY t.evs desc
-    LIMIT 10;
-  `,
+export const userTweetsFetcherTool = createTool({
+  id: 'user-tweets-fetcher',
+  description: `Fetch a user\'s tweets data including media descriptions.`,
   inputSchema: z.object({
-    sql: z.string().describe('SQL query to get tweets to analyze'),
+    userName: z.string().describe('Twitter username to fetch tweets for'),
   }),
   outputSchema: z.object({
     tweets: z.array(z.any())
   }),
   execute: async ({ context }) => {
     try {
-      const tweets = await AnalyzerService.getTweetsBySql(context.sql);
+      const tweets = await AnalyzerService.getTweetsAnalysisViewByUsername(context.userName);
 
       return {
         tweets: tweets
