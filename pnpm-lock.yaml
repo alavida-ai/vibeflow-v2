@@ -64,6 +64,9 @@ importers:
       bun-types:
         specifier: ^1.2.21
         version: 1.2.21(@types/react@19.1.12)
+      bun-types:
+        specifier: ^1.2.21
+        version: 1.2.21(@types/react@19.1.12)
       typescript:
         specifier: ^5.5.0
         version: 5.9.2

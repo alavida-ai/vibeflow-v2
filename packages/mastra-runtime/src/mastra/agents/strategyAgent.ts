@@ -6,9 +6,6 @@ import { GPT_4O } from "../constants";
 const router = createOpenRouterProvider({
   apiKey: process.env.OPENROUTER_API_KEY!
 });
-
-
-
  
 export const strategyAgent = new Agent({
   name: "Strategy Agent",

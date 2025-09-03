@@ -39,7 +39,7 @@
   },
   "scripts": {
     "build": "turbo build",
-    "dev": "turbo run dev --parallel --filter=agents-app --filter=@brand-listener/*",
+    "dev": "turbo run dev --parallel --filter=api --filter=web",
     "migrate": "turbo migrate",
     "generate": "turbo generate",
     "generate:db": "pnpm --filter=@brand-listener/database generate",

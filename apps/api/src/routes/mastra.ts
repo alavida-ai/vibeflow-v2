@@ -11,6 +11,3 @@ console.log('Creating Mastra app');
 const mastraApp = await createHonoServer(mastra) as unknown as Hono;
 
 export { mastraApp };
-
-
-

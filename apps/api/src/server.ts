@@ -17,5 +17,3 @@ app.route('/', mastraApp);
 
 serve({ fetch: app.fetch, port: 4111, hostname: 'localhost', idleTimeout: 255 });
 console.log('API server running on http://localhost:4111');
-
-
