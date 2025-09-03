@@ -20,7 +20,6 @@ export type TweetAnalysisView = {
     }>;
 };
 
-
 export class AnalyzerService {
     /**
      * Save parsed tweets with their media to the database
@@ -121,8 +120,8 @@ export class AnalyzerService {
     }
 
     /*
-     * Update media descriptions for a tweet after AI processing
-     */
+    * Update media descriptions for a tweet after AI processing
+    */
     static async updateMediaDescriptions(media: schema.TweetMediaAnalyzer): Promise<void> {
         await getDb()
             .update(schema.tweetMediaAnalyzer)
@@ -145,7 +144,7 @@ export class AnalyzerService {
 
     static async getTweetsAnalysisViewByUsername(username: string): Promise<TweetAnalysisView[]> {
         const db = getDb();
-
+        
         // Get tweets with their media using a left join to include tweets without media
         const bestTweets = await db
             .select({
