@@ -8,7 +8,7 @@ import { getMCPClient } from "./mcp/client";
 
 let serverPromise: Promise<MCPServer> | null = null;
 
-export const createMCPServer = async (): Promise<MCPServer> => {
+export const createVibeflowMCP = async (): Promise<MCPServer> => {
   if (!serverPromise) {
     serverPromise = (async () =>
       new MCPServer({

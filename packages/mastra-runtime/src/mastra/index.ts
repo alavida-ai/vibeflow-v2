@@ -3,6 +3,7 @@ import { testWorkflow } from "./workflows/test-workflow";
 import { businessStrategyWorkflow } from "./workflows/business-strategy";
 import { createStorage } from "./storage";
 import { frameworkAgent } from "./agents/frameworkAgent";
+import { createVibeflowMCP } from "./mcp";
 
 export const mastra = new Mastra({
   agents: {
@@ -19,6 +20,9 @@ export const mastra = new Mastra({
       "@brand-listener/core"
     ],
     sourcemap: true,
+  },
+  mcpServers: {
+    vibeflow: await createVibeflowMCP(),
   },
   server: {
     port: 4111,
