@@ -8,10 +8,6 @@ on:
       - 'apps/twitter-listener/src/reporting.ts'
       - 'packages/reporting/**'
       - 'packages/core/src/services/**'
-  schedule:
-    # Run every 6 hours starting at 03:00 UTC (03:00, 09:00, 15:00, 21:00)
-    # This runs 3 hours after the main workflow to ensure fresh data
-    - cron: "0 3,9,15,21 * * *"
   workflow_dispatch: # Allow manual triggering
     inputs:
       debug:

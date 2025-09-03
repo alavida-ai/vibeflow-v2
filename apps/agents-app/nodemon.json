@@ -1,0 +1,10 @@
+{
+  "watch": ["../../packages/**/dist", "src"],
+  "ext": "js,json,ts,tsx,mjs,cjs",
+  "ignore": [
+    "../../packages/**/dist/**/*.d.ts",
+    "../../packages/**/dist/**/*.map"
+  ],
+  "delay": "150ms",
+  "exec": "bun --env-file=../../.env --hot src/mastra/api.ts"
+}

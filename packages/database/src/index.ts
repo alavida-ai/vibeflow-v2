@@ -1,9 +1,6 @@
 import { drizzle } from "drizzle-orm/postgres-js";
 import postgres from "postgres";
 import * as schema from "./db/schema/index";
-import { config } from "dotenv";
-
-config();
 
 let _client: ReturnType<typeof drizzle> | null = null;
 

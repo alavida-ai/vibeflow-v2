@@ -2,18 +2,17 @@ import { evaluate } from '@mastra/core/eval';
 import { registerHook, AvailableHooks } from '@mastra/core/hooks';
 import { TABLE_EVALS } from '@mastra/core/storage';
 import { generateEmptyFromSchema, checkEvalStorageFields } from '@mastra/core/utils';
-import dotenv from 'dotenv';
 import { Mastra } from '@mastra/core/mastra';
-import { MCPServer } from '@mastra/mcp';
-import { startWorkflowTool } from './tools/42566e2b-2cdb-4379-baf0-3ba08dfec0ab.mjs';
-import { getNextStepTool } from './tools/903e0bc3-11a4-49c1-981a-205a7e82b52e.mjs';
-import { listWorkflowsTool } from './tools/74b7d487-1ca8-4b7b-94d4-87be33607fff.mjs';
-import { twitterSearcherTool, twitterAnalyserTool } from './tools/a7bf6f34-fdb2-471c-a438-9e474e4caa7d.mjs';
+import { MCPClient, MCPServer } from '@mastra/mcp';
+import { startWorkflowTool } from './tools/0d921f9c-68b0-4f36-bd94-19214a77937f.mjs';
+import { getNextStepTool } from './tools/990164bf-c870-4f8e-a587-bd2d6bd75f55.mjs';
+import { listWorkflowsTool } from './tools/311ed163-218f-4362-b4d0-0e08fbebdaa9.mjs';
+import { twitterSearcherTool, twitterAnalyserTool } from './tools/66393869-22de-4094-9630-fa204de7f173.mjs';
+import { p as perplexityAskTool, T as TEXT_EMBEDDING_3_SMALL, G as GPT_4O, C as CLAUDE_SONNET_4 } from './index2.mjs';
 import { createWorkflow, createStep } from '@mastra/core/workflows';
 import { z } from 'zod';
 import { Agent } from '@mastra/core/agent';
 import { createOpenRouter } from '@openrouter/ai-sdk-provider';
-import { T as TEXT_EMBEDDING_3_SMALL, G as GPT_4O, C as CLAUDE_SONNET_4 } from './constants.mjs';
 import { createOpenAI as createOpenAI$1 } from '@ai-sdk/openai';
 import { Memory } from '@mastra/memory';
 import { PgVector, PostgresStore } from '@mastra/pg';
@@ -54,17 +53,48 @@ import cjsModule from 'node:module';
 const __filename = cjsUrl.fileURLToPath(import.meta.url);
 const __dirname = cjsPath.dirname(__filename);
 const require = cjsModule.createRequire(import.meta.url);
-const server = new MCPServer({
-  name: "test",
-  version: "0.1.0",
-  tools: {
-    startWorkflowTool,
-    getNextStepTool,
-    listWorkflowsTool,
-    twitterAnalyserTool,
-    twitterSearcherTool
+let mcpClientInstance = null;
+function getMCPClient() {
+  if (mcpClientInstance) {
+    return mcpClientInstance;
   }
-});
+  if (!process.env.FIRECRAWL_API_KEY) {
+    throw new Error("FIRECRAWL_API_KEY is not set");
+  }
+  mcpClientInstance = new MCPClient({
+    timeout: 6e5,
+    servers: {
+      // Commented out firecrawlMCP - uncomment if needed
+      firecrawlMCP: {
+        command: "npx",
+        args: [
+          "-y",
+          "firecrawl-mcp"
+        ],
+        env: {
+          FIRECRAWL_API_KEY: process.env.FIRECRAWL_API_KEY
+        }
+      }
+    }
+  });
+  return mcpClientInstance;
+}
+
+const getMCPServer = async () => {
+  return new MCPServer({
+    name: "test",
+    version: "0.1.0",
+    tools: {
+      startWorkflowTool,
+      getNextStepTool,
+      listWorkflowsTool,
+      twitterAnalyserTool,
+      twitterSearcherTool,
+      perplexityAskTool,
+      ...await getMCPClient().getTools()
+    }
+  });
+};
 
 function createOpenRouterProvider(config) {
   console.log("\u{1F527} Initializing OpenRouter provider...");
@@ -295,8 +325,12 @@ const foundationResearchStep = createStep({
   execute: async ({ resumeData, suspend }) => {
     try {
       const { stepCompleted } = resumeData ?? {};
-      const promptInstructions = `Use the perplexity mcp to research @[your-website-url] I want to understand their services, who they serve, key competitors in their local market as well as other competitors they could be competing against, identify other market leaders in their niche`;
-      const acceptanceCriteria = "Output is consistent with desired target audience. Suggest tweaks or further research if necessary.";
+      const promptInstructions = `Your job is to collaborate with the user and help him develop his brand strategy by creating brand analysis, 
+    tone of voice, target audience, and other strategic documents. Use the firecrawl mcp to scrape @[your-website-url] you want to understand their services, who they serve, 
+    key competitors in their local market as well as other competitors they could be competing against. If you do not have all the information you need, ask the user for more information.`;
+      const acceptanceCriteria = `You have all the information you need from the user and scraping his website that sets up the basis for further steps.
+    You can confidently understand the user's brand, his target audience, and his brand positioning.
+    `;
       if (!stepCompleted) {
         const prompt = `
         The prompt is:
@@ -336,8 +370,9 @@ const digitalPresenceAuditStep = createStep({
   execute: async ({ resumeData, suspend }) => {
     try {
       const { stepCompleted } = resumeData ?? {};
-      const promptInstructions = `Okay, now analyse [Your Company Name]'s online presence including: 1) website design, UX and content strategy 2) Social media presence on Instagram, Facebook, Linkedin, Youtube, Twitter/X 3) SEO performance and search visibility 4) Content marketing efforts (blog, resources) 5) online reviews and reputation management. Use firecrawl mcp and perplexity mcp to research`;
-      const acceptanceCriteria = "Audit highlights strengths and weaknesses with specific improvement opportunities identified.";
+      const promptInstructions = `Okay, now analyse the user's companies online presence including: 1) website design, UX and content strategy 2) Social media presence on Instagram, Facebook, Linkedin, Youtube, Twitter/X 3) SEO performance and search visibility 4) Content marketing efforts (blog, resources) 5) online reviews and reputation management. 
+     You can first ask the user what platforms he is currently marketing on and then use the firecrawl mcp to scrape the information or if it's X you have to use the twitter mcp to scrape his tweets and understand his current brand positioning.`;
+      const acceptanceCriteria = "You have a solid understanding of the user's current brand presence, as well as his following, and which platforms he is currently marketing on.";
       if (!stepCompleted) {
         const prompt = `
           The prompt is:
@@ -377,8 +412,10 @@ const marketDynamicsAnalysisStep = createStep({
   execute: async ({ resumeData, suspend }) => {
     try {
       const { stepCompleted } = resumeData ?? {};
-      const promptInstructions = `What are the current market trends in [your specific industry]? What opportunities and challenges does [Your Company Name] face in competing with both local competitions and national online platforms?`;
-      const acceptanceCriteria = "Analysis clearly identifies industry trends, growth opportunities, and competitive challenges.";
+      const promptInstructions = `You should look identify the niche that the user is in, and use the perplexity MCP to research the current market trends and opportunities and challenges in this niche.
+     You should also identify the user's competitors and their market share. This will inform the user's brand positioning, use the research to inform the user's brand strategy. Collaborate closely with the user, highlight research with him
+     and ensure he is happy with the research you have peformed and the implications for his brand strategy.`;
+      const acceptanceCriteria = "You and the user have a solid understanding of the user's niche, the current market trends, and the opportunities and challenges in this niche. And are completely aligned on the user's brand strategy.";
       if (!stepCompleted) {
         const prompt = `
           The prompt is:
@@ -402,7 +439,7 @@ const marketDynamicsAnalysisStep = createStep({
   }
 });
 const strategyDocumentCreationStep = createStep({
-  id: "digital-presence-audit-step",
+  id: "strategy-document-creation-step",
   description: "Strategy document creation",
   inputSchema: z.object({}),
   resumeSchema: z.object({
@@ -418,8 +455,8 @@ const strategyDocumentCreationStep = createStep({
   execute: async ({ resumeData, suspend }) => {
     try {
       const { stepCompleted } = resumeData ?? {};
-      const promptInstructions = `Condense all the information that you have on [Your Company Name] and its competitors into three separate reports: A target audience report, Tone of Voice, and Brand Analysis.`;
-      const acceptanceCriteria = "Documents are comprehensive and serve as a foundation for future communications and content creation.";
+      const promptInstructions = `Condense all the information that you have on the user's company and its competitors into three separate reports: A target audience report, Tone of Voice, and Brand fundamentals Analysis. Put it in the strategy folder as markdown files.`;
+      const acceptanceCriteria = "Documents are comprehensive and serve as a foundation for future communications and content creation. Ensure the user is happy with the documents and has approved them.";
       if (!stepCompleted) {
         const prompt = `
           The prompt is:
@@ -649,23 +686,21 @@ Execute this analysis with the precision of a master craftsman dissecting the wo
   memory,
   tools: {
     twitterSearcherTool,
-    twitterAnalyserTool
+    twitterAnalyserTool,
+    ...await getMCPClient().getTools()
   }
 });
 
-dotenv.config({
-  path: "/Users/alexandergirardet/Code/vibeflow/vibeflow-projects/vibeflow-v2/.env"
-});
 const mastra = new Mastra({
   agents: {
     frameworkAgent
   },
-  mcpServers: {
-    server
-  },
   workflows: {
     testWorkflow,
     businessStrategyWorkflow
+  },
+  mcpServers: {
+    mcpServer: await getMCPServer()
   },
   bundler: {
     transpilePackages: ["@brand-listener/ingestion", "@brand-listener/agent-sdk", "@brand-listener/core"],

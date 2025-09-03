@@ -3,14 +3,7 @@
   "compilerOptions": {
     "outDir": "dist",
     "rootDir": "src",
-    "composite": true,
-    "tsBuildInfoFile": "./dist/agent-sdk.tsbuildinfo",
-    "baseUrl": "../../",
-    "paths": {
-      "@brand-listener/agent-sdk": ["packages/agent-sdk/src"]
-    }
   },
   "include": ["src/**/*"],
-  "exclude": ["dist", "node_modules"],
-  "references": []
+  "exclude": ["dist", "node_modules"]
 }

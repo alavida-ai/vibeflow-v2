@@ -584,37 +584,6 @@ var TwitterAnalyser = class {
     };
   }
 };
-async function createAndRunTwitterAnalyser(userName, maxPages) {
-  const targetUserName = userName;
-  const analyser = new TwitterAnalyser({
-    userName: targetUserName,
-    maxPages
-  });
-  return await analyser.run();
-}
-async function main() {
-  const result = await createAndRunTwitterAnalyser(
-    "Send"
-  );
-  if (result.success) {
-    console.log("\u2705 Twitter analysis completed successfully");
-    console.log(`\u{1F4CA} Summary: ${result.ingestionResult.totalTweets} tweets, ${result.mediaProcessed} media processed`);
-  } else {
-    console.error("\u274C Twitter analysis failed:", result.error);
-    throw new Error(result.error);
-  }
-}
-if (import.meta.url === `file://${process.argv[1]}`) {
-  const { config } = await import('dotenv');
-  config({ path: "/Users/alexandergirardet/Code/vibeflow/vibeflow-projects/vibeflow-v2/.env" });
-  main().then(() => {
-    console.log("\u2705 Main process finished");
-    process.exit(0);
-  }).catch((error) => {
-    console.error("\u274C Main process failed:", error);
-    process.exit(1);
-  });
-}
 
 const twitterSearcherTool = createTool({
   id: "twitter-scraper",
@@ -701,4 +670,4 @@ const twitterAnalyserTool = createTool({
 });
 
 export { twitterAnalyserTool, twitterSearcherTool };
-//# sourceMappingURL=a7bf6f34-fdb2-471c-a438-9e474e4caa7d.mjs.map
+//# sourceMappingURL=66393869-22de-4094-9630-fa204de7f173.mjs.map

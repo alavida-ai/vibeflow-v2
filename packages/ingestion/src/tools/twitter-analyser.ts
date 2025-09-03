@@ -1,4 +1,4 @@
-import { ingestUserLastTweets, IngestionResult } from "@brand-listener/ingestion";
+import { ingestUserLastTweets, IngestionResult } from "../ingest/index";
 import { AnalyzerService } from "@brand-listener/core";
 import { generateVisualDescription } from "@brand-listener/core";
 
@@ -226,21 +226,4 @@ export async function main(): Promise<void> {
     console.error("❌ Twitter analysis failed:", result.error);
     throw new Error(result.error);
   }
-}
-
-// Only run main if this file is executed directly
-if (import.meta.url === `file://${process.argv[1]}`) {
-  // Load environment variables when running locally
-  const { config } = await import('dotenv');
-  config({path: "/Users/alexandergirardet/Code/vibeflow/vibeflow-projects/vibeflow-v2/.env"});
-    
-  main()
-    .then(() => {
-      console.log("✅ Main process finished");
-      process.exit(0);
-    })
-    .catch((error) => {
-      console.error("❌ Main process failed:", error);
-      process.exit(1);
-    });
 }

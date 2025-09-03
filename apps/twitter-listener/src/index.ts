@@ -2,10 +2,8 @@ import { ingestMentions, batchCheckResponseStatus } from "@brand-listener/ingest
 import * as AnalyticsService from "@brand-listener/core";
 import * as TwitterDatabaseService from "@brand-listener/core";
 import { batchReplyToTweets } from "@brand-listener/replier";
-import { config } from "dotenv";
 import { VibeflowAgentClient } from "@brand-listener/agent-sdk";
 
-config();
 
 export async function main() {
 

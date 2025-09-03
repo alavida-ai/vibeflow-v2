@@ -3,6 +3,7 @@ import { memory } from "../memory";
 import { createOpenRouterProvider } from "../router";
 import { CLAUDE_SONNET_4 } from "../constants";
 import { twitterAnalyserTool, twitterSearcherTool } from "../tools/research/twitter-analyser";
+import { getMCPClient } from "../mcp/client";
 
 const router = createOpenRouterProvider({
   apiKey: process.env.OPENROUTER_API_KEY!
@@ -192,6 +193,7 @@ Execute this analysis with the precision of a master craftsman dissecting the wo
   memory: memory,
   tools: {  
     twitterSearcherTool,
-    twitterAnalyserTool
+    twitterAnalyserTool,
+    ...(await getMCPClient().getTools())   
   }
 });

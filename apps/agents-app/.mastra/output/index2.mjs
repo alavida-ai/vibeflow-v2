@@ -1,7 +1,10 @@
-#!/usr/bin/env node
 import { z } from 'zod';
 import { createTool } from '@mastra/core';
-import { P as PERPLEXITY_SONAR } from '../constants.mjs';
+
+const CLAUDE_SONNET_4 = "anthropic/claude-sonnet-4";
+const GPT_4O = "openai/gpt-4o-2024-11-20";
+const TEXT_EMBEDDING_3_SMALL = "text-embedding-3-small";
+const PERPLEXITY_SONAR = "perplexity/sonar";
 
 const perplexityAskSchema = z.object({
   messages: z.array(z.object({
@@ -77,5 +80,5 @@ ${errorText}`
   return messageContent;
 }
 
-export { perplexityAskTool };
-//# sourceMappingURL=903ca57a-152a-4b82-bc3a-90bf97376213.mjs.map
+export { CLAUDE_SONNET_4 as C, GPT_4O as G, TEXT_EMBEDDING_3_SMALL as T, perplexityAskTool as p };
+//# sourceMappingURL=index2.mjs.map

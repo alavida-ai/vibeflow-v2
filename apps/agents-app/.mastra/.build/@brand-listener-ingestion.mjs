@@ -611,36 +611,5 @@ var TwitterAnalyser = class {
     };
   }
 };
-async function createAndRunTwitterAnalyser(userName, maxPages) {
-  const targetUserName = userName;
-  const analyser = new TwitterAnalyser({
-    userName: targetUserName,
-    maxPages
-  });
-  return await analyser.run();
-}
-async function main() {
-  const result = await createAndRunTwitterAnalyser(
-    "Send"
-  );
-  if (result.success) {
-    console.log("\u2705 Twitter analysis completed successfully");
-    console.log(`\u{1F4CA} Summary: ${result.ingestionResult.totalTweets} tweets, ${result.mediaProcessed} media processed`);
-  } else {
-    console.error("\u274C Twitter analysis failed:", result.error);
-    throw new Error(result.error);
-  }
-}
-if (import.meta.url === `file://${process.argv[1]}`) {
-  const { config } = await import('dotenv');
-  config({ path: "/Users/alexandergirardet/Code/vibeflow/vibeflow-projects/vibeflow-v2/.env" });
-  main().then(() => {
-    console.log("\u2705 Main process finished");
-    process.exit(0);
-  }).catch((error) => {
-    console.error("\u274C Main process failed:", error);
-    process.exit(1);
-  });
-}
 
 export { LAST_TWEETS_ENDPOINT, REPLIES_ENDPOINT, TWITTER_API_BASE_URL, TwitterAnalyser, TwitterClient, USER_MENTIONS_ENDPOINT, batchCheckIfUserRepliedToTweet, batchCheckResponseStatus, batchFilterNonRespondedTweets, checkIfUserRepliedToTweet2 as checkIfUserRepliedToTweet, computeEvs, hasUserRepliedToTweet, ingestMentions, ingestUserLastTweets, lastTweetsApiResponseSchema, transformTweetToDbFormat, transformTwitterAnalyzerResponse, transformTwitterResponse, twitterApiResponseSchema, twitterAuthorSchema, twitterTweetSchema };

@@ -20,9 +20,13 @@ const foundationResearchStep = createStep({
     try {
     const { stepCompleted } = resumeData ?? {};
 
-    const promptInstructions = `Use the perplexity mcp to research @[your-website-url] I want to understand their services, who they serve, key competitors in their local market as well as other competitors they could be competing against, identify other market leaders in their niche`;
+    const promptInstructions = `Your job is to collaborate with the user and help him develop his brand strategy by creating brand analysis, 
+    tone of voice, target audience, and other strategic documents. Use the firecrawl mcp to scrape @[your-website-url] you want to understand their services, who they serve, 
+    key competitors in their local market as well as other competitors they could be competing against. If you do not have all the information you need, ask the user for more information.`;
 
-    const acceptanceCriteria = "Output is consistent with desired target audience. Suggest tweaks or further research if necessary.";
+    const acceptanceCriteria = `You have all the information you need from the user and scraping his website that sets up the basis for further steps.
+    You can confidently understand the user's brand, his target audience, and his brand positioning.
+    `;
  
     if (!stepCompleted) {
         const prompt = `
@@ -67,9 +71,10 @@ const digitalPresenceAuditStep = createStep({
       try {
       const { stepCompleted } = resumeData ?? {};
   
-     const promptInstructions = `Okay, now analyse [Your Company Name]'s online presence including: 1) website design, UX and content strategy 2) Social media presence on Instagram, Facebook, Linkedin, Youtube, Twitter/X 3) SEO performance and search visibility 4) Content marketing efforts (blog, resources) 5) online reviews and reputation management. Use firecrawl mcp and perplexity mcp to research`;
+     const promptInstructions = `Okay, now analyse the user's companies online presence including: 1) website design, UX and content strategy 2) Social media presence on Instagram, Facebook, Linkedin, Youtube, Twitter/X 3) SEO performance and search visibility 4) Content marketing efforts (blog, resources) 5) online reviews and reputation management. 
+     You can first ask the user what platforms he is currently marketing on and then use the firecrawl mcp to scrape the information or if it's X you have to use the twitter mcp to scrape his tweets and understand his current brand positioning.`
   
-      const acceptanceCriteria = "Audit highlights strengths and weaknesses with specific improvement opportunities identified.";
+      const acceptanceCriteria = "You have a solid understanding of the user's current brand presence, as well as his following, and which platforms he is currently marketing on.";
    
       if (!stepCompleted) {
           const prompt = `
@@ -114,9 +119,11 @@ const digitalPresenceAuditStep = createStep({
       try {
       const { stepCompleted } = resumeData ?? {};
   
-     const promptInstructions = `What are the current market trends in [your specific industry]? What opportunities and challenges does [Your Company Name] face in competing with both local competitions and national online platforms?`;
+     const promptInstructions = `You should look identify the niche that the user is in, and use the perplexity MCP to research the current market trends and opportunities and challenges in this niche.
+     You should also identify the user's competitors and their market share. This will inform the user's brand positioning, use the research to inform the user's brand strategy. Collaborate closely with the user, highlight research with him
+     and ensure he is happy with the research you have peformed and the implications for his brand strategy.`;
   
-      const acceptanceCriteria = "Analysis clearly identifies industry trends, growth opportunities, and competitive challenges.";
+      const acceptanceCriteria = "You and the user have a solid understanding of the user's niche, the current market trends, and the opportunities and challenges in this niche. And are completely aligned on the user's brand strategy.";
    
       if (!stepCompleted) {
           const prompt = `
@@ -145,7 +152,7 @@ const digitalPresenceAuditStep = createStep({
  
 
   const strategyDocumentCreationStep = createStep({
-    id: "digital-presence-audit-step",
+    id: "strategy-document-creation-step",
     description: "Strategy document creation",
     inputSchema: z.object({}),
     resumeSchema: z.object({
@@ -162,9 +169,9 @@ const digitalPresenceAuditStep = createStep({
       try {
       const { stepCompleted } = resumeData ?? {};
   
-     const promptInstructions = `Condense all the information that you have on [Your Company Name] and its competitors into three separate reports: A target audience report, Tone of Voice, and Brand Analysis.`;
+     const promptInstructions = `Condense all the information that you have on the user's company and its competitors into three separate reports: A target audience report, Tone of Voice, and Brand fundamentals Analysis. Put it in the strategy folder as markdown files.`;
   
-      const acceptanceCriteria = "Documents are comprehensive and serve as a foundation for future communications and content creation.";
+      const acceptanceCriteria = "Documents are comprehensive and serve as a foundation for future communications and content creation. Ensure the user is happy with the documents and has approved them.";
    
       if (!stepCompleted) {
           const prompt = `

@@ -10,6 +10,7 @@ export class AnalyzerService {
      * Handles duplicates by updating existing records
      * Returns the tweets enriched with their database IDs
      */
+
     static async saveParsedTweets(parsedTweets: schema.InsertTweetAnalyzerWithMedia[]): Promise<schema.SavedTweetAnalyzer[]> {
         if (parsedTweets.length === 0) return [];
 
@@ -148,15 +149,8 @@ export class AnalyzerService {
         return result[0] || null;
     }
 
-    /**
-     * Get tweet by API ID (external tweet ID)
-     */
-    static async getTweetByApiId(apiId: string) {
-        const result = await getDb()
-            .select()
-            .from(schema.tweetsAnalyzer)
-            .where(eq(schema.tweetsAnalyzer.apiId, apiId))
-            .limit(1);
-        return result[0] || null;
+    static async getTweetsBySql(sql: string) {
+        const result = await getDb().execute(sql);
+        return result;
     }
 }
