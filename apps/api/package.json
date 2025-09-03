@@ -1,0 +1,19 @@
+{
+  "name": "api",
+  "type": "module",
+  "scripts": {
+    "dev": "bun --env-file=../../.env --hot src/server.ts"
+  },
+  "dependencies": {
+    "@brand-listener/mastra-runtime": "workspace:*",
+    "@mastra/deployer": "^0.15.2",
+    "@mastra/mcp": "^0.10.12",
+    "@scalar/hono-api-reference": "^0.9.16",
+    "@hono/swagger-ui": "^0.5.2",
+    "hono": "^4.9.5"
+  },
+  "devDependencies": {
+    "typescript": "^5.5.0"
+  }
+}
+
