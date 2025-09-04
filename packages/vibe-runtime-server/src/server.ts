@@ -3,11 +3,12 @@ import { initEnv } from './env-loader.js';
 await initEnv();
 
 // Now safely import modules that depend on environment variables
-const { createHonoServer } = await import('@mastra/deployer/server');
 const { createMastra } = await import('@vibeflow/mastra-runtime');
 import fs from 'node:fs/promises';
 import path from 'node:path';
 const { serve } = await import('@hono/node-server');
+const { Hono } = await import('hono');
+import type { Context } from 'hono';
 
 const WORKFLOWS_DIR = process.env.WORKFLOWS_DIR || '.vibeflow';
 const PORT = Number(process.env.RUNTIME_SERVER_PORT || process.env.PORT || 4111);
@@ -48,11 +49,32 @@ async function main() {
     workflows: compiledWorkflows
   });
   
-  const app = await createHonoServer(mastra);
+  // Create Hono app
+  const app = new Hono();
 
-  app.get('/health', (c) => c.text('ok'));
+  // Add health check endpoint
+  app.get('/health', (c: Context) => c.text('ok'));
 
- const server = serve({ fetch: app.fetch, port: PORT, hostname: HOST });
+  // Add basic Mastra endpoints (you can expand these as needed)
+  app.get('/api/workflows', async (c: Context) => {
+    try {
+      const workflows = mastra.getWorkflows({ serialized: true });
+      return c.json(workflows);
+    } catch (error) {
+      return c.json({ error: 'Failed to get workflows' }, 500);
+    }
+  });
+
+  app.get('/api/agents', async (c: Context) => {
+    try {
+      const agents = mastra.getAgents();
+      return c.json(Object.keys(agents));
+    } catch (error) {
+      return c.json({ error: 'Failed to get agents' }, 500);
+    }
+  });
+
+  const server = serve({ fetch: app.fetch, port: PORT, hostname: HOST });
 
   console.log(`Vibeflow runtime server listening on http://${HOST}:${PORT}`);
   return server;
