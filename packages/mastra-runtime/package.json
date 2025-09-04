@@ -1,5 +1,5 @@
 {
-  "name": "@brand-listener/mastra-runtime",
+  "name": "@vibeflow/mastra-runtime",
   "version": "0.1.0",
   "type": "module",
   "main": "dist/index.js",
@@ -18,18 +18,18 @@
   },
   "dependencies": {
     "@ai-sdk/openai": "^1.3.24",
-    "@brand-listener/agent-sdk": "workspace:*",
-    "@brand-listener/core": "workspace:*",
-    "@brand-listener/database": "workspace:*",
-    "@brand-listener/ingestion": "workspace:*",
+    "@vibeflow/agent-sdk": "workspace:*",
+    "@vibeflow/core": "workspace:*",
+    "@vibeflow/database": "workspace:*",
+    "@vibeflow/ingestion": "workspace:*",
     "@google/genai": "^1.16.0",
     "@hono/swagger-ui": "^0.5.2",
     "@hono/zod-openapi": "^0.16.4",
-    "@mastra/client-js": "latest",
-    "@mastra/core": "latest",
+    "@mastra/client-js": "^0.11.2",
+    "@mastra/core": "^0.15.2",
     "@mastra/deployer": "^0.15.2",
-    "@mastra/libsql": "latest",
-    "@mastra/loggers": "latest",
+    "@mastra/libsql": "^0.13.8",
+    "@mastra/loggers": "^0.10.10",
     "@mastra/mcp": "^0.10.12",
     "@mastra/memory": "^0.13.1",
     "@mastra/pg": "^0.14.2",
@@ -44,8 +44,10 @@
     "hono": "^4.9.5",
     "replicate": "^1.0.1",
     "tsup": "^8.5.0",
-    "uuid": "^11.1.0",
-    "zod": "^3.25.75"
+    "uuid": "^11.1.0"
+  },
+  "peerDependencies": {
+    "zod": "^3.25.0"
   },
   "devDependencies": {
     "@types/bun": "latest",

@@ -1,5 +1,5 @@
 import { TwitterApiTweet, LastTweetsApiResponse } from "../client/twitter";
-import { schema } from "@brand-listener/database";
+import { schema } from "@vibeflow/database";
 
 
 // HACK: This is a hack to get the analyzer response into the correct format

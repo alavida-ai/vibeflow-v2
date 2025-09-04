@@ -1,6 +1,6 @@
-import { createTool } from "@mastra/core";
+import { createTool, Tool } from "@mastra/core";
 import { z } from "zod";
-import { startWorkflow, StartWorkflowResult, startWorkflowResultSchema } from "@brand-listener/agent-sdk";
+import { startWorkflow, startWorkflowResultSchema } from "@vibeflow/agent-sdk";
 import { setSession } from "../../sessions";
 
 export const startWorkflowTool = createTool({
@@ -10,7 +10,9 @@ export const startWorkflowTool = createTool({
     workflowId: z.string()
   }),
   outputSchema: startWorkflowResultSchema,
-  execute: async ({ context, runtimeContext }, options) => {
+  execute: async ({ context, runtimeContext, mastra }, options) => {
+
+    console.log("mastra", mastra);
     // @ts-ignore
     const mcpSid = options?.extra?.sessionId;       // provided by MCP over Hono SSE
     console.log("appSid", mcpSid)

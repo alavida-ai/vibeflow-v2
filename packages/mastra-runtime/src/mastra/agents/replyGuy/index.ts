@@ -42,7 +42,7 @@ export const replyGuyAgent = new Proxy({} as Agent, {
 ❌ replyGuyAgent cannot be used directly in monorepo context.
 🔧 Use createReplyGuyAgent(config) instead:
 
-import { createReplyGuyAgent } from '@brand-listener/agents';
+import { createReplyGuyAgent } from '@vibeflow/agents';
 
 const agent = createReplyGuyAgent({
     openRouter: {

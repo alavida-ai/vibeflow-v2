@@ -1,5 +1,5 @@
 {
-  "name": "@brand-listener/agent-sdk",
+  "name": "@vibeflow/agent-sdk",
   "version": "0.0.0",
   "type": "module",
   "scripts": {
@@ -7,9 +7,10 @@
     "dev": "tsup src/index.ts --format esm --sourcemap --dts --out-dir dist --watch"
   },
   "dependencies": {
+    "@mastra/client-js": "^0.11.2",
     "drizzle-orm": "^0.44.5",
     "yaml": "^2.3.2",
-    "@mastra/client-js": "^0.11.2"
+    "zod": "^3.25.0"
   },
   "exports": {
     ".": {

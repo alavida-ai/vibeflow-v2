@@ -1,6 +1,6 @@
 import { createTool } from "@mastra/core";
-import z from "zod";
-import { listWorkflows } from "@brand-listener/agent-sdk";
+import { z } from "zod";
+import { listWorkflows } from "@vibeflow/agent-sdk";
 
 export const listWorkflowsTool = createTool({
   id: "list-workflows",
@@ -9,9 +9,8 @@ export const listWorkflowsTool = createTool({
   outputSchema: z.object({
     workflows: z.record(z.string(), z.any())
   }),
-  execute: async ({ runtimeContext }, options) => {
+  execute: async ({ runtimeContext }) => {
     const workflows = await listWorkflows();
-    console.log("Workflows", workflows);
     return { workflows };
   }
 });

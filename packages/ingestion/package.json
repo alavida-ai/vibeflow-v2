@@ -1,5 +1,5 @@
 {
-  "name": "@brand-listener/ingestion",
+  "name": "@vibeflow/ingestion",
   "version": "1.0.0",
   "description": "",
   "type": "module",
@@ -23,9 +23,9 @@
   "license": "ISC",
   "packageManager": "pnpm@10.13.1",
   "dependencies": {
-    "@brand-listener/core": "workspace:*",
-    "@brand-listener/database": "workspace:*",
-    "zod": "^4.1.3"
+    "@vibeflow/core": "workspace:*",
+    "@vibeflow/database": "workspace:*",
+    "zod": "^3.25.0"
   },
   "devDependencies": {
     "tsup": "^8.5.0"

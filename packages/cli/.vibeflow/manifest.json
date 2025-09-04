@@ -1,0 +1,15 @@
+{
+  "generatedAt": "2025-09-04T15:07:23.306Z",
+  "workflows": [
+    {
+      "id": "new",
+      "path": "workflows/new.json",
+      "hash": "50b25e143ed14543891103610e2017360f4570f5"
+    },
+    {
+      "id": "test",
+      "path": "workflows/test.json",
+      "hash": "35e12f7ee4d9c9fa95c1d106a6566df9d21d0dd5"
+    }
+  ]
+}

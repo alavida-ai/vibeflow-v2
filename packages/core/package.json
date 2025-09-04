@@ -1,9 +1,9 @@
 {
-  "name": "@brand-listener/core",
+  "name": "@vibeflow/core",
   "version": "0.0.0",
   "type": "module",
   "dependencies": {
-    "@brand-listener/database": "workspace:*",
+    "@vibeflow/database": "workspace:*",
     "@google/genai": "^1.16.0",
     "drizzle-orm": "^0.44.5",
     "uuid": "^11.1.0",

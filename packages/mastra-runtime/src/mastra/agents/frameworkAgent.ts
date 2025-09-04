@@ -9,7 +9,7 @@ const router = createOpenRouterProvider({
   apiKey: process.env.OPENROUTER_API_KEY!
 });
 
-export const frameworkAgent = new Agent({
+export const frameworkAgent: Agent = new Agent({
   name: "Framework Agent",
   instructions: `
 ROLE ASSIGNMENT

@@ -1,5 +1,5 @@
 {
-  "name": "@brand-listener/reporting",
+  "name": "@vibeflow/reporting",
   "version": "1.0.0",
   "description": "Brand Listener Twitter reporting service for AWS deployment",
   "type": "module",
@@ -22,8 +22,8 @@
   "license": "ISC",
   "packageManager": "pnpm@10.13.1",
   "dependencies": {
-    "@brand-listener/core": "workspace:*",
-    "@brand-listener/database": "workspace:*",
+    "@vibeflow/core": "workspace:*",
+    "@vibeflow/database": "workspace:*",
     "zod": "^3.23.8"
   },
   "devDependencies": {

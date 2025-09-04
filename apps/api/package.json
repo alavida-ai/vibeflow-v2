@@ -5,12 +5,12 @@
     "dev": "bun --env-file=../../.env --hot src/server.ts"
   },
   "dependencies": {
-    "@brand-listener/mastra-runtime": "workspace:*",
+    "@vibeflow/mastra-runtime": "workspace:*",
     "@hono/swagger-ui": "^0.5.2",
     "@mastra/deployer": "^0.15.2",
     "@mastra/mcp": "^0.10.12",
     "@scalar/hono-api-reference": "^0.9.16",
-    "bun": "^1.2.2",
+    "bun-types": "^1.2.21",
     "hono": "^4.9.5"
   },
   "devDependencies": {

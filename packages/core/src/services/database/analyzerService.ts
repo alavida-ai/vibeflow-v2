@@ -1,7 +1,7 @@
 import {
     getDb,
     schema
-} from "@brand-listener/database";
+} from "@vibeflow/database";
 import { eq, and, isNull } from 'drizzle-orm';
 
 export class AnalyzerService {

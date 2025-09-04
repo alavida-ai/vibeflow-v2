@@ -1,10 +1,10 @@
-import { createTool } from '@mastra/core/tools';
-import { TwitterAnalyser } from '@brand-listener/ingestion';
+import { createTool, Tool } from '@mastra/core/tools';
+import { TwitterAnalyser } from '@vibeflow/ingestion';
 import { z } from 'zod';
-import { AnalyzerService } from '@brand-listener/core';
+import { AnalyzerService } from '@vibeflow/core';
 
-
-export const twitterSearcherTool = createTool({
+// @ts-ignore
+export const twitterSearcherTool : Tool = createTool({
   id: 'twitter-scraper',
   description: 'Search for tweets from a user and get info on any media in the tweets',
   inputSchema: z.object({
@@ -54,7 +54,8 @@ export const twitterSearcherTool = createTool({
 });
 
 
-export const twitterAnalyserTool = createTool({
+// @ts-ignore
+export const twitterAnalyserTool: Tool = createTool({
   id: 'twitter-analyser',
   description: `Analyze a user\'s tweets and get info on any media in the tweets. You need to write a SQL query to get the tweets to analyze. A username will be provided to analyze the tweets. If this returns empty it means we have not scraped the tweets yet. So you to use the twitter scraper tool to scrape the tweets.
       SELECT 

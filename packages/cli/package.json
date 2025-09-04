@@ -1,0 +1,29 @@
+{
+  "name": "@vibeflow/cli",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsup src/index.ts --format esm --sourcemap --dts --out-dir dist --external commander",
+    "dev": "tsx src/index.ts",
+    "prepublishOnly": "pnpm build"
+  },
+  "exports": {
+    ".": "./dist/index.js"
+  },
+  "bin": {
+    "vibe": "./dist/index.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "packageManager": "pnpm@10.13.1",
+  "dependencies": {
+    "@vibeflow/compiler": "workspace:*",
+    "commander": "^12.1.0"
+  },
+  "devDependencies": {
+    "tsx": "^4.7.1",
+    "typescript": "^5.3.3",
+    "tsup": "^8.5.0"
+  }
+}
