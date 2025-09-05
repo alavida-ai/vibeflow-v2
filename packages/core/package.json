@@ -1,6 +1,6 @@
 {
   "name": "@vibeflow/core",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "type": "module",
   "dependencies": {
     "@vibeflow/database": "workspace:*",
@@ -26,6 +26,9 @@
   "files": [
     "dist"
   ],
+  "publishConfig": {
+    "access": "public"
+  },
   "devDependencies": {
     "@types/node": "^20.5.0",
     "@types/uuid": "^10.0.0",

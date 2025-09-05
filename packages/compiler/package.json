@@ -1,6 +1,6 @@
 {
   "name": "@vibeflow/compiler",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -12,6 +12,9 @@
   },
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
   "description": "Workflow compiler for Vibeflow - compiles YAML workflows to executable format",
   "keywords": [
     "vibeflow",
@@ -30,6 +33,9 @@
   "homepage": "https://vibeflow.dev",
   "bugs": {
     "url": "https://github.com/vibeflow/vibeflow/issues"
+  },
+  "publishConfig": {
+    "access": "public"
   },
   "packageManager": "pnpm@10.13.1",
   "dependencies": {

@@ -1,6 +1,7 @@
 {
   "name": "api",
   "type": "module",
+  "private": true,
   "scripts": {
     "dev": "bun --env-file=../../.env --hot src/server.ts"
   },

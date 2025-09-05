@@ -10,6 +10,7 @@ import type { CompileOptions, Manifest, ManifestWorkflowEntry } from './types';
 
 // Export types for external use
 export type { WorkflowInput, StepInput } from './schema';
+export type { Manifest, ManifestWorkflowEntry, CompileOptions } from './types';
 
 export { WorkflowSchema, StepSchema } from './schema';
 

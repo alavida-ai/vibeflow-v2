@@ -3,7 +3,8 @@ import { exit } from 'node:process';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { Command } from 'commander';
-import { compile, watch, type WatchOptions } from '@vibeflow/compiler';
+import { compile, watch, type WatchOptions, type Manifest } from '@vibeflow/compiler';
+import { startServer } from '@vibeflow/runtime-server';
 import chalk from 'chalk';
 import spawn from 'cross-spawn';
 import type { ChildProcess } from 'node:child_process';
@@ -24,8 +25,7 @@ const log = {
 };
 
 class DevServer {
-  private serverProcess: ChildProcess | null = null;
-  private isShuttingDown = false;
+  private serverInstance: any = null;
 
   constructor(
     private srcDir: string,
@@ -34,131 +34,48 @@ class DevServer {
     private host: string = 'localhost'
   ) {}
 
-  async start(): Promise<void> {
-    if (this.serverProcess) {
-      log.warn('Server already running, stopping first...');
-      await this.stop();
+  async start(manifest: Manifest): Promise<void> {
+    if (this.serverInstance) {
+      log.warn('Server already running, rebuilding workflows instead...');
+      await this.reloadWorkflows(manifest);
+      return;
     }
 
     log.server(`${log.time()} Starting Vibeflow runtime server on ${this.host}:${this.port}`);
 
-    // Determine the path to the runtime server
-    const runtimeServerPath = path.resolve(__dirname, '../../vibe-runtime-server/src/server.ts');
-    
-    // Use tsx to run the server in development mode for better error reporting
-    this.serverProcess = spawn('npx', ['tsx', runtimeServerPath], {
-      stdio: ['pipe', 'pipe', 'pipe'],
-      env: {
-        ...process.env,
-        SRC_DIR: this.srcDir,
-        OUT_DIR: this.outDir,
-        RUNTIME_SERVER_PORT: this.port.toString(),
-        RUNTIME_SERVER_HOST: this.host,
-        NODE_ENV: 'development',
-      },
-    });
-
-    if (!this.serverProcess.stdout || !this.serverProcess.stderr) {
-      throw new Error('Failed to spawn server process');
-    }
-
-    // Store references to avoid TypeScript null checks
-    const serverProcess = this.serverProcess;
-    const stdout = serverProcess.stdout;
-    const stderr = serverProcess.stderr;
-
-    // Forward server output with prefixes
-    if (stdout) {
-      stdout.on('data', (data: Buffer) => {
-        const output = data.toString().trim();
-        if (output) {
-          output.split('\n').forEach(line => {
-            if (line.trim()) {
-              console.log(`${chalk.dim('[server]')} ${line}`);
-            }
-          });
-        }
-      });
-    }
-
-    if (stderr) {
-      stderr.on('data', (data: Buffer) => {
-        const output = data.toString().trim();
-        if (output) {
-          output.split('\n').forEach(line => {
-            if (line.trim()) {
-              console.log(`${chalk.dim('[server]')} ${chalk.red(line)}`);
-            }
-          });
-        }
-      });
-    }
-
-    serverProcess.on('exit', (code, signal) => {
-      if (!this.isShuttingDown) {
-        if (code === 0) {
-          log.server(`${log.time()} Server exited gracefully`);
-        } else {
-          log.error(`${log.time()} Server exited with code ${code} (signal: ${signal})`);
-        }
-      }
-      this.serverProcess = null;
-    });
-
-    serverProcess.on('error', (err) => {
-      log.error(`${log.time()} Server error: ${err.message}`);
-    });
-
-    // Give the server a moment to start
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    
-    if (this.serverProcess && !this.serverProcess.killed) {
+    try {
+      this.serverInstance = await startServer(manifest, this.outDir, { port: this.port, host: this.host });
       log.success(`${log.time()} Server started successfully`);
       log.info(`${log.time()} API available at http://${this.host}:${this.port}`);
       log.info(`${log.time()} Docs available at http://${this.host}:${this.port}/docs/swagger`);
+    } catch (err) {
+      log.error(`${log.time()} Server error: ${(err as Error).message}`);
+      throw err;
     }
   }
 
   async stop(): Promise<void> {
-    if (!this.serverProcess) return;
-
-    this.isShuttingDown = true;
+    if (!this.serverInstance) return;
+    
     log.server(`${log.time()} Stopping server...`);
-
-    return new Promise((resolve) => {
-      if (!this.serverProcess) {
-        resolve();
-        return;
-      }
-
-      const killTimer = setTimeout(() => {
-        if (this.serverProcess && !this.serverProcess.killed) {
-          log.warn(`${log.time()} Force killing server process`);
-          this.serverProcess.kill('SIGKILL');
-        }
-      }, 5000);
-
-      this.serverProcess.on('exit', () => {
-        clearTimeout(killTimer);
-        this.serverProcess = null;
-        this.isShuttingDown = false;
-        log.server(`${log.time()} Server stopped`);
-        resolve();
-      });
-
-      // Try graceful shutdown first
-      this.serverProcess.kill('SIGTERM');
-    });
+    this.serverInstance.stop();
+    this.serverInstance = null;
+    log.server(`${log.time()} Server stopped`);
   }
 
-  async restart(): Promise<void> {
-    log.server(`${log.time()} Restarting server...`);
-    await this.stop();
-    await this.start();
+  async reloadWorkflows(manifest: Manifest): Promise<void> {
+    if (!this.serverInstance) {
+      await this.start(manifest);
+      return;
+    }
+
+    log.server(`${log.time()} Rebuilding workflow server...`);
+    await this.serverInstance.reloadWorkflows(manifest);
+    log.success(`${log.time()} Workflow server rebuilt and remounted`);
   }
 
-  isRunning(): boolean {
-    return this.serverProcess !== null && !this.serverProcess.killed;
+  isServerRunning(): boolean {
+    return this.serverInstance !== null;
   }
 }
 
@@ -227,30 +144,28 @@ program
         srcDir: resolvedSrc,
         outDir: resolvedOut,
         debounceMs,
-        onEvent: async (evt: 'build-start' | 'build-success' | 'build-error', info?: { error?: Error; manifest?: any }) => {
+        onEvent: async (evt: 'build-start' | 'build-success' | 'build-error', info?: { error?: Error; manifest?: Manifest }) => {
           if (evt === 'build-start') {
             log.build(`${log.time()} Workflow changes detected, recompiling...`);
           }
           if (evt === 'build-success') {
-            const count = info?.manifest?.workflows.length ?? 0;
+            const manifest = info?.manifest;
+            if (!manifest) return;
+            
+            const count = manifest.workflows.length;
             log.success(`${log.time()} Compiled ${count} workflow${count !== 1 ? 's' : ''}`);
             
-            // Restart server after successful compilation
-            if (devServer.isRunning()) {
-              await devServer.restart();
-            } else {
-              await devServer.start();
-            }
+            // Rebuild and remount workflow server after successful compilation  
+            await devServer.reloadWorkflows(manifest);
           }
           if (evt === 'build-error') {
             log.error(`${log.time()} Compilation failed: ${info?.error?.message}`);
-            log.warn(`${log.time()} Server not restarted due to compilation errors`);
+            log.warn(`${log.time()} Workflow server not rebuilt due to compilation errors`);
           }
         },
       } as WatchOptions);
 
-      // Start the server for the first time after initial compilation
-      await devServer.start();
+      // Note: watch() performs an initial build and will trigger build-success → start server
 
       log.success(`${log.time()} Vibeflow development server is ready!`);
       log.info(`${log.time()} Watching for workflow changes in ${resolvedSrc}`);

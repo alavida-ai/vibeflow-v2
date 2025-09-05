@@ -1,6 +1,6 @@
 {
   "name": "@vibeflow/reporting",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "Brand Listener Twitter reporting service for AWS deployment",
   "type": "module",
   "scripts": {
@@ -16,8 +16,16 @@
   },
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
-  "files": ["dist"],
-  "keywords": ["twitter", "ingestion", "aws", "lambda", "sst"],
+  "files": [
+    "dist"
+  ],
+  "keywords": [
+    "twitter",
+    "ingestion",
+    "aws",
+    "lambda",
+    "sst"
+  ],
   "author": "",
   "license": "ISC",
   "packageManager": "pnpm@10.13.1",
@@ -25,6 +33,9 @@
     "@vibeflow/core": "workspace:*",
     "@vibeflow/database": "workspace:*",
     "zod": "^3.23.8"
+  },
+  "publishConfig": {
+    "access": "public"
   },
   "devDependencies": {
     "tsx": "^4.7.1",
