@@ -1,9 +1,9 @@
-import { createTool, Tool } from "@mastra/core";
+import { createTool } from "@mastra/core";
 import { z } from "zod";
 import { startWorkflow, startWorkflowResultSchema } from "@vibeflow/agent-sdk";
 import { setSession } from "../../sessions";
 
-export const startWorkflowTool = createTool({
+export const startWorkflowTool: ReturnType<typeof createTool> = createTool({
   id: "start-workflow",
   description: "Start a workflow and return the first suspend payload (first task). Only one workflow can be active per session.",
   inputSchema: z.object({

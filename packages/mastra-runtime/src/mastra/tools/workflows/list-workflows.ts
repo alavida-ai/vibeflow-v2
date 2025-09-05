@@ -2,7 +2,7 @@ import { createTool } from "@mastra/core";
 import { z } from "zod";
 import { listWorkflows } from "@vibeflow/agent-sdk";
 
-export const listWorkflowsTool = createTool({
+export const listWorkflowsTool: ReturnType<typeof createTool> = createTool({
   id: "list-workflows",
   description: "List all workflows",
   inputSchema: z.object({}),

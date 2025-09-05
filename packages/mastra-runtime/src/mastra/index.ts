@@ -6,7 +6,8 @@ import { createStorage } from "./storage";
 import { frameworkAgent } from "./agents/frameworkAgent";
 import { createVibeflowMCP } from "./mcp";
 
-export async function createMastraInstance(additionalWorkflows: Record<string, Workflow> = {}) {
+export async function createMastraInstance(options: {
+  workflows: Record<string, Workflow>}) {
   return new Mastra({
     agents: {
       frameworkAgent
@@ -14,7 +15,7 @@ export async function createMastraInstance(additionalWorkflows: Record<string, W
     workflows: {
       testWorkflow,
       businessStrategyWorkflow,
-      ...additionalWorkflows
+      ...options.workflows
     },
     bundler: {
       transpilePackages: [

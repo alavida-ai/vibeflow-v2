@@ -34,6 +34,6 @@
   "devDependencies": {
     "drizzle-kit": "^0.31.4",
     "tsup": "^8.5.0",
-    "tsx": "^3.14.0"
+    "tsx": "^4.20.5"
   }
 }

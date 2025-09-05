@@ -1,28 +1,18 @@
 import { createStep, createWorkflow, Workflow } from "@mastra/core/workflows";
 import { z } from "zod";
 import { workflowOrchestrationAgent } from "../agents/workflowOrchestationAgent";
-
-// JSON Spec Interfaces
-export interface WorkflowSpec {
-  id: string;
-  description: string;
-  steps: StepSpec[];
-}
-
-export interface StepSpec {
-  id: string;
-  description: string;
-  promptInstructions: string;
-  acceptanceCriteria: string;
-}
+import type { WorkflowInput, StepInput } from "@vibeflow/compiler";
 
 // Runtime compiler that follows the suspend/resume + dountil pattern
-export function compileWorkflow(spec: WorkflowSpec, mastra: any) : Workflow {
+export function compileWorkflow(spec: WorkflowInput) : {
+  id: string,
+  workflow: Workflow
+} {
   // Create steps following the exact pattern from business-strategy.ts
   const compiledSteps = spec.steps.map(stepSpec => 
     createStep({
       id: stepSpec.id,
-      description: stepSpec.description,
+      description: stepSpec.description ?? stepSpec.id,
       inputSchema: z.object({}),
       resumeSchema: z.object({
         stepCompleted: z.boolean()
@@ -39,12 +29,17 @@ export function compileWorkflow(spec: WorkflowSpec, mastra: any) : Workflow {
           const { stepCompleted } = resumeData ?? {};
 
           if (!stepCompleted) {
+            // Handle acceptance_criteria as string or array
+            const acceptanceCriteria = Array.isArray(stepSpec.acceptance_criteria) 
+              ? stepSpec.acceptance_criteria.join('\n') 
+              : (stepSpec.acceptance_criteria ?? 'Step completed successfully');
+
             const prompt = `
             The prompt is:
-            ${stepSpec.promptInstructions}
+            ${stepSpec.prompt}
         
             The acceptance criteria is:
-            ${stepSpec.acceptanceCriteria}
+            ${acceptanceCriteria}
             `;
             
             const result = await workflowOrchestrationAgent.generate(prompt);
@@ -68,43 +63,60 @@ export function compileWorkflow(spec: WorkflowSpec, mastra: any) : Workflow {
   // Create workflow following the dountil + map pattern
   let workflow = createWorkflow({
     id: spec.id,
-    description: spec.description,
+    description: spec.description ?? spec.id,
     inputSchema: z.object({}),
     outputSchema: z.object({
+      brandName: z.string(),
+      workflowStepOutput: z.string(), 
       stepCompleted: z.boolean()
-    }),
-    mastra
+    })
   });
 
   // Chain each step with dountil + map pattern
-  compiledSteps.forEach(step => {
+  compiledSteps.forEach((step, index) => {
     workflow = workflow
-      .dountil(step, async ({ inputData: { stepCompleted } }) => stepCompleted)
-      .map(async () => ({})); // Clear output after each step
+      .dountil(step, async ({ inputData: { stepCompleted } }) => stepCompleted);
+    
+    // Add map to clear output between steps (except for the last step)
+    if (index < compiledSteps.length - 1) {
+      workflow = workflow.map(async () => ({}));
+    }
   });
   
   workflow.commit();
 
-  return workflow;
+  return {
+    id: spec.id,
+    workflow
+  };
 }
+
+export async function compileWorkflows(workflows: WorkflowInput[]) : Promise<Record<string, {
+  id: string,
+  workflow: Workflow
+}>> {
+  const compiledWorkflows = await Promise.all(workflows.map(compileWorkflow));
+
+  return Object.fromEntries(compiledWorkflows.map(wf => [wf.id, wf]));
+} 
 
 // Example usage:
 /*
-const exampleSpec: WorkflowSpec = {
+const exampleSpec: WorkflowInput = {
   id: "custom-strategy-workflow",
   description: "A custom strategy workflow from JSON",
   steps: [
     {
       id: "research-step",
       description: "Research the market",
-      promptInstructions: "Research the market for the user's business and understand their competitive landscape.",
-      acceptanceCriteria: "You have a comprehensive understanding of the market and competitors."
+      prompt: "Research the market for the user's business and understand their competitive landscape.",
+      acceptance_criteria: "You have a comprehensive understanding of the market and competitors."
     },
     {
       id: "analysis-step", 
       description: "Analyze findings",
-      promptInstructions: "Analyze the research findings and identify key opportunities and threats.",
-      acceptanceCriteria: "Analysis is complete with clear opportunities and threats identified."
+      prompt: "Analyze the research findings and identify key opportunities and threats.",
+      acceptance_criteria: ["Analysis is complete", "Clear opportunities identified", "Threats documented"]
     }
   ]
 };

@@ -3,13 +3,14 @@ import { z } from "zod";
 import { getNextStep, getNextStepResultSchema } from "@vibeflow/agent-sdk";
 import { deleteSession, getSession } from "../../sessions";
 
-export const getNextStepTool = createTool({
+export const getNextStepTool: ReturnType<typeof createTool> = createTool({
   id: "get-next-step",
   description: "Resume the current workflow by marking the previous step as completed and return the next suspend payload (next task). Requires an active workflow started with start-workflow.",
   inputSchema: z.object({}), // No input needed - uses runtime context
   outputSchema: getNextStepResultSchema,
   execute: async ({ runtimeContext }, options) => {
     console.log("options", options)
+
     // @ts-ignore
     const mcpSid = options?.extra?.sessionId;       // provided by MCP over Hono SSE
     console.log("appSid", mcpSid)

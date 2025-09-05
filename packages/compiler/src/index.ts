@@ -8,6 +8,11 @@ import { ZodError } from 'zod';
 import { WorkflowSchema, type WorkflowInput } from './schema';
 import type { CompileOptions, Manifest, ManifestWorkflowEntry } from './types';
 
+// Export types for external use
+export type { WorkflowInput, StepInput } from './schema';
+
+export { WorkflowSchema, StepSchema } from './schema';
+
 async function ensureDir(dir: string): Promise<void> {
   await fs.mkdir(dir, { recursive: true });
 }

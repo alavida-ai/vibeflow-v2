@@ -24,6 +24,10 @@
   "packageManager": "pnpm@10.13.1",
   "dependencies": {
     "@hono/node-server": "^1.19.1",
+    "@hono/swagger-ui": "^0.5.2",
+    "@mastra/deployer": "^0.15.3",
+    "@scalar/hono-api-reference": "^0.9.16",
+    "@vibeflow/compiler": "workspace:*",
     "@vibeflow/mastra-runtime": "workspace:*",
     "dotenv": "^17.2.2",
     "hono": "^4.9.5"
