@@ -27,6 +27,7 @@ interface Framework {
   description: string;
   structure: string;
   prompt: string;
+  tweetsReferenced: number[];
   metrics: {
     avgViews: number;
     avgLikes: number;
@@ -42,45 +43,45 @@ interface AnalysisHistory {
   totalPosts: number;
 }
 
-// Simplified mock data
-const mockFrameworks: Framework[] = [
-  {
-    id: "1",
-    title: "Problem → Solution → Result",
-    description: "Present a problem, share your solution, quantify the outcome",
-    structure: "1. Identify problem\n2. Share solution\n3. Show result\n4. Ask question",
-    prompt: "You are a content expert. Help me create a tweet using the Problem → Solution → Result framework.\n\nAsk me:\n1. What problem does my audience face?\n2. What solution do I offer?\n3. What specific result can I share?\n4. What engaging question should I end with?\n\nCreate a tweet under 280 characters that follows this structure.",
-    metrics: {
-      avgViews: 125000,
-      avgLikes: 890,
-      successRate: 84
-    }
-  },
-  {
-    id: "2",
-    title: "Contrarian Opinion + Data",
-    description: "Challenge common beliefs with supporting evidence",
-    structure: "1. Contrarian statement\n2. Supporting data\n3. Why it matters\n4. Discussion prompt",
-    prompt: "You are a thought leadership expert. Help me create a contrarian take tweet.\n\nAsk me:\n1. What common belief do I disagree with?\n2. What data supports my view?\n3. Why should people care?\n4. What question sparks discussion?\n\nCreate a bold tweet under 280 characters.",
-    metrics: {
-      avgViews: 89000,
-      avgLikes: 1240,
-      successRate: 76
-    }
-  },
-  {
-    id: "3",
-    title: "Personal Story + Lesson",
-    description: "Share a transformative experience with clear takeaway",
-    structure: "1. Set the scene\n2. The challenge\n3. The insight\n4. The lesson",
-    prompt: "You are a storytelling expert. Help me craft a personal story tweet.\n\nAsk me:\n1. What challenge did I face?\n2. What was the turning point?\n3. What did I learn?\n4. How can others apply this?\n\nCreate an authentic story tweet under 280 characters.",
-    metrics: {
-      avgViews: 156000,
-      avgLikes: 2100,
-      successRate: 92
-    }
-  }
-];
+// // Simplified mock data
+// const mockFrameworks: Framework[] = [
+//   {
+//     id: "1",
+//     title: "Problem → Solution → Result",
+//     description: "Present a problem, share your solution, quantify the outcome",
+//     structure: "1. Identify problem\n2. Share solution\n3. Show result\n4. Ask question",
+//     prompt: "You are a content expert. Help me create a tweet using the Problem → Solution → Result framework.\n\nAsk me:\n1. What problem does my audience face?\n2. What solution do I offer?\n3. What specific result can I share?\n4. What engaging question should I end with?\n\nCreate a tweet under 280 characters that follows this structure.",
+//     metrics: {
+//       avgViews: 125000,
+//       avgLikes: 890,
+//       successRate: 84
+//     }
+//   },
+//   {
+//     id: "2",
+//     title: "Contrarian Opinion + Data",
+//     description: "Challenge common beliefs with supporting evidence",
+//     structure: "1. Contrarian statement\n2. Supporting data\n3. Why it matters\n4. Discussion prompt",
+//     prompt: "You are a thought leadership expert. Help me create a contrarian take tweet.\n\nAsk me:\n1. What common belief do I disagree with?\n2. What data supports my view?\n3. Why should people care?\n4. What question sparks discussion?\n\nCreate a bold tweet under 280 characters.",
+//     metrics: {
+//       avgViews: 89000,
+//       avgLikes: 1240,
+//       successRate: 76
+//     }
+//   },
+//   {
+//     id: "3",
+//     title: "Personal Story + Lesson",
+//     description: "Share a transformative experience with clear takeaway",
+//     structure: "1. Set the scene\n2. The challenge\n3. The insight\n4. The lesson",
+//     prompt: "You are a storytelling expert. Help me craft a personal story tweet.\n\nAsk me:\n1. What challenge did I face?\n2. What was the turning point?\n3. What did I learn?\n4. How can others apply this?\n\nCreate an authentic story tweet under 280 characters.",
+//     metrics: {
+//       avgViews: 156000,
+//       avgLikes: 2100,
+//       successRate: 92
+//     }
+//   }
+// ];
 
 const Index = () => {
   // State management
@@ -112,21 +113,58 @@ const Index = () => {
     setIsLoading(true);
     setShowNewAnalysis(false);
     
-    // Simulate API call
-    setTimeout(() => {
+    try {
+      // Call the analysis API
+      const response = await fetch('/api/analyze', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ username: inputUsername }),
+      });
+
+      const data = await response.json();
+
+      let frameworks = []; // Fallback to mock data
+      let totalPosts = 247;
+
+      if (response.ok && data.frameworks && Array.isArray(data.frameworks)) {
+        frameworks = data.frameworks;
+        totalPosts = data.totalPosts || 0;
+        console.log('Using real framework data:', frameworks);
+      } else {
+        console.log('API call failed or no framework data received, using mock data');
+        if (!response.ok) {
+          console.error('API Error:', data.error || 'Failed to analyze user');
+        }
+      }
+
       const newAnalysis: AnalysisHistory = {
         id: Date.now().toString(),
         username: inputUsername,
-        frameworks: mockFrameworks,
+        frameworks: frameworks,
         analyzedAt: new Date(),
-        totalPosts: 247
+        totalPosts: totalPosts
       };
 
       // Add to history (keep only last 10 analyses)
       setAnalysisHistory(prev => [newAnalysis, ...prev].slice(0, 10));
       setCurrentAnalysis(newAnalysis);
+    } catch (error) {
+      console.error('Error calling analysis API:', error);
+      // Still create an entry with mock data on error
+      const newAnalysis: AnalysisHistory = {
+        id: Date.now().toString(),
+        username: inputUsername,
+        frameworks: [],
+        analyzedAt: new Date(),
+        totalPosts: 0
+      };
+      setAnalysisHistory(prev => [newAnalysis, ...prev].slice(0, 10));
+      setCurrentAnalysis(newAnalysis);
+    } finally {
       setIsLoading(false);
-    }, 1500);
+    }
   };
 
   const handleSelectAnalysis = (analysis: AnalysisHistory) => {
@@ -211,7 +249,7 @@ const Index = () => {
           {showNewAnalysis ? (
             // New Analysis View
             <div className="flex items-center justify-center min-h-screen p-6">
-              <TwitterInput onAnalyze={handleAnalyze} isLoading={isLoading} />
+              <TwitterInput onSubmit={handleAnalyze} isLoading={isLoading} />
             </div>
           ) : (
             // Results View

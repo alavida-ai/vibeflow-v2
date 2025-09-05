@@ -4,18 +4,20 @@ import { Input } from "@/components/ui/input";
 import { Search } from "lucide-react";
 
 interface TwitterInputProps {
-  onAnalyze: (username: string) => void;
+  onSubmit: (username: string) => void;
   isLoading?: boolean;
 }
 
-export const TwitterInput = ({ onAnalyze, isLoading }: TwitterInputProps) => {
+export const TwitterInput = ({ onSubmit, isLoading }: TwitterInputProps) => {
   const [username, setUsername] = useState("");
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (username.trim()) {
-      onAnalyze(username.trim().replace('@', ''));
-    }
+    if (!username.trim()) return;
+
+    const cleanUsername = username.trim().replace('@', '');
+    onSubmit(cleanUsername);
+    setUsername(""); // Clear input after submission
   };
 
   return (

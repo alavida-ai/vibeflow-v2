@@ -1,7 +1,7 @@
 import { Agent } from "@mastra/core/agent";
 import { memory } from "../memory";
 import { createOpenRouterProvider } from "../router";
-import { CLAUDE_SONNET_4 } from "../constants";
+import { CLAUDE_SONNET_4, GPT_4O } from "../constants";
 import { userTweetsFetcherTool, userTweetsScraperTool } from "../tools/research/twitter-analyser";
 import { getMCPClient } from "../mcp/client";
 
@@ -187,12 +187,23 @@ Extract insights that reveal market positioning and differentiation strategies.
 Evaluate which techniques scale across different price points, audiences, and mediums.
 
 Execute this analysis with the precision of a master craftsman dissecting the work of legends, extracting every ounce of strategic value that can transform ordinary copy into conversion-crushing communications.
+
+TWEET REFERENCE REQUIREMENT:
+
+When analyzing Twitter content frameworks, you MUST include the specific tweet IDs that demonstrate each framework pattern. For each framework you identify:
+
+1. Use the userTweetsFetcherTool to get the user's tweet data
+2. Reference specific tweets by their ID that exemplify the framework
+3. Include these tweet IDs in your analysis output for each framework
+4. Format your output to clearly show which tweets support each framework pattern
+
+This tweet reference data is critical for calculating engagement metrics for each framework.
 `,
   model: router(CLAUDE_SONNET_4),
   memory: memory,
   tools: {  
     userTweetsFetcherTool,
-    userTweetsScraperTool,
+    // userTweetsScraperTool,
     ...(await getMCPClient().getTools())   
   }
 });

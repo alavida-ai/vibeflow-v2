@@ -6,6 +6,7 @@ import { eq, and, isNull, desc, inArray } from 'drizzle-orm';
 
 // Type for the getBestPerformingTweetsByUsernameView return value
 export type TweetAnalysisView = {
+    id: number;
     type: schema.TweetAnalyzer['type'];
     text: string;
     retweetCount: number;
@@ -174,6 +175,7 @@ export class AnalyzerService {
             .where(inArray(schema.tweetMediaAnalyzer.tweetId, bestTweets.map(tweet => tweet.id)));
 
         return bestTweets.map(tweet => ({
+            id: tweet.id,
             type: tweet.tweetType,
             text: tweet.text,
             retweetCount: tweet.retweetCount,
@@ -188,6 +190,67 @@ export class AnalyzerService {
                     type: m.type,
                     description: m.description
                 }))
+        }));
+    }
+
+    /**
+     * Get tweets by their IDs
+     * Used for calculating framework metrics based on specific tweet references
+     */
+    static async getTweetsByIds(tweetIds: string[]): Promise<TweetAnalysisView[]> {
+        if (tweetIds.length === 0) return [];
+
+        const db = getDb();
+
+        // Get tweets and their media in a single query
+        const tweetsWithMedia = await db
+            .select({
+                tweet: schema.tweetsAnalyzer,
+                media: schema.tweetMediaAnalyzer
+            })
+            .from(schema.tweetsAnalyzer)
+            .leftJoin(
+                schema.tweetMediaAnalyzer,
+                eq(schema.tweetMediaAnalyzer.tweetId, schema.tweetsAnalyzer.id)
+            )
+            .where(inArray(schema.tweetsAnalyzer.apiId, tweetIds))
+            .orderBy(desc(schema.tweetsAnalyzer.createdAt));
+
+        // Group media by tweet ID
+        const mediaByTweetId = new Map<number, Array<{
+            type: schema.TweetMediaAnalyzer['type'];
+            description: string | null;
+        }>>();
+
+        tweetsWithMedia.forEach(({ tweet, media }) => {
+            if (media) {
+                if (!mediaByTweetId.has(tweet.id)) {
+                    mediaByTweetId.set(tweet.id, []);
+                }
+                mediaByTweetId.get(tweet.id)!.push({
+                    type: media.type,
+                    description: media.description
+                });
+            }
+        });
+
+        // Get unique tweets and combine with their media
+        const uniqueTweets = new Map<number, typeof schema.tweetsAnalyzer.$inferSelect>();
+        tweetsWithMedia.forEach(({ tweet }) => {
+            uniqueTweets.set(tweet.id, tweet);
+        });
+
+        return Array.from(uniqueTweets.values()).map(tweet => ({
+            id: tweet.id,
+            type: tweet.type,
+            text: tweet.text,
+            retweetCount: tweet.retweetCount,
+            replyCount: tweet.replyCount,
+            likeCount: tweet.likeCount,
+            quoteCount: tweet.quoteCount,
+            viewCount: tweet.viewCount,
+            bookmarkCount: tweet.bookmarkCount,
+            media: mediaByTweetId.get(tweet.id) || []
         }));
     }
 }
