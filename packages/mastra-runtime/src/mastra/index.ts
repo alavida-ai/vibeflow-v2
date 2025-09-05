@@ -1,36 +1,41 @@
 import { Mastra } from "@mastra/core/mastra";
+import { Workflow } from "@mastra/core/workflows";
 import { testWorkflow } from "./workflows/test-workflow";
 import { businessStrategyWorkflow } from "./workflows/business-strategy";
 import { createStorage } from "./storage";
 import { frameworkAgent } from "./agents/frameworkAgent";
 import { createVibeflowMCP } from "./mcp";
 
-export const mastra = new Mastra({
-  agents: {
-    frameworkAgent
-  },
-  workflows: {
-    testWorkflow,
-    businessStrategyWorkflow,
-  },
-  bundler: {
-    transpilePackages: [
-      "@brand-listener/ingestion",
-      "@brand-listener/agent-sdk",
-      "@brand-listener/core"
-    ],
-    sourcemap: true,
-  },
-  mcpServers: {
-    vibeflow: await createVibeflowMCP(),
-  },
-  server: {
-    port: 4111,
-    host: "localhost",
-    build: {
-      openAPIDocs: true,
+export async function createMastraInstance(options: {
+  workflows: Record<string, Workflow>}) {
+  return new Mastra({
+    agents: {
+      frameworkAgent
     },
-  },
-  storage: createStorage()
-});
+    workflows: {
+      testWorkflow,
+      businessStrategyWorkflow,
+      ...options.workflows
+    },
+    bundler: {
+      transpilePackages: [
+        "@vibeflow/ingestion",
+        "@vibeflow/agent-sdk",
+        "@vibeflow/core"
+      ],
+      sourcemap: true,
+    },
+    mcpServers: {
+      vibeflow: await createVibeflowMCP(),
+    },
+    server: {
+      port: 4111,
+      host: "localhost",
+      build: {
+        openAPIDocs: true,
+      },
+    },
+    storage: createStorage()
+  });
+}
 

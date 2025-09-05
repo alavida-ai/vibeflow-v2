@@ -1,7 +1,7 @@
 import * as TwitterTransformer from "../transformer";
-import { schema } from "@brand-listener/database";
-import * as AnalyticsService from "@brand-listener/core";
-import * as TwitterDatabaseService from "@brand-listener/core";
+import { schema } from "@vibeflow/database";
+import * as AnalyticsService from "@vibeflow/core";
+import * as TwitterDatabaseService from "@vibeflow/core";
 import { TwitterClient, TwitterApiResponse } from "../client/twitter";
 /* -------------------------------------------------------------------------- */
 /*                              TYPES                                         */

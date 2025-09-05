@@ -1,8 +1,8 @@
 {
-  "name": "brand-listener-workspace",
+  "name": "vibeflow-workspace",
   "version": "1.0.0",
   "description": "AI-powered social media monitoring system that tracks brand mentions and keywords using Twitter API .io",
-  "private": true,
+  "private": false,
   "repository": {
     "type": "git",
     "url": "git+https://github.com/alavida/brand-listener.git"
@@ -27,23 +27,30 @@
     "packages/*",
     "apps/*"
   ],
+  "pnpm": {
+    "overrides": {
+      "zod": "^3.25.0",
+      "ai": "^4.3.19"
+    }
+  },
   "devDependencies": {
+    "@changesets/cli": "^2.29.6",
     "@types/node": "^20.5.0",
     "@typescript-eslint/eslint-plugin": "^6.4.0",
     "@typescript-eslint/parser": "^6.4.0",
-    "eslint": "^8.47.0",
+    "eslint": "^8.57.1",
     "prettier": "^3.0.0",
-    "tsx": "^3.12.7",
+    "tsx": "^4.20.5",
     "turbo": "^1.10.7",
     "typescript": "^5.1.6"
   },
   "scripts": {
     "build": "turbo build",
-    "dev": "turbo run dev --parallel --filter=agents-app --filter=@brand-listener/*",
+    "dev": "turbo run dev --parallel --filter=agents-app --filter=@vibeflow/*",
     "migrate": "turbo migrate",
     "generate": "turbo generate",
-    "generate:db": "pnpm --filter=@brand-listener/database generate",
-    "migrate:db": "pnpm --filter=@brand-listener/database migrate",
+    "generate:db": "pnpm --filter=@vibeflow/database generate",
+    "migrate:db": "pnpm --filter=@vibeflow/database migrate",
     "lint": "turbo lint",
     "typecheck": "turbo typecheck",
     "clean": "turbo clean",
@@ -51,8 +58,5 @@
     "setup": "./scripts/setup.sh",
     "verify": "./scripts/verify-setup.sh"
   },
-  "packageManager": "pnpm@10.13.1",
-  "dependencies": {
-    "zod": "^3.25.76"
-  }
+  "packageManager": "pnpm@10.13.1"
 }

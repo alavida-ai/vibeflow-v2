@@ -1,4 +1,4 @@
-import { getDb, schema } from "@brand-listener/database";
+import { getDb, schema } from "@vibeflow/database";
 import { eq, inArray, gt, and, ne, desc } from "drizzle-orm";
 
 /* -------------------------------------------------------------------------- */
