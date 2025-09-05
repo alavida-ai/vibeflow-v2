@@ -1,0 +1,119 @@
+# {{PROJECT_NAME}}
+
+A Vibeflow project for workflow-based automation and AI agent collaboration.
+
+## Getting Started
+
+### Prerequisites
+
+- Node.js 18+ 
+- pnpm, npm, or yarn
+- Cursor IDE (recommended for full MCP integration)
+
+### Installation
+
+```bash
+# Install dependencies
+pnpm install
+
+# Start development server  
+pnpm dev
+```
+
+## Project Structure
+
+```
+{{PROJECT_NAME}}/
+├── studio/
+│   └── workflows/          # YAML workflow definitions
+├── .cursor/
+│   ├── mcp.json           # MCP server configuration
+│   └── rules/             # Cursor AI rules and context
+├── package.json
+└── README.md
+```
+
+## Working with Workflows
+
+### Defining Workflows
+
+Workflows are defined in YAML format in the `studio/workflows/` directory:
+
+```yaml
+id: my-workflow
+description: Description of what this workflow does
+steps:
+  - id: step1
+    description: First step description
+    prompt: |
+      Instructions for this step
+    acceptance_criteria: |
+      - Criteria for completion
+      - What success looks like
+```
+
+### Using the MCP Integration
+
+This project includes Cursor MCP integration for AI-assisted workflow management:
+
+- **List workflows**: Use the `list-workflows` MCP tool
+- **Start workflows**: Use the `start-workflow` MCP tool  
+- **Navigate steps**: Use the `next-step` MCP tool
+
+### Development Commands
+
+```bash
+# Development server
+pnpm dev
+
+# Build for production
+pnpm build
+
+# Run tests
+pnpm test
+
+# Lint code
+pnpm lint
+
+# Type checking
+pnpm typecheck
+```
+
+## Configuration
+
+### MCP Server
+
+The `.cursor/mcp.json` file configures the Vibeflow MCP server connection:
+
+```json
+{
+  "mcpServers": {
+    "vibeflow": {
+      "url": "http://localhost:4112/api/mcp/vibeflow/sse"
+    }
+  }
+}
+```
+
+### Cursor Rules
+
+The `.cursor/rules/rule.mdc` file contains project-specific AI assistant rules and context.
+
+## Learn More
+
+- [Vibeflow Documentation](https://vibeflow.dev/docs)
+- [MCP Protocol](https://modelcontextprotocol.io/)
+- [Cursor IDE](https://cursor.sh/)
+
+## Contributing
+
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Add tests if needed
+5. Submit a pull request
+
+## License
+
+MIT License - see LICENSE file for details.
+

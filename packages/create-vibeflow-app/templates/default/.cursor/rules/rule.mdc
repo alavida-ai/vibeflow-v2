@@ -1,0 +1,40 @@
+---
+description: Vibeflow project rules for {{PROJECT_NAME}}
+globs:
+alwaysApply: true
+---
+
+# {{PROJECT_NAME}} - Vibeflow Project
+
+This is a Vibeflow project that enables workflow-based automation and AI agent collaboration.
+
+## Project Structure
+
+- `studio/workflows/` - Contains YAML workflow definitions that describe multi-step processes
+- `.cursor/` - Cursor IDE configuration including MCP server connections and AI rules
+- Package structure follows standard Node.js/TypeScript patterns
+
+## Working with Workflows
+
+You have access to the Vibeflow MCP server which provides tools for:
+- Listing available workflows  
+- Starting workflow execution
+- Managing workflow steps and state
+- Collaborating with AI agents
+
+## Best Practices
+
+- Define workflows in YAML format with clear steps, prompts, and acceptance criteria [[memory:8124231]]
+- Start with acceptance criteria and prompts rather than overcomplicating specs [[memory:8112054]]  
+- Use the MCP tools to interact with workflows programmatically
+- Follow the existing project structure and naming conventions
+
+## Key Commands
+
+- Use MCP tools to list workflows: `list-workflows`
+- Start workflows with: `start-workflow`
+- Navigate workflow steps with: `next-step`
+
+Always consult the Vibeflow MCP when working with workflows and agent collaboration.
+
+
