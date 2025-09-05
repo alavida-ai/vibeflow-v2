@@ -12,7 +12,6 @@
     "@mastra/mcp": "^0.11.3",
     "@scalar/hono-api-reference": "^0.9.16",
     "@vibeflow/mastra-runtime": "workspace:*",
-    "bun-types": "^1.2.21",
     "hono": "^4.9.5"
   },
   "devDependencies": {
