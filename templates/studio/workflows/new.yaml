@@ -1,0 +1,11 @@
+id: here-is-a-new-workflow
+description: the new workflow
+steps:
+  - id: step1
+    description: find the new workflow
+    prompt: find the chicote
+    acceptance_criteria: you have found the chicote
+  - id: step2
+    description: feed the new workflow
+    prompt: feed the chicote
+    acceptance_criteria: you have fed the chicote

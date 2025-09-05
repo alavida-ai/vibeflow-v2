@@ -1,0 +1,22 @@
+{
+  "id": "the-chicote",
+  "description": "the chicote workflow",
+  "steps": [
+    {
+      "id": "step1",
+      "description": "find the chicote",
+      "prompt": "find the chicote",
+      "acceptance_criteria": [
+        "you have found the chicote"
+      ]
+    },
+    {
+      "id": "step2",
+      "description": "feed the chicote",
+      "prompt": "feed the chicote",
+      "acceptance_criteria": [
+        "you have fed the chicote"
+      ]
+    }
+  ]
+}

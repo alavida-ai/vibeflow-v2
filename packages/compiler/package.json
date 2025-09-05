@@ -12,8 +12,25 @@
   },
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
-  "author": "",
-  "license": "ISC",
+  "description": "Workflow compiler for Vibeflow - compiles YAML workflows to executable format",
+  "keywords": [
+    "vibeflow",
+    "compiler",
+    "workflow",
+    "yaml",
+    "ai"
+  ],
+  "author": "Vibeflow",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/vibeflow/vibeflow.git",
+    "directory": "packages/compiler"
+  },
+  "homepage": "https://vibeflow.dev",
+  "bugs": {
+    "url": "https://github.com/vibeflow/vibeflow/issues"
+  },
   "packageManager": "pnpm@10.13.1",
   "dependencies": {
     "fast-glob": "^3.3.2",

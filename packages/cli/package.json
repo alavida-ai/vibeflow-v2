@@ -1,10 +1,10 @@
 {
-  "name": "@vibeflow/cli",
+  "name": "vibeflow-ai",
   "version": "1.0.0",
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "tsup src/index.ts --format esm --sourcemap --dts --out-dir dist --external commander",
+    "build": "tsup src/index.ts --format esm --sourcemap --dts --out-dir dist --external commander,chalk,cross-spawn",
     "dev": "tsx src/index.ts",
     "prepublishOnly": "pnpm build"
   },
@@ -12,16 +12,44 @@
     ".": "./dist/index.js"
   },
   "bin": {
-    "vibe": "./dist/index.js"
+    "vibe": "./dist/index.js",
+    "vibeflow-ai": "./dist/index.js"
   },
-  "author": "",
-  "license": "ISC",
+  "description": "AI workflow development CLI - build, watch, and deploy intelligent workflows",
+  "keywords": [
+    "ai",
+    "workflow",
+    "cli",
+    "development",
+    "automation",
+    "llm",
+    "agent"
+  ],
+  "author": "Vibeflow",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/vibeflow/vibeflow.git",
+    "directory": "packages/cli"
+  },
+  "homepage": "https://vibeflow.dev",
+  "bugs": {
+    "url": "https://github.com/vibeflow/vibeflow/issues"
+  },
   "packageManager": "pnpm@10.13.1",
   "dependencies": {
     "@vibeflow/compiler": "workspace:*",
-    "commander": "^12.1.0"
+    "commander": "^12.1.0",
+    "chalk": "^5.3.0",
+    "cross-spawn": "^7.0.3"
+  },
+  "publishConfig": {
+    "dependencies": {
+      "@vibeflow/compiler": "^1.0.0"
+    }
   },
   "devDependencies": {
+    "@types/cross-spawn": "^6.0.6",
     "tsx": "^4.7.1",
     "typescript": "^5.3.3",
     "tsup": "^8.5.0"

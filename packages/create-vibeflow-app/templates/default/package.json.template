@@ -1,0 +1,20 @@
+{
+  "name": "{{PROJECT_NAME}}",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vibe dev",
+    "build": "vibe build",
+    "start": "vibe dev --port 3000"
+  },
+  "dependencies": {
+    "vibeflow-ai": "^1.0.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.3.3"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

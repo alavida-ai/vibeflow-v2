@@ -1,0 +1,42 @@
+{
+  "name": "create-vibeflow-app",
+  "version": "1.0.0",
+  "description": "Create a new Vibeflow application",
+  "type": "module",
+  "bin": {
+    "create-vibeflow-app": "./dist/index.js"
+  },
+  "files": [
+    "dist",
+    "templates"
+  ],
+  "scripts": {
+    "build": "tsup src/index.ts --format esm --sourcemap --dts --out-dir dist --external prompts,fs-extra,chalk",
+    "dev": "tsx src/index.ts",
+    "prepublishOnly": "pnpm build"
+  },
+  "keywords": [
+    "vibeflow",
+    "scaffolding",
+    "workflow",
+    "cli"
+  ],
+  "author": "",
+  "license": "ISC",
+  "packageManager": "pnpm@10.13.1",
+  "dependencies": {
+    "prompts": "^2.4.2",
+    "fs-extra": "^11.2.0",
+    "chalk": "^5.3.0",
+    "commander": "^12.1.0",
+    "validate-npm-package-name": "^5.0.1"
+  },
+  "devDependencies": {
+    "@types/fs-extra": "^11.0.4",
+    "@types/prompts": "^2.4.9",
+    "@types/validate-npm-package-name": "^4.0.2",
+    "tsup": "^8.5.0",
+    "tsx": "^4.7.1",
+    "typescript": "^5.3.3"
+  }
+}
