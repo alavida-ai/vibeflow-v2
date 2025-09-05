@@ -2,7 +2,7 @@
   "name": "vibeflow-workspace",
   "version": "1.0.0",
   "description": "AI-powered social media monitoring system that tracks brand mentions and keywords using Twitter API .io",
-  "private": true,
+  "private": false,
   "repository": {
     "type": "git",
     "url": "git+https://github.com/alavida/brand-listener.git"
