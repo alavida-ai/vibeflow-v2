@@ -1,5 +1,5 @@
 import { TwitterApiTweet, TwitterApiResponse } from "../client/twitter";
-import { schema } from "@brand-listener/database";
+import { schema } from "@vibeflow/database";
 
 /* -------------------------------------------------------------------------- */
 /*                              FUNCTIONS                                     */

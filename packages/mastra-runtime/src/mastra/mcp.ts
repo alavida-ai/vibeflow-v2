@@ -4,7 +4,6 @@ import { getNextStepTool } from "./tools/workflows/get-next-step";
 import { listWorkflowsTool } from "./tools/workflows/list-workflows";
 import { userTweetsFetcherTool, userTweetsScraperTool } from "./tools/research/twitter-analyser";
 import { perplexityAskTool } from "./tools/research/perplexity";
-import { getMCPClient } from "./mcp/client";
 
 let serverPromise: Promise<MCPServer> | null = null;
 
@@ -21,7 +20,8 @@ export const createVibeflowMCP = async (): Promise<MCPServer> => {
           userTweetsFetcherTool,
           userTweetsScraperTool,
           perplexityAskTool,
-          ...(await getMCPClient().getTools()),
+          // Temporarily disabled external MCP tools due to schema incompatibility
+          // ...(await getMCPClient().getTools()),
         },
       }))();
   }

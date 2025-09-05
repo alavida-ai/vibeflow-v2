@@ -1,0 +1,53 @@
+{
+  "name": "@vibeflow/compiler",
+  "version": "2.0.0",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsup src/index.ts --format esm --sourcemap --dts --out-dir dist --external chokidar --external fast-glob --external js-yaml --external zod",
+    "prepublishOnly": "pnpm build"
+  },
+  "exports": {
+    ".": "./dist/index.js"
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "description": "Workflow compiler for Vibeflow - compiles YAML workflows to executable format",
+  "keywords": [
+    "vibeflow",
+    "compiler",
+    "workflow",
+    "yaml",
+    "ai"
+  ],
+  "author": "Vibeflow",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/vibeflow/vibeflow.git",
+    "directory": "packages/compiler"
+  },
+  "homepage": "https://vibeflow.dev",
+  "bugs": {
+    "url": "https://github.com/vibeflow/vibeflow/issues"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "packageManager": "pnpm@10.13.1",
+  "dependencies": {
+    "fast-glob": "^3.3.2",
+    "js-yaml": "^4.1.0",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@types/js-yaml": "^4.0.9",
+    "chokidar": "^3.6.0",
+    "tsup": "^8.5.0",
+    "tsx": "^4.7.1",
+    "typescript": "^5.3.3"
+  }
+}

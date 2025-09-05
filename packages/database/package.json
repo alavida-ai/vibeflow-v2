@@ -1,6 +1,6 @@
 {
-  "name": "@brand-listener/database",
-  "version": "1.0.0",
+  "name": "@vibeflow/database",
+  "version": "2.0.0",
   "description": "",
   "type": "module",
   "exports": {
@@ -13,7 +13,9 @@
   },
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "build": "tsup src/index.ts --format esm --sourcemap --dts --out-dir dist",
     "dev": "tsup src/index.ts --format esm --sourcemap --dts --out-dir dist --watch",
@@ -28,11 +30,16 @@
   "dependencies": {
     "drizzle-orm": "^0.44.5",
     "drizzle-zod": "^0.8.3",
-    "postgres": "^3.4.7"
+    "postgres": "^3.4.7",
+    "zod": "^3.25.0"
   },
+  "publishConfig": {
+    "access": "public"
+  },
+  
   "devDependencies": {
     "drizzle-kit": "^0.31.4",
     "tsup": "^8.5.0",
-    "tsx": "^3.14.0"
+    "tsx": "^4.20.5"
   }
 }

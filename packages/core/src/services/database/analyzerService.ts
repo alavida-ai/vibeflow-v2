@@ -1,7 +1,7 @@
 import {
     getDb,
     schema
-} from "@brand-listener/database";
+} from "@vibeflow/database";
 import { eq, and, isNull, desc, inArray } from 'drizzle-orm';
 
 // Type for the getBestPerformingTweetsByUsernameView return value

@@ -1,8 +1,8 @@
 // Brand Listener Reports - Generated January 25, 2025, 2:47 PM
 
-import { schema } from '@brand-listener/database';
-import { type SlackMessagePayload } from '@brand-listener/core';
-import { TweetCandidate } from '@brand-listener/core';
+import { schema } from '@vibeflow/database';
+import { type SlackMessagePayload } from '@vibeflow/core';
+import { TweetCandidate } from '@vibeflow/core';
 
 /* -------------------------------------------------------------------------- */
 /*                       SLACK MESSAGE BUILDERS                               */

@@ -1,15 +1,8 @@
 import { VibeflowAgentClient } from "../client";
-import z from "zod";
+import { StartWorkflowResult } from "./types";
 
 const VIBEFLOW_BASE_URL = process.env.VIBEFLOW_BASE_URL || "http://localhost:4111/";
 
-export const startWorkflowResultSchema = z.object({
-    runId: z.string().optional(),
-    suspendPayload: z.any().optional(),
-    status: z.enum(["suspended"]).optional()
-  });
-  
-  export type StartWorkflowResult = z.infer<typeof startWorkflowResultSchema>;
   
   export async function startWorkflow(workflowId: string) : Promise<StartWorkflowResult> {
     const vibeflowAgentClient = new VibeflowAgentClient(VIBEFLOW_BASE_URL);

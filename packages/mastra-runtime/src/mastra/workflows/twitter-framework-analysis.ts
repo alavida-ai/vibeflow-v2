@@ -2,7 +2,7 @@ import { createWorkflow, createStep } from "@mastra/core/workflows";
 import { z } from "zod";
 import { RuntimeContext } from "@mastra/core/runtime-context";
 import { Mastra } from "@mastra/core";
-import { AnalyzerService } from "@brand-listener/core";
+import { AnalyzerService } from "@vibeflow/core";
 
 type WorkflowContext = {
   username: string;

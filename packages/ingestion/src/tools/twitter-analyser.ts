@@ -1,6 +1,6 @@
 import { ingestUserLastTweets, IngestionResult } from "../ingest/index";
-import { AnalyzerService } from "@brand-listener/core";
-import { generateVisualDescription } from "@brand-listener/core";
+import { AnalyzerService } from "@vibeflow/core";
+import { generateVisualDescription } from "@vibeflow/core";
 
 /* -------------------------------------------------------------------------- */
 /*                              TYPES                                         */

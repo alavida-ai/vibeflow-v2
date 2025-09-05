@@ -1,9 +1,9 @@
 {
-  "name": "@brand-listener/core",
-  "version": "0.0.0",
+  "name": "@vibeflow/core",
+  "version": "1.0.0",
   "type": "module",
   "dependencies": {
-    "@brand-listener/database": "workspace:*",
+    "@vibeflow/database": "workspace:*",
     "@google/genai": "^1.16.0",
     "drizzle-orm": "^0.44.5",
     "uuid": "^11.1.0",
@@ -26,6 +26,9 @@
   "files": [
     "dist"
   ],
+  "publishConfig": {
+    "access": "public"
+  },
   "devDependencies": {
     "@types/node": "^20.5.0",
     "@types/uuid": "^10.0.0",

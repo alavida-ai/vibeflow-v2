@@ -4,7 +4,7 @@
     "jsx": "react-jsx",
     "jsxImportSource": "hono/jsx",
     "paths": {
-      "@brand-listener/mastra-runtime": ["../../packages/mastra-runtime/src"]
+      "@vibeflow/mastra-runtime": ["../../packages/mastra-runtime/src"]
     }
   },
   "include": ["src/**/*"],

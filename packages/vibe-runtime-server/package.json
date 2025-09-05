@@ -1,0 +1,40 @@
+{
+  "name": "@vibeflow/runtime-server",
+  "version": "3.0.1",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsup src/server.ts --format esm --sourcemap --dts --out-dir dist",
+    "dev": "tsx src/server.ts",
+    "start": "node dist/server.js"
+  },
+  "exports": {
+    ".": "./dist/server.js"
+  },
+  "main": "./dist/server.js",
+  "types": "./dist/server.d.ts",
+  "files": [
+    "dist"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "author": "",
+  "license": "ISC",
+  "packageManager": "pnpm@10.13.1",
+  "dependencies": {
+    "@hono/node-server": "^1.19.1",
+    "@hono/swagger-ui": "^0.5.2",
+    "@mastra/deployer": "^0.15.3",
+    "@scalar/hono-api-reference": "^0.9.16",
+    "@vibeflow/compiler": "workspace:*",
+    "@vibeflow/mastra-runtime": "workspace:*",
+    "dotenv": "^17.2.2",
+    "hono": "^4.9.5"
+  },
+  "devDependencies": {
+    "tsup": "^8.5.0",
+    "tsx": "^4.7.1",
+    "typescript": "^5.3.3"
+  }
+}

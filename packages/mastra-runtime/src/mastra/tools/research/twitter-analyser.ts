@@ -1,10 +1,10 @@
 import { createTool } from '@mastra/core/tools';
-import { TwitterAnalyser } from '@brand-listener/ingestion';
+import { TwitterAnalyser } from '@vibeflow/ingestion';
 import { z } from 'zod';
-import { AnalyzerService } from '@brand-listener/core';
+import { AnalyzerService } from '@vibeflow/core';
 
 
-export const userTweetsScraperTool = createTool({
+export const userTweetsScraperTool: ReturnType<typeof createTool> = createTool({
   id: 'user-tweets-scraper',
   description: 'Search for tweets from a user and get info on any media in the tweets',
   inputSchema: z.object({
@@ -54,7 +54,7 @@ export const userTweetsScraperTool = createTool({
 });
 
 
-export const userTweetsFetcherTool = createTool({
+export const userTweetsFetcherTool: ReturnType<typeof createTool> = createTool({
   id: 'user-tweets-fetcher',
   description: `Fetch a user\'s tweets data including media descriptions.`,
   inputSchema: z.object({
