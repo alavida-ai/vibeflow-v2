@@ -7,17 +7,17 @@ A Vibeflow project for workflow-based automation and AI agent collaboration.
 ### Prerequisites
 
 - Node.js 18+ 
-- pnpm, npm, or yarn
+- npm, yarn, or pnpm
 - Cursor IDE (recommended for full MCP integration)
 
 ### Installation
 
 ```bash
 # Install dependencies
-pnpm install
+npm install
 
 # Start development server  
-pnpm dev
+npm run dev
 ```
 
 ## Project Structure
@@ -26,9 +26,14 @@ pnpm dev
 {{PROJECT_NAME}}/
 ├── studio/
 │   └── workflows/          # YAML workflow definitions
+├── strategy/               # Brand and marketing strategy templates
+│   ├── brand-fundamentals-template.md
+│   ├── market-content-strategy-template.md
+│   └── tone-of-voice-template.md
 ├── .cursor/
 │   ├── mcp.json           # MCP server configuration
 │   └── rules/             # Cursor AI rules and context
+├── .env.example           # Environment variables template
 ├── package.json
 └── README.md
 ```
@@ -64,22 +69,48 @@ This project includes Cursor MCP integration for AI-assisted workflow management
 
 ```bash
 # Development server
-pnpm dev
+npm run dev
 
 # Build for production
-pnpm build
+npm run build
 
 # Run tests
-pnpm test
+npm test
 
 # Lint code
-pnpm lint
+npm run lint
 
 # Type checking
-pnpm typecheck
+npm run typecheck
 ```
 
+## Strategy Templates
+
+This project includes comprehensive strategy templates to help you define your brand and marketing approach:
+
+- **Brand Fundamentals**: Core brand strategy, values, and positioning
+- **Market Content Strategy**: Content planning and market analysis
+- **Tone of Voice**: Communication guidelines and voice characteristics
+
+These templates are located in the `strategy/` directory and can be customized for your specific project needs.
+
 ## Configuration
+
+### Environment Variables
+
+Copy `.env.example` to `.env` and fill in your API keys:
+
+```bash
+cp .env.example .env
+```
+
+Required API keys:
+- **TWITTER_API_KEY**: For social media integration
+- **DATABASE_URL**: Database connection string
+- **GOOGLE_API_KEY**: Google services integration
+- **OPENROUTER_API_KEY**: AI model routing
+- **OPENAI_API_KEY**: OpenAI services
+- **FIRECRAWL_API_KEY**: Web scraping and content extraction
 
 ### MCP Server
 

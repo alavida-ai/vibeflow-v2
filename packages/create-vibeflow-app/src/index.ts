@@ -18,8 +18,8 @@ program
   .version('2.0.0')
   .argument('[project-directory]', 'directory to create the project in')
   .option('--template <name>', 'template to use', 'default')
-  .option('--use-npm', 'use npm instead of pnpm')
-  .option('--use-yarn', 'use yarn instead of pnpm')
+  .option('--use-pnpm', 'use pnpm instead of npm')
+  .option('--use-yarn', 'use yarn instead of npm')
   .option('--skip-install', 'skip installing dependencies')
   .action(async (projectDirectory, options) => {
     console.log();
@@ -76,9 +76,9 @@ program
     console.log();
 
     // Determine package manager
-    let packageManager: 'npm' | 'yarn' | 'pnpm' = 'pnpm';
-    if (options.useNpm) {
-      packageManager = 'npm';
+    let packageManager: 'npm' | 'yarn' | 'pnpm' = 'npm';
+    if (options.usePnpm) {
+      packageManager = 'pnpm';
     } else if (options.useYarn) {
       packageManager = 'yarn';
     }

@@ -1,7 +1,7 @@
 {
   "mcpServers": {
     "vibeflow": {
-      "url": "http://localhost:4112/api/mcp/vibeflow/sse"
+      "url": "http://localhost:4111/api/mcp/vibeflow/sse"
     }
   }
 }

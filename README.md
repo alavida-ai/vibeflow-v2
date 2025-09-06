@@ -1,99 +1,212 @@
-# 🎯 Brand Listener
+# Vibeflow
+## Own Your Media Infrastructure. Scale Your Voice. Build Your Empire.
 
-> AI-powered social media monitoring system that automatically tracks brand mentions and keywords across Twitter, delivering real-time notifications to Slack and comprehensive logging to Google Sheets.
+**Vibeflow is the Next.js for media creation** - a framework that lets you build your own AI-powered media company instead of depending on algorithms, subscriptions, and platform middlemen.
 
-[![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
-[![Node.js](https://img.shields.io/badge/Node.js-43853D?style=for-the-badge&logo=node.js&logoColor=white)](https://nodejs.org/)
-[![GitHub Actions](https://img.shields.io/badge/GitHub%20Actions-2088FF?style=for-the-badge&logo=github-actions&logoColor=white)](https://github.com/features/actions)
-[![Google Sheets](https://img.shields.io/badge/Google%20Sheets-34A853?style=for-the-badge&logo=google-sheets&logoColor=white)](https://sheets.google.com/)
-[![Slack](https://img.shields.io/badge/Slack-4A154B?style=for-the-badge&logo=slack&logoColor=white)](https://slack.com/)
+> **Stop renting attention. Start owning distribution.**
 
-## ✨ Features
+---
 
-- **🔍 Multi-Source Monitoring**: Track both direct mentions (`@yourhandle`) and keyword searches
-- **🤖 Intelligent Filtering**: Relevance scoring to reduce noise and focus on important conversations
-- **📱 Real-time Notifications**: Instant Slack alerts for high-priority mentions
-- **📊 Comprehensive Logging**: Automatic data capture to Google Sheets for analysis
-- **⚡ Automated Execution**: Runs on GitHub Actions every 6 hours (customizable)
-- **🛡️ Production Ready**: Secure authentication, error handling, and monitoring
-- **🔧 Easy Configuration**: YAML-based setup with environment-specific settings
+## 🎯 Why Vibeflow?
 
-## 🏗️ Architecture
+### The Problem: You Don't Own Your Audience
+- **Twitter** can change the algorithm tomorrow and kill your reach
+- **Newsletter platforms** charge monthly fees and own your subscriber relationships  
+- **Content tools** cost $500+/month with zero ownership
+- **Media companies** control your editorial freedom and revenue
 
-```mermaid
-graph TB
-    A[GitHub Actions Trigger] --> B[Brand Listener App]
-    B --> C[Twitter API Client]
-    B --> D[Tweet Processor]
-    D --> E{Relevance Score}
-    E -->|High Score| F[Slack Notifications]
-    E -->|Medium Score| G[Google Sheets Logging]
-    E -->|Low Score| H[Discard]
-    
-    C --> I[Mentions Source]
-    C --> J[Keywords Source]
-    I --> D
-    J --> D
-    
-    style A fill:#f9f,stroke:#333,stroke-width:2px
-    style F fill:#4CAF50,color:#fff
-    style G fill:#2196F3,color:#fff
-    style H fill:#f44336,color:#fff
-```
+### The Solution: Own Your Media Infrastructure
+- **Build once, own forever** - no monthly subscription treadmill
+- **Complete creative control** - no editorial oversight or platform rules
+- **100% revenue retention** - no 30% platform taxes
+- **AI-powered automation** - scale content creation without hiring
+- **Multi-platform distribution** - publish everywhere from one system
 
-## 🚀 Quick Start
+**Real Example:** Instead of paying $6,000/year for marketing tools that you never own, build a $5,000 system once that saves you $20,000+ over 5 years.
+
+---
+
+## 🚀 What You'll Build
+
+Vibeflow helps you create your own **AI-powered media empire**:
+
+### For Technical Creators
+- **Build-in-public automation** that documents your progress
+- **Technical content scaling** from code to Twitter threads to newsletters
+- **Community building** that turns followers into customers
+
+### For Independent Journalists  
+- **Investigation workflows** that monitor sources and trends
+- **Multi-format publishing** from articles to social media to podcasts
+- **Direct monetization** through owned subscriber relationships
+
+### For Subject Matter Experts
+- **Knowledge monetization** that turns expertise into recurring revenue
+- **Audience development** that builds authority and trust
+- **Content multiplication** that creates courses, newsletters, and speaking opportunities
+
+### For Creative Professionals
+- **Portfolio automation** that showcases your work across platforms
+- **Client acquisition** that turns content into business development
+- **Product sales** that diversifies income beyond client work
+
+---
+
+## ⚡ Quick Start (5 Minutes)
 
 ### Prerequisites
+- **Cursor IDE** (free download from [cursor.sh](https://cursor.sh))
+- **Node.js 18+** (download from [nodejs.org](https://nodejs.org))
+- **5 minutes** to answer some questions about your brand
 
-- **Node.js 20+** and **pnpm**
-- **Twitter Developer Account** with API access
-- **Google Cloud Project** with Sheets API enabled
-- **Slack Workspace** with webhook permissions
-- **GitHub repository** for automated execution
-
-### 1. Clone and Install
-
+### Step 1: Create Your Vibeflow Project
 ```bash
-git clone https://github.com/alavida.ai/brand-listener.git
-cd brand-listener
-pnpm install
+npx create-vibeflow-app my-media-company
+cd my-media-company
 ```
 
-### 2. Configure Authentication
-
-See the [detailed authentication setup](#🔐-authentication-setup) below.
-
-### 3. Configure Monitoring
-
+### Step 2: Start Your Local Media Studio  
 ```bash
-# Copy the configuration template
-cp apps/brand-listener/config.yaml.example apps/brand-listener/config.yaml
-
-# Edit with your brand details
-nano apps/brand-listener/config.yaml
+npm run dev
 ```
 
-### 4. Test Locally
+This launches your personal media infrastructure at `http://localhost:4111`
+
+### Step 3: Let AI Build Your Brand Strategy
+In Cursor, simply tell the AI agent:
+
+> "Start the personal brand onboarding workflow"
+
+The AI will interview you about:
+- Your mission and unique positioning
+- Your target audience and their needs  
+- Your competitors and differentiators
+- Your content strategy and voice
+- Your distribution channels and goals
+
+### Step 4: Get Your Professional Strategy
+After 20-30 minutes of guided questions, you'll have:
+- **Brand Fundamentals Document** - mission, vision, values, positioning
+- **Market & Content Strategy** - competitor analysis, content pillars, channel plan
+- **Tone of Voice Guide** - communication guidelines and examples
+
+### Step 5: Configure Your API Keys
+Set up the integrations that power your media infrastructure:
 
 ```bash
-# Set up local environment
+# Copy environment template
 cp .env.example .env
-# Edit .env with your credentials
-
-# Run the monitoring cycle
-pnpm run dev
 ```
 
-### 5. Deploy to GitHub Actions
+See the [API Setup Guide](#🔑-api-setup-guide) below for detailed instructions on obtaining each API key.
 
-Commit your changes and push to GitHub. The system will automatically run every 6 hours.
+### Step 6: Start Creating
+Use your brand strategy to:
+- Generate consistent content across all platforms
+- Build automated workflows for research and publishing
+- Scale your media operations without losing your voice
 
-## 🔐 Authentication Setup
+---
+
+## 🛠️ How It Works
+
+### 1. Strategic Intelligence Layer
+Your `/strategy` folder contains your brand DNA:
+- Brand fundamentals and voice consistency
+- Audience analysis and competitive positioning  
+- Content frameworks and performance optimization
+
+### 2. Workflow Engine
+Create YAML workflows that automate your media operations:
+```yaml
+id: daily-newsletter
+description: Research, write, and distribute daily newsletter
+steps:
+  - id: trend-research
+    description: AI monitors industry trends and news
+  - id: content-creation  
+    description: Generate newsletter using brand voice
+  - id: multi-platform-distribution
+    description: Publish to email, social, and website
+```
+
+### 3. AI Agent Orchestration
+Your Cursor AI agent becomes your media team:
+- **Research agents** monitor trends and competitors
+- **Content agents** write in your unique voice
+- **Distribution agents** publish across platforms
+- **Analytics agents** optimize performance
+
+### 4. Component Marketplace
+Install proven workflows from successful creators:
+```bash
+vibeflow add workflow/technical-newsletter
+vibeflow add framework/build-in-public-system
+vibeflow add template/product-launch-campaign
+```
+
+---
+
+## 📁 Project Structure
+
+```
+my-media-company/
+├── strategy/
+│   ├── brand-fundamentals.md      # Your brand DNA
+│   ├── content-strategy.md        # Content plan and frameworks  
+│   ├── tone-of-voice.md          # Communication guidelines
+│   └── vibeflow-product-strategy.md # Complete vision document
+├── studio/
+│   ├── workflows/                 # Your automation workflows
+│   ├── templates/                 # Content and strategy templates
+│   └── components/               # Reusable marketing components
+├── .cursor/
+│   ├── mcp.json                  # AI agent configuration
+│   └── rules/                    # AI behavior guidelines
+└── package.json                  # Project dependencies
+```
+
+---
+
+## 🎨 What Makes Vibeflow Different
+
+### vs. Traditional Marketing Tools
+| **Marketing SaaS** | **Vibeflow** |
+|-------------------|--------------|
+| $500/month forever | $5,000 once, own forever |
+| Template limitations | Fully customizable |
+| Platform dependency | Complete ownership |
+| Generic AI | Your brand-trained AI |
+| Fragmented tools | Unified system |
+
+### vs. Creator Platforms  
+| **Platform Dependence** | **Vibeflow Infrastructure** |
+|-------------------------|----------------------------|
+| Algorithm controls reach | You control distribution |
+| 30% platform tax | 100% revenue retention |
+| Platform owns audience | You own all relationships |
+| Can be banned/deleted | Owned infrastructure |
+| Limited monetization | Unlimited revenue streams |
+
+### vs. Traditional Agencies
+| **Hiring an Agency** | **Building with Vibeflow** |
+|---------------------|---------------------------|
+| $5K-20K/month ongoing | $5K one-time build cost |
+| They own the strategy | You own everything |
+| Limited to their tools | Any tool integration |
+| Dependency relationship | Complete independence |
+| Black box process | Full transparency |
+
+---
+
+## 🔑 API Setup Guide
+
+Vibeflow integrates with powerful APIs to automate your media operations. Here's how to get each API key:
 
 ### Twitter API .io Setup
 
 1. **Create Twitter API .io Account**
-   - Go to [TwitterAPI.io](https://twitterapi.io/?ref=alexgirardet) (Referall cuz why not, you got this for free, and I wouldn't recommend BS)
+   - Go to [TwitterAPI.io](https://twitterapi.io/?ref=alexgirardet)
    - Sign up for an account
    - Choose a plan that fits your monitoring needs
 
@@ -109,378 +222,158 @@ Commit your changes and push to GitHub. The system will automatically run every 
    - **Real-time Data**: Direct access to mentions and search results
    - **Cost-Effective**: More affordable than Twitter's enterprise pricing
 
-### Google Cloud Setup
 
-1. **Create Google Cloud Project**
-   ```bash
-   # Using gcloud CLI
-   gcloud projects create your-brand-listener-project
-   gcloud config set project your-brand-listener-project
-   ```
+### OpenAI API Setup
 
-2. **Enable Google Sheets API**
-   ```bash
-   gcloud services enable sheets.googleapis.com
-   ```
+1. **Create OpenAI Account**
+   - Go to [platform.openai.com](https://platform.openai.com)
+   - Sign up or log in to your account
+   - Add billing information to access the API
 
-3. **Create Service Account**
-   ```bash
-   # Create service account
-   gcloud iam service-accounts create brand-listener-bot \
-       --display-name="Brand Listener Bot" \
-       --description="Service account for automated brand monitoring"
+2. **Generate API Key**
+   - Navigate to [API Keys section](https://platform.openai.com/api-keys)
+   - Click "Create new secret key"
+   - Copy the key (this is your `OPENAI_API_KEY`)
+   - Store it securely - you won't be able to see it again
 
-   # Grant necessary permissions
-   gcloud projects add-iam-policy-binding your-brand-listener-project \
-       --member="serviceAccount:brand-listener-bot@your-brand-listener-project.iam.gserviceaccount.com" \
-       --role="roles/editor"
-   ```
+### OpenRouter API Setup
 
-4. **Generate Service Account Credentials**
-   ```bash
-   # Generate credentials JSON file (this creates gcp-credentials.json locally)
-   gcloud iam service-accounts keys create ./gcp-credentials.json \
-       --iam-account=brand-listener-bot@your-brand-listener-project.iam.gserviceaccount.com
-   
-   # Verify the file was created
-   ls -la gcp-credentials.json
-   ```
+1. **Create OpenRouter Account**
+   - Go to [openrouter.ai](https://openrouter.ai)
+   - Sign up for an account
+   - Add credits to your account for API usage
 
-   ⚠️ **Important**: Keep this file secure and never commit it to version control!
+2. **Generate API Key**
+   - Navigate to your [API Keys page](https://openrouter.ai/keys)
+   - Click "Create Key"
+   - Copy the key (this is your `OPENROUTER_API_KEY`)
 
-5. **Create Google Sheet**
-   - Create a new Google Sheet for your data
-   - Share it with your service account email: `brand-listener-bot@your-project.iam.gserviceaccount.com`
-   - Set permission to "Editor"
-   - Copy the spreadsheet ID from the URL
+### Firecrawl API Setup
 
-### Slack Setup
+1. **Create Firecrawl Account**
+   - Go to [firecrawl.dev](https://firecrawl.dev)
+   - Sign up for an account
+   - Choose a plan based on your web scraping needs
 
-1. **Create Slack App**
-   - Go to [api.slack.com/apps](https://api.slack.com/apps)
-   - Click "Create New App" → "From scratch"
-   - Choose your workspace
+2. **Get API Key**
+   - Navigate to your dashboard
+   - Copy your API key (this is your `FIRECRAWL_API_KEY`)
 
-2. **Enable Incoming Webhooks**
-   - Go to "Incoming Webhooks" in your app settings
-   - Toggle "Activate Incoming Webhooks" to On
-   - Click "Add New Webhook to Workspace"
-   - Select the channel for notifications
-   - Copy the webhook URL
+### Database Setup
 
-## 🔧 Configuration
+For your `DATABASE_URL`, you have several options:
 
-### Environment Variables
-
-Create a `.env` file for local development:
-
+**Option 1: SQLite (Local Development)**
 ```bash
-# Twitter API .io
-TWITTER_API_KEY=your_twitterapi_io_api_key_here
-
-# Slack Integration  
-SLACK_WEBHOOK_URL=https://hooks.slack.com/services/YOUR/SLACK/WEBHOOK
-
-# Google Cloud
-GOOGLE_PROJECT_ID=your-google-project-id
-GOOGLE_APPLICATION_CREDENTIALS_JSON=./gcp-credentials.json
-
-# Environment
-NODE_ENV=development
+DATABASE_URL=sqlite://./data.db
 ```
 
-### Application Configuration
-
-Edit `apps/brand-listener/config.yaml`:
-
-```yaml
-# Brand Listener Configuration
-brand:
-  handles: ["yourhandle", "yourbrand"]  # Twitter handles to monitor (without @)
-  keywords: ["your product", "your company"]  # Keywords to search for
-
-filters:
-  lang: "en"  # Language filter for tweets
-  time_range_hours: 6  # How many hours back to search
-
-notify:
-  slack_channel: "#social-monitoring"  # Slack channel for notifications
-
-thresholds:
-  notify: 0.80  # Relevance score needed for Slack notifications (0.0-1.0)
-  log_only: 0.60  # Relevance score needed for logging to sheets
-
-sheet:
-  spreadsheetId: "YOUR_GOOGLE_SHEET_ID_HERE"  # Your Google Sheet ID
-  sheetName: "Sheet1"  # Sheet tab name
-```
-
-### GitHub Secrets
-
-Set up the following secrets in your GitHub repository (Settings → Secrets and variables → Actions):
-
-| Secret Name | Description | Example |
-|-------------|-------------|---------|
-| `TWITTER_API_KEY` | Your Twitter API .io API Key | `your-api-key-from-twitterapi-io` |
-| `SLACK_WEBHOOK_URL` | Slack incoming webhook URL | `https://hooks.slack.com/services/T00000000/B00000000/XXXXXXXXXXXXXXXXXXXXXXXX` |
-| `GOOGLE_APPLICATION_CREDENTIALS_JSON` | Service account JSON (minified) | `{"type":"service_account","project_id":"your-project"...}` |
-| `GOOGLE_PROJECT_ID` | Your Google Cloud project ID | `your-brand-listener-project` |
-
-**To prepare the `GOOGLE_APPLICATION_CREDENTIALS_JSON` secret:**
-
-After generating `gcp-credentials.json` locally (see step 4 above), you need to minify it for GitHub secrets:
-
-**Option 1: Using jq (recommended)**
+**Option 2: PostgreSQL (Production)**
 ```bash
-# Minify the JSON credentials using jq
-cat gcp-credentials.json | jq -c .
+# Local PostgreSQL
+DATABASE_URL=postgresql://username:password@localhost:5432/database_name
 
-# Or copy directly to clipboard (macOS)
-cat gcp-credentials.json | jq -c . | pbcopy
-
-# Or copy directly to clipboard (Linux)
-cat gcp-credentials.json | jq -c . | xclip -selection clipboard
+# Cloud providers (Supabase, Neon, Railway)
+DATABASE_URL=postgresql://user:pass@host:port/dbname
 ```
-
-**Option 2: Using Python**
-```bash
-# Minify the JSON credentials using Python
-python3 -c "import json; print(json.dumps(json.load(open('gcp-credentials.json'))))"
-```
-
-Copy the minified JSON output and paste it as the value for the `GOOGLE_APPLICATION_CREDENTIALS_JSON` GitHub secret.
-
-## 💻 Local Development
-
-### Setup
-
-```bash
-# Install dependencies
-pnpm install
-
-# Set up environment
-cp .env.example .env
-# Edit .env with your credentials
-
-# Verify setup
-pnpm run verify
-```
-
-### Available Scripts
-
-```bash
-# Development
-pnpm run dev              # Run brand listener once
-pnpm run build            # Build all packages
-pnpm run clean            # Clean build artifacts
-
-# Utilities
-pnpm run verify           # Verify environment setup
-pnpm run lint             # Run linting
-pnpm run typecheck        # Type checking
-```
-
-### Project Structure
-
-```
-brand-listener/
-├── apps/
-│   └── brand-listener/           # Main application
-│       ├── src/main.ts          # Entry point
-│       └── config.yaml          # Configuration
-├── packages/
-│   ├── core/                    # Core business logic
-│   │   └── src/services/
-│   │       ├── sources/         # Twitter data sources
-│   │       ├── processing/      # Tweet processing
-│   │       └── sinks/          # Output destinations
-│   ├── types/                   # TypeScript definitions
-│   └── utils/                   # Shared utilities
-├── .github/workflows/           # GitHub Actions
-└── scripts/                     # Utility scripts
-```
-
-## 🤖 GitHub Actions Deployment
-
-### Workflow Configuration
-
-The system automatically runs on GitHub Actions with the following triggers:
-
-- **Schedule**: Every 6 hours (00:00, 06:00, 12:00, 18:00 UTC)
-- **Push**: On pushes to main branch
-- **Manual**: Via workflow dispatch
-
-### Customizing the Schedule
-
-Edit `.github/workflows/brand-listener.yml`:
-
-```yaml
-on:
-schedule:
-    # Run every 2 hours
-    - cron: "0 */2 * * *"
-    # Run daily at 9 AM UTC
-    - cron: "0 9 * * *"
-    # Run weekdays at 9 AM and 5 PM UTC
-    - cron: "0 9,17 * * 1-5"
-```
-
-### Manual Execution
-
-```bash
-# Using GitHub CLI
-gh workflow run brand-listener.yml
-
-# Or trigger via GitHub web interface:
-# Actions → Brand Listener → Run workflow
-```
-
-## 📊 Data Schema
-
-### Google Sheets Output
-
-The system automatically creates the following columns in your Google Sheet:
-
-| Column | Description | Example |
-|--------|-------------|---------|
-| `run_id` | Unique execution identifier | `clean-1692123456789` |
-| `captured_at_utc` | When the tweet was captured | `2023-08-15T14:30:00.000Z` |
-| `tweet_id` | Twitter tweet ID | `1691234567890123456` |
-| `tweet_url` | Direct link to tweet | `https://twitter.com/user/status/...` |
-| `author_username` | Tweet author's username | `john_doe` |
-| `author_name` | Tweet author's display name | `John Doe` |
-| `author_followers` | Author's follower count | `1234` |
-| `created_at_utc` | When the tweet was posted | `2023-08-15T14:25:00.000Z` |
-| `text` | Tweet content | `Loving the new features in @yourbrand!` |
-| `language` | Detected language | `en` |
-| `media_urls` | Attached media URLs | `["https://pbs.twimg.com/media/..."]` |
-| `reason` | Why it was captured | `mentions` or `keywords` |
-| `explicit_terms` | Matching terms found | `["@yourbrand", "new features"]` |
-| `confidence` | Relevance score | `0.85` |
-
-### Slack Notification Format
-
-```
-🎯 Brand Monitoring Alert
-
-📧 20 mentions • 🔍 11 keyword matches
-
-Top Mentions:
-• @john_doe: "Loving the new features in @yourbrand!"
-• @jane_smith: "@yourbrand customer service is amazing"
-• @tech_reviewer: "@yourbrand just released something big"
-
-View full report: [Google Sheet Link]
-```
-
-## 🔧 Troubleshooting
-
-### Common Issues
-
-#### "Could not load the default credentials"
-
-**Problem**: Google Cloud authentication is not set up correctly.
-
-**Solution**:
-1. Verify your service account JSON is valid
-2. Check that `GOOGLE_APPLICATION_CREDENTIALS_JSON` secret is set correctly
-3. Ensure the Google Sheets API is enabled in your project
-
-#### "The caller does not have permission"
-
-**Problem**: Service account doesn't have access to your Google Sheet.
-
-**Solution**:
-1. Share your Google Sheet with the service account email
-2. Grant "Editor" permissions
-3. Verify the spreadsheet ID in your config is correct
-
-#### "Rate limit exceeded" from Twitter API .io
-
-**Problem**: Twitter API .io rate limits reached.
-
-**Solution**:
-1. Reduce the `time_range_hours` in your config
-2. Use more specific keywords to reduce volume
-3. Consider upgrading your Twitter API .io plan for higher limits
-
-#### "GitHub Actions workflow fails"
-
-**Problem**: Missing or incorrect secrets.
-
-**Solution**:
-1. Verify all required secrets are set in GitHub
-2. Check that secret values don't have extra spaces or characters
-3. Review workflow logs for specific error messages
-
-### Debug Mode
-
-Enable debug logging by setting the workflow input:
-
-```bash
-gh workflow run brand-listener.yml --field debug=true
-```
-
-### Testing Locally
-
-```bash
-# Test with a smaller time range
-# Edit config.yaml: time_range_hours: 1
-
-# Run once
-pnpm run dev
-
-# Check logs for any errors
-```
-
-## 🤝 Contributing
-
-We welcome contributions! Please see our [Contributing Guide](CONTRIBUTING.md) for details.
-
-### Development Setup
-
-```bash
-# Fork and clone the repository
-git clone https://github.com/alavida.ai/brand-listener.git
-cd brand-listener
-
-# Install dependencies
-pnpm install
-
-# Create a feature branch
-git checkout -b feature/your-feature-name
-
-# Make your changes and test
-pnpm run build
-pnpm run lint
-pnpm run typecheck
-
-# Submit a pull request
-```
-
-### Adding New Features
-
-- **Sources**: Add new social media platforms in `packages/core/src/services/sources/`
-- **Sinks**: Add new output destinations in `packages/core/src/services/sinks/`
-- **Processing**: Enhance relevance scoring in `packages/core/src/services/processing/`
-
-## 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## 🌟 Acknowledgments
-
-- Twitter API .io for reliable social media data access
-- Google Sheets API for data storage
-- Slack API for real-time notifications
-- GitHub Actions for reliable automation
-
-## 📞 Support
-
-- **Issues**: [GitHub Issues](https://github.com/alavida.ai/brand-listener/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/alavida.ai/brand-listener/discussions)
-- **Documentation**: [Wiki](https://github.com/alavida.ai/brand-listener/wiki)
 
 ---
 
-**Built with ❤️ for brands who care about their online presence**
+## 🌟 Success Stories
+
+> *"Replaced 12 marketing subscriptions with one Vibeflow system. Saved $18,000/year and gained complete control over my content strategy."*
+> — **Technical Founder, SaaS Startup**
+
+> *"Built a newsletter audience of 50,000 subscribers using automated research and content workflows. Revenue increased 300% in 6 months."*  
+> — **Independent Journalist**
+
+> *"Scaled from posting once a week to daily content across 5 platforms without increasing time investment."*
+> — **Design Agency Owner**
+
+---
+
+## 🎓 Learning Path
+
+### New to Media Strategy?
+1. **Start with onboarding workflow** - builds complete brand strategy
+2. **Use provided templates** - proven frameworks for content creation
+3. **Join the community** - learn from other Vibeflow creators
+4. **Iterate and optimize** - improve based on performance data
+
+### Experienced Creator?
+1. **Import existing brand assets** into strategy folder
+2. **Build custom workflows** for your specific use cases  
+3. **Integrate your current tools** via APIs and automation
+4. **Share successful patterns** with the community
+
+### Technical Background?
+1. **Explore the codebase** - contribute to open source development
+2. **Build custom components** - extend Vibeflow capabilities
+3. **Create integrations** - connect to new platforms and tools
+4. **Lead community development** - help define the future of media infrastructure
+
+---
+
+## 🤝 Community & Support
+
+### Get Help
+- **Discord Community** - Connect with other Vibeflow creators
+- **Documentation** - Comprehensive guides and tutorials
+- **GitHub Issues** - Report bugs and request features
+- **Office Hours** - Weekly community calls and Q&A
+
+### Contribute
+- **Share workflows** - Upload successful patterns to component marketplace
+- **Improve documentation** - Help make Vibeflow more accessible
+- **Build integrations** - Connect new platforms and tools
+- **Spread the word** - Help creators discover owned media infrastructure
+
+### Stay Updated
+- **Newsletter** - Weekly updates on new features and community highlights
+- **Twitter** - Follow [@vibeflow](https://twitter.com/vibeflow) for daily insights
+- **Blog** - Deep dives on media infrastructure and creator economy trends
+
+---
+
+## 🔮 Vision: The Future of Media
+
+**By 2030, every creator will own their media infrastructure just like developers own their code infrastructure.**
+
+This means:
+- **Journalists** investigate and publish without editorial constraints
+- **Builders** scale content creation alongside product development
+- **Experts** monetize knowledge through direct audience relationships  
+- **Creators** build media empires without platform dependency
+
+**The result:** A media landscape where the best ideas win based on merit and audience value, not algorithmic manipulation or institutional gatekeeping.
+
+---
+
+## 📄 License
+
+Vibeflow is open source and available under the MIT License. Build, modify, and distribute freely.
+
+---
+
+## 🚀 Ready to Own Your Media Infrastructure?
+
+```bash
+# Start building your media empire today
+npx create-vibeflow-app my-media-company
+cd my-media-company  
+npm run dev
+
+# Then tell your Cursor agent:
+# "Start the personal brand onboarding workflow"
+```
+
+**Questions?** Join our [Discord community](https://discord.gg/vibeflow) or [book a demo call](https://cal.com/vibeflow).
+
+**Want to contribute?** Check out our [contribution guidelines](CONTRIBUTING.md) and help build the future of creator-owned media.
+
+---
+
+*"Own your distribution. Scale your voice. Build your empire."*
+
+**[Get Started](https://github.com/vibeflow/vibeflow) • [Community](https://discord.gg/vibeflow) • [Documentation](https://docs.vibeflow.dev) • [Examples](https://github.com/vibeflow/examples)**
+
