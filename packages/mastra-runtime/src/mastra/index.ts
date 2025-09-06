@@ -1,7 +1,5 @@
 import { Mastra } from "@mastra/core/mastra";
 import { Workflow } from "@mastra/core/workflows";
-import { testWorkflow } from "./workflows/test-workflow";
-import { businessStrategyWorkflow } from "./workflows/business-strategy";
 import { createStorage } from "./storage";
 import { frameworkAgent } from "./agents/frameworkAgent";
 import { createVibeflowMCP } from "./mcp";
@@ -13,8 +11,6 @@ export async function createMastraInstance(options: {
       frameworkAgent
     },
     workflows: {
-      testWorkflow,
-      businessStrategyWorkflow,
       ...options.workflows
     },
     bundler: {
