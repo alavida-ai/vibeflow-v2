@@ -1,5 +1,5 @@
 import { Hono } from 'hono';
-import { serve } from 'bun';
+import { serve } from '@hono/node-server'
 // routes
 import { mastraApp } from './routes/mastra';
 import { docs } from './routes/docs';
@@ -46,5 +46,7 @@ app.route('/docs', docs);
 
 app.route('/', mastraApp);
 
-serve({ fetch: app.fetch, port: 4111, hostname: 'localhost', idleTimeout: 255 });
+serve({ fetch: app.fetch, port: 4111, hostname: 'localhost' });
 console.log('API server running on http://localhost:4111');
+
+

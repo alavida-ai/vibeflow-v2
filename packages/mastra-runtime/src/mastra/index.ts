@@ -7,10 +7,15 @@ import { createStorage } from "./storage";
 import { frameworkAgent } from "./agents/frameworkAgent";
 import { parseAgent } from "./agents/parseAgent";
 import { createVibeflowMCP } from "./mcp";
+import { PinoLogger } from "@mastra/loggers";
 
 export async function createMastraInstance(options: {
   workflows: Record<string, Workflow>}) {
   return new Mastra({
+    logger: new PinoLogger({
+      name: 'VibeFlow-Mastra',
+      level: 'debug'
+    }),
     agents: {
       frameworkAgent,
       parseAgent

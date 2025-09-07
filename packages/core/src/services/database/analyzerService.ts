@@ -197,7 +197,7 @@ export class AnalyzerService {
      * Get tweets by their IDs
      * Used for calculating framework metrics based on specific tweet references
      */
-    static async getTweetsByIds(tweetIds: string[]): Promise<TweetAnalysisView[]> {
+    static async getTweetsByIds(tweetIds: number[]): Promise<TweetAnalysisView[]> {
         if (tweetIds.length === 0) return [];
 
         const db = getDb();
@@ -213,7 +213,7 @@ export class AnalyzerService {
                 schema.tweetMediaAnalyzer,
                 eq(schema.tweetMediaAnalyzer.tweetId, schema.tweetsAnalyzer.id)
             )
-            .where(inArray(schema.tweetsAnalyzer.apiId, tweetIds))
+            .where(inArray(schema.tweetsAnalyzer.id, tweetIds))
             .orderBy(desc(schema.tweetsAnalyzer.createdAt));
 
         // Group media by tweet ID

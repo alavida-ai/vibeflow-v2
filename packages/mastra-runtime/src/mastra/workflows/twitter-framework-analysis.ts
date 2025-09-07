@@ -42,6 +42,17 @@ const frameworkAnalysisStep = createStep({
     mastra: Mastra, 
     runtimeContext: RuntimeContext<WorkflowContext> 
   }) => {
+    const stepId = "framework-analysis";
+    const startTime = Date.now();
+    
+    const logger = mastra.getLogger();
+    
+    logger.info(`Starting framework analysis step`, {
+      stepId,
+      username: inputData.username,
+      timestamp: new Date().toISOString()
+    });
+    
     const { username } = inputData;
     
     // Set context
@@ -49,7 +60,16 @@ const frameworkAnalysisStep = createStep({
     runtimeContext.set("threadId", `framework-analysis-${Date.now()}`);
     runtimeContext.set("resourceId", `user-${username}`);
 
+    const contextData = {
+      username,
+      threadId: runtimeContext.get("threadId"),
+      resourceId: runtimeContext.get("resourceId")
+    };
+
+    logger.debug('Context set for framework analysis', { stepId, contextData });
+
     const frameworkAgent = mastra.getAgent("frameworkAgent");
+    logger.debug('Framework agent retrieved', { stepId, agentName: "frameworkAgent" });
     
     const prompt = `Analyze Twitter user @${username} and identify their content frameworks. 
 
@@ -65,6 +85,8 @@ Use the userTweetsFetcherTool to get the tweet data - no need to scrape since th
 
     let result;
     try {
+      logger.info('Calling framework agent generate method', { stepId });
+      
       result = await frameworkAgent.generate(prompt, {
         memory: {
           thread: {
@@ -73,13 +95,53 @@ Use the userTweetsFetcherTool to get the tweet data - no need to scrape since th
           resource: runtimeContext.get("resourceId")
         }
       });
+      
+      // Log the COMPLETE framework agent response
+      logger.info('Framework agent generation completed - FULL RESPONSE', {
+        stepId,
+        username,
+        responseLength: result.text.length,
+        fullResponse: result.text // Complete response without truncation
+      });
+
+      // Also log a structured analysis of the response
+      logger.debug('Framework agent response analysis', {
+        stepId,
+        username,
+        responseStats: {
+          length: result.text.length,
+          containsTweetIds: /\b\d{19}\b/.test(result.text), // Check for Twitter ID pattern
+          tweetIdMatches: result.text.match(/\b\d{19}\b/g) || [],
+          containsFramework: result.text.toLowerCase().includes('framework'),
+          lineCount: result.text.split('\n').length
+        },
+        response: result.text
+      });
+      
     } catch (error) {
-      console.error('Framework agent generation failed:', error);
+      logger.error('Framework agent generation failed', {
+        stepId,
+        username,
+        error: error instanceof Error ? error.message : String(error),
+        stack: error instanceof Error ? error.stack : undefined
+      });
+      
       if (error instanceof Error && error.message.includes('Payment Required')) {
-        throw new Error('OpenRouter API payment required. Please check your API key and account balance.');
+        const paymentError = new Error('OpenRouter API payment required. Please check your API key and account balance.');
+        logger.error('Payment required error detected', { stepId, error: paymentError.message });
+        throw paymentError;
       }
       throw error;
     }
+
+    const endTime = Date.now();
+    const duration = endTime - startTime;
+    
+    logger.info('Framework analysis step completed', {
+      stepId,
+      username,
+      duration,
+    });
 
     return {
       rawAnalysis: result.text,
@@ -111,6 +173,10 @@ const parseFrameworksStep = createStep({
     mastra: Mastra, 
     runtimeContext: RuntimeContext<WorkflowContext> 
   }) => {
+    const stepId = "parse-frameworks";
+    const startTime = Date.now();
+    const logger = mastra.getLogger();
+
     const { rawAnalysis, username } = inputData;
 
     const parseAgent = mastra.getAgent("parseAgent");
@@ -121,33 +187,90 @@ ${rawAnalysis}
 
 Remember to extract the tweet IDs that each framework references.`;
 
-    const result = await parseAgent.generate(prompt, {
-      memory: {
-        thread: {
-          id: runtimeContext.get("threadId"),
-        },
-        resource: runtimeContext.get("resourceId")
-      }
-    });
+    let result;
+    try {
+      logger.info('Calling parse agent generate method', { stepId });
+      
+      result = await parseAgent.generate(prompt, {
+        memory: {
+          thread: {
+            id: runtimeContext.get("threadId"),
+          },
+          resource: runtimeContext.get("resourceId")
+        }
+      });
+      
+      logger.info('Parse agent generation completed - FULL RESPONSE', {
+        stepId,
+        username,
+        responseLength: result.text.length,
+        fullResponse: result.text // Complete response without truncation
+      });
+      
+    } catch (error) {
+      logger.error('Parse agent generation failed', {
+        stepId,
+        username,
+        error: error instanceof Error ? error.message : String(error),
+        stack: error instanceof Error ? error.stack : undefined
+      });
+      throw error;
+    }
 
     let parsedFrameworks;
     try {
+      logger.debug('Starting JSON parsing', { stepId });
+      
       // Clean and parse the JSON response
       let jsonText = result.text.trim();
+      
+      logger.debug('Raw JSON text extracted', {
+        stepId,
+        jsonTextLength: jsonText.length,
+        jsonTextPreview: jsonText.substring(0, 300) + "..."
+      });
       
       // Remove markdown code blocks if present
       if (jsonText.startsWith('```json')) {
         jsonText = jsonText.replace(/```json\n?/, '').replace(/\n?```$/, '');
+        logger.debug('Removed markdown json code blocks', { stepId });
       } else if (jsonText.startsWith('```')) {
         jsonText = jsonText.replace(/```\n?/, '').replace(/\n?```$/, '');
+        logger.debug('Removed markdown code blocks', { stepId });
       }
       
       const parsed = JSON.parse(jsonText);
       parsedFrameworks = parsed.frameworks || [];
+      
+      logger.info('JSON parsing successful', {
+        stepId,
+        frameworksCount: parsedFrameworks.length,
+        frameworks: parsedFrameworks.map((f: any) => ({
+          title: f.title,
+          tweetIdsCount: f.tweetIds?.length || 0,
+          tweetIds: f.tweetIds || []
+        }))
+      });
+      
     } catch (error) {
-      console.error('Failed to parse framework JSON:', error);
+      logger.error('Failed to parse framework JSON', {
+        stepId,
+        error: error instanceof Error ? error.message : String(error),
+        rawResponse: result.text.substring(0, 1000) + "..." // Show more of the response for debugging
+      });
       parsedFrameworks = [];
     }
+
+    const endTime = Date.now();
+    const duration = endTime - startTime;
+    
+    logger.info('Parse frameworks step completed', {
+      stepId,
+      username,
+      duration,
+      frameworksCount: parsedFrameworks.length,
+      outputSize: JSON.stringify({ frameworks: parsedFrameworks, username }).length
+    });
 
     return {
       frameworks: parsedFrameworks,
@@ -175,7 +298,7 @@ const calculateMetricsStep = createStep({
     totalPosts: z.number(),
     username: z.string()
   }),
-  execute: async ({ inputData }: { 
+  execute: async ({ inputData, mastra }: { 
     inputData: { 
       frameworks: Array<{
         title: string,
@@ -185,19 +308,84 @@ const calculateMetricsStep = createStep({
         tweetIds: string[]
       }>, 
       username: string 
-    } 
+    },
+    mastra: Mastra
   }) => {
+    const stepId = "calculate-metrics";
+    const startTime = Date.now();
+    const logger = mastra.getLogger();
+    
+    logger.info('Starting calculate metrics step', {
+      stepId,
+      username: inputData.username,
+      frameworksCount: inputData.frameworks.length,
+      frameworks: inputData.frameworks.map(f => ({
+        title: f.title,
+        tweetIdsCount: f.tweetIds?.length || 0
+      }))
+    });
+
     const { frameworks, username } = inputData;
+    
+    logger.debug('Processing frameworks for metrics calculation', { stepId });
     
     const enrichedFrameworks = await Promise.all(
       frameworks.map(async (framework, index) => {
+        const frameworkStartTime = Date.now();
+        
+        logger.debug(`Processing framework ${index + 1}: ${framework.title}`, {
+          stepId,
+          frameworkIndex: index + 1,
+          title: framework.title,
+          tweetIdsCount: framework.tweetIds?.length || 0,
+          tweetIds: framework.tweetIds
+        });
+
         let avgViews = 0;
         let avgLikes = 0;
         
         if (framework.tweetIds && framework.tweetIds.length > 0) {
           try {
-            // Fetch tweets by their IDs from the database
-            const tweets = await AnalyzerService.getTweetsByIds(framework.tweetIds);
+            logger.debug(`Fetching tweets for framework: ${framework.title}`, {
+              stepId,
+              title: framework.title,
+              requestedTweetIds: framework.tweetIds,
+              requestedCount: framework.tweetIds.length
+            });
+            
+            // Convert string IDs to integers for database lookup
+            const tweetDbIds = framework.tweetIds.map(id => parseInt(id, 10)).filter(id => !isNaN(id));
+            
+            logger.debug(`Converting tweet IDs for database lookup`, {
+              stepId,
+              title: framework.title,
+              originalIds: framework.tweetIds,
+              convertedIds: tweetDbIds,
+              conversionSuccess: tweetDbIds.length === framework.tweetIds.length
+            });
+            
+            // Fetch tweets by their internal database IDs
+            const tweets = await AnalyzerService.getTweetsByIds(tweetDbIds);
+            
+            logger.info(`Tweets fetched for framework: ${framework.title}`, {
+              stepId,
+              title: framework.title,
+              requestedCount: framework.tweetIds.length,
+              actualCount: tweets.length,
+              foundTweets: tweets.map(t => ({
+                id: t.id,
+                viewCount: t.viewCount,
+                likeCount: t.likeCount,
+                text: t.text.substring(0, 100) + "...", // First 100 chars of tweet text
+                // Debug data types and null values
+                viewCountType: typeof t.viewCount,
+                likeCountType: typeof t.likeCount,
+                isViewCountNull: t.viewCount === null,
+                isLikeCountNull: t.likeCount === null,
+                isViewCountUndefined: t.viewCount === undefined,
+                isLikeCountUndefined: t.likeCount === undefined
+              }))
+            });
             
             if (tweets.length > 0) {
               const totalViews = tweets.reduce((sum, tweet) => sum + (tweet.viewCount || 0), 0);
@@ -205,20 +393,65 @@ const calculateMetricsStep = createStep({
               
               avgViews = Math.round(totalViews / tweets.length);
               avgLikes = Math.round(totalLikes / tweets.length);
+              
+              logger.info(`Metrics calculated for framework: ${framework.title}`, {
+                stepId,
+                title: framework.title,
+                totalViews,
+                totalLikes,
+                avgViews,
+                avgLikes,
+                tweetsProcessed: tweets.length,
+                calculation: {
+                  viewSum: totalViews,
+                  likeSum: totalLikes,
+                  tweetCount: tweets.length
+                }
+              });
+            } else {
+              logger.warn(`No tweets found for framework: ${framework.title}`, {
+                stepId,
+                title: framework.title,
+                requestedTweetIds: framework.tweetIds
+              });
             }
           } catch (error) {
-            console.error(`Failed to fetch tweets for framework ${framework.title}:`, error);
+            logger.error(`Failed to fetch tweets for framework: ${framework.title}`, {
+              stepId,
+              title: framework.title,
+              tweetIds: framework.tweetIds,
+              error: error instanceof Error ? error.message : String(error),
+              stack: error instanceof Error ? error.stack : undefined
+            });
+            
             // Use fallback values if database query fails
             avgViews = Math.floor(Math.random() * 100000) + 50000; // Random between 50k-150k
             avgLikes = Math.floor(Math.random() * 1000) + 500; // Random between 500-1500
+            
+            logger.debug(`Using fallback metrics for framework: ${framework.title}`, {
+              stepId,
+              title: framework.title,
+              fallbackAvgViews: avgViews,
+              fallbackAvgLikes: avgLikes
+            });
           }
         } else {
           // Fallback if no tweet IDs provided
           avgViews = Math.floor(Math.random() * 100000) + 50000;
           avgLikes = Math.floor(Math.random() * 1000) + 500;
+          
+          logger.warn(`No tweet IDs provided for framework: ${framework.title}`, {
+            stepId,
+            title: framework.title,
+            fallbackAvgViews: avgViews,
+            fallbackAvgLikes: avgLikes
+          });
         }
 
-        return {
+        const frameworkEndTime = Date.now();
+        const frameworkDuration = frameworkEndTime - frameworkStartTime;
+
+        const enrichedFramework = {
           id: `${index + 1}`,
           title: framework.title,
           description: framework.description,
@@ -230,24 +463,72 @@ const calculateMetricsStep = createStep({
             successRate: 77 // Hardcoded as requested
           }
         };
+
+        logger.debug(`Framework ${index + 1} enriched successfully`, {
+          stepId,
+          frameworkIndex: index + 1,
+          title: enrichedFramework.title,
+          metrics: enrichedFramework.metrics,
+          processingDuration: frameworkDuration
+        });
+
+        return enrichedFramework;
       })
     );
+
+    logger.debug('All frameworks processed', {
+      stepId,
+      enrichedFrameworksCount: enrichedFrameworks.length
+    });
 
     // Get total posts for the user
     let totalPosts = 0;
     try {
+      logger.debug(`Fetching total posts count for user: ${username}`, { stepId });
+      
       const userTweets = await AnalyzerService.getTweetsAnalysisViewByUsername(username);
       totalPosts = userTweets.length;
+      
+      logger.info(`Total posts count retrieved`, {
+        stepId,
+        username,
+        totalPosts,
+        tweetsFound: userTweets.length
+      });
     } catch (error) {
-      console.error('Failed to get total posts count:', error);
+      logger.error('Failed to get total posts count', {
+        stepId,
+        username,
+        error: error instanceof Error ? error.message : String(error),
+        stack: error instanceof Error ? error.stack : undefined
+      });
       totalPosts = 0;
     }
 
-    return {
+    const endTime = Date.now();
+    const duration = endTime - startTime;
+    
+    const output = {
       frameworks: enrichedFrameworks,
       totalPosts,
       username
     };
+
+    logger.info('Calculate metrics step completed', {
+      stepId,
+      username,
+      duration,
+      frameworksCount: enrichedFrameworks.length,
+      totalPosts,
+      outputSize: JSON.stringify(output).length,
+      finalFrameworks: enrichedFrameworks.map(f => ({
+        id: f.id,
+        title: f.title,
+        metrics: f.metrics
+      }))
+    });
+
+    return output;
   }
 });
 
