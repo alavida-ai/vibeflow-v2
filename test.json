@@ -1,0 +1,126 @@
+{
+    "type": "workflow-step-result",
+    "runId": "7c29e93c-ef75-4c66-a9b8-8dfa631cf4d7",
+    "from": "WORKFLOW",
+    "payload": {
+        "stepName": "calculate-metrics",
+        "id": "calculate-metrics",
+        "stepCallId": "7c820998-27ff-445e-9a5b-5cc8569b85a7",
+        "status": "success",
+        "output": {
+            "frameworks": [
+                {
+                    "id": "1",
+                    "title": "Build-in-Public Milestone Celebration",
+                    "description": "Celebrates achievements while providing transparent metrics and lessons learned, creating social proof and community engagement.",
+                    "structure": "1. Achievement announcement with specific metrics\n2. Gratitude expression\n3. Lessons learned (what worked/didn't work)\n4. Future optimization plans\n5. Community engagement hook",
+                    "prompt": "Just hit [MILESTONE] on day [X] of [BIGGER GOAL]\n\nI am very grateful\n\nHere are some things I've learned:\n\n[SPECIFIC LESSON WITH PROOF/METRICS]\n\nWhere I misstepped:\n- [MISTAKE 1 with impact]\n- [MISTAKE 2 with impact]\n\nWhat I will improve:\n[SPECIFIC OPTIMIZATION PLAN]\n\n[FUTURE COMMITMENT/TIMELINE]",
+                    "metrics": {
+                        "avgViews": 207,
+                        "avgLikes": 10,
+                        "successRate": 77
+                    }
+                },
+                {
+                    "id": "2",
+                    "title": "Technical Deep-Dive Education",
+                    "description": "Breaks down complex technical concepts into digestible, numbered components with practical examples and implementation details.",
+                    "structure": "1. Topic introduction with goal statement\n2. Numbered component breakdown (typically 3-4 items)\n3. Detailed explanation of each component\n4. Practical example/use case\n5. Implementation flow with steps\n6. Future application tease",
+                    "prompt": "I am diving into [TECHNICAL TOPIC] this week.\n\nGoal: [SPECIFIC IMPLEMENTATION GOAL]\n\nThere are [X] components:\n[NUMBERED LIST OF COMPONENTS]\n\nLet's walk through [PRACTICAL EXAMPLE].\n\n[DETAILED BREAKDOWN OF EACH COMPONENT]\n\n[STEP-BY-STEP IMPLEMENTATION FLOW]\n\nAnd that's the foundation.\n\nNext, I will [FUTURE APPLICATION].",
+                    "metrics": {
+                        "avgViews": 117,
+                        "avgLikes": 4,
+                        "successRate": 77
+                    }
+                },
+                {
+                    "id": "3",
+                    "title": "Controversial Prediction with Reasoning",
+                    "description": "Makes bold industry predictions backed by logical reasoning and personal experience to spark engagement and establish thought leadership.",
+                    "structure": "1. 'Controversial opinion' hook\n2. Bold prediction with timeline\n3. 'Here are my reasons:' transition\n4. Multiple supporting arguments with subheadings\n5. Personal experience validation\n6. Solution/opportunity identification\n7. Value delivery promise",
+                    "prompt": "controversial opinion\n\nby [TIMELINE] [BOLD PREDICTION]\n\nhere are my reasons:\n\n[REASON 1]: [EXPLANATION WITH PERSONAL PAIN POINT]\n\n[REASON 2]: [TECHNICAL/MARKET ADVANTAGE]\n\n[REASON 3]: [ACCESSIBILITY/DEMOCRATIZATION ANGLE]\n\nThe real [BLOCKER] is [SPECIFIC CHALLENGE]\n\nSo I'll be [SOLUTION/VALUE DELIVERY]\n\nStay tuned",
+                    "metrics": {
+                        "avgViews": 111,
+                        "avgLikes": 4,
+                        "successRate": 77
+                    }
+                },
+                {
+                    "id": "4",
+                    "title": "Major Achievement + Team Building",
+                    "description": "Announces significant business milestones while highlighting team growth and mission alignment.",
+                    "structure": "1. 'Major goal achieved' declaration\n2. Specific achievement with social proof\n3. Expected impact/improvement\n4. Mission connection\n5. Visual proof (often with image)",
+                    "prompt": "major goal achieved\n\n[SPECIFIC ACHIEVEMENT WITH SOCIAL PROOF]\n\nim expecting [QUANTIFIED IMPROVEMENT]\n\none step closer to the mission: [BIGGER VISION/GOAL]",
+                    "metrics": {
+                        "avgViews": 136,
+                        "avgLikes": 6,
+                        "successRate": 77
+                    }
+                },
+                {
+                    "id": "5",
+                    "title": "Rapid Execution Showcase",
+                    "description": "Demonstrates speed and efficiency of systems/tools by showing dramatic time-to-value ratios with cost breakdowns.",
+                    "structure": "1. Time constraint + impressive outcome\n2. Excitement/emotion expression\n3. Cost efficiency highlight\n4. Bulleted capability breakdown\n5. Ownership vs. rental philosophy\n6. Call-to-action for technical details",
+                    "prompt": "in [SHORT TIME] I went from nothing to [IMPRESSIVE OUTCOME]\n\nthis is fucking awesome because [COST/EFFICIENCY BENEFIT]\n\n• [CAPABILITY 1]\n• [CAPABILITY 2] \n• [CAPABILITY 3]\n• [INTEGRATION DETAIL]\n\nthis is what [CATEGORY] looks like when you own it instead of rent it\n\nDM me if you want the exact technical breakdown",
+                    "metrics": {
+                        "avgViews": 95,
+                        "avgLikes": 7,
+                        "successRate": 77
+                    }
+                },
+                {
+                    "id": "6",
+                    "title": "Weekend Hacker Announcement",
+                    "description": "Builds anticipation for product launches by showcasing weekend development productivity with casual, confident tone.",
+                    "structure": "1. Product shipping announcement with timeline\n2. Casual blessing/celebration of development time\n3. Visual proof (GIF/image)",
+                    "prompt": "Shipping [PRODUCT DESCRIPTION] on [DAY]\n\nGod bless the weekend hackathons",
+                    "metrics": {
+                        "avgViews": 128,
+                        "avgLikes": 11,
+                        "successRate": 77
+                    }
+                },
+                {
+                    "id": "7",
+                    "title": "Lifestyle + Productivity Integration",
+                    "description": "Shows the intersection of personal enjoyment and professional development, creating aspirational content around work-life integration.",
+                    "structure": "1. Lifestyle appreciation statement\n2. Specific scene setting (time, place, activity)\n3. Content consumption + creation combination\n4. Application to business context\n5. Visual proof of the moment",
+                    "prompt": "honestly doesn't get better than this.\n\n[TIME/SETTING], [PERSONAL ENJOYMENT] + [LEARNING ACTIVITY], and [PRODUCTIVE APPLICATION]",
+                    "metrics": {
+                        "avgViews": 66,
+                        "avgLikes": 2,
+                        "successRate": 77
+                    }
+                },
+                {
+                    "id": "8",
+                    "title": "Tech Stack Authority",
+                    "description": "Establishes technical credibility by sharing curated tool selections with brief, confident descriptions.",
+                    "structure": "1. Purpose statement\n2. Tool category + specific tool + brief benefit\n3. Concise, technical language\n4. Comprehensive coverage of full stack",
+                    "prompt": "my tech stack to [SPECIFIC PURPOSE]\n\n[TOOL CATEGORY]: [SPECIFIC TOOL] - [BRIEF BENEFIT]\n[TOOL CATEGORY]: [SPECIFIC TOOL] - [BRIEF BENEFIT]\n[Continue pattern...]",
+                    "metrics": {
+                        "avgViews": 115,
+                        "avgLikes": 8,
+                        "successRate": 77
+                    }
+                },
+                {
+                    "id": "9",
+                    "title": "Industry Insight + Personal Validation",
+                    "description": "Shares strategic insights about industry shifts while positioning personal experience as validation of the trend.",
+                    "structure": "1. Prediction/insight statement\n2. Risk/reward framing\n3. Industry parallel/analogy\n4. Role evolution description\n5. Personal experience as proof\n6. Pattern recognition claim",
+                    "prompt": "[INDUSTRY PREDICTION/INSIGHT]\n\nthere's a lot to gain by [OPPORTUNITY], and a lot to lose by [RISK]\n\ni believe that [INDUSTRY] will experience the same [SHIFT TYPE] we're seeing in [PARALLEL INDUSTRY]\n\n[ROLE EVOLUTION DESCRIPTION]\n\nmy work [PERSONAL EXPERIENCE] has made this pattern extremely obvious to me",
+                    "metrics": {
+                        "avgViews": 133,
+                        "avgLikes": 3,
+                        "successRate": 77
+                    }
+                }
+            ],
+            "totalPosts": 10,
+            "username": "alexgirardet"
+        },
+        "endedAt": 1757268968086
+    }
+}

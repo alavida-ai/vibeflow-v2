@@ -100,8 +100,7 @@ Use the userTweetsFetcherTool to get the tweet data - no need to scrape since th
       logger.info('Framework agent generation completed - FULL RESPONSE', {
         stepId,
         username,
-        responseLength: result.text.length,
-        fullResponse: result.text // Complete response without truncation
+        responseLength: result.text.length
       });
 
       // Also log a structured analysis of the response
@@ -318,16 +317,10 @@ const calculateMetricsStep = createStep({
     logger.info('Starting calculate metrics step', {
       stepId,
       username: inputData.username,
-      frameworksCount: inputData.frameworks.length,
-      frameworks: inputData.frameworks.map(f => ({
-        title: f.title,
-        tweetIdsCount: f.tweetIds?.length || 0
-      }))
+      frameworksCount: inputData.frameworks.length
     });
 
     const { frameworks, username } = inputData;
-    
-    logger.debug('Processing frameworks for metrics calculation', { stepId });
     
     const enrichedFrameworks = await Promise.all(
       frameworks.map(async (framework, index) => {
@@ -346,46 +339,11 @@ const calculateMetricsStep = createStep({
         
         if (framework.tweetIds && framework.tweetIds.length > 0) {
           try {
-            logger.debug(`Fetching tweets for framework: ${framework.title}`, {
-              stepId,
-              title: framework.title,
-              requestedTweetIds: framework.tweetIds,
-              requestedCount: framework.tweetIds.length
-            });
-            
             // Convert string IDs to integers for database lookup
             const tweetDbIds = framework.tweetIds.map(id => parseInt(id, 10)).filter(id => !isNaN(id));
             
-            logger.debug(`Converting tweet IDs for database lookup`, {
-              stepId,
-              title: framework.title,
-              originalIds: framework.tweetIds,
-              convertedIds: tweetDbIds,
-              conversionSuccess: tweetDbIds.length === framework.tweetIds.length
-            });
-            
             // Fetch tweets by their internal database IDs
             const tweets = await AnalyzerService.getTweetsByIds(tweetDbIds);
-            
-            logger.info(`Tweets fetched for framework: ${framework.title}`, {
-              stepId,
-              title: framework.title,
-              requestedCount: framework.tweetIds.length,
-              actualCount: tweets.length,
-              foundTweets: tweets.map(t => ({
-                id: t.id,
-                viewCount: t.viewCount,
-                likeCount: t.likeCount,
-                text: t.text.substring(0, 100) + "...", // First 100 chars of tweet text
-                // Debug data types and null values
-                viewCountType: typeof t.viewCount,
-                likeCountType: typeof t.likeCount,
-                isViewCountNull: t.viewCount === null,
-                isLikeCountNull: t.likeCount === null,
-                isViewCountUndefined: t.viewCount === undefined,
-                isLikeCountUndefined: t.likeCount === undefined
-              }))
-            });
             
             if (tweets.length > 0) {
               const totalViews = tweets.reduce((sum, tweet) => sum + (tweet.viewCount || 0), 0);
@@ -463,15 +421,7 @@ const calculateMetricsStep = createStep({
             successRate: 77 // Hardcoded as requested
           }
         };
-
-        logger.debug(`Framework ${index + 1} enriched successfully`, {
-          stepId,
-          frameworkIndex: index + 1,
-          title: enrichedFramework.title,
-          metrics: enrichedFramework.metrics,
-          processingDuration: frameworkDuration
-        });
-
+        
         return enrichedFramework;
       })
     );
@@ -520,7 +470,6 @@ const calculateMetricsStep = createStep({
       duration,
       frameworksCount: enrichedFrameworks.length,
       totalPosts,
-      outputSize: JSON.stringify(output).length,
       finalFrameworks: enrichedFrameworks.map(f => ({
         id: f.id,
         title: f.title,

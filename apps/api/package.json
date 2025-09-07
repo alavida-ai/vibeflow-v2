@@ -3,7 +3,7 @@
   "type": "module",
   "private": true,
   "scripts": {
-    "dev": "tsx src/server.ts"
+    "dev": "tsx --env-file ../../.env src/server.ts"
   },
   "dependencies": {
     "@hono/node-server": "^1.19.1",

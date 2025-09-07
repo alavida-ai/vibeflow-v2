@@ -1,0 +1,218 @@
+id: personal-brand-onboarding
+description: Complete personal brand strategy development with human-in-the-loop discovery
+steps:
+  - id: brand-discovery-interview
+    description: Extract core brand DNA through guided questions
+    prompt: |
+      You are conducting a brand discovery interview. Ask the user these questions one at a time, 
+      wait for their response, and then ask follow-up questions to get deeper insights.
+      
+      Core Questions to Ask:
+      1. "What's the one problem you're obsessed with solving? Be specific about the transformation you create."
+      2. "In 10 words or less, what do you want to be known for?"
+      3. "What would you never compromise on, even if it cost you customers or opportunities?"
+      4. "Describe the emotional state someone is in before they find you vs. after working with you."
+      5. "If you had to choose only 3 core values that drive every decision, what would they be?"
+      
+      For each answer, ask 1-2 follow-up questions like:
+      - "Can you give me a specific example of that?"
+      - "What does that look like in practice?"
+      - "How is that different from what others in your space believe?"
+      
+      Document all responses and synthesize into:
+      - Mission statement (one sentence)
+      - Vision statement (one sentence)  
+      - 3 core values with brief explanations
+      - Emotional north star (primary emotion to evoke)
+      - Brand mantra (3-4 words)
+    acceptance_criteria: |
+      - User has answered all 5 core questions with specific examples
+      - Follow-up questions revealed deeper insights beyond surface answers
+      - Clear mission, vision, values, and emotional direction documented
+      - User confirms these elements feel authentic to their brand
+
+  - id: audience-research-validation
+    description: Define primary audience through interview and validation
+    prompt: |
+      Now we'll define your primary audience. Ask these questions and dig deep into their responses:
+      
+      Audience Definition Questions:
+      1. "Describe your ideal customer in 2-3 sentences. Be brutally specific - demographics AND psychographics."
+      2. "What keeps them awake at 3am worrying? What's their biggest fear or frustration?"
+      3. "What transformation or outcome do they desperately want but can't seem to achieve?"
+      4. "Where do they go when they need advice, inspiration, or solutions? (specific platforms, people, communities)"
+      5. "What would they say their #1 goal is for the next 12 months?"
+      
+      Validation Questions:
+      6. "How do you know this audience actually exists and has money to spend?"
+      7. "What proof do you have that they want what you're offering?"
+      
+      For each response, probe deeper:
+      - "What specific words would they use to describe this problem?"
+      - "How much would solving this be worth to them?"
+      - "Who else is trying to help them with this?"
+      
+      Document findings and create:
+      - Primary audience profile (demographic + psychographic)
+      - Functional job and emotional job they "hire" the brand for
+      - Top 3 goals/desired outcomes
+      - Top 3 pain points/barriers
+      - Specific hangout locations (platforms, communities, events)
+    acceptance_criteria: |
+      - Detailed audience profile with specific demographics and psychographics
+      - Clear understanding of functional and emotional jobs-to-be-done
+      - Specific pain points and goals documented with user's language
+      - Validated audience locations and proof of market demand
+      - User can picture their ideal customer as a real person
+
+  - id: competitive-analysis-positioning
+    description: Map competitive landscape and define unique positioning
+    prompt: |
+      Time to analyze your competitive landscape and find your unique position.
+      
+      Competitive Research Questions:
+      1. "Name 3 people/brands your audience currently follows for advice in this area."
+      2. "For each competitor, what do they do really well that you respect?"
+      3. "What do they do that makes you cringe or disagree with their approach?"
+      4. "What industry trend or conventional wisdom do you think is totally wrong?"
+      5. "Complete this sentence: 'Unlike [competitor name], I believe...'"
+      
+      Market Analysis Questions:
+      6. "What regulatory, technological, or cultural changes could impact your market in the next 3 years?"
+      7. "What features/services are now 'table stakes' that everyone must have?"
+      8. "What capabilities still differentiate the best from the rest?"
+      
+      Positioning Questions:
+      9. "What's the core problem or industry flaw your brand stands against?"
+      10. "How would you complete: 'For [your audience] who need [specific problem], [your brand] is a [category] that delivers [benefit] because [reason to believe].'"
+      
+      Research each mentioned competitor online while user responds. Document:
+      - Top 3 competitors with strengths/weaknesses
+      - 2 regulatory, 2 technological, 2 cultural trends
+      - Table stakes vs. differentiators
+      - 5 high-intent keywords competitors own
+      - Complete positioning statement
+      - "Enemy" narrative (what you stand against)
+    acceptance_criteria: |
+      - 3 specific competitors analyzed with clear strengths/weaknesses
+      - 6 market trends identified that could impact the business
+      - Clear distinction between table stakes and true differentiators
+      - Complete positioning statement that differentiates from competitors
+      - Strong "enemy" narrative that rallies audience around shared belief
+
+  - id: content-strategy-development
+    description: Define content approach, channels, and success metrics
+    prompt: |
+      Now let's build your content strategy based on your brand and audience insights.
+      
+      Content Objective Questions:
+      1. "What's the ONE measurable outcome that would prove your content is working in 12 months?"
+      2. "How does content creation fit into your business model? (leads, sales, authority, etc.)"
+      
+      Content Format Questions:
+      3. "Which format energizes you most: long-form writing, video, speaking/audio, or visual content?"
+      4. "What topic could you talk about for hours without getting bored?"
+      5. "What's a contrarian opinion you have that would spark debate in your industry?"
+      
+      Channel Strategy Questions:
+      6. "Where does your audience ACTUALLY consume content? (Be honest, not aspirational)"
+      7. "How much time can you realistically dedicate to content creation each week?"
+      8. "Do you prefer to batch create or create daily?"
+      
+      Content Pillars Questions:
+      9. "Based on your brand pillars from Step 1, what 3 content themes would reinforce each pillar?"
+      10. "For each of your audience's 3 main goals (from Step 2), what type of content would help them achieve it?"
+      
+      Using their brand fundamentals and audience research, help them create:
+      - Annual content objective (measurable)
+      - 3 content pillars mapped to brand pillars
+      - Primary channels with realistic posting frequency
+      - 3-5 hero content formats
+      - Standard repurposing workflow
+      - Known roadmap milestones requiring content support
+      - Primary conversion event and tracking method
+    acceptance_criteria: |
+      - Clear, measurable annual content objective defined
+      - 3 content pillars that align with brand pillars and audience needs
+      - Realistic channel strategy based on audience behavior and creator capacity
+      - Defined hero formats and repurposing workflow
+      - Conversion tracking plan established
+      - Content calendar foundation ready for implementation
+
+  - id: tone-voice-definition
+    description: Codify communication style and create voice guidelines
+    prompt: |
+      Let's define your unique voice and communication style for consistent brand expression.
+      
+      Personality & Archetype Questions:
+      1. "Describe your personality in 3 adjectives that would show up in your content."
+      2. "What's your natural communication style? (direct, storytelling, analytical, humorous, etc.)"
+      3. "When you're passionate about a topic, how do you naturally express it?"
+      
+      Language & Vocabulary Questions:
+      4. "What words, phrases, or slang do you use that others in your industry might not?"
+      5. "What marketing language or industry jargon makes you want to throw your laptop?"
+      6. "How do you want people to feel after reading your content?"
+      
+      Style Guidelines Questions:
+      7. "Do you prefer short, punchy sentences or longer, detailed explanations?"
+      8. "How much personality vs. professionalism should show through?"
+      9. "What reading level should your content target? (conversational, professional, academic)"
+      
+      Channel Adaptation Questions:
+      10. "Should your Twitter voice be different from your blog voice? How?"
+      11. "Any legal disclaimers or compliance requirements for your industry?"
+      
+      Create comprehensive tone of voice guidelines including:
+      - Primary archetype and 3 tone adjectives
+      - Target reading level
+      - 5-10 encouraged words/phrases and 5-10 banned words
+      - 3 "Do" vs "Don't" sentence examples
+      - Channel-specific adaptations
+      - Structure rules for headers and lists
+      - Sample content in multiple formats (tweet, email intro, blog opening)
+    acceptance_criteria: |
+      - Clear archetype and tone adjectives that match creator's personality
+      - Specific vocabulary guidelines with encouraged/banned words
+      - Practical do/don't examples that show voice in action
+      - Channel-specific tone adaptations defined
+      - Sample content created that demonstrates consistent voice
+      - Guidelines detailed enough for others to write in this voice
+
+  - id: template-compilation-review
+    description: Generate final brand templates and validate completeness
+    prompt: |
+      Time to compile everything into your final brand templates and ensure completeness.
+      
+      Using all previous responses, create these 3 comprehensive templates:
+      
+      1. **Brand Fundamentals Template** - Mission, vision, values, audience profile, positioning
+      2. **Market & Content Strategy Template** - Competitor analysis, content pillars, channel strategy
+      3. **Tone of Voice Template** - Communication guidelines, examples, channel adaptations
+      
+      Reference the template files:
+      - /strategy/brand-fundamentals-template.md
+      - /strategy/market-content-strategy-template.md  
+      - /strategy/tone-of-voice-template.md
+      
+      Fill out each template completely using the user's responses from previous steps.
+      
+      Validation Questions:
+      1. "Looking at your Brand Fundamentals template - does this capture who you really are?"
+      2. "Will this Content Strategy actually help you achieve your business goals?"
+      3. "Can you start creating content tomorrow using these Tone of Voice guidelines?"
+      4. "What feels missing or unclear that would prevent you from implementing this strategy?"
+      
+      Make any necessary revisions based on feedback.
+      
+      Finally, provide next steps:
+      - How to implement the content strategy
+      - Tools/systems needed for execution
+      - Timeline for launching branded content
+      - Success metrics to track
+    acceptance_criteria: |
+      - All 3 templates completely filled out with user's specific information
+      - User validates that templates feel authentic and actionable
+      - Any gaps or unclear areas have been addressed and revised
+      - Clear implementation plan provided with specific next steps
+      - User feels confident they can begin executing their brand strategy immediately
