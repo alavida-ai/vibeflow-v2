@@ -43,14 +43,14 @@ export const DashboardSidebar = ({
 }: DashboardSidebarProps) => {
   return (
     <Sidebar className="border-r border-border" collapsible="icon">
-      <SidebarHeader className="p-4">
-        <div className="flex items-center justify-between mb-4">
+      <SidebarHeader className="flex flex-col gap-2 p-2">
+        <div className="mb-4 flex h-8 w-full items-center justify-start gap-2 group-data-[collapsible=icon]:size-8 group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:p-2">
           <SidebarTrigger className="h-8 w-8 flex-shrink-0" />
           <span className="group-data-[collapsible=icon]:hidden font-semibold">Vibeflow</span>
         </div>
         <Button
           onClick={onNewAnalysis}
-          className="w-full justify-start gap-2 group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:px-2"
+          className="flex h-8 w-full items-center justify-start gap-2 group-data-[collapsible=icon]:size-8 group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:p-2"
           variant={showNewAnalysis ? "default" : "outline"}
           size="sm"
         >
@@ -99,9 +99,9 @@ export const DashboardSidebar = ({
         </div>
       </SidebarContent>
       
-      <SidebarFooter className="p-4">
+      <SidebarFooter className="p-2">
         <SignedIn>
-          <div className="flex items-center justify-center group-data-[collapsible=icon]:justify-center">
+          <div className="flex items-center group-data-[collapsible=icon]:size-8 group-data-[collapsible=icon]:justify-center ">
             <UserButton 
               appearance={{
                 elements: {
