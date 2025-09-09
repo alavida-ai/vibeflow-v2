@@ -13,7 +13,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 
-export default function DashboardPage() {
+export default function RootPage() {
   const { user, isLoaded } = useUser();
 
   if (!isLoaded) {

@@ -59,7 +59,7 @@ export const FrameworkCard = ({ framework }: FrameworkCardProps) => {
             </p>
           </div>
           <div className="ml-4 text-right">
-            <p className="text-sm font-medium">{framework.metrics.successRate}%</p>
+            <p className="text-sm font-medium text-accent">{framework.metrics.successRate}%</p>
             <p className="text-xs text-muted-foreground">Success</p>
           </div>
         </div>

@@ -8,7 +8,7 @@ import { useStreamingAnalysis } from "@/hooks/use-streaming-analysis";
 import { AnalysisHistory } from "@/types/dashboard";
 
 
-const Index = () => {
+export default function DashboardPage() {
   // State management
   const [analysisHistory, setAnalysisHistory] = useState<AnalysisHistory[]>([]);
   const [currentAnalysis, setCurrentAnalysis] = useState<AnalysisHistory | null>(null);
@@ -53,7 +53,7 @@ const Index = () => {
     setCurrentAnalysis(newAnalysis);
     
     try {
-      await startAnalysis(inputUsername, currentAnalysis, setCurrentAnalysis, setAnalysisHistory);
+      await startAnalysis(inputUsername, newAnalysis, setCurrentAnalysis, setAnalysisHistory);
     } catch (error) {
       console.error('Analysis failed:', error);
     }
@@ -94,5 +94,3 @@ const Index = () => {
     </SidebarProvider>
   );
 };
-
-export default Index;

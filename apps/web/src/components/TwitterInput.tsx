@@ -24,7 +24,9 @@ export const TwitterInput = ({ onSubmit, isLoading }: TwitterInputProps) => {
     <div className="w-full max-w-xl mx-auto px-6">
       <div className="text-center mb-12">
         <h1 className="text-5xl font-light tracking-tight mb-4">
-          Framework
+          <span className="text-primary">
+            Framework
+          </span>
         </h1>
         <p className="text-lg text-muted-foreground font-light">
           Discover content frameworks from any Twitter account

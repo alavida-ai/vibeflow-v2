@@ -31,12 +31,12 @@ export const MetricsPanel = ({
 
         <div className="space-y-6">
           <div>
-            <p className="text-2xl font-light">{totalFrameworks}</p>
+            <p className="text-2xl font-light text-primary">{totalFrameworks}</p>
             <p className="text-sm text-muted-foreground">Frameworks</p>
           </div>
 
           <div>
-            <p className="text-2xl font-light">{avgEngagement.toLocaleString()}</p>
+            <p className="text-2xl font-light text-accent">{avgEngagement.toLocaleString()}</p>
             <p className="text-sm text-muted-foreground">Avg. Engagement</p>
           </div>
 
@@ -46,7 +46,7 @@ export const MetricsPanel = ({
           </div>
 
           <div>
-            <p className="text-2xl font-light text-green-600">+24%</p>
+            <p className="text-2xl font-light text-success">+24%</p>
             <p className="text-sm text-muted-foreground">Growth Rate</p>
           </div>
         </div>

@@ -28,36 +28,36 @@ export const WorkflowProgress = ({ currentStep, completedSteps }: WorkflowProgre
             <div key={step.id} className="flex items-center space-x-3">
               <div className="flex-shrink-0">
                 {isCompleted ? (
-                  <CheckCircle className="w-6 h-6 text-green-600 dark:text-green-400" />
+                  <CheckCircle className="w-6 h-6 text-success" />
                 ) : isCurrent ? (
-                  <Loader2 className="w-6 h-6 text-blue-600 dark:text-blue-400 animate-spin" />
+                  <Loader2 className="w-6 h-6 text-primary animate-spin" />
                 ) : (
                   <div className="w-6 h-6 rounded-full border-2 border-muted bg-muted" />
                 )}
               </div>
               <div className="flex-1">
                 <div className={`font-medium ${
-                  isCompleted ? 'text-green-700 dark:text-green-300' : 
-                  isCurrent ? 'text-blue-700 dark:text-blue-300' : 
+                  isCompleted ? 'text-success' : 
+                  isCurrent ? 'text-primary' : 
                   'text-muted-foreground'
                 }`}>
                   {step.name}
                 </div>
                 <div className={`text-sm ${
-                  isCompleted ? 'text-green-600 dark:text-green-400' : 
-                  isCurrent ? 'text-blue-600 dark:text-blue-400' : 
+                  isCompleted ? 'text-success' : 
+                  isCurrent ? 'text-primary' : 
                   'text-muted-foreground/70'
                 }`}>
                   {step.description}
                 </div>
               </div>
               {isCurrent && (
-                <div className="text-sm text-blue-600 dark:text-blue-400 font-medium">
+                <div className="text-sm text-primary font-medium">
                   In Progress...
                 </div>
               )}
               {isCompleted && (
-                <div className="text-sm text-green-600 dark:text-green-400 font-medium">
+                <div className="text-sm text-success font-medium">
                   Complete
                 </div>
               )}

@@ -21,7 +21,7 @@ export const DashboardContent = ({
   completedSteps,
   onAnalyze
 }: DashboardContentProps) => {
-  const avgEngagement = currentAnalysis 
+  const avgEngagement = currentAnalysis
     ? currentAnalysis.frameworks.reduce((acc, f) => acc + f.metrics.avgLikes, 0) / Math.max(currentAnalysis.frameworks.length, 1)
     : 0;
 
@@ -40,11 +40,11 @@ export const DashboardContent = ({
         <div className="p-4">
           <div className="grid grid-cols-2 gap-4">
             <div className="text-center">
-              <div className="text-2xl font-bold">{currentAnalysis?.frameworks.length || 0}</div>
+              <div className="text-2xl font-bold text-primary">{currentAnalysis?.frameworks.length || 0}</div>
               <div className="text-xs text-muted-foreground">Frameworks</div>
             </div>
             <div className="text-center">
-              <div className="text-2xl font-bold">{Math.round(avgEngagement)}</div>
+              <div className="text-2xl font-bold text-accent">{Math.round(avgEngagement)}</div>
               <div className="text-xs text-muted-foreground">Avg Engagement</div>
             </div>
           </div>
@@ -56,7 +56,7 @@ export const DashboardContent = ({
           )}
         </div>
       </div>
-      
+
       {/* Frameworks Section */}
       <div className="flex-1 p-4 lg:p-6 overflow-y-auto">
         <div className="max-w-4xl mx-auto">
@@ -69,25 +69,25 @@ export const DashboardContent = ({
               {currentAnalysis?.frameworks.length || 0} frameworks found
             </p>
           </div>
-          
+
           {/* Show workflow progress when loading */}
           {isLoading && (
-            <WorkflowProgress 
-              currentStep={currentStep} 
-              completedSteps={completedSteps} 
+            <WorkflowProgress
+              currentStep={currentStep}
+              completedSteps={completedSteps}
             />
           )}
-          
-          <FrameworksList 
-            frameworks={currentAnalysis?.frameworks || []} 
-            isLoading={isLoading} 
+
+          <FrameworksList
+            frameworks={currentAnalysis?.frameworks || []}
+            isLoading={isLoading}
           />
         </div>
       </div>
-      
+
       {/* Metrics Section - Desktop (right side) */}
       <div className="hidden lg:block w-80 shrink-0">
-        <MetricsPanel 
+        <MetricsPanel
           username={currentAnalysis?.username}
           totalFrameworks={currentAnalysis?.frameworks.length || 0}
           avgEngagement={Math.round(avgEngagement)}

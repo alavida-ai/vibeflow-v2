@@ -26,7 +26,7 @@ Your task is to parse this into a clean JSON structure with the following format
       "title": "Framework Title",
       "description": "Clear description of what this framework does",
       "structure": "Step-by-step structure of the framework",
-      "prompt": "The prompt template for using this framework",
+      "prompt": "The prompt template for using this framework. Please do not summarise this. Keep it as close to the original as possible.",
       "tweetIds": ["tweetId1", "tweetId2", "tweetId3"]
     }
   ]
@@ -40,7 +40,7 @@ IMPORTANT RULES:
 5. If no clear frameworks can be extracted, return {"frameworks": []}
 6. Make descriptions concise but informative (1-2 sentences)
 7. Structure should be clear step-by-step instructions
-8. Prompts should be actionable templates users can follow
+8. Prompts should be actionable templates users can follow to use the framework. Please keep these as detailed as possible.
 
 Focus on accuracy and completeness. Only include frameworks that are well-defined and have supporting tweet references.
 `,
