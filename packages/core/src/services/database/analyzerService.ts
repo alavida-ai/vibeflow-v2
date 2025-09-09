@@ -103,21 +103,58 @@ export class AnalyzerService {
         return [];
     }
 
-    static async getMediaByAuthorUsername(username: string): Promise<schema.TweetMediaAnalyzer[]> {
-        return await getDb()
-            .select({
-                id: schema.tweetMediaAnalyzer.id,
-                tweetId: schema.tweetMediaAnalyzer.tweetId,
-                url: schema.tweetMediaAnalyzer.url,
-                type: schema.tweetMediaAnalyzer.type,
-                description: schema.tweetMediaAnalyzer.description,
-                scrapedAt: schema.tweetMediaAnalyzer.scrapedAt,
-                updatedAt: schema.tweetMediaAnalyzer.updatedAt
-            })
-            .from(schema.tweetMediaAnalyzer)
-            .innerJoin(schema.tweetsAnalyzer, eq(schema.tweetMediaAnalyzer.tweetId, schema.tweetsAnalyzer.id))
-            .where(and(eq(schema.tweetsAnalyzer.username, username), isNull(schema.tweetMediaAnalyzer.description)))
-            .orderBy(schema.tweetsAnalyzer.createdAt);
+    static async getMediaByAuthorUsername(username: string, bestNTweets?: number): Promise<schema.TweetMediaAnalyzer[]> {
+        const db = getDb();
+        
+        if (bestNTweets) {
+            // First, get the best N tweets by EVS
+            const bestTweets = await db
+                .select({ id: schema.tweetsAnalyzer.id })
+                .from(schema.tweetsAnalyzer)
+                .where(eq(schema.tweetsAnalyzer.username, username))
+                .orderBy(desc(schema.tweetsAnalyzer.evs))
+                .limit(bestNTweets);
+            
+            const bestTweetIds = bestTweets.map(tweet => tweet.id);
+            
+            if (bestTweetIds.length === 0) return [];
+            
+            // Then get media for those specific tweets
+            return await db
+                .select({
+                    id: schema.tweetMediaAnalyzer.id,
+                    tweetId: schema.tweetMediaAnalyzer.tweetId,
+                    url: schema.tweetMediaAnalyzer.url,
+                    type: schema.tweetMediaAnalyzer.type,
+                    description: schema.tweetMediaAnalyzer.description,
+                    scrapedAt: schema.tweetMediaAnalyzer.scrapedAt,
+                    updatedAt: schema.tweetMediaAnalyzer.updatedAt
+                })
+                .from(schema.tweetMediaAnalyzer)
+                .innerJoin(schema.tweetsAnalyzer, eq(schema.tweetMediaAnalyzer.tweetId, schema.tweetsAnalyzer.id))
+                .where(and(
+                    eq(schema.tweetsAnalyzer.username, username),
+                    isNull(schema.tweetMediaAnalyzer.description),
+                    inArray(schema.tweetsAnalyzer.id, bestTweetIds)
+                ))
+                .orderBy(desc(schema.tweetsAnalyzer.evs));
+        } else {
+            // get all media without filtering
+            return await db
+                .select({
+                    id: schema.tweetMediaAnalyzer.id,
+                    tweetId: schema.tweetMediaAnalyzer.tweetId,
+                    url: schema.tweetMediaAnalyzer.url,
+                    type: schema.tweetMediaAnalyzer.type,
+                    description: schema.tweetMediaAnalyzer.description,
+                    scrapedAt: schema.tweetMediaAnalyzer.scrapedAt,
+                    updatedAt: schema.tweetMediaAnalyzer.updatedAt
+                })
+                .from(schema.tweetMediaAnalyzer)
+                .innerJoin(schema.tweetsAnalyzer, eq(schema.tweetMediaAnalyzer.tweetId, schema.tweetsAnalyzer.id))
+                .where(and(eq(schema.tweetsAnalyzer.username, username), isNull(schema.tweetMediaAnalyzer.description)))
+                .orderBy(desc(schema.tweetsAnalyzer.evs));
+        }
     }
 
     /*
@@ -143,7 +180,7 @@ export class AnalyzerService {
             .where(eq(schema.tweetsAnalyzer.id, tweetId));
     }
 
-    static async getTweetsAnalysisViewByUsername(username: string): Promise<TweetAnalysisView[]> {
+    static async getTweetsAnalysisViewByUsername(username: string, limit: number = 10): Promise<TweetAnalysisView[]> {
         const db = getDb();
         
         // Get tweets with their media using a left join to include tweets without media
@@ -162,7 +199,7 @@ export class AnalyzerService {
             .from(schema.tweetsAnalyzer)
             .where(eq(schema.tweetsAnalyzer.username, username))
             .orderBy(desc(schema.tweetsAnalyzer.evs))
-            .limit(10);
+            .limit(limit);
 
         // get media for each tweet
         const media = await db

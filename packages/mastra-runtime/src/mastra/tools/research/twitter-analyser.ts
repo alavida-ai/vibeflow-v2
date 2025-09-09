@@ -10,6 +10,7 @@ export const userTweetsScraperTool: ReturnType<typeof createTool> = createTool({
   inputSchema: z.object({
     userName: z.string().describe('Twitter username to analyze'),
     numTweets: z.number().describe('Number of tweets to analyze'),
+    processMedia: z.boolean().optional().describe('Whether to process media content (default: true)'),
   }),
   outputSchema: z.object({
     totalTweets: z.number(),
@@ -29,7 +30,8 @@ export const userTweetsScraperTool: ReturnType<typeof createTool> = createTool({
       
       const twitterAnalyser = new TwitterAnalyser({
         userName: context.userName,
-        maxPages: Math.ceil(context.numTweets / 20)
+        maxPages: Math.ceil(context.numTweets / 20) || 10,
+        processMedia: context.processMedia ?? true
       });
       const tweetsForOutput = await twitterAnalyser.run();
 
@@ -65,7 +67,7 @@ export const userTweetsFetcherTool: ReturnType<typeof createTool> = createTool({
   }),
   execute: async ({ context }) => {
     try {
-      const tweets = await AnalyzerService.getTweetsAnalysisViewByUsername(context.userName);
+      const tweets = await AnalyzerService.getTweetsAnalysisViewByUsername(context.userName, 30);
 
       return {
         tweets: tweets
