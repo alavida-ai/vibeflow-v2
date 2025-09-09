@@ -11,10 +11,12 @@ import {
   SidebarGroupContent,
   SidebarTrigger,
 } from "@/components/ui/sidebar";
-import { Button } from "@/components/ui/button";
 import { Plus, User, Clock } from "lucide-react";
 import { SignedIn, UserButton } from '@clerk/nextjs';
 import { AnalysisHistory } from "@/types/dashboard";
+import { MoonIcon, SunIcon } from "lucide-react";
+import { useTheme } from "next-themes";
+import { useEffect, useState } from "react";
 
 interface DashboardSidebarProps {
   analysisHistory: AnalysisHistory[];
@@ -27,7 +29,7 @@ interface DashboardSidebarProps {
 const formatDate = (date: Date) => {
   const now = new Date();
   const diffInHours = Math.floor((now.getTime() - date.getTime()) / (1000 * 60 * 60));
-  
+
   if (diffInHours < 1) return 'Just now';
   if (diffInHours < 24) return `${diffInHours}h ago`;
   if (diffInHours < 48) return 'Yesterday';
@@ -41,6 +43,19 @@ export const DashboardSidebar = ({
   onNewAnalysis,
   onSelectAnalysis
 }: DashboardSidebarProps) => {
+  const { theme, setTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  const toggleTheme = () => {
+    setTheme(theme === "dark" ? "light" : "dark");
+  };
+
+  const isDark = theme === "dark";
+
   return (
     <Sidebar className="border-r border-border" collapsible="icon">
       <SidebarHeader className="flex flex-col gap-2 p-2">
@@ -48,17 +63,16 @@ export const DashboardSidebar = ({
           <SidebarTrigger className="h-8 w-8 flex-shrink-0" />
           <span className="group-data-[collapsible=icon]:hidden font-semibold">Vibeflow</span>
         </div>
-        <Button
+        <SidebarMenuButton
           onClick={onNewAnalysis}
-          className="flex h-8 w-full items-center justify-start gap-2 group-data-[collapsible=icon]:size-8 group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:p-2"
-          variant={showNewAnalysis ? "default" : "outline"}
-          size="sm"
+          isActive={showNewAnalysis}
+          className="h-8 w-full"
         >
           <Plus className="w-4 h-4 flex-shrink-0" />
-          <span className="group-data-[collapsible=icon]:hidden">New Analysis</span>
-        </Button>
+          <span>New Analysis</span>
+        </SidebarMenuButton>
       </SidebarHeader>
-      
+
       <SidebarContent className="px-2">
         {/* Only show history section when not collapsed */}
         <div className="group-data-[collapsible=icon]:hidden">
@@ -98,11 +112,38 @@ export const DashboardSidebar = ({
           </SidebarGroup>
         </div>
       </SidebarContent>
-      
-      <SidebarFooter className="p-2">
+
+      <SidebarFooter className="flex flex-col gap-4 p-2">
+        <SidebarMenuButton 
+          onClick={toggleTheme}
+          className="h-8 w-full relative overflow-hidden"
+        >
+          {!mounted ? (
+            <div className="w-4 h-4 bg-input rounded animate-pulse" />
+          ) : (
+            <>
+              <SunIcon
+                className={`w-4 h-4 transition-all duration-300 ${
+                  isDark
+                    ? "rotate-90 scale-0 opacity-0"
+                    : "rotate-0 scale-100 opacity-100"
+                }`}
+              />
+              <MoonIcon
+                className={`absolute w-4 h-4 transition-all duration-300 ${
+                  isDark
+                    ? "rotate-0 scale-100 opacity-100"
+                    : "-rotate-90 scale-0 opacity-0"
+                }`}
+              />
+            </>
+          )}
+          <span>Toggle Theme</span>
+        </SidebarMenuButton>
+
         <SignedIn>
           <div className="flex items-center group-data-[collapsible=icon]:size-8 group-data-[collapsible=icon]:justify-center ">
-            <UserButton 
+            <UserButton
               appearance={{
                 elements: {
                   avatarBox: "w-8 h-8",

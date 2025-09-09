@@ -31,19 +31,6 @@ export async function POST(request: NextRequest) {
 
     const { runId } = await createRunResponse.json();
 
-    // Then start the workflow asynchronously and wait for completion
-    // const response = await fetch(`http://localhost:4111/api/workflows/twitterFrameworkAnalysisWorkflow/start-async?runId=${runId}`, {
-    //   method: 'POST',
-    //   headers: {
-    //     'Content-Type': 'application/json',
-    //   },
-    //   body: JSON.stringify({
-    //     inputData: {
-    //       username: username
-    //     }
-    //   }),
-    // });
-
     const response = await fetch(`http://localhost:4111/api/workflows/twitterFrameworkAnalysisWorkflow/streamVNext?runId=${runId}`, {
       method: 'POST',
       headers: {

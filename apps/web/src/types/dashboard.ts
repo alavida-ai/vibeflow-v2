@@ -3,12 +3,15 @@ export interface Framework {
   title: string;
   description: string;
   structure: string;
-  prompt: string;
+  promptTemplate: string;
   tweetsReferenced: number[];
   metrics: {
     avgViews: number;
     avgLikes: number;
-    successRate: number;
+    avgRetweets: number;
+    avgReplies: number;
+    avgQuotes: number;
+    avgBookmarks: number;
   };
 }
 

@@ -2,19 +2,8 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Copy, Check } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { Framework } from "@/types/dashboard";
 
-interface Framework {
-  id: string;
-  title: string;
-  description: string;
-  structure: string;
-  prompt: string;
-  metrics: {
-    avgViews: number;
-    avgLikes: number;
-    successRate: number;
-  };
-}
 
 interface FrameworkCardProps {
   framework: Framework;
@@ -26,7 +15,25 @@ export const FrameworkCard = ({ framework }: FrameworkCardProps) => {
 
   const handleCopy = async () => {
     try {
-      await navigator.clipboard.writeText(framework.prompt);
+
+      const prompt = `Please create a tweet draft using the framework below as your guide. Apply the framework's structure and style to the content provided after the ---:
+
+Framework: ${framework.title}
+Description: ${framework.description}
+
+Structure: 
+${framework.structure}
+
+Template: 
+\`\`\`
+${framework.promptTemplate}
+\`\`\`
+---
+Content to transform into a tweet:
+
+`;
+
+      await navigator.clipboard.writeText(prompt);
       setCopied(true);
       toast({
         title: "Copied",
@@ -51,32 +58,58 @@ export const FrameworkCard = ({ framework }: FrameworkCardProps) => {
   return (
     <div className="border-b border-border pb-6 mb-6 last:border-b-0">
       <div className="space-y-4">
-        <div className="flex items-start justify-between">
-          <div className="flex-1">
-            <h3 className="text-lg font-medium mb-2">{framework.title}</h3>
-            <p className="text-sm text-muted-foreground font-light leading-relaxed">
-              {framework.description}
-            </p>
-          </div>
-          <div className="ml-4 text-right">
-            <p className="text-sm font-medium text-accent">{framework.metrics.successRate}%</p>
-            <p className="text-xs text-muted-foreground">Success</p>
+        <div>
+          <h3 className="text-lg font-medium mb-2">{framework.title}</h3>
+          <p className="text-sm text-muted-foreground font-light leading-relaxed mb-3">
+            {framework.description}
+          </p>
+          <div className="flex gap-4 text-sm flex-wrap">
+            <div>
+              <span className="font-medium text-accent">{formatNumber(framework.metrics.avgViews)}</span>
+              <span className="text-muted-foreground ml-1">avg views</span>
+            </div>
+            <div>
+              <span className="font-medium text-accent">{formatNumber(framework.metrics.avgLikes)}</span>
+              <span className="text-muted-foreground ml-1">avg likes</span>
+            </div>
+            <div>
+              <span className="font-medium text-accent">{formatNumber(framework.metrics.avgRetweets)}</span>
+              <span className="text-muted-foreground ml-1">avg retweets</span>
+            </div>
+            <div>
+              <span className="font-medium text-accent">{formatNumber(framework.metrics.avgReplies)}</span>
+              <span className="text-muted-foreground ml-1">avg replies</span>
+            </div>
+            <div>
+              <span className="font-medium text-accent">{formatNumber(framework.metrics.avgQuotes)}</span>
+              <span className="text-muted-foreground ml-1">avg quotes</span>
+            </div>
+            <div>
+              <span className="font-medium text-accent">{formatNumber(framework.metrics.avgBookmarks)}</span>
+              <span className="text-muted-foreground ml-1">avg bookmarks</span>
+            </div>
           </div>
         </div>
 
-        <div className="flex gap-6 text-sm">
+        <div className="space-y-3">
           <div>
-            <span className="font-medium">{formatNumber(framework.metrics.avgViews)}</span>
-            <span className="text-muted-foreground ml-1">views</span>
+            <h4 className="text-sm font-medium mb-2">Structure:</h4>
+            <div className="space-y-1">
+              {framework.structure.split('\n').map((line, index) => (
+                <div key={index} className="flex items-start gap-2 text-sm">
+                  <span className="text-accent font-medium min-w-[20px]">{index + 1}.</span>
+                  <span className="text-muted-foreground">{line.replace(/^\d+\.\s*/, '')}</span>
+                </div>
+              ))}
+            </div>
           </div>
-          <div>
-            <span className="font-medium">{formatNumber(framework.metrics.avgLikes)}</span>
-            <span className="text-muted-foreground ml-1">likes</span>
-          </div>
-        </div>
 
-        <div className="bg-muted/30 p-3 rounded border text-xs font-mono text-muted-foreground">
-          {framework.structure}
+          <div>
+            <h4 className="text-sm font-medium mb-2">Template:</h4>
+            <div className="bg-muted/30 p-3 rounded border text-xs font-mono text-muted-foreground whitespace-pre-line">
+              {framework.promptTemplate}
+            </div>
+          </div>
         </div>
 
         <Button

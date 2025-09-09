@@ -26,7 +26,7 @@ Your task is to parse this into a clean JSON structure with the following format
       "title": "Framework Title",
       "description": "Clear description of what this framework does",
       "structure": "Step-by-step structure of the framework",
-      "prompt": "The prompt template for using this framework. Please do not summarise this. Keep it as close to the original as possible.",
+      "promptTemplate": "The prompt template for using this framework. Please do not summarise this. Keep it as close to the original as possible.",
       "tweetIds": ["tweetId1", "tweetId2", "tweetId3"]
     }
   ]
@@ -34,7 +34,7 @@ Your task is to parse this into a clean JSON structure with the following format
 
 IMPORTANT RULES:
 1. Extract ONLY the frameworks that are clearly defined
-2. Ensure each framework has ALL required fields (title, description, structure, prompt, tweetIds)
+2. Ensure each framework has ALL required fields (title, description, structure, promptTemplate, tweetIds)
 3. The tweetIds array should contain the specific tweet IDs that this framework was extracted from
 4. Return ONLY valid JSON, no markdown formatting or additional text
 5. If no clear frameworks can be extracted, return {"frameworks": []}

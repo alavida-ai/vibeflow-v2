@@ -16,11 +16,14 @@ const FrameworkSchema = z.object({
   title: z.string(),
   description: z.string(),
   structure: z.string(),
-  prompt: z.string(),
+  promptTemplate: z.string(),
   metrics: z.object({
     avgViews: z.number(),
     avgLikes: z.number(),
-    successRate: z.number()
+    avgRetweets: z.number(),
+    avgReplies: z.number(),
+    avgQuotes: z.number(),
+    avgBookmarks: z.number()
   })
 });
 
@@ -162,7 +165,7 @@ const parseFrameworksStep = createStep({
       title: z.string(),
       description: z.string(),
       structure: z.string(),
-      prompt: z.string(),
+      promptTemplate: z.string(),
       tweetIds: z.array(z.string())
     })),
     username: z.string()
@@ -287,7 +290,7 @@ const calculateMetricsStep = createStep({
       title: z.string(),
       description: z.string(),
       structure: z.string(),
-      prompt: z.string(),
+      promptTemplate: z.string(),
       tweetIds: z.array(z.string())
     })),
     username: z.string()
@@ -303,7 +306,7 @@ const calculateMetricsStep = createStep({
         title: string,
         description: string,
         structure: string,
-        prompt: string,
+        promptTemplate: string,
         tweetIds: string[]
       }>, 
       username: string 
@@ -336,6 +339,10 @@ const calculateMetricsStep = createStep({
 
         let avgViews = 0;
         let avgLikes = 0;
+        let avgRetweets = 0;
+        let avgReplies = 0;
+        let avgQuotes = 0;
+        let avgBookmarks = 0;
         
         if (framework.tweetIds && framework.tweetIds.length > 0) {
           try {
@@ -348,24 +355,20 @@ const calculateMetricsStep = createStep({
             if (tweets.length > 0) {
               const totalViews = tweets.reduce((sum, tweet) => sum + (tweet.viewCount || 0), 0);
               const totalLikes = tweets.reduce((sum, tweet) => sum + (tweet.likeCount || 0), 0);
+              const totalRetweets = tweets.reduce((sum, tweet) => sum + (tweet.retweetCount || 0), 0);
+              const totalReplies = tweets.reduce((sum, tweet) => sum + (tweet.replyCount || 0), 0);
+              const totalQuotes = tweets.reduce((sum, tweet) => sum + (tweet.quoteCount || 0), 0);
+              const totalBookmarks = tweets.reduce((sum, tweet) => sum + (tweet.bookmarkCount || 0), 0);
+
               
               avgViews = Math.round(totalViews / tweets.length);
               avgLikes = Math.round(totalLikes / tweets.length);
+              avgRetweets = Math.round(totalRetweets / tweets.length);
+              avgReplies = Math.round(totalReplies / tweets.length);
+              avgQuotes = Math.round(totalQuotes / tweets.length);
+              avgBookmarks = Math.round(totalBookmarks / tweets.length);
               
-              logger.info(`Metrics calculated for framework: ${framework.title}`, {
-                stepId,
-                title: framework.title,
-                totalViews,
-                totalLikes,
-                avgViews,
-                avgLikes,
-                tweetsProcessed: tweets.length,
-                calculation: {
-                  viewSum: totalViews,
-                  likeSum: totalLikes,
-                  tweetCount: tweets.length
-                }
-              });
+          
             } else {
               logger.warn(`No tweets found for framework: ${framework.title}`, {
                 stepId,
@@ -414,11 +417,14 @@ const calculateMetricsStep = createStep({
           title: framework.title,
           description: framework.description,
           structure: framework.structure,
-          prompt: framework.prompt,
+          promptTemplate: framework.promptTemplate,
           metrics: {
             avgViews,
             avgLikes,
-            successRate: 77 // Hardcoded as requested
+            avgRetweets,
+            avgReplies,
+            avgQuotes,
+            avgBookmarks
           }
         };
         

@@ -66,7 +66,10 @@ export const DashboardContent = ({
               {currentAnalysis?.username && (
                 <>@{currentAnalysis.username} • </>
               )}
-              {currentAnalysis?.frameworks.length || 0} frameworks found
+              {isLoading 
+                ? "Analyzing frameworks..." 
+                : `${currentAnalysis?.frameworks.length || 0} frameworks found`
+              }
             </p>
           </div>
 

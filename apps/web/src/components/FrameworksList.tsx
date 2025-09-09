@@ -1,18 +1,6 @@
 import { FrameworkCard } from "./FrameworkCard";
 import { Skeleton } from "@/components/ui/skeleton";
-
-interface Framework {
-  id: string;
-  title: string;
-  description: string;
-  structure: string;
-  prompt: string;
-  metrics: {
-    avgViews: number;
-    avgLikes: number;
-    successRate: number;
-  };
-}
+import { Framework } from "@/types/dashboard";
 
 interface FrameworksListProps {
   frameworks: Framework[];
