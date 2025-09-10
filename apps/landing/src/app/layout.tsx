@@ -22,15 +22,13 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark">
       <body
-        className={`${inter.variable} font-sans antialiased`}
+        className={`${inter.variable} font-sans antialiased min-h-screen flex flex-col`}
       >
-        <div className="min-h-screen flex flex-col">
         <Header />
-        <div className="flex-1 pt-[68px]">
+        <main className="flex-1 pt-[68px]">
           {children}
-        </div>
+        </main>
         <Footer />
-        </div>
       </body>
     </html>
   );
