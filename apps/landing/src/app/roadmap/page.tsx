@@ -85,11 +85,6 @@ const Roadmap = () => {
   ];
 
   return (
-    <>
-      <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
-        rel="stylesheet"
-      />
       <div className="flex flex-col">
         <main className="px-16 py-[120px] max-md:px-8 max-md:py-20 max-sm:px-4 max-sm:py-[60px]">
           <div className="max-w-4xl mx-auto">
@@ -171,7 +166,6 @@ const Roadmap = () => {
           </div>
         </main>
       </div>
-    </>
   );
 };
 
