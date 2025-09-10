@@ -256,7 +256,7 @@ function Item({ item, className }: { item: RoadmapItem; className?: string }) {
           <Badge
             variant="default"
             className={cn(
-              'text-foreground w-[6.6875rem]',
+              'text-foreground w-26.75',
               statusColors[item.status],
             )}
           >

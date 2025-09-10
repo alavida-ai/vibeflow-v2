@@ -26,7 +26,7 @@ const Header = () => {
             <span className="text-2xl font-bold text-gray-800">/</span>
             <span className="text-2xl font-bold">VibeFlow</span>
         </div>
-        <nav className="flex flex-grow justify-center">
+        <nav className="flex grow justify-center">
             <NavigationMenu>
                 <NavigationMenuList>
                     <NavigationMenuItem>
