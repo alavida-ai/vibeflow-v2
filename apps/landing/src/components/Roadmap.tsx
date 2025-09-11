@@ -16,7 +16,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { EXTERNAL_LINKS } from '@/constants/external-links';
+// import { EXTERNAL_LINKS } from '@/constants/external-links';
 import { cn } from '@/lib/utils';
 
 type Status = 'All' | 'In Progress' | 'Planned' | 'Shipped';
@@ -256,7 +256,7 @@ function Item({ item, className }: { item: RoadmapItem; className?: string }) {
           <Badge
             variant="default"
             className={cn(
-              'text-foreground w-26.75',
+              'text-foreground w-[6.6875rem]',
               statusColors[item.status],
             )}
           >
