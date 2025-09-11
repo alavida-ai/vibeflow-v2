@@ -16,7 +16,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
-// import { EXTERNAL_LINKS } from '@/constants/external-links';
+import { EXTERNAL_LINKS } from '@/constants/external-links';
 import { cn } from '@/lib/utils';
 
 type Status = 'All' | 'In Progress' | 'Planned' | 'Shipped';

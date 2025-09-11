@@ -35,6 +35,7 @@ import { cn } from '@/lib/utils';
 type NavItem = {
   title: string;
   href?: string;
+  comingSoon?: boolean;
   subitems?: Array<{
     title: string;
     items: Array<{
@@ -50,7 +51,8 @@ type NavItem = {
 const navigationItems: NavItem[] = [
     {
         title: "Docs",
-        href: "/docs"
+        href: "/docs",
+        comingSoon: true
       },
       {
         title: "Roadmap",
@@ -58,7 +60,8 @@ const navigationItems: NavItem[] = [
       },
       {
         title: "Components",
-        href: "/components"
+        href: "/components",
+        comingSoon: true
       },
       {
         title: "Tools",
@@ -278,10 +281,28 @@ function MobileNavItem({
   const [isOpen, setIsOpen] = React.useState(false);
 
   if (!item.subitems) {
+    if (item.comingSoon) {
+      return (
+        <div className="block relative">
+          <Button 
+            variant="ghost" 
+            size="sm" 
+            className="opacity-50 cursor-not-allowed hover:bg-transparent"
+            disabled
+          >
+            {item.title}
+          </Button>
+          <span className="absolute -top-1 -right-1 z-50 text-muted-foreground text-[9px] font-medium px-1 py-0.5 bg-background border border-border rounded-sm">
+            Coming Soon!
+          </span>
+        </div>
+      );
+    }
+
     return (
       <Link
         href={item.href!}
-        className="block"
+        className="block relative"
         onClick={() => setIsMenuOpen(false)}
       >
         <Button variant="ghost" size="sm">
@@ -368,8 +389,27 @@ function MobileNavItem({
 function DesktopNavItem({ item }: { item: NavItem }) {
   const pathname = usePathname();
   if (!item.subitems) {
+    if (item.comingSoon) {
+      return (
+        <NavigationMenuItem className="relative">
+          <span
+            className={cn(
+              navigationMenuTriggerStyle(),
+              'text-base font-medium opacity-50 cursor-not-allowed',
+              'hover:bg-transparent hover:text-muted-foreground'
+            )}
+          >
+            {item.title}
+          </span>
+          <span className="absolute -top-1 -right-1 z-50 text-muted-foreground text-[6px] font-medium px-1 py-0.5 bg-background border border-border rounded-sm">
+            Coming Soon
+          </span>
+        </NavigationMenuItem>
+      );
+    }
+
     return (
-      <NavigationMenuItem className="">
+      <NavigationMenuItem className="relative">
         <Link
           href={item.href!}
           className={cn(
