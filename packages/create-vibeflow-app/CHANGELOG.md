@@ -1,5 +1,11 @@
 # create-vibeflow-app
 
+## 4.2.0
+
+### Minor Changes
+
+- docs
+
 ## 4.1.0
 
 ### Minor Changes

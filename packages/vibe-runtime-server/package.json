@@ -25,7 +25,7 @@
   "dependencies": {
     "@hono/node-server": "^1.19.1",
     "@hono/swagger-ui": "^0.5.2",
-    "@mastra/deployer": "^0.15.3",
+    "@mastra/deployer": "^0.16.3",
     "@scalar/hono-api-reference": "^0.9.16",
     "@vibeflow/compiler": "workspace:*",
     "@vibeflow/mastra-runtime": "workspace:*",
