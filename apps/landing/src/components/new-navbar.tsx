@@ -94,7 +94,7 @@ function Navbar() {
   return (
     <header
       className={cn(
-        'border-b transition-all duration-300',
+        'border-b transition-all duration-300 bg-background',
         isMenuColorInverted
           ? theme === 'dark'
             ? 'light bg-foreground text-background [&_*]:border-border/30'
@@ -258,11 +258,11 @@ const NavBarAction = ({
           <ThemeToggle className="hidden lg:block" />
         </div>
         <Link
-          href="/signup"
+          href="/build-in-open"
           className="ms-3"
           onClick={() => setIsMenuOpen?.(false)}
         >
-          <Button size="sm" variant="default" className="">
+          <Button size="sm" variant="default" className="hover:cursor-pointer">
             Build in Public
           </Button>
         </Link>
@@ -414,8 +414,9 @@ function DesktopNavItem({ item }: { item: NavItem }) {
           href={item.href!}
           className={cn(
             navigationMenuTriggerStyle(),
-            'text-base font-medium',
-            pathname === item.href && 'text-secondary',
+            'text-base font-medium relative',
+            pathname === item.href && 'text-foreground bg-accent/20',
+            pathname === item.href && 'after:absolute after:bottom-0 after:left-1/2 after:-translate-x-1/2 after:w-1 after:h-1 after:bg-foreground after:rounded-full'
           )}
         >
           {item.title}
@@ -485,7 +486,7 @@ const ListItem = React.forwardRef<
                 className={cn(
                   'flex size-8 shrink-0 items-center justify-center rounded-md',
                   isHighlighted &&
-                    'bg-secondary [&>svg]:!text-secondary-foreground',
+                    'bg-accent/30 [&>svg]:!text-foreground ring-1 ring-border/20',
                 )}
               >
                 {Icon && <Icon className="text-foreground size-4" />}

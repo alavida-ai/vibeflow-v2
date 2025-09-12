@@ -86,8 +86,10 @@ export default function RootLayout({
           defaultTheme="light"
           disableTransitionOnChange
         >
+          <div className="fixed top-0 left-0 right-0 z-50">
           <Navbar />
-          <main className="flex-1">{children}</main>
+          </div>
+          <main className="flex-1 pt-[84px]">{children}</main>
           <Footer />
         </ThemeProvider>
       </body>

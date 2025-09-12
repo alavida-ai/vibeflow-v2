@@ -35,18 +35,11 @@ const Hero12 = () => {
       }
     },
     {
-      name: "Content Optimizer",
-      description: "AI-powered content enhancement",
-      content: "Automatically optimize your content for maximum engagement across platforms. Analyze performance metrics and suggest improvements.",
-      categories: ["Content", "AI", "Optimization"],
+      name: "X Listener",
+      description: "Track social engagement on X",
+      content: "Automatically track social engagement on X. Analyze performance metrics and suggest improvements.",
+      categories: ["Social Media", "Analytics", "Optimization"],
       status: "coming-soon"
-    },
-    {
-      name: "Audience Insights",
-      description: "Deep audience understanding",
-      content: "Get detailed insights into your audience behavior, preferences, and engagement patterns. Make data-driven decisions.",
-      categories: ["Analytics", "Strategy", "Insights"],
-      status: "available"
     }
   ];
 
