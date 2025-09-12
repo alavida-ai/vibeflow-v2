@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { AnalysisHistory } from '@/types/dashboard';
-import { StepResult } from '@/types/dashboard';
+import { AnalysisHistory } from '@/types/twitter-analyzer';
+import { StepResult } from '@/types/twitter-analyzer';
 
 export const useStreamingAnalysis = () => {
     const [isLoading, setIsLoading] = useState(false);
@@ -88,7 +88,7 @@ export const useStreamingAnalysis = () => {
         setIsLoading(true);
         setCurrentStep(null);
         setCompletedSteps([]);
-        setStepResults({}); // Reset step results for new analysis
+        setStepResults({});
 
         try {
             // Call the streaming analysis API
@@ -110,9 +110,8 @@ export const useStreamingAnalysis = () => {
                 throw new Error('No response body received');
             }
 
-            // Process the streaming response using the correct Mastra approach
+            // Process the streaming response
             try {
-                // Use the approach similar to Mastra's client-side processing
                 const reader = response.body.getReader();
                 const decoder = new TextDecoder();
                 let buffer = '';

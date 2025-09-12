@@ -1,10 +1,9 @@
 import { CheckCircle, Loader2 } from "lucide-react";
 import { getWorkflowConfig } from "@/config/workflow-configs";
-import { StepResult } from "@/types/dashboard";
+import { StepResult } from "@/types/twitter-analyzer";
 
 // Re-export types for external use
 export type { WorkflowStepConfig } from "@/config/workflow-configs";
-
 
 interface WorkflowProgressProps {
   workflowId?: string;

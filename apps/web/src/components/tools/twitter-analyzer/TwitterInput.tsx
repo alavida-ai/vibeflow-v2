@@ -5,10 +5,9 @@ import { Search } from "lucide-react";
 
 interface TwitterInputProps {
   onSubmit: (username: string) => void;
-  isLoading?: boolean;
 }
 
-export const TwitterInput = ({ onSubmit, isLoading }: TwitterInputProps) => {
+export const TwitterInput = ({ onSubmit }: TwitterInputProps) => {
   const [username, setUsername] = useState("");
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -42,17 +41,16 @@ export const TwitterInput = ({ onSubmit, isLoading }: TwitterInputProps) => {
             value={username}
             onChange={(e) => setUsername(e.target.value)}
             className="pl-12 h-12 text-base border-border bg-background focus:ring-1 focus:ring-ring"
-            disabled={isLoading}
           />
         </div>
         
         <Button
           type="submit"
-          disabled={!username.trim() || isLoading}
+          disabled={!username.trim()}
           variant="default"
           className="w-full h-12"
         >
-          {isLoading ? "Analyzing..." : "Analyze"}
+          Analyze
         </Button>
       </form>
     </div>

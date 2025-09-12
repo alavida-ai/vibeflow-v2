@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from "react";
 
+import { SidebarMenuButton } from "@/components/ui/sidebar";
+
 import { MoonIcon, SunIcon } from "lucide-react";
 import { useTheme } from "next-themes";
 
@@ -30,9 +32,8 @@ export function ThemeSwitcherButton() {
   const isDark = theme === "dark";
 
   return (
-    <Button
+    <SidebarMenuButton
       variant="outline"
-      size="icon"
       onClick={toggleTheme}
       className="relative overflow-hidden"
     >
@@ -51,6 +52,6 @@ export function ThemeSwitcherButton() {
         }`}
       />
       <span className="sr-only">Toggle theme</span>
-    </Button>
+    </SidebarMenuButton>
   );
 }

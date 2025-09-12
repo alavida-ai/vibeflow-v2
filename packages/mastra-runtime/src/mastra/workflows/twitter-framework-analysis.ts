@@ -69,7 +69,9 @@ const twitterScraperStep = createStep({
         throw new Error('Twitter analysis returned invalid result');
       }
 
-      const totalTweets = tweetsForOutput.ingestionResult.totalTweets ?? 0;
+      const totalTweetsViews = await AnalyzerService.getTweetsAnalysisViewByUsername(username);
+
+      const totalTweets = totalTweetsViews.length;
 
       console.log(`✅ Twitter analysis completed. Total tweets: ${totalTweets}`);
 

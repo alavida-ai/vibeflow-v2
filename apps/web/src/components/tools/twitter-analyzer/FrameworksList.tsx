@@ -1,6 +1,6 @@
 import { FrameworkCard } from "./FrameworkCard";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Framework } from "@/types/dashboard";
+import { Framework } from "@/types/twitter-analyzer";
 
 interface FrameworksListProps {
   frameworks: Framework[];

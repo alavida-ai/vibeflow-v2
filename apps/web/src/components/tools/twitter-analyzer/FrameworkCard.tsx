@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Copy, Check } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import { Framework } from "@/types/dashboard";
+import { Framework } from "@/types/twitter-analyzer";
 
 
 interface FrameworkCardProps {
