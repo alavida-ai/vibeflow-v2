@@ -7,9 +7,15 @@ import { generateActivityData } from '@/lib/openData';
 
 interface MarketingActivityCalendarProps {
   className?: string;
+  lowActivityColor?: string;
+  highActivityColor?: string;
 }
 
-export function MarketingActivityCalendar({ className }: MarketingActivityCalendarProps) {
+export function MarketingActivityCalendar({ 
+  className,
+  lowActivityColor = 'var(--muted)',
+  highActivityColor = 'var(--chart-1)'
+}: MarketingActivityCalendarProps) {
   const activityData = generateActivityData();
 
   return (
@@ -17,9 +23,9 @@ export function MarketingActivityCalendar({ className }: MarketingActivityCalend
       <ActivityCalendar 
         data={activityData}
         theme={{
-            light: ['hsl(0, 0%, 92%)', 'firebrick'],
-            dark: ['#333', 'rgb(214, 16, 174)'],
-          }}
+          light: [lowActivityColor, highActivityColor],
+          dark: [lowActivityColor, highActivityColor],
+        }}
         showWeekdayLabels={true}
         blockSize={12}
         blockMargin={2}

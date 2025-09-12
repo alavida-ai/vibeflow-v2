@@ -6,6 +6,7 @@ import { Inter } from 'next/font/google';
 import Navbar from '@/components/new-navbar';
 import Footer from '@/components/layout/footer';
 import { ThemeProvider } from '@/components/theme-provider';
+import { TooltipProvider } from '@/components/ui/tooltip';
 
 const inter = Inter({
   variable: '--font-inter',
@@ -86,11 +87,13 @@ export default function RootLayout({
           defaultTheme="light"
           disableTransitionOnChange
         >
-          <div className="fixed top-0 left-0 right-0 z-50">
-          <Navbar />
-          </div>
-          <main className="flex-1 pt-[84px]">{children}</main>
-          <Footer />
+          <TooltipProvider>
+            <div className="fixed top-0 left-0 right-0 z-50">
+            <Navbar />
+            </div>
+            <main className="flex-1 pt-[84px]">{children}</main>
+            <Footer />
+          </TooltipProvider>
         </ThemeProvider>
       </body>
     </html>

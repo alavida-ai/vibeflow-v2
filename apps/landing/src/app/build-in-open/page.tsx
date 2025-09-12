@@ -11,10 +11,10 @@ import { StrategyTabs } from '@/components/open/strategy-tabs';
 import ActivityCalendar from 'react-activity-calendar';
 import { generateActivityData } from '@/lib/openData';
 import { useMediaQuery } from '@/hooks/use-media-query';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 
 const BuildInOpen = () => {
   const activityData = generateActivityData();
-  const { isAtLeast } = useMediaQuery();  
 
   const metrics = [
     {
@@ -72,13 +72,23 @@ const BuildInOpen = () => {
           <ActivityCalendar 
             data={activityData}
             theme={{
-              light: ['hsl(0, 0%, 92%)', 'firebrick'],
-              dark: ['#333', 'rgb(214, 16, 174)'],
+              light: ['var(--chart-2)', 'var(--chart-5)'],
+              dark: ['var(--chart-2)', 'var(--chart-5)'],
             }}
-            showWeekdayLabels={isAtLeast('sm')}
-            blockSize={isAtLeast('sm') ? 13 : 10}
-            blockMargin={isAtLeast('sm') ? 4 : 2}
-            fontSize={isAtLeast('sm') ? 13 : 11}
+            showWeekdayLabels={true}
+            blockSize={13}
+            blockMargin={4}
+            fontSize={13}
+            renderBlock={(block, activity) => (
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  {block}
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>{activity.count} activities on {activity.date}</p>
+                </TooltipContent>
+              </Tooltip>
+            )}
           />
         </div>
       </div>
