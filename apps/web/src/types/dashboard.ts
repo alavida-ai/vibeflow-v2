@@ -22,3 +22,9 @@ export interface AnalysisHistory {
   analyzedAt: Date;
   totalPosts: number;
 }
+
+export interface StepResult {
+  stepId: string;
+  output?: any;
+  timestamp?: number;
+}

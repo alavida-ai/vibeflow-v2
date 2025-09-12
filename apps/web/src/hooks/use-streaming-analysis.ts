@@ -1,10 +1,12 @@
 import { useState } from 'react';
 import { AnalysisHistory } from '@/types/dashboard';
+import { StepResult } from '@/types/dashboard';
 
 export const useStreamingAnalysis = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [currentStep, setCurrentStep] = useState<string | null>(null);
     const [completedSteps, setCompletedSteps] = useState<string[]>([]);
+    const [stepResults, setStepResults] = useState<Record<string, StepResult>>({});
 
     const processStreamEvent = (
         event: any,
@@ -18,13 +20,24 @@ export const useStreamingAnalysis = () => {
             // Handle different event types based on Mastra documentation
             if (event.type === 'workflow-step-result') {
                 const stepName = event.payload?.stepName || event.payload?.id;
+                const stepOutput = event.payload?.output;
+
+                // Store step result with output data
+                setStepResults(prev => ({
+                    ...prev,
+                    [stepName]: {
+                        stepId: stepName,
+                        output: stepOutput,
+                        timestamp: Date.now()
+                    }
+                }));
 
                 // Mark step as completed
                 setCompletedSteps(prev => [...prev, stepName]);
 
                 // Handle the final step (calculate-metrics) which contains the complete result
-                if (stepName === 'calculate-metrics' && event.payload?.output?.frameworks) {
-                    const result = event.payload.output;
+                if (stepName === 'calculate-metrics' && stepOutput?.frameworks) {
+                    const result = stepOutput;
                     setCurrentAnalysis(prev => {
                         if (!prev) return prev;
                         const finalAnalysis = {
@@ -45,7 +58,7 @@ export const useStreamingAnalysis = () => {
                     console.log('Final frameworks received from calculate-metrics step:', result);
                 } else {
                     // Handle other step results for debugging
-                    console.log(`Step ${stepName} completed:`, event.payload?.output);
+                    console.log(`Step ${stepName} completed:`, stepOutput);
                 }
             } else if (event.type === 'workflow-finish') {
                 console.log('Workflow completed with usage:', event.payload?.usage);
@@ -59,6 +72,7 @@ export const useStreamingAnalysis = () => {
                 console.log('Workflow started with runId:', event.runId);
                 setCurrentStep('starting');
                 setCompletedSteps([]);
+                setStepResults({}); // Reset step results for new workflow run
             }
         } catch (error) {
             console.error('Error processing stream event:', error);
@@ -74,6 +88,7 @@ export const useStreamingAnalysis = () => {
         setIsLoading(true);
         setCurrentStep(null);
         setCompletedSteps([]);
+        setStepResults({}); // Reset step results for new analysis
 
         try {
             // Call the streaming analysis API
@@ -179,6 +194,7 @@ export const useStreamingAnalysis = () => {
         isLoading,
         currentStep,
         completedSteps,
+        stepResults,
         startAnalysis
     };
 };

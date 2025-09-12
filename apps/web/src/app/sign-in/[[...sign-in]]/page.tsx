@@ -7,7 +7,7 @@ export default function SignInPage() {
         <div className="text-center space-y-2">
           <h1 className="text-2xl font-bold">Sign In</h1>
           <p className="text-muted-foreground">
-            Sign in to your account using Clerk's built-in component
+            Sign in to your account
           </p>
         </div>
         <SignIn />

@@ -15,7 +15,7 @@ export default function DashboardPage() {
   const [showNewAnalysis, setShowNewAnalysis] = useState(true);
   
   // Use the streaming analysis hook
-  const { isLoading, currentStep, completedSteps, startAnalysis } = useStreamingAnalysis();
+  const { isLoading, currentStep, completedSteps, stepResults, startAnalysis } = useStreamingAnalysis();
 
   // Load history from localStorage on component mount
   useEffect(() => {
@@ -87,6 +87,7 @@ export default function DashboardPage() {
             isLoading={isLoading}
             currentStep={currentStep}
             completedSteps={completedSteps}
+            stepResults={stepResults}
             onAnalyze={handleAnalyze}
           />
         </SidebarInset>

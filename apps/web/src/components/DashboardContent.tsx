@@ -3,6 +3,7 @@ import { FrameworksList } from "@/components/FrameworksList";
 import { MetricsPanel } from "@/components/MetricsPanel";
 import { WorkflowProgress } from "@/components/WorkflowProgress";
 import { AnalysisHistory } from "@/types/dashboard";
+import { StepResult } from "@/types/dashboard";
 
 interface DashboardContentProps {
   showNewAnalysis: boolean;
@@ -10,6 +11,7 @@ interface DashboardContentProps {
   isLoading: boolean;
   currentStep: string | null;
   completedSteps: string[];
+  stepResults?: Record<string, StepResult>;
   onAnalyze: (username: string) => void;
 }
 
@@ -19,6 +21,7 @@ export const DashboardContent = ({
   isLoading,
   currentStep,
   completedSteps,
+  stepResults,
   onAnalyze
 }: DashboardContentProps) => {
   const avgEngagement = currentAnalysis
@@ -76,8 +79,10 @@ export const DashboardContent = ({
           {/* Show workflow progress when loading */}
           {isLoading && (
             <WorkflowProgress
+              workflowId="twitter-framework-analysis"
               currentStep={currentStep}
               completedSteps={completedSteps}
+              stepResults={stepResults}
             />
           )}
 

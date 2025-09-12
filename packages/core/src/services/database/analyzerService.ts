@@ -52,7 +52,6 @@ export class AnalyzerService {
                             viewCount: parsedTweet.viewCount,
                             bookmarkCount: parsedTweet.bookmarkCount,
                             evs: parsedTweet.evs,
-                            status: 'scraped',
                             updatedAt: new Date(),
                         },
                     })
@@ -84,28 +83,27 @@ export class AnalyzerService {
      * Save media for a specific tweet
      */
     static async saveMediaForTweet(tweetId: number, mediaItems: Omit<schema.InsertTweetMediaAnalyzer, 'tweetId'>[]): Promise<schema.TweetMediaAnalyzer[]> {
-        // Delete existing media for this tweet first
-        await getDb().delete(schema.tweetMediaAnalyzer).where(eq(schema.tweetMediaAnalyzer.tweetId, tweetId));
+        if (mediaItems.length > 0) {
+            const mediaToInsert: schema.InsertTweetMediaAnalyzer[] = mediaItems.map(media => ({
+                ...media,
+                tweetId
+            }));
 
-        // Insert new media
-        const mediaToInsert: schema.InsertTweetMediaAnalyzer[] = mediaItems.map(media => ({
-            ...media,
-            tweetId
-        }));
-
-        if (mediaToInsert.length > 0) {
-            const result = await getDb()
+            await getDb()
                 .insert(schema.tweetMediaAnalyzer)
                 .values(mediaToInsert)
-                .returning();
-            return result;
+                .onConflictDoNothing({ target: schema.tweetMediaAnalyzer.tweetId }); // don't overwrite existing tweet's media
         }
-        return [];
+
+        return await getDb()
+            .select()
+            .from(schema.tweetMediaAnalyzer)
+            .where(eq(schema.tweetMediaAnalyzer.tweetId, tweetId));
     }
 
     static async getMediaByAuthorUsername(username: string, bestNTweets?: number): Promise<schema.TweetMediaAnalyzer[]> {
         const db = getDb();
-        
+
         if (bestNTweets) {
             // First, get the best N tweets by EVS
             const bestTweets = await db
@@ -114,11 +112,11 @@ export class AnalyzerService {
                 .where(eq(schema.tweetsAnalyzer.username, username))
                 .orderBy(desc(schema.tweetsAnalyzer.evs))
                 .limit(bestNTweets);
-            
+
             const bestTweetIds = bestTweets.map(tweet => tweet.id);
-            
+
             if (bestTweetIds.length === 0) return [];
-            
+
             // Then get media for those specific tweets
             return await db
                 .select({
@@ -180,11 +178,11 @@ export class AnalyzerService {
             .where(eq(schema.tweetsAnalyzer.id, tweetId));
     }
 
-    static async getTweetsAnalysisViewByUsername(username: string, limit: number = 10): Promise<TweetAnalysisView[]> {
+    static async getTweetsAnalysisViewByUsername(username: string, limit?: number): Promise<TweetAnalysisView[]> {
         const db = getDb();
-        
+
         // Get tweets with their media using a left join to include tweets without media
-        const bestTweets = await db
+        const baseQuery = db
             .select({
                 id: schema.tweetsAnalyzer.id,
                 tweetType: schema.tweetsAnalyzer.type,
@@ -198,8 +196,9 @@ export class AnalyzerService {
             })
             .from(schema.tweetsAnalyzer)
             .where(eq(schema.tweetsAnalyzer.username, username))
-            .orderBy(desc(schema.tweetsAnalyzer.evs))
-            .limit(limit);
+            .orderBy(desc(schema.tweetsAnalyzer.evs));
+
+        const bestTweets = await (limit ? baseQuery.limit(limit) : baseQuery);
 
         // get media for each tweet
         const media = await db

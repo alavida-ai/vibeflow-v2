@@ -84,7 +84,7 @@ const twitterScraperStep = createStep({
   },
 });
 
-const generateMediaDescriptionsStepForBestTweets = createStep({
+const generateMediaDescriptionsStep = createStep({
   id: "generate-media-descriptions",
   description: "Generate AI descriptions for media in the best performing tweets",
   inputSchema: z.object({
@@ -438,10 +438,12 @@ const calculateMetricsStep = createStep({
 
     const { frameworks, username } = inputData;
 
+    let totalPosts = 0;
+
     const enrichedFrameworks = await Promise.all(
       frameworks.map(async (framework, index) => {
         const frameworkStartTime = Date.now();
-
+        
         logger.debug(`Processing framework ${index + 1}: ${framework.title}`, {
           stepId,
           frameworkIndex: index + 1,
@@ -461,6 +463,8 @@ const calculateMetricsStep = createStep({
           try {
             // Convert string IDs to integers for database lookup
             const tweetDbIds = framework.tweetIds.map(id => parseInt(id, 10)).filter(id => !isNaN(id));
+            
+            totalPosts += tweetDbIds.length;
 
             // Fetch tweets by their internal database IDs
             const tweets = await AnalyzerService.getTweetsByIds(tweetDbIds);
@@ -498,10 +502,6 @@ const calculateMetricsStep = createStep({
               stack: error instanceof Error ? error.stack : undefined
             });
 
-            // Use fallback values if database query fails
-            avgViews = Math.floor(Math.random() * 100000) + 50000; // Random between 50k-150k
-            avgLikes = Math.floor(Math.random() * 1000) + 500; // Random between 500-1500
-
             logger.debug(`Using fallback metrics for framework: ${framework.title}`, {
               stepId,
               title: framework.title,
@@ -510,10 +510,6 @@ const calculateMetricsStep = createStep({
             });
           }
         } else {
-          // Fallback if no tweet IDs provided
-          avgViews = Math.floor(Math.random() * 100000) + 50000;
-          avgLikes = Math.floor(Math.random() * 1000) + 500;
-
           logger.warn(`No tweet IDs provided for framework: ${framework.title}`, {
             stepId,
             title: framework.title,
@@ -549,30 +545,6 @@ const calculateMetricsStep = createStep({
       stepId,
       enrichedFrameworksCount: enrichedFrameworks.length
     });
-
-    // Get total posts for the user
-    let totalPosts = 0;
-    try {
-      logger.debug(`Fetching total posts count for user: ${username}`, { stepId });
-
-      const userTweets = await AnalyzerService.getTweetsAnalysisViewByUsername(username);
-      totalPosts = userTweets.length;
-
-      logger.info(`Total posts count retrieved`, {
-        stepId,
-        username,
-        totalPosts,
-        tweetsFound: userTweets.length
-      });
-    } catch (error) {
-      logger.error('Failed to get total posts count', {
-        stepId,
-        username,
-        error: error instanceof Error ? error.message : String(error),
-        stack: error instanceof Error ? error.stack : undefined
-      });
-      totalPosts = 0;
-    }
 
     const endTime = Date.now();
     const duration = endTime - startTime;
@@ -614,7 +586,7 @@ export const twitterFrameworkAnalysisWorkflow = createWorkflow({
   })
 })
   .then(twitterScraperStep)
-  .then(generateMediaDescriptionsStepForBestTweets)
+  .then(generateMediaDescriptionsStep)
   .then(frameworkAnalysisStep)
   .then(parseFrameworksStep)
   .then(calculateMetricsStep)
