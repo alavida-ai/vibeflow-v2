@@ -39,7 +39,8 @@ export const TwitterAnalyzerDashboardContent = () => {
     addToHistory(newAnalysis);
 
     try {
-      await startAnalysis(inputUsername, newAnalysis, setCurrentAnalysis, setAnalysisHistory);
+      // Much simpler call - no complex parameters needed!
+      await startAnalysis(inputUsername);
     } catch (error) {
       console.error('Analysis failed:', error);
     }
