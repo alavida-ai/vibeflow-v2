@@ -60,3 +60,5 @@ coverage/
 # Temporary files
 tmp/
 temp/
+
+.mastra/

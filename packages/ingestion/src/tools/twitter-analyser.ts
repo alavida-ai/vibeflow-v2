@@ -11,6 +11,7 @@ export interface TwitterAnalyserConfig {
   maxPages?: number;
   apiKey?: string;
   databaseUrl?: string;
+  processMedia?: boolean;
 }
 
 export interface AnalysisResult {
@@ -29,10 +30,12 @@ export class TwitterAnalyser {
   private readonly maxPages: number;
   private readonly apiKey: string;
   private readonly databaseUrl: string;
+  private readonly processMedia: boolean;
 
   constructor(config: TwitterAnalyserConfig) {
     this.userName = config.userName;
     this.maxPages = config.maxPages || 1;
+    this.processMedia = config.processMedia ?? true; // Default to true for backward compatibility
     
     // Use provided credentials or fall back to environment variables
     this.apiKey = config.apiKey || process.env.TWITTER_API_KEY || '';
@@ -83,10 +86,16 @@ export class TwitterAnalyser {
 
       console.log(`✅ Ingestion complete: ${ingestionResult.totalTweets} tweets processed`);
       
-      // Step 2: Generate media descriptions
-      const mediaProcessed = await this.generateMediaDescriptions();
+      // Step 2: Generate media descriptions (optional)
+      let mediaProcessed = 0;
+      if (this.processMedia) {
+        mediaProcessed = await this.generateMediaDescriptions();
+        console.log(`✅ Media processing complete: ${mediaProcessed} media items processed`);
+      } else {
+        console.log(`ℹ️ Media processing skipped (processMedia = false)`);
+      }
       
-      console.log(`✅ Analysis complete: ${mediaProcessed} media items processed`);
+      console.log(`✅ Analysis complete`);
       
       return {
         success: true,
@@ -127,11 +136,12 @@ export class TwitterAnalyser {
 
   /**
    * Generate AI descriptions for media content in tweets
+   * @param bestNTweets - Optional parameter to limit media processing to the best N tweets by EVS score
    */
-  private async generateMediaDescriptions(): Promise<number> {
-    console.log(`🎨 Starting media description generation for @${this.userName}`);
+  async generateMediaDescriptions(bestNTweets?: number): Promise<number> {
+    console.log(`🎨 Starting media description generation for @${this.userName}${bestNTweets ? ` (limited to best ${bestNTweets} tweets)` : ''}`);
     
-    const mediaItems = await AnalyzerService.getMediaByAuthorUsername(this.userName);
+    const mediaItems = await AnalyzerService.getMediaByAuthorUsername(this.userName, bestNTweets);
     
     if (mediaItems.length === 0) {
       console.log("No media items found that need description generation");
@@ -195,7 +205,8 @@ export class TwitterAnalyser {
  */
 export async function createAndRunTwitterAnalyser(
   userName?: string,
-  maxPages?: number
+  maxPages?: number,
+  processMedia?: boolean
 ): Promise<AnalysisResult> {
   const targetUserName = userName || process.env.TWITTER_USERNAME;
   
@@ -205,7 +216,8 @@ export async function createAndRunTwitterAnalyser(
   
   const analyser = new TwitterAnalyser({
     userName: targetUserName,
-    maxPages
+    maxPages,
+    processMedia
   });
   
   return await analyser.run();
