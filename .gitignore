@@ -61,4 +61,6 @@ coverage/
 tmp/
 temp/
 
+**/.mastra/
+
 .mastra/
