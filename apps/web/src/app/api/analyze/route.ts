@@ -2,6 +2,13 @@ import { NextRequest, NextResponse } from 'next/server';
 
 export async function POST(request: NextRequest) {
   try {
+    const WORKFLOW_CREATE_RUN_URL = process.env.WORKFLOW_CREATE_RUN_URL;
+    const WORKFLOW_STREAM_URL = process.env.WORKFLOW_STREAM_URL;
+    
+    if (!WORKFLOW_CREATE_RUN_URL || !WORKFLOW_STREAM_URL) {
+      throw new Error('WORKFLOW_CREATE_RUN_URL and WORKFLOW_STREAM_URL must be set');
+    }
+
     const { username } = await request.json();
     
     if (!username) {
@@ -13,7 +20,7 @@ export async function POST(request: NextRequest) {
 
     // Call the Mastra Twitter framework analysis workflow
     // First create a workflow run
-    const createRunResponse = await fetch('http://localhost:4111/api/workflows/twitterFrameworkAnalysisWorkflow/create-run', {
+    const createRunResponse = await fetch(WORKFLOW_CREATE_RUN_URL, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -31,7 +38,7 @@ export async function POST(request: NextRequest) {
 
     const { runId } = await createRunResponse.json();
 
-    const response = await fetch(`http://localhost:4111/api/workflows/twitterFrameworkAnalysisWorkflow/streamVNext?runId=${runId}`, {
+    const response = await fetch(`${WORKFLOW_STREAM_URL}?runId=${runId}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

@@ -36,17 +36,17 @@ export const MetricsPanel = ({
           </div>
 
           <div>
-            <p className="text-2xl font-light text-accent">{avgEngagement.toLocaleString()}</p>
+            <p className="text-2xl font-light text-primary">{avgEngagement.toLocaleString()}</p>
             <p className="text-sm text-muted-foreground">Avg. Engagement</p>
           </div>
 
           <div>
-            <p className="text-2xl font-light">{totalPosts.toLocaleString()}</p>
+            <p className="text-2xl font-light text-primary">{totalPosts.toLocaleString()}</p>
             <p className="text-sm text-muted-foreground">Posts Analyzed</p>
           </div>
 
           <div>
-            <p className="text-2xl font-light text-success">+24%</p>
+            <p className="text-2xl font-light text-primary">+24%</p>
             <p className="text-sm text-muted-foreground">Growth Rate</p>
           </div>
         </div>

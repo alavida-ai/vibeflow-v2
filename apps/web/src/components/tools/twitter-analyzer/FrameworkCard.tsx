@@ -65,27 +65,27 @@ Content to transform into a tweet:
           </p>
           <div className="flex gap-4 text-sm flex-wrap">
             <div>
-              <span className="font-medium text-accent">{formatNumber(framework.metrics.avgViews)}</span>
+              <span className="font-medium text-primary">{formatNumber(framework.metrics.avgViews)}</span>
               <span className="text-muted-foreground ml-1">avg views</span>
             </div>
             <div>
-              <span className="font-medium text-accent">{formatNumber(framework.metrics.avgLikes)}</span>
+              <span className="font-medium text-primary">{formatNumber(framework.metrics.avgLikes)}</span>
               <span className="text-muted-foreground ml-1">avg likes</span>
             </div>
             <div>
-              <span className="font-medium text-accent">{formatNumber(framework.metrics.avgRetweets)}</span>
+              <span className="font-medium text-primary">{formatNumber(framework.metrics.avgRetweets)}</span>
               <span className="text-muted-foreground ml-1">avg retweets</span>
             </div>
             <div>
-              <span className="font-medium text-accent">{formatNumber(framework.metrics.avgReplies)}</span>
+              <span className="font-medium text-primary">{formatNumber(framework.metrics.avgReplies)}</span>
               <span className="text-muted-foreground ml-1">avg replies</span>
             </div>
             <div>
-              <span className="font-medium text-accent">{formatNumber(framework.metrics.avgQuotes)}</span>
+              <span className="font-medium text-primary">{formatNumber(framework.metrics.avgQuotes)}</span>
               <span className="text-muted-foreground ml-1">avg quotes</span>
             </div>
             <div>
-              <span className="font-medium text-accent">{formatNumber(framework.metrics.avgBookmarks)}</span>
+              <span className="font-medium text-primary">{formatNumber(framework.metrics.avgBookmarks)}</span>
               <span className="text-muted-foreground ml-1">avg bookmarks</span>
             </div>
           </div>
@@ -97,7 +97,7 @@ Content to transform into a tweet:
             <div className="space-y-1">
               {framework.structure.split('\n').map((line, index) => (
                 <div key={index} className="flex items-start gap-2 text-sm">
-                  <span className="text-accent font-medium min-w-[20px]">{index + 1}.</span>
+                  <span className="text-primary font-medium min-w-[20px]">{index + 1}.</span>
                   <span className="text-muted-foreground">{line.replace(/^\d+\.\s*/, '')}</span>
                 </div>
               ))}
