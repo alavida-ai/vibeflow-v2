@@ -30,6 +30,8 @@
   --color-chart-3: var(--chart-3);
   --color-chart-2: var(--chart-2);
   --color-chart-1: var(--chart-1);
+  --color-activity-calendar-low-activity: var(--activity-calendar-low-activity);
+  --color-activity-calendar-high-activity: var(--activity-calendar-high-activity);
   --color-ring: var(--ring);
   --color-input: var(--input);
   --color-border: var(--border);
@@ -116,6 +118,11 @@
   --chart-4: oklch(0.828 0.189 84.429);
   --chart-5: oklch(0.769 0.188 70.08);
 
+
+
+  --activity-calendar-low-activity: #ebedf0;
+  --activity-calendar-high-activity: rgba(64, 196, 99, 0.8);
+
   --sidebar: oklch(0.99 0 0);
   --sidebar-foreground: oklch(0.99 0 0);
   --sidebar-primary: oklch(0.18 0 0);
@@ -151,6 +158,9 @@
   --chart-3: oklch(57.9% 0.184 144.62);
   --chart-4: oklch(0.828 0.189 84.429);
   --chart-5: oklch(0.769 0.188 70.08);
+
+  --activity-calendar-low-activity: #161b22;
+  --activity-calendar-high-activity: rgba(57, 211, 83, 0.9);
 
   --sidebar: oklch(0.05 0 0);
   --sidebar-foreground: oklch(0.95 0 0);

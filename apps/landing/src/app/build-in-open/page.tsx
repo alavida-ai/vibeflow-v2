@@ -72,8 +72,8 @@ const BuildInOpen = () => {
           <ActivityCalendar 
             data={activityData}
             theme={{
-              light: ['var(--chart-2)', 'var(--chart-5)'],
-              dark: ['var(--chart-2)', 'var(--chart-5)'],
+              light: ['var(--activity-calendar-low-activity)', 'var(--activity-calendar-high-activity)'],
+              dark: ['var(--activity-calendar-low-activity)', 'var(--activity-calendar-high-activity)'],
             }}
             showWeekdayLabels={true}
             blockSize={13}
@@ -84,9 +84,49 @@ const BuildInOpen = () => {
                 <TooltipTrigger asChild>
                   {block}
                 </TooltipTrigger>
-                <TooltipContent>
-                  <p>{activity.count} activities on {activity.date}</p>
-                </TooltipContent>
+                 <TooltipContent className="p-3 max-w-xs">
+                   <div className="space-y-2">
+                     <p className="font-semibold text-sm">{new Date(activity.date).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })}</p>
+                     <p className="text-xs text-muted-foreground">{activity.count} marketing activities</p>
+                     
+                     {activity.count > 0 && (
+                       <div className="space-y-1 pt-2 border-t">
+                         <div className="flex items-center justify-between text-xs">
+                           <span className="flex items-center gap-1">
+                             <span className="w-2 h-2 bg-blue-500 rounded-full"></span>
+                             Tweets
+                           </span>
+                           <span className="text-muted-foreground">{Math.floor(Math.random() * 3) + 1}</span>
+                         </div>
+                         <div className="flex items-center justify-between text-xs">
+                           <span className="flex items-center gap-1">
+                             <span className="w-2 h-2 bg-green-500 rounded-full"></span>
+                             Blog Posts
+                           </span>
+                           <span className="text-muted-foreground">{Math.floor(Math.random() * 2)}</span>
+                         </div>
+                         <div className="flex items-center justify-between text-xs">
+                           <span className="flex items-center gap-1">
+                             <span className="w-2 h-2 bg-orange-500 rounded-full"></span>
+                             SEO Updates
+                           </span>
+                           <span className="text-muted-foreground">{Math.floor(Math.random() * 2)}</span>
+                         </div>
+                         
+                         <div className="pt-2 border-t space-y-1">
+                           <div className="flex justify-between text-xs">
+                             <span className="text-muted-foreground">Views:</span>
+                             <span className="font-medium">{(Math.random() * 10000).toFixed(0)}</span>
+                           </div>
+                           <div className="flex justify-between text-xs">
+                             <span className="text-muted-foreground">Engagements:</span>
+                             <span className="font-medium">{(Math.random() * 500).toFixed(0)}</span>
+                           </div>
+                         </div>
+                       </div>
+                     )}
+                   </div>
+                 </TooltipContent>
               </Tooltip>
             )}
           />
