@@ -1,9 +1,27 @@
 # Roles & Responsibilities
 
-Vibeflow operates on a clear separation of concerns between two key roles. Understanding these roles is crucial for effective collaboration and successful marketing automation.
+Vibeflow operates on a **three-tier system** similar to Shopify's model. Understanding these roles is crucial for effective collaboration and successful marketing automation.
 
-## The Marketing Architect (You)
+## The Three-Tier System
 
+### 🎯 **End Users** (Your Clients)
+**They use Vibeflow daily to create content through natural conversation.**
+
+#### What They Do
+- Request content through Claude/MCP ("write a blog post about...")
+- Provide feedback and iterate on AI-generated content
+- Focus on their business goals, not system configuration
+- Get brand-aligned content without technical knowledge
+
+#### What They Don't Do
+- Configure workflows or brand strategy
+- Manage technical integrations
+- Worry about system architecture
+- Handle complex setup or troubleshooting
+
+**Think of them like:** Shopify store owners who just want to sell products, not manage technical infrastructure.
+
+### 🏗️ **Marketing Architects** (Agency Owners like Thomas)
 **You are the strategic mind and client relationship manager.**
 
 ### Your Core Responsibilities
@@ -53,8 +71,9 @@ flowchart LR
 - ❌ Handle technical troubleshooting
 - ❌ Create new agent capabilities
 
-## The Content Engineer (Us)
+**Think of yourself like:** Shopify Partners who configure stores for clients, but don't build the core platform.
 
+### ⚙️ **Content Engineers** (Platform Developers)
 **We are the technical infrastructure team.**
 
 ### Our Core Responsibilities
@@ -98,14 +117,65 @@ flowchart LR
 - ❌ Manage client relationships
 - ❌ Set strategic marketing direction
 
+**Think of us like:** Shopify's core development team who build platform capabilities but don't manage individual stores.
+
+## The Complete Flow
+
+```mermaid
+graph TD
+    subgraph "End Users (Your Clients)"
+        EU[End User]
+        REQ[Request Content]
+        CHAT[Chat with Claude]
+    end
+
+    subgraph "Marketing Architects (You)"
+        MA[Marketing Architect]
+        CONFIG[Configure Brand Strategy]
+        MANAGE[Manage Client Relations]
+        QC[Quality Control]
+    end
+
+    subgraph "Content Engineers (Us)"
+        CE[Content Engineer]
+        BUILD[Build Platform Features]
+        AGENTS[Develop Agents]
+        TOOLS[Create Tools]
+    end
+
+    EU --> REQ
+    REQ --> CHAT
+    CHAT --> |Triggers workflows| CONFIG
+    
+    MA --> CONFIG
+    MA --> MANAGE
+    MA --> QC
+    
+    CE --> BUILD
+    CE --> AGENTS
+    CE --> TOOLS
+    
+    BUILD --> CONFIG
+    AGENTS --> CONFIG
+    TOOLS --> CONFIG
+    
+    CONFIG --> |Enables| CHAT
+    MANAGE --> |Supports| EU
+    QC --> |Ensures quality for| EU
+
+    style EU fill:#E8F5E8
+    style MA fill:#FFE4B5
+    style CE fill:#98FB98
+```
+
 ## How We Collaborate
 
 ### The Perfect Partnership
 
 ```mermaid
 graph TB
-    subgraph "Marketing Architect Domain"
-        MA[Marketing Architect]
+            subgraph "Marketing Architect Domain"
+        MA2[Marketing Architect]
         STRAT[Strategy Definition]
         WF[Workflow Creation]
         QC[Quality Control]
@@ -118,15 +188,15 @@ graph TB
     end
 
     subgraph "Content Engineer Domain"
-        CE[Content Engineer]
+        CE2[Content Engineer]
         TECH[Technical Implementation]
         AGENTS[Agent Development]
         TOOLS[Tool Integration]
     end
 
-    MA --> STRAT
-    MA --> WF
-    MA --> QC
+    MA2 --> STRAT
+    MA2 --> WF
+    MA2 --> QC
     
     STRAT --> REQ
     WF --> REQ
@@ -136,16 +206,30 @@ graph TB
     FEEDBACK --> AGENTS
     TRAINING --> TOOLS
     
-    CE --> TECH
-    CE --> AGENTS
-    CE --> TOOLS
+    CE2 --> TECH
+    CE2 --> AGENTS
+    CE2 --> TOOLS
 
-    style MA fill:#FFE4B5
-    style CE fill:#98FB98
+    style MA2 fill:#FFE4B5
+    style CE2 fill:#98FB98
     style REQ fill:#E6E6FA
     style FEEDBACK fill:#E6E6FA
     style TRAINING fill:#E6E6FA
 ```
+
+### End User Support Flow
+
+**End Users contact Marketing Architects for:**
+- Content that doesn't match expectations
+- New content types or campaign needs
+- Brand voice adjustments
+- Strategic marketing questions
+
+**Marketing Architects contact Content Engineers for:**
+- New agent capabilities or tools
+- Technical integrations with marketing platforms
+- Platform bugs or performance issues
+- Advanced workflow features
 
 ### When You Need Our Help
 
