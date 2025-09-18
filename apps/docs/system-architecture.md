@@ -6,54 +6,9 @@ Understanding how Vibeflow works under the hood will help you make better decisi
 
 Think of Vibeflow as your marketing agency's nervous system. It connects your strategic brain (the brand bible) to specialized team members (agents) who execute tasks, all coordinated by an intelligent project manager (the Cursor Agent).
 
-```mermaid
-graph TB
-    subgraph "Your Role: Marketing Architect"
-        YOU[You: Strategic Direction]
-        BIBLE[Brand Bible<br/>Strategy Documents]
-        WORKFLOWS[Workflow Definitions<br/>Process Design]
-    end
+📊 **[See the complete three-tier system overview](./diagrams/three-tier-system.md)**
 
-    subgraph "Vibeflow Core System"
-        CURSOR[AI Project Manager<br/>Orchestrates Everything]
-        MCP[Tool Registry<br/>Available Capabilities]
-    end
-
-    subgraph "Specialized AI Agents"
-        RESEARCH[Research Agent<br/>Market Analysis]
-        CONTENT[Content Agent<br/>Writing & Creation]
-        SOCIAL[Social Agent<br/>Platform Management]
-        ANALYTICS[Analytics Agent<br/>Performance Tracking]
-    end
-
-    subgraph "External Marketing Tools"
-        PLATFORMS[Social Platforms<br/>LinkedIn, Twitter, Instagram]
-        CRM[CRM Systems<br/>HubSpot, Salesforce]
-        EMAIL[Email Platforms<br/>Mailchimp, Sendgrid]
-        ANALYTICS_EXT[Analytics<br/>Google Analytics, Mixpanel]
-    end
-
-    YOU --> BIBLE
-    YOU --> WORKFLOWS
-    
-    BIBLE --> CURSOR
-    WORKFLOWS --> CURSOR
-    
-    CURSOR --> MCP
-    CURSOR --> RESEARCH
-    CURSOR --> CONTENT
-    CURSOR --> SOCIAL
-    CURSOR --> ANALYTICS
-    
-    RESEARCH --> PLATFORMS
-    CONTENT --> CRM
-    SOCIAL --> EMAIL
-    ANALYTICS --> ANALYTICS_EXT
-
-    style YOU fill:#FFE4B5
-    style CURSOR fill:#87CEEB
-    style BIBLE fill:#98FB98
-```
+🔄 **[Understand how workflows execute](./diagrams/workflow-execution.md)**
 
 ## Core Components Explained
 
@@ -184,36 +139,7 @@ Each agent is like hiring a specialist with specific skills and tools.
 
 ### The Workflow Execution Process
 
-```mermaid
-sequenceDiagram
-    participant You as Marketing Architect
-    participant PM as AI Project Manager
-    participant Bible as Brand Bible
-    participant Agent as Specialist Agent
-    participant Tools as External Tools
-
-    You->>PM: Start "Content Creation" workflow
-    PM->>Bible: Check brand guidelines and voice
-    Bible-->>PM: Brand context and requirements
-    
-    PM->>PM: Plan step execution based on brand context
-    PM->>Agent: Delegate task with rich context
-    Agent->>Tools: Use specialized tools for research/creation
-    Tools-->>Agent: Raw data and results
-    Agent-->>PM: Completed work aligned with brand
-    
-    PM->>You: Present results for review
-    You-->>PM: Feedback and approval
-    
-    alt If changes needed
-        PM->>Agent: Provide specific feedback
-        Agent->>Tools: Refine approach
-        Tools-->>Agent: Updated results
-        Agent-->>PM: Revised work
-    end
-    
-    PM->>You: Final deliverable ready
-```
+🤖 **[See how the Cursor Agent orchestrates everything](./diagrams/cursor-agent-orchestration.md)**
 
 ### Decision-Making Framework
 

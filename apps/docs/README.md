@@ -34,6 +34,16 @@ The technical infrastructure team who build and maintain the Vibeflow platform c
 - **Marketing Architects** maintain strategic control while automating execution  
 - **Content Engineers** focus on building powerful capabilities, not managing clients
 
+## Visual System Overview
+
+For a complete visual understanding of how Vibeflow works:
+
+📊 **[Three-Tier System Overview](./diagrams/three-tier-system.md)** - See how End Users, Marketing Architects, and Content Engineers work together
+
+🔄 **[Workflow Execution Process](./diagrams/workflow-execution.md)** - Understand how YAML workflows become AI-powered execution
+
+🤖 **[Cursor Agent Orchestration](./diagrams/cursor-agent-orchestration.md)** - See your AI project manager in action
+
 ## Quick Start
 
 ### For Marketing Architects

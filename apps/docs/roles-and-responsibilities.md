@@ -54,16 +54,7 @@ Vibeflow operates on a **three-tier system** similar to Shopify's model. Underst
 
 ### Your Typical Day
 
-```mermaid
-flowchart LR
-    START[Start Day] --> REVIEW[Review Client Strategies]
-    REVIEW --> PLAN[Plan Workflow Execution]
-    PLAN --> EXECUTE[Run Workflows with AI]
-    EXECUTE --> EVALUATE[Review Agent Outputs]
-    EVALUATE --> APPROVE[Approve/Iterate Content]
-    APPROVE --> DELIVER[Deliver to Client]
-    DELIVER --> UPDATE[Update Brand Bible]
-```
+🔄 **[See how workflows execute from YAML to AI delivery](./diagrams/workflow-execution.md)**
 
 ### What You Don't Do
 
@@ -123,101 +114,13 @@ flowchart LR
 
 ## The Complete Flow
 
-```mermaid
-graph TD
-    subgraph "End Users (Your Clients)"
-        EU[End User]
-        REQ[Request Content]
-        CHAT[Chat with Claude]
-    end
-
-    subgraph "Marketing Architects (You)"
-        MA[Marketing Architect]
-        CONFIG[Configure Brand Strategy]
-        MANAGE[Manage Client Relations]
-        QC[Quality Control]
-    end
-
-    subgraph "Content Engineers (Us)"
-        CE[Content Engineer]
-        BUILD[Build Platform Features]
-        AGENTS[Develop Agents]
-        TOOLS[Create Tools]
-    end
-
-    EU --> REQ
-    REQ --> CHAT
-    CHAT --> |Triggers workflows| CONFIG
-    
-    MA --> CONFIG
-    MA --> MANAGE
-    MA --> QC
-    
-    CE --> BUILD
-    CE --> AGENTS
-    CE --> TOOLS
-    
-    BUILD --> CONFIG
-    AGENTS --> CONFIG
-    TOOLS --> CONFIG
-    
-    CONFIG --> |Enables| CHAT
-    MANAGE --> |Supports| EU
-    QC --> |Ensures quality for| EU
-
-    style EU fill:#E8F5E8
-    style MA fill:#FFE4B5
-    style CE fill:#98FB98
-```
+📊 **[See the complete three-tier system in action](./diagrams/three-tier-system.md)**
 
 ## How We Collaborate
 
 ### The Perfect Partnership
 
-```mermaid
-graph TB
-            subgraph "Marketing Architect Domain"
-        MA2[Marketing Architect]
-        STRAT[Strategy Definition]
-        WF[Workflow Creation]
-        QC[Quality Control]
-    end
-
-    subgraph "Shared Collaboration Zone"
-        REQ[Requirements Discussion]
-        FEEDBACK[Feedback & Iteration]
-        TRAINING[Agent Training & Testing]
-    end
-
-    subgraph "Content Engineer Domain"
-        CE2[Content Engineer]
-        TECH[Technical Implementation]
-        AGENTS[Agent Development]
-        TOOLS[Tool Integration]
-    end
-
-    MA2 --> STRAT
-    MA2 --> WF
-    MA2 --> QC
-    
-    STRAT --> REQ
-    WF --> REQ
-    QC --> FEEDBACK
-    
-    REQ --> TECH
-    FEEDBACK --> AGENTS
-    TRAINING --> TOOLS
-    
-    CE2 --> TECH
-    CE2 --> AGENTS
-    CE2 --> TOOLS
-
-    style MA2 fill:#FFE4B5
-    style CE2 fill:#98FB98
-    style REQ fill:#E6E6FA
-    style FEEDBACK fill:#E6E6FA
-    style TRAINING fill:#E6E6FA
-```
+🤖 **[See how the Cursor Agent bridges our collaboration](./diagrams/cursor-agent-orchestration.md)**
 
 ### End User Support Flow
 

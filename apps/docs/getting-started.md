@@ -48,6 +48,10 @@ my-agency-name/
 └── .cursor/              # AI assistant configuration
 ```
 
+**🎯 New to Vibeflow?** Start with these visual guides:
+- 📊 **[Three-Tier System Overview](./diagrams/three-tier-system.md)** - Understand your role in the system
+- 🔄 **[How Workflows Execute](./diagrams/workflow-execution.md)** - See your YAML become AI magic
+
 ## Core Concepts
 
 ### 1. The Brand Bible (Your Strategic Foundation)
