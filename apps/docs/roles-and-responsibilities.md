@@ -2,6 +2,8 @@
 
 Vibeflow operates on a **three-tier system** similar to Shopify's model. Understanding these roles is crucial for effective collaboration and successful marketing automation.
 
+📊 **[See the complete visual overview of the three-tier system](./diagrams/three-tier-system.md)**
+
 ## The Three-Tier System
 
 ### 🎯 **End Users** (Your Clients)

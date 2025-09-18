@@ -52,6 +52,7 @@ Your Marketing Architect will provide you with access. Then you simply chat with
 - [**Content Request Examples**](./examples/content-requests.md) - Sample requests and outputs
 
 ### 🏗️ **For Marketing Architects** 
+- [**📊 Three-Tier System Overview**](./diagrams/three-tier-system.md) - Visual guide to the complete system
 - [**Getting Started Guide**](./getting-started.md) - Setup and basic concepts
 - [**Roles & Responsibilities**](./roles-and-responsibilities.md) - Understanding the three-tier system
 - [**System Architecture**](./system-architecture.md) - How Vibeflow works under the hood

@@ -9,6 +9,10 @@ Welcome to Vibeflow! This guide will get you from zero to running your first mar
 - How to structure client projects
 - Your first workflow execution
 
+## Start Here: The Big Picture
+
+Before diving into setup details, **[see the complete three-tier system overview](./diagrams/three-tier-system.md)** to understand how you fit into the Vibeflow ecosystem and the value you provide to your clients.
+
 ## Installation
 
 Setting up Vibeflow is as simple as creating any modern web application:
