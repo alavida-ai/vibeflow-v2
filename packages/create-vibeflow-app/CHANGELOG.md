@@ -1,5 +1,11 @@
 # create-vibeflow-app
 
+## 4.3.0
+
+### Minor Changes
+
+- Added agents
+
 ## 4.2.0
 
 ### Minor Changes
