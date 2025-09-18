@@ -1,0 +1,114 @@
+id: personal-brand-onboarding
+description: Complete personal brand strategy development with human-in-the-loop discovery
+steps:
+  - id: brand-discovery-interview
+    description: Extract core brand DNA through guided questions
+    prompt: |
+      You are conducting a brand discovery interview. Ask the user these questions one at a time, 
+      wait for their response, and then ask follow-up questions to get deeper insights.
+    
+      
+      For each answer, ask follow-up questions if you believe there is:
+      - "Can you give me a specific example of that?"
+      - "What does that look like in practice?"
+      - "How is that different from what others in your space believe?"
+      
+    acceptance_criteria: |
+      - User has answered a few core questions that cover mission, vision, values, emotional north star, and brand mantra
+      - Follow-up questions revealed deeper insights beyond surface answers
+      - User confirms these elements feel authentic to their brand
+
+  - id: audience-research-validation
+    description: Define primary audience through interview and validation
+    prompt: |
+      Now we'll define your primary audience. Ask questions, synthesize user responses, and dig deeper into their responses:
+      
+      For each response, probe deeper if there is opportunity to do so, for example:
+      - "What are 3 specific words they would use to describe the problem they are trying to solve?"
+      - "How much would solving this be worth to them?"
+      - "Who else is trying to help them with this?"
+      
+    acceptance_criteria: |
+      - Audience profile with specific demographics and psychographics
+      - Functional job and emotional job they "hire" the brand for
+      - Top 3 goals/desired outcomes
+      - Top 3 pain points/barriers
+      - Validated audience locations and proof of market demand
+      - User can picture their ideal customer as a real person
+
+  - id: competitive-analysis-positioning
+    description: Map competitive landscape and define unique positioning
+    prompt: |
+      Use the perplexity MCP tool to analyze your competitive landscape and help find the user's unique positioning.
+      
+      Identify content gaps the user's competitors are
+
+    acceptance_criteria: |
+      - 3 specific competitors analyzed with clear strengths/weaknesses
+      - Identified content gaps the user's competitors are filling
+      - Identified areas the user could uniquely position themselves
+
+  - id: content-strategy-development
+    description: Define content approach, channels, and success metrics
+    prompt: |
+      Now help the user build their content strategy based on their brand and audience insights.
+    
+      Using their brand fundamentals and audience research, help them create:
+      - Annual content objective (measurable)
+      - 3 content pillars mapped to brand pillars
+      - Primary channels with realistic posting frequency
+      - 3-5 hero content formats
+      - Primary conversion event and tracking method
+
+    acceptance_criteria: |
+      - Clear, measurable annual content objective defined
+      - 3 content pillars that align with brand pillars and audience needs
+      - Realistic channel strategy based on audience behavior and creator capacity
+      - Defined hero formats and repurposing workflow
+      - Conversion tracking plan established
+      - Content calendar foundation ready for implementation
+
+  - id: tone-voice-definition
+    description: Codify communication style and create voice guidelines
+    prompt: |
+      Help the user define their unique voice and communication style for consistent brand expression.
+      
+      You may ask the user of previous work they have done to help them define their voice. If they mention a website or a substack use your tools to scrape it. 
+
+      If they mention an X account use the twitter MCP tool to scrape it.
+    acceptance_criteria: |
+      - Clear archetype and tone adjectives that match creator's personality
+      - Specific vocabulary guidelines with encouraged/banned words
+      - Guidelines detailed enough for others to write in this voice
+
+  - id: template-compilation-review
+    description: Generate final brand templates and validate completeness
+    prompt: |
+      Help the user compile everything into their final brand templates and ensure completeness.
+      
+      Using all previous responses, create these 3 comprehensive templates:
+      
+      1. **Brand Fundamentals Template** - Mission, vision, values, audience profile, positioning
+      2. **Market & Content Strategy Template** - Competitor analysis, content pillars, channel strategy
+      3. **Tone of Voice Template** - Communication guidelines, examples, channel adaptations
+      
+      Reference the template files:
+      - /strategy/brand-fundamentals-template.md
+      - /strategy/market-content-strategy-template.md  
+      - /strategy/tone-of-voice-template.md
+      
+      Fill out each template completely using the user's responses from previous steps.
+      
+      Make any necessary revisions based on feedback.
+      
+      Finally, provide next steps:
+      - How to implement the content strategy
+      - Tools/systems needed for execution
+      - Timeline for launching branded content
+      - Success metrics to track
+    acceptance_criteria: |
+      - All 3 templates completely filled out with user's specific information
+      - User validates that templates feel authentic and actionable
+      - Any gaps or unclear areas have been addressed and revised
+      - Clear implementation plan provided with specific next steps
+      - User feels confident they can begin executing their brand strategy immediately

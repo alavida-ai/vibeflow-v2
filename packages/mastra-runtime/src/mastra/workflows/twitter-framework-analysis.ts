@@ -112,8 +112,6 @@ const generateMediaDescriptionsStep = createStep({
     });
 
     try {
-      // Import TwitterAnalyser and generate media descriptions for best 10 tweets
-      const { TwitterAnalyser } = await import('@vibeflow/ingestion');
 
       const twitterAnalyser = new TwitterAnalyser({
         userName: inputData.username,

@@ -1,6 +1,5 @@
 import { Mastra } from "@mastra/core/mastra";
 import { Workflow } from "@mastra/core/workflows";
-import { testWorkflow } from "./workflows/test-workflow";
 import { businessStrategyWorkflow } from "./workflows/business-strategy";
 import { twitterFrameworkAnalysisWorkflow } from "./workflows/twitter-framework-analysis";
 import { createStorage } from "./storage";
@@ -8,11 +7,13 @@ import { frameworkAgent } from "./agents/frameworkAgent";
 import { parseAgent } from "./agents/parseAgent";
 import { createVibeflowMCP } from "./mcp";
 import { PinoLogger } from "@mastra/loggers";
-import { PgVector } from "@mastra/pg";
-import { rorySutherlandAgent } from "./agents/rorySutherlandAgent";
+import { strategyAgent } from "./agents/strategyAgent";
+import { Agent } from "@mastra/core/agent";
 
 export async function createMastraInstance(options?: {
-  workflows?: Record<string, Workflow>}): Promise<Mastra> {
+  workflows?: Record<string, Workflow>,
+  agents?: Record<string, Agent>
+}): Promise<Mastra> {
   return new Mastra({
     logger: new PinoLogger({
       name: 'VibeFlow-Mastra',
@@ -21,17 +22,14 @@ export async function createMastraInstance(options?: {
     agents: {
       frameworkAgent,
       parseAgent,
-      rorySutherlandAgent
+      strategyAgent,
+      ...options?.agents
     },
     workflows: {
-      testWorkflow,
       businessStrategyWorkflow,
       twitterFrameworkAnalysisWorkflow,
       ...options?.workflows
       
-    },
-    vectors: {
-      pgVector: new PgVector({ connectionString: process.env.DATABASE_URL! }),
     },
     bundler: {
       transpilePackages: [
@@ -51,7 +49,10 @@ export async function createMastraInstance(options?: {
         openAPIDocs: true,
       },
     },
-    storage: createStorage()
+    storage: createStorage(),
+    telemetry: {
+      enabled: true
+    }
   });
 }
 

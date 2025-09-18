@@ -5,14 +5,14 @@ import fg from 'fast-glob';
 import yaml from 'js-yaml';
 import chokidar from 'chokidar';
 import { ZodError } from 'zod';
-import { WorkflowSchema, type WorkflowInput } from './schema';
-import type { CompileOptions, Manifest, ManifestWorkflowEntry } from './types';
+import { WorkflowSchema, AgentSchema, type WorkflowInput, type AgentInput } from './schema';
+import type { CompileOptions, Manifest, ManifestWorkflowEntry, ManifestAgentEntry } from './types';
 
 // Export types for external use
-export type { WorkflowInput, StepInput } from './schema';
-export type { Manifest, ManifestWorkflowEntry, CompileOptions } from './types';
+export type { WorkflowInput, StepInput, AgentInput } from './schema';
+export type { Manifest, ManifestWorkflowEntry, ManifestAgentEntry, CompileOptions } from './types';
 
-export { WorkflowSchema, StepSchema } from './schema';
+export { WorkflowSchema, StepSchema, AgentSchema } from './schema';
 
 async function ensureDir(dir: string): Promise<void> {
   await fs.mkdir(dir, { recursive: true });
@@ -47,12 +47,15 @@ export async function compile(options: CompileOptions): Promise<Manifest> {
   const srcDir = path.resolve(options.srcDir);
   const outDir = path.resolve(options.outDir || '.vibeflow');
   const outWorkflowsDir = path.join(outDir, 'workflows');
+  const outAgentsDir = path.join(outDir, 'agents');
 
   await ensureDir(outWorkflowsDir);
+  await ensureDir(outAgentsDir);
 
   const yamlFiles = await fg(['**/*.y?(a)ml'], { cwd: srcDir, dot: false, absolute: true });
 
-  const entries: ManifestWorkflowEntry[] = [];
+  const workflowEntries: ManifestWorkflowEntry[] = [];
+  const agentEntries: ManifestAgentEntry[] = [];
 
   for (const file of yamlFiles) {
     const raw = await fs.readFile(file, 'utf8');
@@ -63,38 +66,66 @@ export async function compile(options: CompileOptions): Promise<Manifest> {
       throw new Error(formatYamlError(file, e));
     }
 
-    const result = WorkflowSchema.safeParse(parsed);
-    if (!result.success) {
-      throw new Error(formatZodError(file, result.error));
+    // Try to parse as workflow first
+    const workflowResult = WorkflowSchema.safeParse(parsed);
+    if (workflowResult.success) {
+      // Process as workflow
+      const workflow = workflowResult.data as WorkflowInput;
+      const outRelPath = `workflows/${workflow.id}.json`;
+      const outAbsPath = path.join(outDir, outRelPath);
+
+      const normalized = {
+        id: workflow.id,
+        description: workflow.description ?? '',
+        steps: workflow.steps.map(s => ({
+          id: s.id,
+          description: s.description ?? '',
+          prompt: s.prompt,
+          acceptance_criteria: Array.isArray(s.acceptance_criteria)
+            ? s.acceptance_criteria
+            : (s.acceptance_criteria ? [s.acceptance_criteria] : []),
+        })),
+      } satisfies WorkflowInput;
+
+      const json = toStableJson(normalized);
+      await ensureDir(path.dirname(outAbsPath));
+      await fs.writeFile(outAbsPath, json, 'utf8');
+
+      workflowEntries.push({ id: workflow.id, path: outRelPath, hash: hashContent(json) });
+      continue;
     }
 
-    const workflow = result.data as WorkflowInput;
-    const outRelPath = `workflows/${workflow.id}.json`;
-    const outAbsPath = path.join(outDir, outRelPath);
+    // Try to parse as agent
+    const agentResult = AgentSchema.safeParse(parsed);
+    if (agentResult.success) {
+      // Process as agent
+      const agent = agentResult.data as AgentInput;
+      const outRelPath = `agents/${agent.id}.json`;
+      const outAbsPath = path.join(outDir, outRelPath);
 
-    const normalized = {
-      id: workflow.id,
-      description: workflow.description ?? '',
-      steps: workflow.steps.map(s => ({
-        id: s.id,
-        description: s.description ?? '',
-        prompt: s.prompt,
-        acceptance_criteria: Array.isArray(s.acceptance_criteria)
-          ? s.acceptance_criteria
-          : (s.acceptance_criteria ? [s.acceptance_criteria] : []),
-      })),
-    } satisfies WorkflowInput;
+      const normalized = {
+        id: agent.id,
+        name: agent.name,
+        description: agent.description,
+        instructions: agent.instructions,
+      } satisfies AgentInput;
 
-    const json = toStableJson(normalized);
-    await ensureDir(path.dirname(outAbsPath));
-    await fs.writeFile(outAbsPath, json, 'utf8');
+      const json = toStableJson(normalized);
+      await ensureDir(path.dirname(outAbsPath));
+      await fs.writeFile(outAbsPath, json, 'utf8');
 
-    entries.push({ id: workflow.id, path: outRelPath, hash: hashContent(json) });
+      agentEntries.push({ id: agent.id, path: outRelPath, hash: hashContent(json) });
+      continue;
+    }
+
+    // If neither schema matches, throw an error
+    throw new Error(`File ${file} does not match workflow or agent schema. Workflow errors: ${formatZodError(file, workflowResult.error)}. Agent errors: ${formatZodError(file, agentResult.error)}`);
   }
 
   const manifest: Manifest = {
     generatedAt: new Date().toISOString(),
-    workflows: entries.sort((a, b) => a.id.localeCompare(b.id)),
+    workflows: workflowEntries.sort((a, b) => a.id.localeCompare(b.id)),
+    agents: agentEntries.sort((a, b) => a.id.localeCompare(b.id)),
   };
 
   await fs.writeFile(path.join(outDir, 'manifest.json'), toStableJson(manifest), 'utf8');

@@ -9,6 +9,7 @@ const router = createOpenRouterProvider({
 
 export const parseAgent = new Agent({
   name: "Parse Agent",
+  description: "A parse agent for parsing raw framework analysis output into structured data",
   instructions: `
 You are a data parsing specialist. Your job is to parse raw framework analysis output into structured data.
 
