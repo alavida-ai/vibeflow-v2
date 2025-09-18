@@ -1,5 +1,11 @@
 # create-vibeflow-app
 
+## 4.4.1
+
+### Patch Changes
+
+- Added directory handling
+
 ## 4.4.0
 
 ### Minor Changes
