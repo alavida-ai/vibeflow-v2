@@ -60,3 +60,6 @@ coverage/
 # Temporary files
 tmp/
 temp/
+
+# Ignore mastra build output
+.mastra
