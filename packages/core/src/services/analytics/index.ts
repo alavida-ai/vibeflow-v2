@@ -68,7 +68,7 @@ export async function calculateTweetAnalytics(tweet: schema.Tweet): Promise<sche
   const shouldReply = calculateShouldReply(finalScore);
 
   return {
-    tweetId: tweet.tweetId,
+    tweetId: tweet.id,
     rawEngagementScore: rawEngagementScore.toString(),
     normalizedEngagementScore: finalScore.toString(),
     freshnessAdjustedScore: finalScore.toString(),
@@ -77,7 +77,7 @@ export async function calculateTweetAnalytics(tweet: schema.Tweet): Promise<sche
     freshnessDecayFactor: freshnessDecayFactor.toString(),
     ageInHours: calculateFreshnessDecay(tweet.createdAtUtc).ageInHours.toString(),
     algorithmVersion: ANALYTICS_VERSION,
-    computedAt: new Date(),
+    computedAtUtc: new Date(),
     shouldReply
   };
 }

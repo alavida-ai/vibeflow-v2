@@ -1,8 +1,8 @@
-import { ApiTweet } from '../source/TwitterClient';
+import { ApiTweet } from '../source/';
 import { schema } from '@vibeflow/database';
 
 export interface TransformOptions {
-    source: string;
+    source: (typeof schema.sourceConstants)[keyof typeof schema.sourceConstants];
 }
 
 export class TweetTransformer {
@@ -40,10 +40,6 @@ export class TweetTransformer {
             createdAtUtc: new Date(tweet.createdAt),
             capturedAtUtc: capturedAt,
             updatedAtUtc: capturedAt,
-
-            // Pipeline state
-            status: "pending" as const,
-            errors: [],
 
             // Metadata
             source: options.source,

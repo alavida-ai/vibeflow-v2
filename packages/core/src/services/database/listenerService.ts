@@ -26,15 +26,18 @@ export const REPLIED_TWEET_STATUS = schema.replyStatusConstants.responded;
 
 export async function insertTweetsAndIgnoreDuplicates(tweets: schema.InsertTweet[]) {
     try {
-  const db = getDb();
-    const result = await db.insert(schema.tweets).values(tweets).onConflictDoNothing(
-        {
-            target: [schema.tweets.id]
-        }
-    ).returning();
-    return result;
-  } catch (error) {
-    console.error("Error inserting tweets", error);
+        const db = getDb();
+        const result = await db
+            .insert(schema.tweets)
+            .values(tweets)
+            .onConflictDoNothing(
+                {
+                    target: [schema.tweets.id]
+                }
+            ).returning();
+        return result;
+    } catch (error) {
+        console.error("Error inserting tweets", error);
         throw error;
     }
 }
@@ -58,7 +61,7 @@ export async function getPendingTweets() {
                     eq(schema.tweetReplies.status, PENDING_TWEET_STATUS)
                 )
             );
-        
+
         return result.map(r => r.tweet);
     } catch (error) {
         console.error("Error getting pending tweets", error);
@@ -69,7 +72,7 @@ export async function getPendingTweets() {
 export async function addReplyToTweet(tweetId: number, reply: string, reasoning: string): Promise<schema.TweetReply> {
     try {
         const db = getDb();
-        
+
         // First check if tweet exists
         const tweet = await db.select().from(schema.tweets).where(eq(schema.tweets.id, tweetId)).limit(1);
         if (tweet.length === 0) {
@@ -131,7 +134,7 @@ export async function getMostRelevantTweetsToReplyTo({
             .where(eq(schema.tweetReplies.status, READY_TO_RESPOND_TWEET_STATUS))
             .orderBy(desc(schema.tweetAnalytics.finalScore))
             .limit(top_k);
-        
+
         return result;
     } catch (error) {
         console.error("Error getting most relevant tweets to reply to", error);
@@ -167,7 +170,7 @@ export async function addErrorToTweetReply(tweetId: number, error: string) {
 }
 
 export async function setTweetReplyStatus(tweetId: number, status: schema.TweetReply["status"]) {
-    try {   
+    try {
         const db = getDb();
         // Insert or update reply status
         await db
@@ -202,7 +205,7 @@ export async function batchSetTweetReplyStatus(tweetIds: number[], status: schem
             createdAtUtc: new Date(),
             updatedAtUtc: new Date()
         }));
-        
+
         for (const value of values) {
             await db
                 .insert(schema.tweetReplies)
@@ -277,15 +280,18 @@ export async function batchAddAnalyticsToTweets(analytics: schema.InsertTweetAna
 export async function getTweetAnalytics(tweetId: number) {
     try {
         const db = getDb();
-        const result = await db.select().from(schema.tweetAnalytics).where(eq(schema.tweetAnalytics.tweetId, tweetId));
+        const result = await db
+            .select()
+            .from(schema.tweetAnalytics)
+            .where(eq(schema.tweetAnalytics.tweetId, tweetId));
         return result;
     } catch (error) {
         console.error("Error getting tweet analytics", error);
-        throw new Error("Error getting tweet analytics")    ;
+        throw new Error("Error getting tweet analytics");
     }
 }
 
-export async function getTweetCandidates() : Promise<TweetCandidate[]> {
+export async function getTweetCandidates(): Promise<TweetCandidate[]> {
     try {
         const db = getDb();
         const result = await db

@@ -1,13 +1,12 @@
 import { TwitterPipeline } from './pipeline/tweets-pipeline';
-import { TwitterClient, MentionsEndpoint, UserTweetsEndpoint, RepliesEndpoint } from './source';
-import { MediaProcessor, EvsProcessor } from './processors';
+import { TwitterClient, UserMentionsEndpoint, UserLastTweetsEndpoint, TweetRepliesEndpoint } from './source';
+import { MediaProcessor } from './processors';
 
 export function createMentionsPipeline(apiKey: string): TwitterPipeline {
   const client = new TwitterClient(apiKey);
   
   return new TwitterPipeline({
-    endpoint: new MentionsEndpoint(client),
-    storage: 'listener',
+    endpoint: new UserMentionsEndpoint(client),
     processors: []
   });
 }
@@ -16,10 +15,8 @@ export function createUserTweetsPipeline(apiKey: string): TwitterPipeline {
   const client = new TwitterClient(apiKey);
   
   return new TwitterPipeline({
-    endpoint: new UserTweetsEndpoint(client),
-    storage: 'analyzer',
+    endpoint: new UserLastTweetsEndpoint(client),
     processors: [
-      new EvsProcessor(),
       new MediaProcessor()
     ]
   });
@@ -29,8 +26,7 @@ export function createRepliesPipeline(apiKey: string): TwitterPipeline {
   const client = new TwitterClient(apiKey);
   
   return new TwitterPipeline({
-    endpoint: new RepliesEndpoint(client),
-    storage: 'listener',
+    endpoint: new TweetRepliesEndpoint(client),
     processors: []
   });
 }
@@ -48,19 +44,19 @@ export function createCustomPipeline(config: {
   let endpoint;
   switch (config.endpoint) {
     case 'mentions':
-      endpoint = new MentionsEndpoint(client);
+      endpoint = new UserMentionsEndpoint(client);
       break;
     case 'userTweets':
-      endpoint = new UserTweetsEndpoint(client);
+      endpoint = new UserLastTweetsEndpoint(client);
       break;
     case 'replies':
-      endpoint = new RepliesEndpoint(client);
+      endpoint = new TweetRepliesEndpoint(client);
       break;
   }
   
   const processors = [];
   if (config.includeEvs) {
-    processors.push(new EvsProcessor());
+    // processors.push(new EvsProcessor());
   }
   if (config.includeMediaProcessing) {
     processors.push(new MediaProcessor());
@@ -68,7 +64,6 @@ export function createCustomPipeline(config: {
   
   return new TwitterPipeline({
     endpoint,
-    storage: config.storage,
     processors
   });
 }

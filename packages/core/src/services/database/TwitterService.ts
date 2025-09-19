@@ -5,7 +5,7 @@ import {
 import { eq, and, isNull, desc, inArray } from 'drizzle-orm';
 
 // Type for the getBestPerformingTweetsByUsernameView return value
-export type TweetAnalysisView = {
+export type TweetView = {
     id: number;
     type: schema.Tweet['type'];
     text: string;
@@ -166,19 +166,9 @@ export class TwitterService {
                 updatedAtUtc: media.updatedAtUtc
             })
             .where(eq(schema.tweetMedia.id, media.id));
-
-        // Update tweet status to indicate visual processing is complete
-        const tweetId = media.tweetId;
-        await getDb()
-            .update(schema.tweets)
-            .set({
-                status: 'visual_processed',
-                updatedAtUtc: new Date()
-            })
-            .where(eq(schema.tweets.id, tweetId));
     }
 
-    static async getTweetsAnalysisViewByUsername(authorUsername: string, limit?: number): Promise<TweetAnalysisView[]> {
+    static async getTweetsAnalysisViewByUsername(authorUsername: string, limit?: number): Promise<TweetView[]> {
         const db = getDb();
 
         // Get tweets with their media using a left join to include tweets without media
@@ -233,7 +223,7 @@ export class TwitterService {
      * Get tweets by their IDs
      * Used for calculating framework metrics based on specific tweet references
      */
-    static async getTweetsByIds(tweetIds: number[]): Promise<TweetAnalysisView[]> {
+    static async getTweetsByIds(tweetIds: number[]): Promise<TweetView[]> {
         if (tweetIds.length === 0) return [];
 
         const db = getDb();

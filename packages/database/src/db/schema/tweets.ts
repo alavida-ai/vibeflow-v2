@@ -39,6 +39,7 @@ export const tweetSourceEnumSchema = z.enum([
 
 export const sourceConstants = tweetSourceEnumSchema.enum;
 export const tweetSourceEnum = pgEnum("tweet_source", tweetSourceEnumSchema.options as [string, ...string[]]);
+export type TweetSourceEnum = z.infer<typeof tweetSourceEnumSchema>;
 
 // Media type enum
 export const tweetMediaTypeEnumSchema = z.enum([

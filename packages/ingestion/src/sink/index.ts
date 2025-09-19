@@ -1,1 +1,1 @@
-export * from './TweetStorage';
+export * from './TweetSink';

@@ -2,11 +2,11 @@
 import { PipelineConfig, PipelineOptions, PipelineResult } from './types';
 import { schema } from '@vibeflow/database';
 import { TweetTransformer } from '../transformers/TweetTransformer';
-import { TweetStorage } from '../sink/TweetStorage';
+import { TweetSink } from '../sink/TweetSink';
 
 export class TwitterPipeline {
   private transformer = new TweetTransformer();
-  private storage = new TweetStorage();
+  private sink = new TweetSink();
 
   constructor(private config: PipelineConfig) {}
 
@@ -36,14 +36,12 @@ export class TwitterPipeline {
         // Transform tweets
         const tweetData: schema.InsertTweetWithMedia[] = response.tweets.map(tweet => 
           this.transformer.transform(tweet, {
-            source: this.getSourceName(),
-            extractMedia: this.shouldExtractMedia(),
-            calculateEvs: this.shouldCalculateEvs()
+            source: this.getSourceName()
           })
         );
 
         // Save tweets
-        await this.storage.save(tweetData, this.config.storage);
+        await this.sink.save(tweetData, this.config.storage);
         totalTweets += tweetData.length;
 
         // Run processors
@@ -95,14 +93,5 @@ export class TwitterPipeline {
 
   private getSourceName(): string {
     return this.config.endpoint.constructor.name.replace('Endpoint', '').toLowerCase();
-  }
-
-  private shouldExtractMedia(): boolean {
-    return this.config.processors.some(p => p.name === 'MediaProcessor');
-  }
-
-  private shouldCalculateEvs(): boolean {
-    return this.config.storage === 'analyzer' || 
-           this.config.processors.some(p => p.name === 'EvsProcessor');
   }
 }

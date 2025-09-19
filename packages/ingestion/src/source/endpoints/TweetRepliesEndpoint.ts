@@ -1,7 +1,7 @@
-import { TwitterEndpoint } from '../pipeline/types';
-import { TwitterClient } from './TwitterClient';
+import { TwitterEndpoint } from '../../pipeline/types';
+import { TwitterClient } from '../TwitterClient';
 
-export class RepliesEndpoint implements TwitterEndpoint {
+export class TweetRepliesEndpoint implements TwitterEndpoint {
   constructor(private client: TwitterClient) {}
 
   async fetch(
