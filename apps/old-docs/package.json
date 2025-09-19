@@ -1,0 +1,28 @@
+{
+  "name": "docs",
+  "version": "1.0.0",
+  "description": "Documentation site built with Nextra",
+  "type": "module",
+  "scripts": {
+    "dev": "next",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "next": "15.5.2",
+    "nextra": "^4.4.0",
+    "nextra-theme-docs": "^4.4.0",
+    "react": "19.1.0",
+    "react-dom": "19.1.0",
+    "zod": "4.1.9"
+  },
+  "keywords": [
+    "documentation",
+    "nextra",
+    "nextjs"
+  ],
+  "author": "",
+  "license": "ISC",
+  "packageManager": "pnpm@10.13.1"
+}

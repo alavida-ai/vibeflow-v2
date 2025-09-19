@@ -1,0 +1,6 @@
+{
+  "version": 3,
+  "sources": [],
+  "sections": [
+    {"offset": {"line": 7, "column": 0}, "map": {"version":3,"sources":["file:///Users/alexandergirardet/Code/vibeflow/vibeflow-projects/vibeflow-v2/apps/docs/src/app/apple-icon.png.mjs%20%28structured%20image%20object%29"],"sourcesContent":["import src from \"IMAGE\";\nexport default { src, width: 192, height: 192 }\n"],"names":[],"mappings":";;;;AAAA;;uCACe;IAAE,KAAA,+IAAG;IAAE,OAAO;IAAK,QAAQ;AAAI","debugId":null}}]
+}

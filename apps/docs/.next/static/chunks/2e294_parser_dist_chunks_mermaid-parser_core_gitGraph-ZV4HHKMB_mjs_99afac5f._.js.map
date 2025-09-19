@@ -1,0 +1,6 @@
+{
+  "version": 3,
+  "sources": [],
+  "sections": [
+    {"offset": {"line": 4, "column": 0}, "map": {"version":3,"sources":["file:///Users/alexandergirardet/Code/vibeflow/vibeflow-projects/vibeflow-v2/node_modules/.pnpm/%40mermaid-js%2Bparser%400.6.2/node_modules/%40mermaid-js/parser/dist/chunks/mermaid-parser.core/gitGraph-ZV4HHKMB.mjs"],"sourcesContent":["import {\n  GitGraphModule,\n  createGitGraphServices\n} from \"./chunk-BN7GFLIU.mjs\";\nimport \"./chunk-4KMFLZZN.mjs\";\nexport {\n  GitGraphModule,\n  createGitGraphServices\n};\n"],"names":[],"mappings":";AAAA;AAIA","ignoreList":[0],"debugId":null}}]
+}

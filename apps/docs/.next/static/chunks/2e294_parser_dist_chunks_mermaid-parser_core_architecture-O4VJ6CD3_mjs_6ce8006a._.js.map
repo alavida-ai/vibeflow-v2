@@ -1,0 +1,6 @@
+{
+  "version": 3,
+  "sources": [],
+  "sections": [
+    {"offset": {"line": 4, "column": 0}, "map": {"version":3,"sources":["file:///Users/alexandergirardet/Code/vibeflow/vibeflow-projects/vibeflow-v2/node_modules/.pnpm/%40mermaid-js%2Bparser%400.6.2/node_modules/%40mermaid-js/parser/dist/chunks/mermaid-parser.core/architecture-O4VJ6CD3.mjs"],"sourcesContent":["import {\n  ArchitectureModule,\n  createArchitectureServices\n} from \"./chunk-JEIROHC2.mjs\";\nimport \"./chunk-4KMFLZZN.mjs\";\nexport {\n  ArchitectureModule,\n  createArchitectureServices\n};\n"],"names":[],"mappings":";AAAA;AAIA","ignoreList":[0],"debugId":null}}]
+}
