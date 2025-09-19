@@ -274,7 +274,7 @@ export async function ingestMentions(config: BrandListenerConfig): Promise<Inges
 export async function ingestUserLastTweets(config: UserLastTweetsConfig): Promise<IngestionResult> {
   const { 
     userName, 
-    maxPages = 1, 
+    maxPages = 10, 
     cursor: initialCursor 
   } = config;
 

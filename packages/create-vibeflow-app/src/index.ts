@@ -24,11 +24,16 @@ program
   .action(async (projectDirectory, options) => {
     console.log();
 
-    let projectName = projectDirectory;
+    let projectName: string;
+    let targetDirectory: string;
 
-    // Prompt for project name if not provided
-    if (!projectName) {
-      const response = await prompts({
+    // If project directory is provided as argument, use it as project name and create subdirectory
+    if (projectDirectory) {
+      projectName = projectDirectory;
+      targetDirectory = projectDirectory;
+    } else {
+      // Prompt for project name
+      const projectResponse = await prompts({
         type: 'text',
         name: 'projectName',
         message: 'What is your project named?',
@@ -42,12 +47,28 @@ program
         },
       });
 
-      if (!response.projectName) {
+      if (!projectResponse.projectName) {
         console.log('\nOperation cancelled.');
         process.exit(1);
       }
 
-      projectName = response.projectName;
+      projectName = projectResponse.projectName;
+
+      // Prompt for target directory
+      const directoryResponse = await prompts({
+        type: 'text',
+        name: 'targetDirectory',
+        message: 'Where should we create your project?',
+        initial: '.',
+        format: (value: string) => value.trim() || '.',
+      });
+
+      if (directoryResponse.targetDirectory === undefined) {
+        console.log('\nOperation cancelled.');
+        process.exit(1);
+      }
+
+      targetDirectory = directoryResponse.targetDirectory || '.';
     }
 
     // Validate project name
@@ -61,13 +82,41 @@ program
       process.exit(1);
     }
 
-    const resolvedProjectPath = path.resolve(projectName);
-    const projectDirName = path.basename(resolvedProjectPath);
+    // Determine the actual project path
+    let resolvedProjectPath: string;
+    let projectDirName: string;
 
-    // Check if directory already exists
-    if (fs.existsSync(resolvedProjectPath)) {
+    if (targetDirectory === '.') {
+      // Create in current directory
+      resolvedProjectPath = path.resolve(process.cwd());
+      projectDirName = projectName;
+      
+      // Check if current directory is empty (or only has .git, .gitignore, etc.)
+      const currentDirContents = await fs.readdir(resolvedProjectPath);
+      const allowedFiles = ['.git', '.gitignore', '.gitattributes', 'README.md', 'LICENSE'];
+      const conflictingFiles = currentDirContents.filter(file => !allowedFiles.includes(file));
+      
+      if (conflictingFiles.length > 0) {
+        console.error(
+          chalk.red(`Current directory is not empty. The following files/directories would conflict:`)
+        );
+        conflictingFiles.slice(0, 10).forEach(file => console.error(chalk.red(`  - ${file}`)));
+        if (conflictingFiles.length > 10) {
+          console.error(chalk.red(`  ... and ${conflictingFiles.length - 10} more`));
+        }
+        console.error(chalk.red(`Please choose an empty directory or use a subdirectory.`));
+        process.exit(1);
+      }
+    } else {
+      // Create in subdirectory
+      resolvedProjectPath = path.resolve(targetDirectory);
+      projectDirName = path.basename(resolvedProjectPath);
+    }
+
+    // Check if directory already exists (only for subdirectory creation)
+    if (targetDirectory !== '.' && fs.existsSync(resolvedProjectPath)) {
       console.error(
-        chalk.red(`Directory "${projectName}" already exists. Please choose a different name.`)
+        chalk.red(`Directory "${targetDirectory}" already exists. Please choose a different directory.`)
       );
       process.exit(1);
     }
@@ -93,9 +142,13 @@ program
       });
 
       console.log();
-      console.log(chalk.green('Success! Created'), chalk.cyan(projectDirName), chalk.green('at'), chalk.cyan(resolvedProjectPath));
+      if (targetDirectory === '.') {
+        console.log(chalk.green('Success! Created'), chalk.cyan(projectDirName), chalk.green('in the current directory'));
+      } else {
+        console.log(chalk.green('Success! Created'), chalk.cyan(projectDirName), chalk.green('at'), chalk.cyan(resolvedProjectPath));
+      }
       console.log();
-      console.log('Inside that directory, you can run several commands:');
+      console.log('You can now run several commands:');
       console.log();
       console.log(chalk.cyan(`  ${packageManager} dev`));
       console.log('    Starts the development server with file watching.');
@@ -106,14 +159,25 @@ program
       console.log(chalk.cyan(`  ${packageManager} start`));
       console.log('    Starts the development server on port 3000.');
       console.log();
-      console.log('We suggest that you begin by typing:');
-      console.log();
-      console.log(chalk.cyan('  cd'), projectDirName);
-      if (!options.skipInstall) {
-        console.log(chalk.cyan(`  ${packageManager} dev`));
+      if (targetDirectory === '.') {
+        console.log('We suggest that you begin by typing:');
+        console.log();
+        if (!options.skipInstall) {
+          console.log(chalk.cyan(`  ${packageManager} dev`));
+        } else {
+          console.log(chalk.cyan(`  ${packageManager} install`));
+          console.log(chalk.cyan(`  ${packageManager} dev`));
+        }
       } else {
-        console.log(chalk.cyan(`  ${packageManager} install`));
-        console.log(chalk.cyan(`  ${packageManager} dev`));
+        console.log('We suggest that you begin by typing:');
+        console.log();
+        console.log(chalk.cyan('  cd'), projectDirName);
+        if (!options.skipInstall) {
+          console.log(chalk.cyan(`  ${packageManager} dev`));
+        } else {
+          console.log(chalk.cyan(`  ${packageManager} install`));
+          console.log(chalk.cyan(`  ${packageManager} dev`));
+        }
       }
       console.log();
       console.log('Happy building! 🚀');

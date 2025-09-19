@@ -12,6 +12,20 @@
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "incremental": false,
-    "composite": false
+    "composite": false,
+    "baseUrl": ".",
+    "paths": {
+      "@vibeflow/agent-sdk": ["./packages/agent-sdk/src"],
+      "@vibeflow/cli": ["./packages/cli/src"],
+      "@vibeflow/compiler": ["./packages/compiler/src"],
+      "@vibeflow/core": ["./packages/core/src"],
+      "@vibeflow/create-vibeflow-app": ["./packages/create-vibeflow-app/src"],
+      "@vibeflow/database": ["./packages/database/src"],
+      "@vibeflow/ingestion": ["./packages/ingestion/src"],
+      "@vibeflow/mastra-runtime": ["./packages/mastra-runtime/src"],
+      "@vibeflow/replier": ["./packages/replier/src"],
+      "@vibeflow/reporting": ["./packages/reporting/src"],
+      "@vibeflow/vibe-runtime-server": ["./packages/vibe-runtime-server/src"]
+    }
   }
 }

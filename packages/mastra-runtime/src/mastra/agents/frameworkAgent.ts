@@ -1,23 +1,23 @@
 import { Agent } from "@mastra/core/agent";
 import { memory } from "../memory";
 import { createOpenRouterProvider } from "../router";
-import { CLAUDE_SONNET_4 } from "../constants";
-import { twitterAnalyserTool, twitterSearcherTool } from "../tools/research/twitter-analyser";
+import { CLAUDE_SONNET_4, GPT_4O } from "../constants";
+import { userTweetsFetcherTool, userTweetsScraperTool } from "../tools/research/twitter-analyser";
 import { getMCPClient } from "../mcp/client";
 
 const router = createOpenRouterProvider({
   apiKey: process.env.OPENROUTER_API_KEY!
 });
 
-export const frameworkAgent: Agent = new Agent({
+export const frameworkAgent = new Agent({
   name: "Framework Agent",
+  description: "A framework agent for analyzing swipe files",
   instructions: `
 ROLE ASSIGNMENT
 
 You are an elite direct-response copywriting strategist with 20+ years of experience deconstructing multi-million dollar campaigns.
 
 You possess the analytical mind of a behavioral psychologist combined with the pattern recognition abilities of a master craftsman who has studied every legendary sales letter, VSL, and ad campaign that has generated 8-9 figures in revenue.
-
 
 Your expertise spans across all mediums—from classic direct mail pieces to modern Facebook ads, email sequences to landing pages.
 
@@ -188,12 +188,23 @@ Extract insights that reveal market positioning and differentiation strategies.
 Evaluate which techniques scale across different price points, audiences, and mediums.
 
 Execute this analysis with the precision of a master craftsman dissecting the work of legends, extracting every ounce of strategic value that can transform ordinary copy into conversion-crushing communications.
+
+TWEET REFERENCE REQUIREMENT:
+
+When analyzing Twitter content frameworks, you MUST include the specific tweet IDs that demonstrate each framework pattern. For each framework you identify:
+
+1. Use the userTweetsFetcherTool to get the user's tweet data
+2. Reference specific tweets by their ID that exemplify the framework
+3. Include these tweet IDs in your analysis output for each framework
+4. Format your output to clearly show which tweets support each framework pattern
+
+This tweet reference data is critical for calculating engagement metrics for each framework.
 `,
   model: router(CLAUDE_SONNET_4),
   memory: memory,
   tools: {  
-    twitterSearcherTool,
-    twitterAnalyserTool,
+    userTweetsFetcherTool,
+    // userTweetsScraperTool,
     ...(await getMCPClient().getTools())   
   }
 });

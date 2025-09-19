@@ -1,5 +1,17 @@
 # @vibeflow/runtime-server
 
+## 3.1.0
+
+### Minor Changes
+
+- Added agents
+
+### Patch Changes
+
+- Updated dependencies
+  - @vibeflow/compiler@2.1.0
+  - @vibeflow/mastra-runtime@1.3.0
+
 ## 3.0.2
 
 ### Patch Changes

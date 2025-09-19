@@ -1,5 +1,17 @@
 # vibeflow-ai
 
+## 4.1.0
+
+### Minor Changes
+
+- Added agents
+
+### Patch Changes
+
+- Updated dependencies
+  - @vibeflow/compiler@2.1.0
+  - @vibeflow/runtime-server@3.1.0
+
 ## 4.0.2
 
 ### Patch Changes

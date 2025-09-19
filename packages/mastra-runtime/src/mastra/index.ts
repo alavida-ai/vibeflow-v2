@@ -1,23 +1,35 @@
 import { Mastra } from "@mastra/core/mastra";
 import { Workflow } from "@mastra/core/workflows";
+import { businessStrategyWorkflow } from "./workflows/business-strategy";
+import { twitterFrameworkAnalysisWorkflow } from "./workflows/twitter-framework-analysis";
 import { createStorage } from "./storage";
 import { frameworkAgent } from "./agents/frameworkAgent";
+import { parseAgent } from "./agents/parseAgent";
 import { createVibeflowMCP } from "./mcp";
-import { PgVector } from "@mastra/pg";
-import { rorySutherlandAgent } from "./agents/rorySutherlandAgent";
+import { PinoLogger } from "@mastra/loggers";
+import { strategyAgent } from "./agents/strategyAgent";
+import { Agent } from "@mastra/core/agent";
 
 export async function createMastraInstance(options?: {
-  workflows?: Record<string, Workflow>}) {
+  workflows?: Record<string, Workflow>,
+  agents?: Record<string, Agent>
+}): Promise<Mastra> {
   return new Mastra({
+    logger: new PinoLogger({
+      name: 'VibeFlow-Mastra',
+      level: 'debug'
+    }),
     agents: {
       frameworkAgent,
-      rorySutherlandAgent
+      parseAgent,
+      strategyAgent,
+      ...options?.agents
     },
     workflows: {
+      businessStrategyWorkflow,
+      twitterFrameworkAnalysisWorkflow,
       ...options?.workflows
-    },
-    vectors: {
-      pgVector: new PgVector({ connectionString: process.env.DATABASE_URL! }),
+      
     },
     bundler: {
       transpilePackages: [
@@ -37,8 +49,11 @@ export async function createMastraInstance(options?: {
         openAPIDocs: true,
       },
     },
-    storage: createStorage()
+    storage: createStorage(),
+    telemetry: {
+      enabled: true
+    }
   });
 }
 
-export const mastra = await createMastraInstance();
+export const mastra: Mastra = await createMastraInstance();

@@ -1,6 +1,6 @@
 {
   "name": "@vibeflow/database",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "description": "",
   "type": "module",
   "exports": {
@@ -36,7 +36,6 @@
   "publishConfig": {
     "access": "public"
   },
-  
   "devDependencies": {
     "drizzle-kit": "^0.31.4",
     "tsup": "^8.5.0",
