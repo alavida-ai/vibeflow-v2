@@ -1,3 +1,2 @@
-export * from "./analyzerSchema";
-export * from "./listenerSchema";
+export * from "./tweets";
 export * from "./workflowSchema";

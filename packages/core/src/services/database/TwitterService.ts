@@ -7,7 +7,7 @@ import { eq, and, isNull, desc, inArray } from 'drizzle-orm';
 // Type for the getBestPerformingTweetsByUsernameView return value
 export type TweetAnalysisView = {
     id: number;
-    type: schema.TweetAnalyzer['type'];
+    type: schema.Tweet['type'];
     text: string;
     retweetCount: number;
     replyCount: number;
@@ -16,22 +16,22 @@ export type TweetAnalysisView = {
     viewCount: number;
     bookmarkCount: number;
     media: Array<{
-        type: schema.TweetMediaAnalyzer['type'];
+        type: schema.TweetMedia['type'];
         description: string | null;
     }>;
 };
 
-export class AnalyzerService {
+export class TwitterService {
     /**
      * Save parsed tweets with their media to the database
      * Handles duplicates by updating existing records
      * Returns the tweets enriched with their database IDs
      */
 
-    static async saveParsedTweets(parsedTweets: schema.InsertTweetAnalyzerWithMedia[]): Promise<schema.SavedTweetAnalyzer[]> {
+    static async insertTweetsWithMedia(parsedTweets: schema.InsertTweetWithMedia[]): Promise<schema.TweetWithMedia[]> {
         if (parsedTweets.length === 0) return [];
 
-        const savedTweets: schema.SavedTweetAnalyzer[] = [];
+        const savedTweets: schema.TweetWithMedia[] = [];
 
         try {
             for (const parsedTweet of parsedTweets) {
@@ -40,10 +40,10 @@ export class AnalyzerService {
 
                 // Insert/update tweet and get the ID
                 const [tweet] = await getDb()
-                    .insert(schema.tweetsAnalyzer)
-                    .values(tweetData as schema.InsertTweetAnalyzer)
+                    .insert(schema.tweets)
+                    .values(tweetData as schema.InsertTweet)
                     .onConflictDoUpdate({
-                        target: schema.tweetsAnalyzer.apiId,
+                        target: schema.tweets.apiId,
                         set: {
                             retweetCount: parsedTweet.retweetCount,
                             replyCount: parsedTweet.replyCount,
@@ -51,19 +51,19 @@ export class AnalyzerService {
                             quoteCount: parsedTweet.quoteCount,
                             viewCount: parsedTweet.viewCount,
                             bookmarkCount: parsedTweet.bookmarkCount,
-                            evs: parsedTweet.evs,
-                            updatedAt: new Date(),
+                            // evs: parsedTweet.evs, TODO: add EVS from analytics table
+                            updatedAtUtc: new Date(),
                         },
                     })
                     .returning();
 
                 // Insert media if present
-                let savedMedia: schema.TweetMediaAnalyzer[] = [];
+                let savedMedia: schema.TweetMedia[] = [];
                 if (media && media.length > 0) {
                     savedMedia = await this.saveMediaForTweet(tweet.id, media);
                 }
 
-                const savedTweet: schema.SavedTweetAnalyzer = {
+                const savedTweet: schema.TweetWithMedia = {
                     ...tweet,
                     media: savedMedia
                 };
@@ -82,35 +82,35 @@ export class AnalyzerService {
     /**
      * Save media for a specific tweet
      */
-    static async saveMediaForTweet(tweetId: number, mediaItems: Omit<schema.InsertTweetMediaAnalyzer, 'tweetId'>[]): Promise<schema.TweetMediaAnalyzer[]> {
+    static async saveMediaForTweet(tweetId: number, mediaItems: Omit<schema.InsertTweetMedia, 'tweetId'>[]): Promise<schema.TweetMedia[]> {
         if (mediaItems.length > 0) {
-            const mediaToInsert: schema.InsertTweetMediaAnalyzer[] = mediaItems.map(media => ({
+            const mediaToInsert: schema.InsertTweetMedia[] = mediaItems.map(media => ({
                 ...media,
                 tweetId
             }));
 
             await getDb()
-                .insert(schema.tweetMediaAnalyzer)
+                .insert(schema.tweetMedia)
                 .values(mediaToInsert)
-                .onConflictDoNothing({ target: schema.tweetMediaAnalyzer.tweetId }); // don't overwrite existing tweet's media
+                .onConflictDoNothing({ target: schema.tweetMedia.tweetId }); // don't overwrite existing tweet's media
         }
 
         return await getDb()
             .select()
-            .from(schema.tweetMediaAnalyzer)
-            .where(eq(schema.tweetMediaAnalyzer.tweetId, tweetId));
+            .from(schema.tweetMedia)
+            .where(eq(schema.tweetMedia.tweetId, tweetId));
     }
 
-    static async getMediaByAuthorUsername(username: string, bestNTweets?: number): Promise<schema.TweetMediaAnalyzer[]> {
+    static async getMediaByAuthorUsername(authorUsername: string, bestNTweets?: number): Promise<schema.TweetMedia[]> {
         const db = getDb();
 
         if (bestNTweets) {
             // First, get the best N tweets by EVS
             const bestTweets = await db
-                .select({ id: schema.tweetsAnalyzer.id })
-                .from(schema.tweetsAnalyzer)
-                .where(eq(schema.tweetsAnalyzer.username, username))
-                .orderBy(desc(schema.tweetsAnalyzer.evs))
+                .select({ id: schema.tweets.id })
+                .from(schema.tweets)
+                .where(eq(schema.tweets.authorUsername, authorUsername))
+                // .orderBy(desc(schema.tweets.evs)) TODO: add EVS from analytics table
                 .limit(bestNTweets);
 
             const bestTweetIds = bestTweets.map(tweet => tweet.id);
@@ -120,95 +120,95 @@ export class AnalyzerService {
             // Then get media for those specific tweets
             return await db
                 .select({
-                    id: schema.tweetMediaAnalyzer.id,
-                    tweetId: schema.tweetMediaAnalyzer.tweetId,
-                    url: schema.tweetMediaAnalyzer.url,
-                    type: schema.tweetMediaAnalyzer.type,
-                    description: schema.tweetMediaAnalyzer.description,
-                    scrapedAt: schema.tweetMediaAnalyzer.scrapedAt,
-                    updatedAt: schema.tweetMediaAnalyzer.updatedAt
+                    id: schema.tweetMedia.id,
+                    tweetId: schema.tweetMedia.tweetId,
+                    url: schema.tweetMedia.url,
+                    type: schema.tweetMedia.type,
+                    description: schema.tweetMedia.description,
+                    capturedAtUtc: schema.tweetMedia.capturedAtUtc,
+                    updatedAtUtc: schema.tweetMedia.updatedAtUtc
                 })
-                .from(schema.tweetMediaAnalyzer)
-                .innerJoin(schema.tweetsAnalyzer, eq(schema.tweetMediaAnalyzer.tweetId, schema.tweetsAnalyzer.id))
+                .from(schema.tweetMedia)
+                .innerJoin(schema.tweets, eq(schema.tweetMedia.tweetId, schema.tweets.id))
                 .where(and(
-                    eq(schema.tweetsAnalyzer.username, username),
-                    isNull(schema.tweetMediaAnalyzer.description),
-                    inArray(schema.tweetsAnalyzer.id, bestTweetIds)
+                    eq(schema.tweets.authorUsername, authorUsername),
+                    isNull(schema.tweetMedia.description),
+                    inArray(schema.tweets.id, bestTweetIds)
                 ))
-                .orderBy(desc(schema.tweetsAnalyzer.evs));
+                // .orderBy(desc(schema.tweets.evs)); TODO: add EVS from analytics table
         } else {
             // get all media without filtering
             return await db
                 .select({
-                    id: schema.tweetMediaAnalyzer.id,
-                    tweetId: schema.tweetMediaAnalyzer.tweetId,
-                    url: schema.tweetMediaAnalyzer.url,
-                    type: schema.tweetMediaAnalyzer.type,
-                    description: schema.tweetMediaAnalyzer.description,
-                    scrapedAt: schema.tweetMediaAnalyzer.scrapedAt,
-                    updatedAt: schema.tweetMediaAnalyzer.updatedAt
+                    id: schema.tweetMedia.id,
+                    tweetId: schema.tweetMedia.tweetId,
+                    url: schema.tweetMedia.url,
+                    type: schema.tweetMedia.type,
+                    description: schema.tweetMedia.description,
+                    capturedAtUtc: schema.tweetMedia.capturedAtUtc,
+                    updatedAtUtc: schema.tweetMedia.updatedAtUtc
                 })
-                .from(schema.tweetMediaAnalyzer)
-                .innerJoin(schema.tweetsAnalyzer, eq(schema.tweetMediaAnalyzer.tweetId, schema.tweetsAnalyzer.id))
-                .where(and(eq(schema.tweetsAnalyzer.username, username), isNull(schema.tweetMediaAnalyzer.description)))
-                .orderBy(desc(schema.tweetsAnalyzer.evs));
+                .from(schema.tweetMedia)
+                .innerJoin(schema.tweets, eq(schema.tweetMedia.tweetId, schema.tweets.id))
+                .where(and(eq(schema.tweets.authorUsername, authorUsername), isNull(schema.tweetMedia.description)))
+                // .orderBy(desc(schema.tweets.evs)); TODO: add EVS from analytics table
         }
     }
 
     /*
     * Update media descriptions for a tweet after AI processing
     */
-    static async updateMediaDescriptions(media: schema.TweetMediaAnalyzer): Promise<void> {
+    static async updateMediaDescriptions(media: schema.TweetMedia): Promise<void> {
         await getDb()
-            .update(schema.tweetMediaAnalyzer)
+            .update(schema.tweetMedia)
             .set({
                 description: media.description,
-                updatedAt: media.updatedAt
+                updatedAtUtc: media.updatedAtUtc
             })
-            .where(eq(schema.tweetMediaAnalyzer.id, media.id));
+            .where(eq(schema.tweetMedia.id, media.id));
 
         // Update tweet status to indicate visual processing is complete
         const tweetId = media.tweetId;
         await getDb()
-            .update(schema.tweetsAnalyzer)
+            .update(schema.tweets)
             .set({
                 status: 'visual_processed',
-                updatedAt: new Date()
+                updatedAtUtc: new Date()
             })
-            .where(eq(schema.tweetsAnalyzer.id, tweetId));
+            .where(eq(schema.tweets.id, tweetId));
     }
 
-    static async getTweetsAnalysisViewByUsername(username: string, limit?: number): Promise<TweetAnalysisView[]> {
+    static async getTweetsAnalysisViewByUsername(authorUsername: string, limit?: number): Promise<TweetAnalysisView[]> {
         const db = getDb();
 
         // Get tweets with their media using a left join to include tweets without media
         const baseQuery = db
             .select({
-                id: schema.tweetsAnalyzer.id,
-                tweetType: schema.tweetsAnalyzer.type,
-                text: schema.tweetsAnalyzer.text,
-                retweetCount: schema.tweetsAnalyzer.retweetCount,
-                replyCount: schema.tweetsAnalyzer.replyCount,
-                likeCount: schema.tweetsAnalyzer.likeCount,
-                quoteCount: schema.tweetsAnalyzer.quoteCount,
-                viewCount: schema.tweetsAnalyzer.viewCount,
-                bookmarkCount: schema.tweetsAnalyzer.bookmarkCount,
+                id: schema.tweets.id,
+                tweetType: schema.tweets.type,
+                text: schema.tweets.text,
+                retweetCount: schema.tweets.retweetCount,
+                replyCount: schema.tweets.replyCount,
+                likeCount: schema.tweets.likeCount,
+                quoteCount: schema.tweets.quoteCount,
+                viewCount: schema.tweets.viewCount,
+                bookmarkCount: schema.tweets.bookmarkCount,
             })
-            .from(schema.tweetsAnalyzer)
-            .where(eq(schema.tweetsAnalyzer.username, username))
-            .orderBy(desc(schema.tweetsAnalyzer.evs));
+            .from(schema.tweets)
+            .where(eq(schema.tweets.authorUsername, authorUsername))
+            // .orderBy(desc(schema.tweets.evs)); TODO: add EVS from analytics table
 
         const bestTweets = await (limit ? baseQuery.limit(limit) : baseQuery);
 
         // get media for each tweet
         const media = await db
             .select({
-                tweetId: schema.tweetMediaAnalyzer.tweetId,
-                type: schema.tweetMediaAnalyzer.type,
-                description: schema.tweetMediaAnalyzer.description,
+                tweetId: schema.tweetMedia.tweetId,
+                type: schema.tweetMedia.type,
+                description: schema.tweetMedia.description,
             })
-            .from(schema.tweetMediaAnalyzer)
-            .where(inArray(schema.tweetMediaAnalyzer.tweetId, bestTweets.map(tweet => tweet.id)));
+            .from(schema.tweetMedia)
+            .where(inArray(schema.tweetMedia.tweetId, bestTweets.map(tweet => tweet.id)));
 
         return bestTweets.map(tweet => ({
             id: tweet.id,
@@ -241,20 +241,20 @@ export class AnalyzerService {
         // Get tweets and their media in a single query
         const tweetsWithMedia = await db
             .select({
-                tweet: schema.tweetsAnalyzer,
-                media: schema.tweetMediaAnalyzer
+                tweet: schema.tweets,
+                media: schema.tweetMedia
             })
-            .from(schema.tweetsAnalyzer)
+            .from(schema.tweets)
             .leftJoin(
-                schema.tweetMediaAnalyzer,
-                eq(schema.tweetMediaAnalyzer.tweetId, schema.tweetsAnalyzer.id)
+                schema.tweetMedia,
+                eq(schema.tweetMedia.tweetId, schema.tweets.id)
             )
-            .where(inArray(schema.tweetsAnalyzer.id, tweetIds))
-            .orderBy(desc(schema.tweetsAnalyzer.createdAt));
+            .where(inArray(schema.tweets.id, tweetIds))
+            .orderBy(desc(schema.tweets.createdAtUtc));
 
         // Group media by tweet ID
         const mediaByTweetId = new Map<number, Array<{
-            type: schema.TweetMediaAnalyzer['type'];
+            type: schema.TweetMedia['type'];
             description: string | null;
         }>>();
 
@@ -271,7 +271,7 @@ export class AnalyzerService {
         });
 
         // Get unique tweets and combine with their media
-        const uniqueTweets = new Map<number, typeof schema.tweetsAnalyzer.$inferSelect>();
+        const uniqueTweets = new Map<number, typeof schema.tweets.$inferSelect>();
         tweetsWithMedia.forEach(({ tweet }) => {
             uniqueTweets.set(tweet.id, tweet);
         });

@@ -1,3 +1,6 @@
+// Move the existing TwitterClient from packages/ingestion/src/client/twitter.ts
+// This is the same code - just moved to endpoints folder
+
 import { z } from "zod";
 
 /* -------------------------------------------------------------------------- */
