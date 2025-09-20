@@ -2,7 +2,7 @@ import { MCPServer } from "@mastra/mcp";
 import { startWorkflowTool } from "./tools/workflows/start-workflow";
 import { getNextStepTool } from "./tools/workflows/get-next-step";
 import { listWorkflowsTool } from "./tools/workflows/list-workflows";
-import { userTweetsFetcherTool, userTweetsScraperTool } from "./tools/research/twitter-analyser";
+import { userTweetsFetcherTool } from "./tools/research/twitter-analyser";
 import { perplexityAskTool } from "./tools/research/perplexity";
 
 let serverPromise: Promise<MCPServer> | null = null;
@@ -18,7 +18,6 @@ export const createVibeflowMCP = async (): Promise<MCPServer> => {
           getNextStepTool,
           listWorkflowsTool,
           userTweetsFetcherTool,
-          userTweetsScraperTool,
           perplexityAskTool,
           // Temporarily disabled external MCP tools due to schema incompatibility
           // ...(await getMCPClient().getTools()),

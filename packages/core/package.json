@@ -10,7 +10,6 @@
     "yaml": "^2.3.2"
   },
   "scripts": {
-    "test:analyzer": "tsx src/services/database/analyzerService.test.ts",
     "build": "tsup src/index.ts --format esm --sourcemap --dts --out-dir dist",
     "dev": "tsup src/index.ts --format esm --sourcemap --dts --out-dir dist --watch"
   },
