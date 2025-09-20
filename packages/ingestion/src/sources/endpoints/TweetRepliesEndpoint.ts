@@ -8,7 +8,7 @@ export class TweetRepliesEndpoint implements TwitterEndpoint {
     params: { tweetId: string }, 
     cursor?: string
   ) {
-    const response = await this.client.getReplies(params.tweetId, cursor);
+    const response = await this.client.getTweetReplies(params.tweetId, cursor);
 
     return {
       tweets: response.tweets,

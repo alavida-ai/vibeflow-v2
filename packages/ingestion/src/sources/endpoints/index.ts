@@ -1,4 +1,4 @@
-import { ApiTweet } from '../';
+import { ApiTweet, TwitterClient } from '..';
 
 export * from './UserMentionsEndpoint';
 export * from './UserLastTweetsEndpoint';

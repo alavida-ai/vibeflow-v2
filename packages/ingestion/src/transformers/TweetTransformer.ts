@@ -1,4 +1,4 @@
-import { ApiTweet } from '../source/';
+import { ApiTweet } from '../sources';
 import { schema } from '@vibeflow/database';
 import { Transformer, TransformOptions } from '.';
 

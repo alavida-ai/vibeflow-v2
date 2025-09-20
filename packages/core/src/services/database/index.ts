@@ -1,1 +1,1 @@
-export * from "./TwitterService";
+export * from "./twitterService";

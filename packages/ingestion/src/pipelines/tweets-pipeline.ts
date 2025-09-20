@@ -10,6 +10,7 @@ export class TwitterPipeline {
     let hasNextPage = true;
     let pageCount = 0;
     let totalTweets = 0;
+    let savedTweets: schema.TweetWithMedia[] = [];
     const maxPages = options?.maxPages || 100;
     const processorResults: Record<string, any> = {};
 
@@ -29,37 +30,21 @@ export class TwitterPipeline {
         }
 
         // Transform tweets
-        const tweetData: schema.InsertTweetWithMedia[] = response.tweets.map(tweet => 
+        const scrapedTweets: schema.InsertTweetWithMedia[] = response.tweets.map(tweet => 
           this.config.transformer.transform(tweet, {
             source: this.getSourceName()
           })
         );
 
         // Save tweets
-        await this.config.sink.save(tweetData);
-        totalTweets += tweetData.length;
-
-        // Run processors
-        for (const processor of this.config.processors) {
-          try {
-            const result = await processor.process(tweetData);
-            processorResults[processor.name] = result;
-            console.log(`✅ ${processor.name}: ${result.message}`);
-          } catch (error: any) {
-            console.error(`❌ ${processor.name} failed:`, error);
-            processorResults[processor.name] = {
-              success: false,
-              processed: 0,
-              errors: [error.message]
-            };
-          }
-        }
-
+        savedTweets = await this.config.sink.save(scrapedTweets);
+        totalTweets += savedTweets.length;
+        
         // Update pagination
         hasNextPage = response.hasNextPage;
         cursor = response.nextCursor || undefined;
 
-        console.log(`✅ Page ${pageCount}: ${tweetData.length} tweets`);
+        console.log(`✅ Page ${pageCount}: ${savedTweets.length} saved tweets`);
       }
 
       console.log(`🎉 Complete! ${totalTweets} tweets across ${pageCount} pages`);
@@ -67,6 +52,7 @@ export class TwitterPipeline {
       return {
         success: true,
         totalTweets,
+        savedTweets,
         pagesProcessed: pageCount,
         nextCursor: cursor,
         hasMorePages: pageCount >= maxPages && hasNextPage,
@@ -78,6 +64,7 @@ export class TwitterPipeline {
       return {
         success: false,
         totalTweets,
+        savedTweets,
         pagesProcessed: pageCount,
         hasMorePages: false,
         processorResults,

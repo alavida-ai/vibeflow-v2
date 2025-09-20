@@ -1,5 +1,5 @@
 import { schema } from '@vibeflow/database';
-import { ApiTweet } from '../source';
+import { ApiTweet } from '../sources';
 
 export * from './TweetTransformer';
 

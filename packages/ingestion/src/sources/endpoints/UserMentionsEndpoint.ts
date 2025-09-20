@@ -8,7 +8,7 @@ export class UserMentionsEndpoint implements TwitterEndpoint {
     params: { userName: string; sinceTime: Date }, 
     cursor?: string
   ) {
-    const response = await this.client.mentions({
+    const response = await this.client.getUserMentions({
       userName: params.userName,
       sinceTime: params.sinceTime,
       cursor

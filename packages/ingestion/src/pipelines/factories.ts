@@ -1,11 +1,12 @@
-import { TwitterPipeline } from './pipelines/tweets-pipeline';
-import { TwitterClient, UserMentionsEndpoint, UserLastTweetsEndpoint, TweetRepliesEndpoint } from './source';
-import { MediaProcessor } from './processors';
-import { TweetTransformer } from './transformers';
-import { TweetSink } from './sink';
+import { TwitterPipeline } from './tweets-pipeline';
+import { TwitterClient, UserMentionsEndpoint, UserLastTweetsEndpoint, TweetRepliesEndpoint } from '../sources';
+import { MediaProcessor } from '../processors';
+import { TweetTransformer } from '../transformers';
+import { TweetSink } from '../sinks';
 
-export function createMentionsPipeline(apiKey: string): TwitterPipeline {
-  const client = new TwitterClient(apiKey);
+
+export function createMentionsPipeline(): TwitterPipeline {
+  const client = TwitterClient.getInstance();
   
   return new TwitterPipeline({
     source: new UserMentionsEndpoint(client),
@@ -15,21 +16,19 @@ export function createMentionsPipeline(apiKey: string): TwitterPipeline {
   });
 }
 
-export function createUserTweetsPipeline(apiKey: string): TwitterPipeline {
-  const client = new TwitterClient(apiKey);
+export function createUserLastTweetsPipeline(): TwitterPipeline {
+  const client = TwitterClient.getInstance();
   
   return new TwitterPipeline({
     source: new UserLastTweetsEndpoint(client),
     transformer: new TweetTransformer(),
     sink: new TweetSink(),
-    processors: [
-      new MediaProcessor()
-    ]
+    processors: []
   });
 }
 
-export function createRepliesPipeline(apiKey: string): TwitterPipeline {
-  const client = new TwitterClient(apiKey);
+export function createRepliesPipeline(): TwitterPipeline {
+  const client = TwitterClient.getInstance();
   
   return new TwitterPipeline({
     source: new TweetRepliesEndpoint(client),
@@ -41,13 +40,12 @@ export function createRepliesPipeline(apiKey: string): TwitterPipeline {
 
 // Custom pipeline builder
 export function createCustomPipeline(config: {
-  apiKey: string;
   endpoint: 'mentions' | 'userTweets' | 'replies';
   storage: 'listener' | 'analyzer';
   includeMediaProcessing?: boolean;
   includeEvs?: boolean;
 }): TwitterPipeline {
-  const client = new TwitterClient(config.apiKey);
+  const client = TwitterClient.getInstance();
   
   let endpoint;
   switch (config.endpoint) {
@@ -77,3 +75,6 @@ export function createCustomPipeline(config: {
     processors
   });
 }
+
+// Re-export TwitterClient static methods for testing
+export const resetTwitterClient = TwitterClient.resetInstance;

@@ -2,8 +2,8 @@ import { createWorkflow, createStep } from "@mastra/core/workflows";
 import { z } from "zod";
 import { RuntimeContext } from "@mastra/core/runtime-context";
 import { Mastra } from "@mastra/core";
-import { AnalyzerService } from "@vibeflow/core";
-import { TwitterAnalyser } from '@vibeflow/ingestion';
+import { generateVisualDescription, TwitterService } from "@vibeflow/core";
+import { createUserLastTweetsPipeline } from '@vibeflow/ingestion';
 
 type WorkflowContext = {
   username: string;
@@ -30,14 +30,14 @@ const FrameworkSchema = z.object({
 
 const FrameworksArraySchema = z.array(FrameworkSchema);
 
-const twitterScraperStep = createStep({
+const fetchTweetsStep = createStep({
   id: "twitter-scraper",
   description: "Scrape Twitter user and get tweet data without processing media",
   inputSchema: z.object({
     username: z.string()
   }),
   outputSchema: z.object({
-    totalTweets: z.number(),
+    tweetIds: z.array(z.number()),
     username: z.string()
   }),
   execute: async ({ inputData, mastra, runtimeContext }: {
@@ -57,26 +57,23 @@ const twitterScraperStep = createStep({
     const { username } = inputData;
 
     try {
-      const twitterAnalyser = new TwitterAnalyser({
-        userName: username,
-        maxPages: 10,
-        processMedia: false
-      });
-      const tweetsForOutput = await twitterAnalyser.run();
+      
+      const tweetIngestionPipeline = createUserLastTweetsPipeline();
+      const pipelineResult = await tweetIngestionPipeline.run({ username }, { maxPages: 1 });
 
       // Validate the response
-      if (!tweetsForOutput || !tweetsForOutput.ingestionResult) {
+      if (!pipelineResult || !pipelineResult.savedTweets) {
         throw new Error('Twitter analysis returned invalid result');
       }
 
-      const totalTweetsViews = await AnalyzerService.getTweetsAnalysisViewByUsername(username);
+      const tweets = pipelineResult.savedTweets;
 
-      const totalTweets = totalTweetsViews.length;
+      const totalTweets = tweets.length;
 
-      console.log(`✅ Twitter analysis completed. Total tweets: ${totalTweets}`);
+      logger.info(`✅ Fetched ${totalTweets} tweets`);
 
       return {
-        totalTweets: totalTweets,
+        tweetIds: tweets.map(tweet => tweet.id),
         username: username
       };
     } catch (error) {
@@ -90,7 +87,7 @@ const generateMediaDescriptionsStep = createStep({
   id: "generate-media-descriptions",
   description: "Generate AI descriptions for media in the best performing tweets",
   inputSchema: z.object({
-    totalTweets: z.number(),
+    tweetIds: z.array(z.number()),
     username: z.string()
   }),
   outputSchema: z.object({
@@ -98,7 +95,7 @@ const generateMediaDescriptionsStep = createStep({
     username: z.string()
   }),
   execute: async ({ inputData, mastra, runtimeContext }: {
-    inputData: { totalTweets: number, username: string },
+    inputData: { tweetIds: number[], username: string },
     mastra: Mastra,
     runtimeContext: RuntimeContext<WorkflowContext>
   }) => {
@@ -112,18 +109,44 @@ const generateMediaDescriptionsStep = createStep({
     });
 
     try {
-      // Import TwitterAnalyser and generate media descriptions for best 10 tweets
-      const { TwitterAnalyser } = await import('@vibeflow/ingestion');
+      // generate media descriptions for best 10 tweets
+      const tweetsIds = inputData.tweetIds;
 
-      const twitterAnalyser = new TwitterAnalyser({
-        userName: inputData.username,
-        maxPages: 1, // Not used since we're only calling generateMediaDescriptions
-        processMedia: false // Not used since we're calling the method directly
-      });
+      // TODO: following logic belongs in core, it will return media processed
+      const mediaItems = await TwitterService.getMediaByTweetIds(tweetsIds);
 
-      // Generate media descriptions for the best 10 tweets
-      const mediaProcessed = await twitterAnalyser.generateMediaDescriptions(10);
-
+      if (mediaItems.length === 0) {
+        logger.info("No media items found that need description generation");
+        return {
+          mediaProcessed: 0,
+          username: inputData.username
+        };
+      }
+      
+      console.log(`Found ${mediaItems.length} media items to process`);
+      
+      // Process all media descriptions in parallel with error handling
+      const results = await Promise.allSettled(
+        mediaItems.map(async (media: any) => {
+          try {
+            const description = await generateVisualDescription(media.type, media.url);
+            media.description = description;
+            media.updatedAt = new Date();
+            await TwitterService.updateMediaDescriptions(media);
+            return true;
+          } catch (error) {
+            console.error(`❌ Failed to process media ${media.id}:`, error);
+            return false;
+          }
+        })
+      );
+      
+      const mediaProcessed = results.filter(
+        (result: any) => result.status === 'fulfilled' && result.value === true
+      ).length;
+      
+      console.log(`✅ Successfully processed ${mediaProcessed} of ${mediaItems.length} media items`);
+      
       logger.info('Media descriptions generation completed', {
         stepId,
         username: inputData.username,
@@ -469,7 +492,7 @@ const calculateMetricsStep = createStep({
             totalPosts += tweetDbIds.length;
 
             // Fetch tweets by their internal database IDs
-            const tweets = await AnalyzerService.getTweetsByIds(tweetDbIds);
+            const tweets = await TwitterService.getTweetsByIds(tweetDbIds);
 
             if (tweets.length > 0) {
               const totalViews = tweets.reduce((sum, tweet) => sum + (tweet.viewCount || 0), 0);
@@ -587,7 +610,7 @@ export const twitterFrameworkAnalysisWorkflow = createWorkflow({
     username: z.string()
   })
 })
-  .then(twitterScraperStep)
+  .then(fetchTweetsStep)
   .then(generateMediaDescriptionsStep)
   .then(frameworkAnalysisStep)
   .then(parseFrameworksStep)

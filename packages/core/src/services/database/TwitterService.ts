@@ -155,6 +155,20 @@ export class TwitterService {
         }
     }
 
+    static async getMediaByTweetIds(tweetIds: number[]): Promise<schema.TweetMedia[]> {
+        const db = getDb();
+
+        return await db
+            .select()
+            .from(schema.tweetMedia)
+            .where(
+                and(
+                    inArray(schema.tweetMedia.tweetId, tweetIds), 
+                    isNull(schema.tweetMedia.description)
+                )
+            );
+    }
+
     /*
     * Update media descriptions for a tweet after AI processing
     */
@@ -168,7 +182,7 @@ export class TwitterService {
             .where(eq(schema.tweetMedia.id, media.id));
     }
 
-    static async getTweetsAnalysisViewByUsername(authorUsername: string, limit?: number): Promise<TweetView[]> {
+    static async getTweetsViewByUsername(authorUsername: string, limit?: number): Promise<TweetView[]> {
         const db = getDb();
 
         // Get tweets with their media using a left join to include tweets without media

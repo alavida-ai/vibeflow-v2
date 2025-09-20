@@ -8,7 +8,7 @@ export class UserLastTweetsEndpoint implements TwitterEndpoint {
     params: { userName: string }, 
     cursor?: string
   ) {
-    const response = await this.client.getLastTweets(params.userName, cursor);
+    const response = await this.client.getUserLastTweets(params.userName, cursor);
 
     // Handle the "data" wrapper in LastTweetsApiResponse
     return {

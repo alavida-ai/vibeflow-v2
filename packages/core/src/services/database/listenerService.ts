@@ -24,24 +24,6 @@ export const REPLIED_TWEET_STATUS = schema.replyStatusConstants.responded;
 /*                              FUNCTIONS                                     */
 /* -------------------------------------------------------------------------- */
 
-export async function insertTweetsAndIgnoreDuplicates(tweets: schema.InsertTweet[]) {
-    try {
-        const db = getDb();
-        const result = await db
-            .insert(schema.tweets)
-            .values(tweets)
-            .onConflictDoNothing(
-                {
-                    target: [schema.tweets.id]
-                }
-            ).returning();
-        return result;
-    } catch (error) {
-        console.error("Error inserting tweets", error);
-        throw error;
-    }
-}
-
 export async function getPendingTweets() {
     try {
         const db = getDb();
@@ -74,7 +56,11 @@ export async function addReplyToTweet(tweetId: number, reply: string, reasoning:
         const db = getDb();
 
         // First check if tweet exists
-        const tweet = await db.select().from(schema.tweets).where(eq(schema.tweets.id, tweetId)).limit(1);
+        const tweet = await db
+            .select()
+            .from(schema.tweets)
+            .where(eq(schema.tweets.id, tweetId))
+            .limit(1);
         if (tweet.length === 0) {
             throw new Error("Tweet not found");
         }
@@ -122,7 +108,7 @@ export async function getMostRelevantTweetsToReplyTo({
                 tweet: schema.tweets,
                 analytics: schema.tweetAnalytics
             })
-            .from(schema.tweets)
+            .from(schema.tweetAnalytics)
             .innerJoin(
                 schema.tweetAnalytics,
                 eq(schema.tweets.id, schema.tweetAnalytics.tweetId)

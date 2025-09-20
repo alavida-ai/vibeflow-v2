@@ -111,9 +111,27 @@ export const LAST_TWEETS_ENDPOINT = '/twitter/user/last_tweets';
 
 export class TwitterClient {
   private readonly apiKey: string;
+  private static _instance: TwitterClient | null = null;
 
   constructor(apiKey: string) {
     this.apiKey = apiKey;
+  }
+
+  // Singleton pattern with lazy loading
+  static getInstance(): TwitterClient {
+    if (TwitterClient._instance === null) {
+      if (!process.env.TWITTER_API_KEY) {
+        throw new Error("TWITTER_API_KEY is not set");
+      }
+      TwitterClient._instance = new TwitterClient(process.env.TWITTER_API_KEY);
+      console.log('📡 TwitterClient initialized');
+    }
+    return TwitterClient._instance;
+  }
+
+  // Reset singleton (useful for testing)
+  static resetInstance(): void {
+    TwitterClient._instance = null;
   }
 
   private async makeRequest(url: string): Promise<unknown> {
@@ -135,7 +153,12 @@ export class TwitterClient {
     return data;
   }
 
-  async mentions({
+  /* -------------------------------------------------------------------------- */
+  /*                              ENDPOINTS                                     */
+  /* -------------------------------------------------------------------------- */
+
+
+  async getUserMentions({
     userName,
     sinceTime,
     cursor
@@ -165,7 +188,7 @@ export class TwitterClient {
     }
   }
 
-  async getReplies(tweetId: string, cursor?: string): Promise<TweetsApiResponse> {
+  async getTweetReplies(tweetId: string, cursor?: string): Promise<TweetsApiResponse> {
     try {
       const url = new URL(REPLIES_ENDPOINT, TWITTER_API_BASE_URL);
       url.searchParams.set('tweetId', tweetId);
@@ -181,7 +204,7 @@ export class TwitterClient {
     }
   }
 
-  async getLastTweets(userName: string, cursor?: string): Promise<UserLastTweetsApiResponse> {
+  async getUserLastTweets(userName: string, cursor?: string): Promise<UserLastTweetsApiResponse> {
     try {
       const url = new URL(LAST_TWEETS_ENDPOINT, TWITTER_API_BASE_URL);
       url.searchParams.set('userName', userName);
