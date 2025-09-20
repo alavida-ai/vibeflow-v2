@@ -1,1 +1,12 @@
+import { schema } from '@vibeflow/database';
+import { ApiTweet } from '../source';
+
 export * from './TweetTransformer';
+
+export interface TransformOptions {
+    source: (typeof schema.sourceConstants)[keyof typeof schema.sourceConstants];
+}
+
+export interface Transformer {
+    transform(tweet: ApiTweet, options: TransformOptions): schema.InsertTweetWithMedia;
+}

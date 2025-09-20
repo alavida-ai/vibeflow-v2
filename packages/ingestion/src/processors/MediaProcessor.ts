@@ -1,4 +1,4 @@
-import { TweetProcessor, ProcessorResult } from '../pipeline/types';
+import { TweetProcessor, ProcessorResult } from '.';
 import { generateVisualDescription, TwitterService } from '@vibeflow/core';
 import { schema } from '@vibeflow/database';
 

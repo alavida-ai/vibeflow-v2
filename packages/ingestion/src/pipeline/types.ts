@@ -1,29 +1,12 @@
-// packages/ingestion/src/pipeline/types.ts
-import { ApiTweet } from '../source';
-import { schema } from '@vibeflow/database';
-
-export interface TwitterEndpoint {
-    fetch(params: any, cursor?: string): Promise<{
-        tweets: ApiTweet[];
-        hasNextPage: boolean;
-        nextCursor?: string | null;
-    }>;
-}
-
-export interface TweetProcessor {
-    name: string;
-    process(tweets: schema.InsertTweetWithMedia[]): Promise<ProcessorResult>;
-}
-
-export interface ProcessorResult {
-    success: boolean;
-    processed: number;
-    message?: string;
-    errors?: string[];
-}
+import { TwitterEndpoint } from '../source/endpoints';
+import { Transformer } from '../transformers';
+import { Sink } from '../sink';
+import { TweetProcessor, ProcessorResult } from '../processors';
 
 export interface PipelineConfig {
     endpoint: TwitterEndpoint;
+    transformer: Transformer;
+    sink: Sink;
     processors: TweetProcessor[];
 }
 

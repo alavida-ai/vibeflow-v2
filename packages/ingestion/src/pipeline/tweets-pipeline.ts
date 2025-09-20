@@ -1,13 +1,8 @@
 // packages/ingestion/src/pipeline/TwitterPipeline.ts
 import { PipelineConfig, PipelineOptions, PipelineResult } from './types';
 import { schema } from '@vibeflow/database';
-import { TweetTransformer } from '../transformers/TweetTransformer';
-import { TweetSink } from '../sink/TweetSink';
 
 export class TwitterPipeline {
-  private transformer = new TweetTransformer();
-  private sink = new TweetSink();
-
   constructor(private config: PipelineConfig) {}
 
   async run(params: any, options?: PipelineOptions): Promise<PipelineResult> {
@@ -35,13 +30,13 @@ export class TwitterPipeline {
 
         // Transform tweets
         const tweetData: schema.InsertTweetWithMedia[] = response.tweets.map(tweet => 
-          this.transformer.transform(tweet, {
+          this.config.transformer.transform(tweet, {
             source: this.getSourceName()
           })
         );
 
         // Save tweets
-        await this.sink.save(tweetData, this.config.storage);
+        await this.config.sink.save(tweetData, this.config.storage);
         totalTweets += tweetData.length;
 
         // Run processors
@@ -91,7 +86,20 @@ export class TwitterPipeline {
     }
   }
 
-  private getSourceName(): string {
-    return this.config.endpoint.constructor.name.replace('Endpoint', '').toLowerCase();
+  private getSourceName(): (typeof schema.sourceConstants)[keyof typeof schema.sourceConstants] {
+    const endpointName = this.config.endpoint.constructor.name.replace('Endpoint', '').toLowerCase();
+    
+    // Map endpoint class names to source constants
+    switch (endpointName) {
+      case 'usermentions':
+        return 'user-mentions';
+      case 'userlasttweets':
+        return 'user-last-tweets';
+      case 'replies':
+        return 'tweet-replies';
+      default:
+        // Default fallback
+        return 'user-mentions';
+    }
   }
 }
