@@ -1,12 +1,16 @@
 import { TwitterPipeline } from './pipeline/tweets-pipeline';
 import { TwitterClient, UserMentionsEndpoint, UserLastTweetsEndpoint, TweetRepliesEndpoint } from './source';
 import { MediaProcessor } from './processors';
+import { TweetTransformer } from './transformers';
+import { TweetSink } from './sink';
 
 export function createMentionsPipeline(apiKey: string): TwitterPipeline {
   const client = new TwitterClient(apiKey);
   
   return new TwitterPipeline({
-    endpoint: new UserMentionsEndpoint(client),
+    source: new UserMentionsEndpoint(client),
+    transformer: new TweetTransformer(),
+    sink: new TweetSink(),
     processors: []
   });
 }
@@ -15,7 +19,9 @@ export function createUserTweetsPipeline(apiKey: string): TwitterPipeline {
   const client = new TwitterClient(apiKey);
   
   return new TwitterPipeline({
-    endpoint: new UserLastTweetsEndpoint(client),
+    source: new UserLastTweetsEndpoint(client),
+    transformer: new TweetTransformer(),
+    sink: new TweetSink(),
     processors: [
       new MediaProcessor()
     ]
@@ -26,7 +32,9 @@ export function createRepliesPipeline(apiKey: string): TwitterPipeline {
   const client = new TwitterClient(apiKey);
   
   return new TwitterPipeline({
-    endpoint: new TweetRepliesEndpoint(client),
+    source: new TweetRepliesEndpoint(client),
+    transformer: new TweetTransformer(),
+    sink: new TweetSink(),
     processors: []
   });
 }
@@ -63,7 +71,9 @@ export function createCustomPipeline(config: {
   }
   
   return new TwitterPipeline({
-    endpoint,
+    source: endpoint,
+    transformer: new TweetTransformer(),
+    sink: new TweetSink(),
     processors
   });
 }

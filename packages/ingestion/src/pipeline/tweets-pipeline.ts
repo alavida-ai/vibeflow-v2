@@ -21,7 +21,7 @@ export class TwitterPipeline {
         console.log(`📄 Page ${pageCount}${cursor ? ` (cursor: ${cursor})` : ''}`);
 
         // Fetch tweets
-        const response = await this.config.endpoint.fetch(params, cursor);
+        const response = await this.config.source.fetch(params, cursor);
         
         if (response.tweets.length === 0) {
           console.log("No tweets found");
@@ -36,7 +36,7 @@ export class TwitterPipeline {
         );
 
         // Save tweets
-        await this.config.sink.save(tweetData, this.config.storage);
+        await this.config.sink.save(tweetData);
         totalTweets += tweetData.length;
 
         // Run processors
@@ -87,7 +87,7 @@ export class TwitterPipeline {
   }
 
   private getSourceName(): (typeof schema.sourceConstants)[keyof typeof schema.sourceConstants] {
-    const endpointName = this.config.endpoint.constructor.name.replace('Endpoint', '').toLowerCase();
+    const endpointName = this.config.source.constructor.name.replace('Endpoint', '').toLowerCase();
     
     // Map endpoint class names to source constants
     switch (endpointName) {

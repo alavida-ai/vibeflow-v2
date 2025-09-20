@@ -4,7 +4,7 @@ import { Sink } from '../sink';
 import { TweetProcessor, ProcessorResult } from '../processors';
 
 export interface PipelineConfig {
-    endpoint: TwitterEndpoint;
+    source: TwitterEndpoint;
     transformer: Transformer;
     sink: Sink;
     processors: TweetProcessor[];
@@ -21,6 +21,6 @@ export interface PipelineResult {
     pagesProcessed: number;
     nextCursor?: string;
     hasMorePages: boolean;
-    processorResults: Record<string, ProcessorResult>;
+    processorResults?: Record<string, ProcessorResult>;
     error?: string;
 }
