@@ -8,6 +8,7 @@ import { eq, inArray, gt, and, ne, desc, or, isNull } from "drizzle-orm";
 export type TweetCandidate = {
     tweet: schema.Tweet;
     analytics: schema.TweetAnalytics;
+    reply: schema.TweetReply;
 }
 
 /* -------------------------------------------------------------------------- */
@@ -106,7 +107,8 @@ export async function getMostRelevantTweetsToReplyTo({
         const result = await db
             .select({
                 tweet: schema.tweets,
-                analytics: schema.tweetAnalytics
+                analytics: schema.tweetAnalytics,
+                reply: schema.tweetReplies
             })
             .from(schema.tweetAnalytics)
             .innerJoin(
@@ -283,14 +285,15 @@ export async function getTweetCandidates(): Promise<TweetCandidate[]> {
         const result = await db
             .select({
                 tweet: schema.tweets,
-                analytics: schema.tweetAnalytics
+                analytics: schema.tweetAnalytics,
+                reply: schema.tweetReplies
             })
             .from(schema.tweets)
             .innerJoin(
                 schema.tweetAnalytics,
                 eq(schema.tweets.id, schema.tweetAnalytics.tweetId)
             )
-            .leftJoin(
+            .innerJoin(
                 schema.tweetReplies,
                 eq(schema.tweets.id, schema.tweetReplies.tweetId)
             )

@@ -28,7 +28,7 @@ export async function replyToTweet({
     tweet
 }: {
     tweet: schema.Tweet
-}) : Promise<schema.Tweet> {
+}) : Promise<schema.TweetReply> {
     try {
         const vibeflowAgentClient = new VibeflowAgentClient(VIBEFLOW_BASE_URL);
         console.log("Creating reply guy agent");
@@ -41,15 +41,15 @@ export async function replyToTweet({
         }
         const parsedTags = parseAgentResponse(text);
         const updatedTweet = await TwitterDatabaseService.addReplyToTweet(
-            tweet.tweetId,
+            tweet.id,
             parsedTags.response,
             parsedTags.reasoning
         );
         return updatedTweet;
     } catch (error) {
         console.error("Error replying to tweet", error);
-        await TwitterDatabaseService.addErrorToTweet(
-            tweet.tweetId,
+        await TwitterDatabaseService.addErrorToTweetReply(
+            tweet.id,
             error instanceof Error ? error.message : String(error)
         );
         throw error;
@@ -60,7 +60,7 @@ export async function batchReplyToTweets({
     tweets,
 }: {
     tweets: schema.Tweet[];
-}) : Promise<schema.Tweet[]> {
+}) : Promise<schema.TweetReply[]> {
     return Promise.all(
         tweets.map((tweet) => replyToTweet({ tweet }))
     );
