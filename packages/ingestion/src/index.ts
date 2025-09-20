@@ -1,5 +1,5 @@
 // Core pipeline
-export * from './pipeline';
+export * from './pipelines';
 export * from './source';
 export * from './transformers';
 export * from './sink';

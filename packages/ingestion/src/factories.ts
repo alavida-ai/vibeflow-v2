@@ -1,4 +1,4 @@
-import { TwitterPipeline } from './pipeline/tweets-pipeline';
+import { TwitterPipeline } from './pipelines/tweets-pipeline';
 import { TwitterClient, UserMentionsEndpoint, UserLastTweetsEndpoint, TweetRepliesEndpoint } from './source';
 import { MediaProcessor } from './processors';
 import { TweetTransformer } from './transformers';
