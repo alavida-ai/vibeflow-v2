@@ -7,5 +7,6 @@ export const createStorage = () => {
 
   return new PostgresStore({
     connectionString: process.env.DATABASE_URL!,
+    schemaName: "mastra"
   })
-}   
+}

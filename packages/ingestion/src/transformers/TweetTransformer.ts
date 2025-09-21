@@ -41,9 +41,6 @@ export class TweetTransformer implements Transformer {
             // Metadata
             source: options.source,
             rawJson: tweet,
-
-            // Unified fields
-            type: this.determineTweetType(tweet),
         };
 
         const media = this.extractMedia(tweet);
@@ -56,11 +53,17 @@ export class TweetTransformer implements Transformer {
         return result;
     }
 
-    // TODO: can this be matched with the schema.tweetMediaTypeEnum?
-    private determineTweetType(tweet: ApiTweet): "text" | "image" | "video" | "animated_gif" {
-        const media = tweet.extendedEntities?.media;
-        if (!media || media.length === 0) return "text";
-        return media[0].type as "text" | "image" | "video" | "animated_gif";
+    private mapApiMediaTypeToDbType(apiType: string): typeof schema.tweetMediaTypeEnumSchema._type {
+        switch (apiType) {
+            case "photo":
+                return "photo";
+            case "video":
+                return "video";
+            case "animated_gif":
+                return "animated_gif";
+            default:
+                throw new Error(`Unknown media type: ${apiType}`);
+        }
     }
 
     private extractMedia(tweet: ApiTweet): schema.InsertTweetMediaWithoutTweetId[] {
@@ -69,14 +72,12 @@ export class TweetTransformer implements Transformer {
 
         return mediaArr.map((media) => {
             if (media.type === 'video' && media.video_info && Array.isArray(media.video_info.variants)) {
-                // Find the highest-bitrate MP4 variant
-                const mp4s = media.video_info.variants.filter((v: any) => v.content_type === 'video/mp4');
-                let best = mp4s[0];
-                for (const variant of mp4s) {
-                    if (!best || (variant.bitrate && (!best.bitrate || variant.bitrate > best.bitrate))) {
-                        best = variant;
-                    }
-                }
+                // Find the highest-bitrate MP4 variant (filter out variants without bitrate)
+                const mp4s = media.video_info.variants
+                    .filter((v: any) => v.content_type === 'video/mp4' && v.bitrate)
+                    .sort((a: any, b: any) => b.bitrate - a.bitrate);
+                
+                const best = mp4s[0] || media.video_info.variants[0]; // fallback to first variant if no MP4 with bitrate
                 return {
                     tweetId: tweet.id,
                     type: 'video' as const,
@@ -88,7 +89,7 @@ export class TweetTransformer implements Transformer {
             } else {
                 return {
                     tweetId: tweet.id,
-                    type: media.type as "text" | "image" | "video" | "animated_gif",
+                    type: this.mapApiMediaTypeToDbType(media.type),
                     url: media.media_url_https,
                     description: null,
                     createdAt: new Date(),

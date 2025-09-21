@@ -6,7 +6,7 @@ export class TwitterPipeline {
   constructor(private config: PipelineConfig) {}
 
   async run(params: any, options?: PipelineOptions): Promise<PipelineResult> {
-    let cursor = options?.cursor;
+    let cursor: string | undefined = undefined;
     let hasNextPage = true;
     let pageCount = 0;
     let totalTweets = 0;

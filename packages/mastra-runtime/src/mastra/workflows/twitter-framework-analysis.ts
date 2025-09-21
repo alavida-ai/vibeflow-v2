@@ -59,7 +59,7 @@ const fetchTweetsStep = createStep({
     try {
       
       const tweetIngestionPipeline = createUserLastTweetsPipeline();
-      const pipelineResult = await tweetIngestionPipeline.run({ username }, { maxPages: 1 });
+      const pipelineResult = await tweetIngestionPipeline.run({ userName: username }, { maxPages: 1 });
 
       // Validate the response
       if (!pipelineResult || !pipelineResult.savedTweets) {

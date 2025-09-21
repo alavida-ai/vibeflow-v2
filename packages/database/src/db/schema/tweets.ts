@@ -8,6 +8,7 @@ import {
   jsonb,
   boolean,
   index,
+  uniqueIndex,
   decimal
 } from 'drizzle-orm/pg-core';
 import { relations } from 'drizzle-orm';
@@ -43,8 +44,7 @@ export type TweetSourceEnum = z.infer<typeof tweetSourceEnumSchema>;
 
 // Media type enum
 export const tweetMediaTypeEnumSchema = z.enum([
-  "text",
-  "image",
+  "photo",
   "video",
   "animated_gif"
 ]);
@@ -94,8 +94,6 @@ export const tweets = pgTable("tweets", {
   source: tweetSourceEnum("source").notNull().default("user-mentions"),
   rawJson: jsonb("raw_json").notNull(), // full payload for reprocessing
 
-  /** Media type */
-  type: tweetMediaTypeEnum("type").notNull().default("text"),
 }, (table) => [
   index("idx_tweets_api_id").on(table.apiId),
   // Analytics optimization indexes
@@ -103,8 +101,7 @@ export const tweets = pgTable("tweets", {
   index("idx_tweets_captured_time").on(table.capturedAtUtc),
   index("idx_tweets_author_updated").on(table.authorId, table.updatedAtUtc),
   index("idx_tweets_language").on(table.language),
-  index("idx_tweets_source").on(table.source),
-  index("idx_tweets_type").on(table.type),
+  index("idx_tweets_source").on(table.source)
 ]);
 
 // Tweet analytics table for storing computed engagement scores and metrics
@@ -162,11 +159,15 @@ export const tweetMedia = pgTable("tweet_media", {
   id: integer().primaryKey().generatedAlwaysAsIdentity(),
   tweetId: integer('tweet_id').notNull().references(() => tweets.id, { onDelete: 'cascade' }),
   url: text("url").notNull(),
-  type: tweetMediaTypeEnum("type").notNull().default("text"),
+  type: tweetMediaTypeEnum("type").notNull(),
   description: text("description"),
   capturedAtUtc: timestamp("captured_at_utc", { withTimezone: true }).defaultNow(),
   updatedAtUtc: timestamp("updated_at_utc", { withTimezone: true }).defaultNow(),
-});
+}, (table) => [
+  index("idx_tweet_media_tweet_id").on(table.tweetId),
+  // Unique constraint to prevent duplicate media for the same tweet
+  uniqueIndex("idx_tweet_media_unique").on(table.tweetId, table.url),
+]);
 
 // Define relations
 export const tweetsRelations = relations(tweets, ({ many, one }) => ({

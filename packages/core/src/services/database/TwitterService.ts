@@ -7,7 +7,6 @@ import { eq, and, isNull, desc, inArray } from 'drizzle-orm';
 // Type for the getBestPerformingTweetsByUsernameView return value
 export type TweetView = {
     id: number;
-    type: schema.Tweet['type'];
     text: string;
     retweetCount: number;
     replyCount: number;
@@ -92,7 +91,7 @@ export class TwitterService {
             await getDb()
                 .insert(schema.tweetMedia)
                 .values(mediaToInsert)
-                .onConflictDoNothing({ target: schema.tweetMedia.tweetId }); // don't overwrite existing tweet's media
+                .onConflictDoNothing({ target: [schema.tweetMedia.tweetId, schema.tweetMedia.url] }); // unique by tweetId + url
         }
 
         return await getDb()
@@ -189,7 +188,6 @@ export class TwitterService {
         const baseQuery = db
             .select({
                 id: schema.tweets.id,
-                tweetType: schema.tweets.type,
                 text: schema.tweets.text,
                 retweetCount: schema.tweets.retweetCount,
                 replyCount: schema.tweets.replyCount,
@@ -216,7 +214,6 @@ export class TwitterService {
 
         return bestTweets.map(tweet => ({
             id: tweet.id,
-            type: tweet.tweetType,
             text: tweet.text,
             retweetCount: tweet.retweetCount,
             replyCount: tweet.replyCount,
@@ -282,7 +279,6 @@ export class TwitterService {
 
         return Array.from(uniqueTweets.values()).map(tweet => ({
             id: tweet.id,
-            type: tweet.type,
             text: tweet.text,
             retweetCount: tweet.retweetCount,
             replyCount: tweet.replyCount,

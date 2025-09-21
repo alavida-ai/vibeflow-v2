@@ -1,4 +1,4 @@
-CREATE TYPE "public"."tweet_media_type" AS ENUM('text', 'image', 'video', 'animated_gif');--> statement-breakpoint
+CREATE TYPE "public"."tweet_media_type" AS ENUM('photo', 'video', 'animated_gif');--> statement-breakpoint
 CREATE TYPE "public"."tweet_reply_status" AS ENUM('pending', 'processed', 'notified', 'ready_to_respond', 'responded', 'ignored', 'error');--> statement-breakpoint
 CREATE TYPE "public"."tweet_source" AS ENUM('user-mentions', 'tweet-replies', 'user-last-tweets');--> statement-breakpoint
 CREATE TABLE "tweet_analytics" (
@@ -20,7 +20,7 @@ CREATE TABLE "tweet_media" (
 	"id" integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY (sequence name "tweet_media_id_seq" INCREMENT BY 1 MINVALUE 1 MAXVALUE 2147483647 START WITH 1 CACHE 1),
 	"tweet_id" integer NOT NULL,
 	"url" text NOT NULL,
-	"type" "tweet_media_type" DEFAULT 'text' NOT NULL,
+	"type" "tweet_media_type" NOT NULL,
 	"description" text,
 	"captured_at_utc" timestamp with time zone DEFAULT now(),
 	"updated_at_utc" timestamp with time zone DEFAULT now()
@@ -62,7 +62,6 @@ CREATE TABLE "tweets" (
 	"updated_at_utc" timestamp with time zone DEFAULT now() NOT NULL,
 	"source" "tweet_source" DEFAULT 'user-mentions' NOT NULL,
 	"raw_json" jsonb NOT NULL,
-	"type" "tweet_media_type" DEFAULT 'text' NOT NULL,
 	CONSTRAINT "tweets_api_id_unique" UNIQUE("api_id")
 );
 --> statement-breakpoint
@@ -73,6 +72,8 @@ CREATE INDEX "idx_tweet_analytics_tweet_id" ON "tweet_analytics" USING btree ("t
 CREATE INDEX "idx_tweet_analytics_final_score" ON "tweet_analytics" USING btree ("final_score");--> statement-breakpoint
 CREATE INDEX "idx_tweet_analytics_should_reply" ON "tweet_analytics" USING btree ("should_reply");--> statement-breakpoint
 CREATE INDEX "idx_tweet_analytics_computed_at" ON "tweet_analytics" USING btree ("computed_at_utc");--> statement-breakpoint
+CREATE INDEX "idx_tweet_media_tweet_id" ON "tweet_media" USING btree ("tweet_id");--> statement-breakpoint
+CREATE UNIQUE INDEX "idx_tweet_media_unique" ON "tweet_media" USING btree ("tweet_id","url");--> statement-breakpoint
 CREATE INDEX "idx_tweet_replies_tweet_id" ON "tweet_replies" USING btree ("tweet_id");--> statement-breakpoint
 CREATE INDEX "idx_tweet_replies_status" ON "tweet_replies" USING btree ("status");--> statement-breakpoint
 CREATE INDEX "idx_tweet_replies_updated" ON "tweet_replies" USING btree ("updated_at_utc");--> statement-breakpoint
@@ -81,5 +82,4 @@ CREATE INDEX "idx_tweets_created_time" ON "tweets" USING btree ("created_at_utc"
 CREATE INDEX "idx_tweets_captured_time" ON "tweets" USING btree ("captured_at_utc");--> statement-breakpoint
 CREATE INDEX "idx_tweets_author_updated" ON "tweets" USING btree ("author_id","updated_at_utc");--> statement-breakpoint
 CREATE INDEX "idx_tweets_language" ON "tweets" USING btree ("lang");--> statement-breakpoint
-CREATE INDEX "idx_tweets_source" ON "tweets" USING btree ("source");--> statement-breakpoint
-CREATE INDEX "idx_tweets_type" ON "tweets" USING btree ("type");
+CREATE INDEX "idx_tweets_source" ON "tweets" USING btree ("source");

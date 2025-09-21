@@ -1,5 +1,5 @@
 {
-  "id": "78b96096-3f66-4270-ba15-fd5a72e0d271",
+  "id": "63f8b945-4ae3-41fe-8b9a-b3aa52ea56ca",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -223,8 +223,7 @@
           "type": "tweet_media_type",
           "typeSchema": "public",
           "primaryKey": false,
-          "notNull": true,
-          "default": "'text'"
+          "notNull": true
         },
         "description": {
           "name": "description",
@@ -247,7 +246,44 @@
           "default": "now()"
         }
       },
-      "indexes": {},
+      "indexes": {
+        "idx_tweet_media_tweet_id": {
+          "name": "idx_tweet_media_tweet_id",
+          "columns": [
+            {
+              "expression": "tweet_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "idx_tweet_media_unique": {
+          "name": "idx_tweet_media_unique",
+          "columns": [
+            {
+              "expression": "tweet_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "url",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
       "foreignKeys": {
         "tweet_media_tweet_id_tweets_id_fk": {
           "name": "tweet_media_tweet_id_tweets_id_fk",
@@ -576,14 +612,6 @@
           "type": "jsonb",
           "primaryKey": false,
           "notNull": true
-        },
-        "type": {
-          "name": "type",
-          "type": "tweet_media_type",
-          "typeSchema": "public",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "'text'"
         }
       },
       "indexes": {
@@ -682,21 +710,6 @@
           "concurrently": false,
           "method": "btree",
           "with": {}
-        },
-        "idx_tweets_type": {
-          "name": "idx_tweets_type",
-          "columns": [
-            {
-              "expression": "type",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
         }
       },
       "foreignKeys": {},
@@ -720,8 +733,7 @@
       "name": "tweet_media_type",
       "schema": "public",
       "values": [
-        "text",
-        "image",
+        "photo",
         "video",
         "animated_gif"
       ]

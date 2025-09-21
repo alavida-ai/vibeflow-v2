@@ -41,7 +41,7 @@ export const apiTweetMediaSchema = z.object({
     variants: z.array(z.object({
       url: z.string(),
       content_type: z.string(),
-      bitrate: z.number()
+      bitrate: z.number().optional() // ← FIXED: bitrate is optional for some video formats
     }))
   }).optional()
 });

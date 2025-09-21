@@ -13,7 +13,6 @@ export interface PipelineConfig {
 
 export interface PipelineOptions {
     maxPages?: number;
-    cursor?: string;
 }
 
 // TODO: return tweet ids
