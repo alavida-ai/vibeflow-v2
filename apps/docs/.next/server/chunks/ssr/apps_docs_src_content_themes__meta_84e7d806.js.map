@@ -1,6 +1,0 @@
-{
-  "version": 3,
-  "sources": [],
-  "sections": [
-    {"offset": {"line": 4, "column": 0}, "map": {"version":3,"sources":["file:///Users/alexandergirardet/Code/vibeflow/vibeflow-projects/vibeflow-v2/apps/docs/src/content/themes/_meta.js"],"sourcesContent":["export default {\n  docs: 'Docs Theme',\n  blog: 'Blog Theme'\n}\n"],"names":[],"mappings":";;;;uCAAe;IACb,MAAM;IACN,MAAM;AACR","debugId":null}}]
-}
