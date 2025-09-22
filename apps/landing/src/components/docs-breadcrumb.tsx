@@ -11,8 +11,10 @@ import {
   BreadcrumbPage,
 } from '@/components/ui/breadcrumb'
 import { docsNavigation } from '@/config/docs-nav'
+import { useIsMobile } from '@/hooks/use-mobile'
 
 export function DocsBreadcrumb() {
+  const isMobile = useIsMobile()
   const pathname = usePathname()
 
   // Helper function to find page info from navigation
@@ -38,12 +40,16 @@ export function DocsBreadcrumb() {
     return null
   }
 
+  if (isMobile) {
+    return null
+  }
+
   return (
     <Breadcrumb className="mb-6">
       <BreadcrumbList>
         {pageInfo.isRoot ? (
           <BreadcrumbItem>
-            <BreadcrumbPage>Documentation</BreadcrumbPage>
+            <BreadcrumbPage><span className="font-medium">Documentation</span></BreadcrumbPage>
           </BreadcrumbItem>
         ) : (
           <>

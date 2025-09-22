@@ -94,7 +94,7 @@ function Navbar() {
   return (
     <header
       className={cn(
-        'border-b transition-all duration-300 bg-background',
+        'border-b transition-all duration-300 bg-background/80 backdrop-blur-xs supports-[backdrop-filter]:bg-background/80',
         isMenuColorInverted
           ? theme === 'dark'
             ? 'light bg-foreground text-background [&_*]:border-border/30'
@@ -105,7 +105,7 @@ function Navbar() {
       <div className="container max-w-[120rem] px-4">
         <div
           className={cn(
-            'flex items-center border-x py-4 lg:border-none lg:py-6',
+            'flex items-center border-x h-[84px] lg:border-none',
           )}
         >
           <Logo

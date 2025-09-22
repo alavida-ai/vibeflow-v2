@@ -133,7 +133,7 @@ export function TableOfContents({ className }: TableOfContentsProps) {
 // Sticky wrapper component for the TOC
 export function StickyTableOfContents({ className }: TableOfContentsProps) {
   return (
-    <div className="sticky top-[84px] h-fit max-h-[calc(100vh-104px)] overflow-y-auto">
+    <div className="sticky top-[84px] pt-4 h-fit max-h-[calc(100vh-104px)] overflow-y-auto">
       <TableOfContents />
     </div>
   )
