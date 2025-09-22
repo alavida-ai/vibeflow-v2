@@ -1,0 +1,51 @@
+import { PageHeader } from '@/components/page-header'
+
+export const metadata = {
+  title: "Configuration",
+  description: "This page covers how to configure your application.",
+  order: 2
+}
+
+<PageHeader 
+  title={metadata.title}
+  description={metadata.description}
+/>
+
+## Basic Configuration
+
+The basic configuration involves setting up your environment:
+
+- **Environment Variables**: Set up your `.env` file
+- **Database**: Configure your database connection
+- **API Keys**: Add your API keys securely
+
+## Advanced Configuration
+
+For more advanced setups, you can:
+
+1. **Custom Middleware**: Add custom middleware functions
+2. **Plugins**: Install and configure plugins
+3. **Deployment**: Set up deployment configurations
+
+### Example Configuration
+
+```json
+{
+  "name": "my-app",
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start"
+  }
+}
+```
+
+## Troubleshooting
+
+Common configuration issues and solutions:
+
+- **Port conflicts**: Change the default port
+- **Environment issues**: Check your environment variables
+- **Dependency conflicts**: Update your dependencies
+
