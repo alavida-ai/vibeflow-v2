@@ -23,7 +23,7 @@ export function TableOfContents({ className }: TableOfContentsProps) {
     
     const items: TocItem[] = Array.from(headings).map((heading) => {
       const level = parseInt(heading.tagName.charAt(1))
-      const title = heading.textContent || ''
+      const title = (heading.textContent || '').replace(/#/g, '').trim()
       const id = heading.id || ''
       
       return {

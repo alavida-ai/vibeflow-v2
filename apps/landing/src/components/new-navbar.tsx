@@ -51,12 +51,12 @@ type NavItem = {
 const navigationItems: NavItem[] = [
     {
         title: "Docs",
-        href: "/docs",
-        comingSoon: true
+        href: "/docs"
       },
       {
         title: "Roadmap",
-        href: "/roadmap"
+        href: "/roadmap",
+        comingSoon: true
       },
       {
         title: "Components",
@@ -72,9 +72,6 @@ const navigationItems: NavItem[] = [
 function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
   const { isAtLeast } = useMediaQuery();
-  const { theme } = useTheme();
-
-  const isMenuColorInverted = isMenuOpen && !isAtLeast('lg');
 
   React.useEffect(() => {
     if (isMenuOpen && !isAtLeast('lg')) {
@@ -94,12 +91,8 @@ function Navbar() {
   return (
     <header
       className={cn(
-        'border-b transition-all duration-300 bg-background/80 backdrop-blur-xs supports-[backdrop-filter]:bg-background/80',
-        isMenuColorInverted
-          ? theme === 'dark'
-            ? 'light bg-foreground text-background [&_*]:border-border/30'
-            : 'dark bg-background text-foreground'
-          : '',
+        'relative border-b transition-all duration-300 bg-background/80 backdrop-blur-xs supports-[backdrop-filter]:bg-background/80',
+        'bg-background text-foreground'
       )}
     >
       <div className="container max-w-[120rem] px-4">
@@ -110,23 +103,18 @@ function Navbar() {
         >
           <Logo
             className={cn(
-              'ps-6 transition-all duration-300 lg:ps-0',
-              isMenuColorInverted
-                ? theme === 'dark'
-                  ? '[&>img]:invert-0'
-                  : '[&>img]:invert'
-                : 'dark:[&>img]:invert',
+              'ps-6 transition-all duration-300 lg:ps-0'
             )}
           />
 
           {/* Hamburger Menu Button (Mobile Only) */}
           <div className="me-6 ml-auto flex flex-1 items-center justify-end lg:me-0 lg:hidden">
-            <ThemeToggle className="" />
+            <ThemeToggle/>
 
             <Button
               variant="outline"
               size="icon"
-              className={cn('relative flex !bg-transparent')}
+              className="relative flex"
               onClick={() => setIsMenuOpen(!isMenuOpen)}
             >
               <span className="sr-only">Open main menu</span>
@@ -180,13 +168,7 @@ function Navbar() {
                   ease: [0.25, 0.46, 0.45, 0.94], // Custom cubic-bezier for smooth feel
                 }}
                 className={cn(
-                  'fixed inset-0 top-16 z-50 container flex flex-col overflow-hidden text-sm font-medium lg:hidden',
-                  isMenuColorInverted
-                    ? theme === 'dark'
-                      ? 'light bg-foreground text-background'
-                      : 'dark bg-background text-foreground'
-                    : '',
-                )}
+                  'absolute top-full left-0 right-0 z-50 min-h-screen container flex flex-col overflow-hidden text-sm font-medium lg:hidden bg-background text-foreground')}
               >
                 <motion.div
                   initial={{ opacity: 0, y: -10 }}

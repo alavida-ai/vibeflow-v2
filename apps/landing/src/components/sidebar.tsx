@@ -95,7 +95,7 @@ export function Sidebar({ items, className }: SidebarProps) {
 
   if (isMobile) {
     return (
-      <div className="sticky top-[84px] left-0 z-50 w-full bg-background/80 backdrop-blur-xs border-y border-border">
+      <div className="sticky top-[84px] left-0 w-full bg-background/80 backdrop-blur-xs border-y border-border">
         <Sheet open={isOpen} onOpenChange={setIsOpen}>
           <SheetTrigger asChild>
             <Button 
