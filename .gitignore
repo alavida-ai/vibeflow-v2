@@ -63,5 +63,3 @@ temp/
 
 # Ignore mastra build output
 .mastra
-
-.contentlayer
