@@ -1,9 +1,9 @@
 import { schema } from '@vibeflow/database';
-import { TwitterService } from '@vibeflow/core';
+import { insertTweetsWithMedia } from '@vibeflow/core';
 import { Sink } from '.';
 
 export class TweetSink implements Sink {
   async save(tweets: schema.InsertTweetWithMedia[]): Promise<schema.TweetWithMedia[]> {
-    return await TwitterService.insertTweetsWithMedia(tweets);
+    return await insertTweetsWithMedia(tweets);
   }
 }

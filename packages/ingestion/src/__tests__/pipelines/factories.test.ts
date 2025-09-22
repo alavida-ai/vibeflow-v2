@@ -7,8 +7,8 @@ import {
 } from '../../pipelines/factories'
 import { TwitterPipeline } from '../../pipelines/tweets-pipeline'
 import { UserMentionsEndpoint, UserLastTweetsEndpoint, TweetRepliesEndpoint } from '../../sources/endpoints'
-import { TweetTransformer } from '../../transformers/TweetTransformer'
-import { TweetSink } from '../../sinks/TweetSink'
+import { TweetTransformer } from '../../transformers/tweet'
+import { TweetSink } from '../../sinks/tweet-sink'
 import { MediaProcessor } from '../../processors'
 import { mockTwitterClient } from '../test-utils'
 

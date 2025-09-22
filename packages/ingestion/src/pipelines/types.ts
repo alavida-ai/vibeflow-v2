@@ -15,7 +15,6 @@ export interface PipelineOptions {
     maxPages?: number;
 }
 
-// TODO: return tweet ids
 export interface PipelineResult {
     success: boolean;
     totalTweets: number;

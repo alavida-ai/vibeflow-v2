@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
-import { TwitterClient } from '../../sources/TwitterClient'
+import { TwitterClient } from '../../sources/twitter-client'
 import { createMockTweetsApiResponse, createMockUserLastTweetsApiResponse, createMockApiTweet } from '../test-utils'
 
 // Mock fetch globally

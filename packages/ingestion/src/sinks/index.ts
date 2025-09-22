@@ -1,6 +1,2 @@
-import { schema } from '@vibeflow/database';
-export * from './TweetSink';
-
-export interface Sink {
-    save(tweets: schema.InsertTweetWithMedia[]): Promise<schema.TweetWithMedia[]>;
-  }
+export * from './tweet-sink';
+export * from './types';

@@ -1,5 +1,5 @@
 import { getDb, schema } from "@vibeflow/database";
-import { eq, inArray, gt, and, ne, desc, or, isNull } from "drizzle-orm";
+import { eq, gt, and, ne, desc, or, isNull } from "drizzle-orm";
 
 /* -------------------------------------------------------------------------- */
 /*                              TYPES                                         */
@@ -18,14 +18,13 @@ export type TweetCandidate = {
 export const PENDING_TWEET_STATUS = schema.replyStatusConstants.pending;
 export const READY_TO_RESPOND_TWEET_STATUS = schema.replyStatusConstants.ready_to_respond;
 export const ERROR_TWEET_STATUS = schema.replyStatusConstants.error;
-export const PROCESSED_TWEET_STATUS = schema.replyStatusConstants.processed;
 export const REPLIED_TWEET_STATUS = schema.replyStatusConstants.responded;
 
 /* -------------------------------------------------------------------------- */
 /*                              FUNCTIONS                                     */
 /* -------------------------------------------------------------------------- */
 
-export async function getPendingTweets() {
+export async function getPendingTweets(): Promise<schema.Tweet[]> {
     try {
         const db = getDb();
         // Get tweets that either have no reply entry (pending) or have pending status
@@ -210,72 +209,6 @@ export async function batchSetTweetReplyStatus(tweetIds: number[], status: schem
     } catch (error) {
         console.error("Error batch setting tweet reply status", error);
         throw error;
-    }
-}
-
-export async function addAnalyticsToTweet(analytics: schema.InsertTweetAnalytics) {
-    try {
-        const db = getDb();
-        await db.insert(schema.tweetAnalytics).values(analytics).onConflictDoUpdate({
-            target: [schema.tweetAnalytics.tweetId],
-            set: {
-                rawEngagementScore: schema.tweetAnalytics.rawEngagementScore,
-                normalizedEngagementScore: schema.tweetAnalytics.normalizedEngagementScore,
-                freshnessAdjustedScore: schema.tweetAnalytics.freshnessAdjustedScore,
-                finalScore: schema.tweetAnalytics.finalScore,
-                authorSizeNormalizationFactor: schema.tweetAnalytics.authorSizeNormalizationFactor,
-                freshnessDecayFactor: schema.tweetAnalytics.freshnessDecayFactor,
-                ageInHours: schema.tweetAnalytics.ageInHours,
-                shouldReply: schema.tweetAnalytics.shouldReply,
-                algorithmVersion: schema.tweetAnalytics.algorithmVersion,
-                computedAtUtc: new Date()
-            }
-        });
-        await setTweetReplyStatus(analytics.tweetId, PROCESSED_TWEET_STATUS);
-        console.log("Added analytics to tweet", analytics.tweetId);
-    } catch (error) {
-        console.error("Error adding analytics to tweet", error);
-        throw error;
-    }
-}
-
-export async function batchAddAnalyticsToTweets(analytics: schema.InsertTweetAnalytics[]) {
-    try {
-        const db = getDb();
-        await db.insert(schema.tweetAnalytics).values(analytics).onConflictDoUpdate({
-            target: [schema.tweetAnalytics.tweetId],
-            set: {
-                rawEngagementScore: schema.tweetAnalytics.rawEngagementScore,
-                normalizedEngagementScore: schema.tweetAnalytics.normalizedEngagementScore,
-                freshnessAdjustedScore: schema.tweetAnalytics.freshnessAdjustedScore,
-                finalScore: schema.tweetAnalytics.finalScore,
-                authorSizeNormalizationFactor: schema.tweetAnalytics.authorSizeNormalizationFactor,
-                freshnessDecayFactor: schema.tweetAnalytics.freshnessDecayFactor,
-                ageInHours: schema.tweetAnalytics.ageInHours,
-                shouldReply: schema.tweetAnalytics.shouldReply,
-                algorithmVersion: schema.tweetAnalytics.algorithmVersion,
-                computedAtUtc: new Date()
-            }
-        });
-        await batchSetTweetReplyStatus(analytics.map(a => a.tweetId), PROCESSED_TWEET_STATUS);
-        console.log("Added analytics to tweets", analytics.map(a => a.tweetId));
-    } catch (error) {
-        console.error("Error adding analytics to tweet", error);
-        throw error;
-    }
-}
-
-export async function getTweetAnalytics(tweetId: number) {
-    try {
-        const db = getDb();
-        const result = await db
-            .select()
-            .from(schema.tweetAnalytics)
-            .where(eq(schema.tweetAnalytics.tweetId, tweetId));
-        return result;
-    } catch (error) {
-        console.error("Error getting tweet analytics", error);
-        throw new Error("Error getting tweet analytics");
     }
 }
 

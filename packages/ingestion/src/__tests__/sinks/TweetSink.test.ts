@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest'
-import { TweetSink } from '../../sinks/TweetSink'
+import { TweetSink } from '../../sinks/tweet-sink'
 import { mockTwitterService, createMockTweetWithMedia } from '../test-utils'
 import { schema } from '@vibeflow/database'
 

@@ -1,6 +1,6 @@
 import { TwitterPipeline } from './tweets-pipeline';
 import { TwitterClient, UserMentionsEndpoint, UserLastTweetsEndpoint, TweetRepliesEndpoint } from '../sources';
-import { MediaProcessor } from '../processors';
+import { TweetProcessor } from '../processors';
 import { TweetTransformer } from '../transformers';
 import { TweetSink } from '../sinks';
 
@@ -42,8 +42,7 @@ export function createRepliesPipeline(): TwitterPipeline {
 export function createCustomPipeline(config: {
   endpoint: 'mentions' | 'userTweets' | 'replies';
   storage: 'listener' | 'analyzer';
-  includeMediaProcessing?: boolean;
-  includeEvs?: boolean;
+  createReplies?: boolean;
 }): TwitterPipeline {
   const client = TwitterClient.getInstance();
   
@@ -60,12 +59,9 @@ export function createCustomPipeline(config: {
       break;
   }
   
-  const processors = [];
-  if (config.includeEvs) {
+  const processors: TweetProcessor[] = [];
+  if (config.createReplies) {
     // processors.push(new EvsProcessor());
-  }
-  if (config.includeMediaProcessing) {
-    processors.push(new MediaProcessor());
   }
   
   return new TwitterPipeline({

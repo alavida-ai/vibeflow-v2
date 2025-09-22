@@ -39,6 +39,14 @@ export class TwitterPipeline {
         // Save tweets
         savedTweets = await this.config.sink.save(scrapedTweets);
         totalTweets += savedTweets.length;
+
+        // Additional processing
+        if (this.config.processors) {
+          for (const processor of this.config.processors) {
+            const result = await processor.process(savedTweets);
+            processorResults[processor.name] = result;
+          }
+        }
         
         // Update pagination
         hasNextPage = response.hasNextPage;
@@ -79,14 +87,14 @@ export class TwitterPipeline {
     // Map endpoint class names to source constants
     switch (endpointName) {
       case 'usermentions':
-        return 'user-mentions';
+        return schema.sourceConstants.user_mentions;
       case 'userlasttweets':
-        return 'user-last-tweets';
+        return schema.sourceConstants.user_last_tweets;
       case 'replies':
-        return 'tweet-replies';
+        return schema.sourceConstants.tweet_replies;
       default:
         // Default fallback
-        return 'user-mentions';
+        throw new Error(`Unknown source name: ${endpointName}`);
     }
   }
 }

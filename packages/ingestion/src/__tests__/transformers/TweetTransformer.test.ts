@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest'
-import { TweetTransformer } from '../../transformers/TweetTransformer'
+import { TweetTransformer } from '../../transformers/tweet'
 import { createMockApiTweet, createMockApiTweetAuthor, createMockApiTweetWithPhoto } from '../test-utils'
+import { schema } from '@vibeflow/database'
 
 describe('TweetTransformer', () => {
   const transformer = new TweetTransformer()
@@ -22,13 +23,13 @@ describe('TweetTransformer', () => {
         createdAt: '2024-01-01T12:00:00.000Z'
       })
 
-      const result = transformer.transform(mockTweet, { source: 'user-mentions' })
+      const result = transformer.transform(mockTweet, { source: schema.sourceConstants.user_mentions })
 
       expect(result).toMatchObject({
         apiId: '1234567890',
         text: 'Hello world!',
         language: 'en',
-        source: 'user-mentions',
+        source: schema.sourceConstants.user_mentions,
         likeCount: 10,
         replyCount: 5,
         retweetCount: 2,
@@ -37,7 +38,6 @@ describe('TweetTransformer', () => {
         bookmarkCount: 3,
         isReply: false,
         conversationId: '1234567890',
-        type: 'text',
         media: []
       })
 
@@ -55,14 +55,14 @@ describe('TweetTransformer', () => {
         conversationId: '9876543210'
       })
 
-      const result = transformer.transform(mockTweet, { source: 'tweet-replies' })
+      const result = transformer.transform(mockTweet, { source: schema.sourceConstants.tweet_replies })
 
       expect(result).toMatchObject({
         isReply: true,
         inReplyToId: '9876543210',
         inReplyToUsername: 'originaluser',
         conversationId: '9876543210',
-        source: 'tweet-replies'
+        source: schema.sourceConstants.tweet_replies
       })
     })
 
@@ -78,7 +78,7 @@ describe('TweetTransformer', () => {
         author: mockAuthor
       })
 
-      const result = transformer.transform(mockTweet, { source: 'user-mentions' })
+      const result = transformer.transform(mockTweet, { source: schema.sourceConstants.user_mentions })
 
       expect(result).toMatchObject({
         authorId: 'author123',
@@ -98,12 +98,12 @@ describe('TweetTransformer', () => {
         }
       })
 
-      const result = transformer.transform(mockTweet, { source: 'user-mentions' })
+      const result = transformer.transform(mockTweet, { source: schema.sourceConstants.user_mentions })
 
       expect(result.media).toHaveLength(1)
       expect(result.media[0]).toMatchObject({
         tweetId: mockTweet.id,
-        type: 'photo',
+        type: schema.tweetMediaTypeConstants.photo,
         url: 'https://example.com/image.jpg',
         description: null
       })
@@ -133,12 +133,12 @@ describe('TweetTransformer', () => {
         }
       })
 
-      const result = transformer.transform(mockTweet, { source: 'user-mentions' })
+      const result = transformer.transform(mockTweet, { source: schema.sourceConstants.user_mentions })
 
       expect(result.media).toHaveLength(1)
       expect(result.media[0]).toMatchObject({
         tweetId: mockTweet.id,
-        type: 'video',
+        type: schema.tweetMediaTypeConstants.video,
         url: 'https://example.com/video_high.mp4', // Should pick highest bitrate
         description: null
       })
@@ -151,7 +151,7 @@ describe('TweetTransformer', () => {
         }
       })
 
-      const result = transformer.transform(mockTweet, { source: 'user-mentions' })
+      const result = transformer.transform(mockTweet, { source: schema.sourceConstants.user_mentions })
 
       expect(result.media).toHaveLength(0)
     })
@@ -165,7 +165,7 @@ describe('TweetTransformer', () => {
         bookmarkCount: undefined
       })
 
-      const result = transformer.transform(mockTweet, { source: 'user-mentions' })
+      const result = transformer.transform(mockTweet, { source: schema.sourceConstants.user_mentions })
 
       expect(result).toMatchObject({
         language: null,
@@ -182,10 +182,10 @@ describe('TweetTransformer', () => {
         text: 'Tweet with photo'
       })
 
-      const result = transformer.transform(tweet, { source: 'user-mentions' })
+      const result = transformer.transform(tweet, { source: schema.sourceConstants.user_mentions })
 
       expect(result.media).toHaveLength(1)
-      expect(result.media[0].type).toBe('photo') // Should keep "photo" as per database enum
+      expect(result.media[0].type).toBe(schema.tweetMediaTypeConstants.photo) // Should keep "photo" as per database enum
       expect(result.media[0].url).toBe('https://pbs.twimg.com/media/test.jpg')
     })
   })

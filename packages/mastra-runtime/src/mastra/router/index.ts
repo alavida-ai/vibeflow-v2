@@ -1,4 +1,3 @@
-
 import { createOpenRouter, OpenRouterProvider } from '@openrouter/ai-sdk-provider';
 
 // Configuration interface for runtime initialization

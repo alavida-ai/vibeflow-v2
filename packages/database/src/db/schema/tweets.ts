@@ -16,31 +16,30 @@ import { createSelectSchema, createInsertSchema } from 'drizzle-zod';
 import { z } from 'zod';
 
 
-// Enums
+/* -------------------------------------------------------------------------- */
+/*                              ENUMS                                         */
+/* -------------------------------------------------------------------------- */
+
 // Tweet processing pipeline statuses
 export const tweetReplyStatusEnumSchema = z.enum([
   "pending",            // collected, not processed
-  "processed",          // analytics computed
   "notified",           // pushed to Slack/alerts
   "ready_to_respond",   // queued for human approval/agent pass
   "responded",          // reply posted
   "ignored",            // intentionally not engaging
   "error",              // error processing tweet
 ]);
-
 export const replyStatusConstants = tweetReplyStatusEnumSchema.enum;
 export const tweetReplyStatusEnum = pgEnum("tweet_reply_status", tweetReplyStatusEnumSchema.options as [string, ...string[]]);
 
 // Tweet source enum
 export const tweetSourceEnumSchema = z.enum([
-  "user-mentions",
-  "tweet-replies", 
-  "user-last-tweets"
+  "user_mentions",
+  "tweet_replies", 
+  "user_last_tweets"
 ]);
-
 export const sourceConstants = tweetSourceEnumSchema.enum;
 export const tweetSourceEnum = pgEnum("tweet_source", tweetSourceEnumSchema.options as [string, ...string[]]);
-export type TweetSourceEnum = z.infer<typeof tweetSourceEnumSchema>;
 
 // Media type enum
 export const tweetMediaTypeEnumSchema = z.enum([
@@ -48,11 +47,23 @@ export const tweetMediaTypeEnumSchema = z.enum([
   "video",
   "animated_gif"
 ]);
-
+export const tweetMediaTypeConstants = tweetMediaTypeEnumSchema.enum;
 export const tweetMediaTypeEnum = pgEnum("tweet_media_type", tweetMediaTypeEnumSchema.options as [string, ...string[]]);
 
+// Media status enum
+export const tweetMediaStatusEnumSchema = z.enum([
+  "pending",
+  "processed",
+  "error"
+]);
+export const tweetMediaStatusConstants = tweetMediaStatusEnumSchema.enum;
+export const tweetMediaStatusEnum = pgEnum("tweet_media_status", tweetMediaStatusEnumSchema.options as [string, ...string[]]);
 
-// Tables
+
+/* -------------------------------------------------------------------------- */
+/*                              TABLES                                        */
+/* -------------------------------------------------------------------------- */
+
 export const tweets = pgTable("tweets", {
   /** Surrogate PK for convenience (keep tweetId unique for idempotency) */
   id: integer().primaryKey().generatedAlwaysAsIdentity(),
@@ -161,15 +172,19 @@ export const tweetMedia = pgTable("tweet_media", {
   url: text("url").notNull(),
   type: tweetMediaTypeEnum("type").notNull(),
   description: text("description"),
+  status: tweetMediaStatusEnum("status").notNull().default("pending"),
   capturedAtUtc: timestamp("captured_at_utc", { withTimezone: true }).defaultNow(),
   updatedAtUtc: timestamp("updated_at_utc", { withTimezone: true }).defaultNow(),
 }, (table) => [
   index("idx_tweet_media_tweet_id").on(table.tweetId),
+  index("idx_tweet_media_status").on(table.status),
   // Unique constraint to prevent duplicate media for the same tweet
   uniqueIndex("idx_tweet_media_unique").on(table.tweetId, table.url),
 ]);
 
-// Define relations
+/* -------------------------------------------------------------------------- */
+/*                              RELATIONS                                     */
+/* -------------------------------------------------------------------------- */
 export const tweetsRelations = relations(tweets, ({ many, one }) => ({
   media: many(tweetMedia),
   replies: many(tweetReplies),
@@ -197,7 +212,9 @@ export const tweetAnalyticsRelations = relations(tweetAnalytics, ({ one }) => ({
   }),
 }));
 
-
+/* -------------------------------------------------------------------------- */
+/*                              SCHEMAS AND TYPES                             */
+/* -------------------------------------------------------------------------- */
 // Schema validation
 export const tweetSelectSchema = createSelectSchema(tweets);
 export const tweetInsertSchema = createInsertSchema(tweets);

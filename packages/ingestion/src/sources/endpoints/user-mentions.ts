@@ -1,5 +1,5 @@
 import { TwitterEndpoint } from '.';
-import { TwitterClient } from '../TwitterClient';
+import { TwitterClient } from '../twitter-client';
 
 export class UserMentionsEndpoint implements TwitterEndpoint {
   constructor(private client: TwitterClient) {}

@@ -1,6 +1,7 @@
 import { ApiTweet } from '../sources';
 import { schema } from '@vibeflow/database';
 import { Transformer, TransformOptions } from '.';
+import { z } from 'zod';
 
 export class TweetTransformer implements Transformer {
     transform(tweet: ApiTweet, options: TransformOptions): schema.InsertTweetWithMedia {
@@ -53,14 +54,14 @@ export class TweetTransformer implements Transformer {
         return result;
     }
 
-    private mapApiMediaTypeToDbType(apiType: string): typeof schema.tweetMediaTypeEnumSchema._type {
+    private mapApiMediaTypeToDbType(apiType: string): z.infer<typeof schema.tweetMediaTypeEnumSchema> {
         switch (apiType) {
             case "photo":
-                return "photo";
+                return schema.tweetMediaTypeConstants.photo;
             case "video":
-                return "video";
+                return schema.tweetMediaTypeConstants.video;
             case "animated_gif":
-                return "animated_gif";
+                return schema.tweetMediaTypeConstants.animated_gif;
             default:
                 throw new Error(`Unknown media type: ${apiType}`);
         }
@@ -80,7 +81,7 @@ export class TweetTransformer implements Transformer {
                 const best = mp4s[0] || media.video_info.variants[0]; // fallback to first variant if no MP4 with bitrate
                 return {
                     tweetId: tweet.id,
-                    type: 'video' as const,
+                    type: schema.tweetMediaTypeConstants.video,
                     url: best.url,
                     description: null,
                     createdAt: new Date(),

@@ -2,7 +2,7 @@ import { createWorkflow, createStep } from "@mastra/core/workflows";
 import { z } from "zod";
 import { RuntimeContext } from "@mastra/core/runtime-context";
 import { Mastra } from "@mastra/core";
-import { generateVisualDescription, TwitterService } from "@vibeflow/core";
+import { batchProcessMediaDescriptions, getMediaByTweetIds, getTweetsByIds } from "@vibeflow/core";
 import { createUserLastTweetsPipeline } from '@vibeflow/ingestion';
 
 type WorkflowContext = {
@@ -109,11 +109,9 @@ const generateMediaDescriptionsStep = createStep({
     });
 
     try {
-      // generate media descriptions for best 10 tweets
       const tweetsIds = inputData.tweetIds;
 
-      // TODO: following logic belongs in core, it will return media processed
-      const mediaItems = await TwitterService.getMediaByTweetIds(tweetsIds);
+      const mediaItems = await getMediaByTweetIds(tweetsIds);
 
       if (mediaItems.length === 0) {
         logger.info("No media items found that need description generation");
@@ -125,25 +123,7 @@ const generateMediaDescriptionsStep = createStep({
       
       console.log(`Found ${mediaItems.length} media items to process`);
       
-      // Process all media descriptions in parallel with error handling
-      const results = await Promise.allSettled(
-        mediaItems.map(async (media: any) => {
-          try {
-            const description = await generateVisualDescription(media.type, media.url);
-            media.description = description;
-            media.updatedAt = new Date();
-            await TwitterService.updateMediaDescriptions(media);
-            return true;
-          } catch (error) {
-            console.error(`❌ Failed to process media ${media.id}:`, error);
-            return false;
-          }
-        })
-      );
-      
-      const mediaProcessed = results.filter(
-        (result: any) => result.status === 'fulfilled' && result.value === true
-      ).length;
+      const mediaProcessed = await batchProcessMediaDescriptions(mediaItems);
       
       console.log(`✅ Successfully processed ${mediaProcessed} of ${mediaItems.length} media items`);
       
@@ -492,7 +472,7 @@ const calculateMetricsStep = createStep({
             totalPosts += tweetDbIds.length;
 
             // Fetch tweets by their internal database IDs
-            const tweets = await TwitterService.getTweetsByIds(tweetDbIds);
+            const tweets = await getTweetsByIds(tweetDbIds);
 
             if (tweets.length > 0) {
               const totalViews = tweets.reduce((sum, tweet) => sum + (tweet.viewCount || 0), 0);
@@ -599,8 +579,8 @@ const calculateMetricsStep = createStep({
 
 // Create the workflow
 export const twitterFrameworkAnalysisWorkflow = createWorkflow({
-  id: "twitter-framework-analysis",
-  description: "Analyze Twitter user content and extract frameworks with metrics",
+  id: "extract-tweet-frameworks",
+  description: "Extract tweet frameworks from a Twitter user",
   inputSchema: z.object({
     username: z.string()
   }),

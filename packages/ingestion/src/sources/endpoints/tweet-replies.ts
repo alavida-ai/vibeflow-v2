@@ -1,4 +1,4 @@
-import { TwitterClient } from '../TwitterClient';
+import { TwitterClient } from '../twitter-client';
 import { TwitterEndpoint } from '.';
 
 export class TweetRepliesEndpoint implements TwitterEndpoint {
