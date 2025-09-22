@@ -1,4 +1,4 @@
-export * from './UserMentionsEndpoint';
-export * from './UserLastTweetsEndpoint';
-export * from './TweetRepliesEndpoint';
+export * from './user-mentions';
+export * from './user-last-tweets';
+export * from './tweet-replies';
 export * from './types';

@@ -2,7 +2,7 @@ import { Mastra } from "@mastra/core/mastra";
 import { Workflow } from "@mastra/core/workflows";
 import { testWorkflow } from "./workflows/test-workflow";
 import { businessStrategyWorkflow } from "./workflows/business-strategy";
-import { twitterFrameworkAnalysisWorkflow } from "./workflows/twitter-framework-analysis";
+import { extractTweetFrameworksWorkflow } from "./workflows/extract-tweet-frameworks";
 import { createStorage } from "./storage";
 import { frameworkAgent } from "./agents/frameworkAgent";
 import { parseAgent } from "./agents/parseAgent";
@@ -26,7 +26,7 @@ export async function createMastraInstance(options?: {
     workflows: {
       testWorkflow,
       businessStrategyWorkflow,
-      twitterFrameworkAnalysisWorkflow,
+      extractTweetFrameworksWorkflow,
       ...options?.workflows
       
     },
@@ -51,7 +51,10 @@ export async function createMastraInstance(options?: {
         openAPIDocs: true,
       },
     },
-    storage: createStorage()
+    storage: createStorage(),
+    telemetry: {
+      enabled: true
+    }
   });
 }
 

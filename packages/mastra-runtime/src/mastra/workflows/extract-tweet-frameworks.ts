@@ -2,7 +2,7 @@ import { createWorkflow, createStep } from "@mastra/core/workflows";
 import { z } from "zod";
 import { RuntimeContext } from "@mastra/core/runtime-context";
 import { Mastra } from "@mastra/core";
-import { batchProcessMediaDescriptions, getMediaByTweetIds, getTweetsByIds } from "@vibeflow/core";
+import { batchProcessMediaDescriptions, getMediaPendingDescriptionByTweetIds, getTweetsByIds } from "@vibeflow/core";
 import { createUserLastTweetsPipeline } from '@vibeflow/ingestion';
 
 type WorkflowContext = {
@@ -109,9 +109,11 @@ const generateMediaDescriptionsStep = createStep({
     });
 
     try {
+
+      // TODO: filter to only process media for top N tweets
       const tweetsIds = inputData.tweetIds;
 
-      const mediaItems = await getMediaByTweetIds(tweetsIds);
+      const mediaItems = await getMediaPendingDescriptionByTweetIds(tweetsIds);
 
       if (mediaItems.length === 0) {
         logger.info("No media items found that need description generation");
@@ -578,7 +580,7 @@ const calculateMetricsStep = createStep({
 });
 
 // Create the workflow
-export const twitterFrameworkAnalysisWorkflow = createWorkflow({
+export const extractTweetFrameworksWorkflow = createWorkflow({
   id: "extract-tweet-frameworks",
   description: "Extract tweet frameworks from a Twitter user",
   inputSchema: z.object({

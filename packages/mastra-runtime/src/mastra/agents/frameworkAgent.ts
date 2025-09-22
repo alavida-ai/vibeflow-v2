@@ -203,6 +203,5 @@ This tweet reference data is critical for calculating engagement metrics for eac
   memory: memory,
   tools: {  
     userTweetsFetcherTool,
-    ...(await getMCPClient().getTools())   
   }
 });

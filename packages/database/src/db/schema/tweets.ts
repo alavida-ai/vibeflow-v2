@@ -102,7 +102,7 @@ export const tweets = pgTable("tweets", {
   updatedAtUtc: timestamp("updated_at_utc", { withTimezone: true }).defaultNow().notNull(),
 
   /** Safety / provenance */
-  source: tweetSourceEnum("source").notNull().default("user-mentions"),
+  source: tweetSourceEnum("source").notNull(),
   rawJson: jsonb("raw_json").notNull(), // full payload for reprocessing
 
 }, (table) => [

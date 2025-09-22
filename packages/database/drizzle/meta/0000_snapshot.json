@@ -1,5 +1,5 @@
 {
-  "id": "63f8b945-4ae3-41fe-8b9a-b3aa52ea56ca",
+  "id": "f57a9a7d-8f12-4ee5-894f-f4a195e850a3",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -231,6 +231,14 @@
           "primaryKey": false,
           "notNull": false
         },
+        "status": {
+          "name": "status",
+          "type": "tweet_media_status",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'pending'"
+        },
         "captured_at_utc": {
           "name": "captured_at_utc",
           "type": "timestamp with time zone",
@@ -252,6 +260,21 @@
           "columns": [
             {
               "expression": "tweet_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "idx_tweet_media_status": {
+          "name": "idx_tweet_media_status",
+          "columns": [
+            {
+              "expression": "status",
               "isExpression": false,
               "asc": true,
               "nulls": "last"
@@ -604,8 +627,7 @@
           "type": "tweet_source",
           "typeSchema": "public",
           "primaryKey": false,
-          "notNull": true,
-          "default": "'user-mentions'"
+          "notNull": true
         },
         "raw_json": {
           "name": "raw_json",
@@ -729,6 +751,15 @@
     }
   },
   "enums": {
+    "public.tweet_media_status": {
+      "name": "tweet_media_status",
+      "schema": "public",
+      "values": [
+        "pending",
+        "processed",
+        "error"
+      ]
+    },
     "public.tweet_media_type": {
       "name": "tweet_media_type",
       "schema": "public",
@@ -743,7 +774,6 @@
       "schema": "public",
       "values": [
         "pending",
-        "processed",
         "notified",
         "ready_to_respond",
         "responded",
@@ -755,9 +785,9 @@
       "name": "tweet_source",
       "schema": "public",
       "values": [
-        "user-mentions",
-        "tweet-replies",
-        "user-last-tweets"
+        "user_mentions",
+        "tweet_replies",
+        "user_last_tweets"
       ]
     }
   },

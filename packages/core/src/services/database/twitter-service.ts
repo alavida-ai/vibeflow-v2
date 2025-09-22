@@ -2,7 +2,7 @@ import {
     getDb,
     schema
 } from "@vibeflow/database";
-import { eq, and, isNull, desc, inArray } from 'drizzle-orm';
+import { eq, and, isNull, desc, or, inArray } from 'drizzle-orm';
 
 // Type for the getBestPerformingTweetsByUsernameView return value
 export type TweetView = {
@@ -144,7 +144,7 @@ export async function getMediaByAuthorUsername(authorUsername: string, bestNTwee
     }
 }
 
-export async function getMediaByTweetIds(tweetIds: number[]): Promise<schema.TweetMedia[]> {
+export async function getMediaPendingDescriptionByTweetIds(tweetIds: number[]): Promise<schema.TweetMedia[]> {
     const db = getDb();
 
     return await db
@@ -153,7 +153,11 @@ export async function getMediaByTweetIds(tweetIds: number[]): Promise<schema.Twe
         .where(
             and(
                 inArray(schema.tweetMedia.tweetId, tweetIds),
-                isNull(schema.tweetMedia.description)
+                or(
+                    isNull(schema.tweetMedia.description), 
+                    eq(schema.tweetMedia.status, schema.tweetMediaStatusConstants.pending),
+                    eq(schema.tweetMedia.status, schema.tweetMediaStatusConstants.error)
+                )
             )
         );
 }
@@ -166,7 +170,8 @@ export async function updateMediaDescriptions(media: schema.TweetMedia): Promise
         .update(schema.tweetMedia)
         .set({
             description: media.description,
-            updatedAtUtc: media.updatedAtUtc
+            updatedAtUtc: media.updatedAtUtc,
+            status: media.status
         })
         .where(eq(schema.tweetMedia.id, media.id));
 }

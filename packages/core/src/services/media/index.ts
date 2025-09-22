@@ -10,18 +10,22 @@ export async function batchProcessMediaDescriptions(mediaItems: schema.TweetMedi
                 const description = await generateVisualDescription(media.type, media.url);
                 media.description = description;
                 media.updatedAt = new Date();
+                media.status = schema.tweetMediaStatusConstants.processed;
                 await updateMediaDescriptions(media);
                 return true;
             } catch (error) {
                 console.error(`❌ Failed to process media ${media.id}:`, error);
+                media.updatedAt = new Date();
+                media.status = schema.tweetMediaStatusConstants.error;
+                await updateMediaDescriptions(media);
                 return false;
             }
         })
     );
 
-    const mediaProcessed = results.filter(
+    const itemsProcessed = results.filter(
         (result: any) => result.status === 'fulfilled' && result.value === true
     ).length;
 
-    return mediaProcessed;
+    return itemsProcessed;
 }
