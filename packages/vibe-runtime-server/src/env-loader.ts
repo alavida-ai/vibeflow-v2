@@ -2,6 +2,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { parse } from 'dotenv';
 import { createLogger } from '@vibeflow/logging';
+import { EnvironmentError, logError } from '@vibeflow/core';
 
 const log = createLogger({ 
   context: 'cli', 
@@ -88,7 +89,7 @@ export function findProjectRoot(startDir: string = process.cwd()): string {
           return currentDir;
         }
       } catch (error) {
-        // Continue if we can't read package.json
+        // Continue if we can't read package.json - this is expected behavior
       }
     }
     
@@ -118,11 +119,13 @@ export async function initEnv(config: EnvConfig = {}): Promise<void> {
   }
   
   // Specifically check for common required variables
-  const requiredVars = ['OPENROUTER_API_KEY', 'DATABASE_URL', 'WORKFLOWS_DIR'];
+  const requiredVars = ['OPENROUTER_API_KEY', 'DATABASE_URL'];
   const missing = requiredVars.filter(key => !process.env[key]);
   
   if (missing.length > 0) {
-    log.error(`🔴 Missing required environment variables: ${missing.join(', ')}`);
+    const error = new EnvironmentError(`🔴 Missing required environment variables: ${missing.join(', ')}`);
+    log.error(error.message);
+    throw error;
   } else {
     log.info(`🟢 All common environment variables are loaded`);
   }

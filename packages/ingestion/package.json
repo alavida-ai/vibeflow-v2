@@ -26,6 +26,7 @@
   "packageManager": "pnpm@10.13.1",
   "dependencies": {
     "@vibeflow/core": "workspace:*",
+    "@vibeflow/logging": "workspace:*",
     "@vibeflow/database": "workspace:*",
     "zod": "^3.25.0"
   },
