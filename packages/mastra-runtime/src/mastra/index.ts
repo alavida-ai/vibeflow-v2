@@ -3,8 +3,7 @@ import { Workflow } from "@mastra/core/workflows";
 import { businessStrategyWorkflow } from "./workflows/business-strategy";
 import { extractTweetFrameworksWorkflow } from "./workflows/extract-tweet-frameworks";
 import { createStorage } from "./storage";
-import { frameworkAgent } from "./agents/frameworkAgent";
-import { parseAgent } from "./agents/parseAgent";
+import { twitterAnalyzerAgent } from "./agents/twitter-analyzer";
 import { createVibeflowMCP } from "./mcp";
 import { PinoLogger } from "@mastra/loggers";
 import { strategyAgent } from "./agents/strategyAgent";
@@ -20,8 +19,7 @@ export async function createMastraInstance(options?: {
       level: 'debug'
     }),
     agents: {
-      frameworkAgent,
-      parseAgent,
+      twitterAnalyzerAgent,
       strategyAgent,
       ...options?.agents
     },

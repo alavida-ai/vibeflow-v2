@@ -1,9 +1,7 @@
 import { Agent } from "@mastra/core/agent";
 import { memory } from "../memory";
 import { createOpenRouterProvider } from "../router";
-import { CLAUDE_SONNET_4, GPT_4O } from "../constants";
-import { userTweetsFetcherTool } from "../tools/research/scrape-tweets";
-import { getMCPClient } from "../mcp/client";
+import { CLAUDE_SONNET_4 } from "../constants";
 
 const router = createOpenRouterProvider({
   apiKey: process.env.OPENROUTER_API_KEY!
@@ -201,8 +199,5 @@ When analyzing Twitter content frameworks, you MUST include the specific tweet I
 This tweet reference data is critical for calculating engagement metrics for each framework.
 `,
   model: router(CLAUDE_SONNET_4),
-  memory: memory,
-  tools: {  
-    userTweetsFetcherTool,
-  }
+  memory: memory
 });

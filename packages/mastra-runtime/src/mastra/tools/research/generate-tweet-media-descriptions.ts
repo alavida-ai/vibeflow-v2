@@ -6,7 +6,7 @@ export const generateTweetMediaDescriptionsTool: ReturnType<typeof createTool> =
     id: 'generate-tweet-media-descriptions',
     description: `Generate media descriptions for tweets.`,
     inputSchema: z.object({
-        tweetIds: z.array(z.number()).describe('Saved tweet IDs to fetch for analysis'),
+        tweetIds: z.array(z.number()).describe('Tweet IDs to generate media descriptions for'),
     }),
     outputSchema: z.object({
         mediaProcessed: z.number().describe('The number of media items processed')
