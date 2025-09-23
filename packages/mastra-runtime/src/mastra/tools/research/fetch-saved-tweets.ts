@@ -4,16 +4,18 @@ import { getTweetsByIds } from '@vibeflow/core';
 
 export const fetchSavedTweetsTool: ReturnType<typeof createTool> = createTool({
   id: 'fetch-saved-tweets',
-  description: `Fetch a user\'s tweets data including media descriptions.`,
+  description: `Fetch a tweet data by their IDs.`,
   inputSchema: z.object({
     tweetIds: z.array(z.number()).describe('Saved tweet IDs to fetch for analysis'),
+    limit: z.number().optional().describe('Limit the number of tweets to fetch'),
   }),
   outputSchema: z.object({
     tweets: z.array(z.any())
   }),
   execute: async ({ context }) => {
+    const { tweetIds, limit } = context;
     try {
-      const tweets = await getTweetsByIds(context.tweetIds);
+      const tweets = await getTweetsByIds(tweetIds, { limit });
 
       return {
         tweets: tweets
