@@ -2,7 +2,6 @@ import { createTool } from '@mastra/core/tools';
 import { z } from 'zod';
 import { createUserLastTweetsPipeline } from '@vibeflow/ingestion';
 
-
 export const userTweetsFetcherTool: ReturnType<typeof createTool> = createTool({
   id: 'user-tweets-fetcher',
   description: `Fetch a user\'s tweets data including media descriptions.`,

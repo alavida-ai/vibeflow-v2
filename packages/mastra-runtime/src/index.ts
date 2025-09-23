@@ -14,10 +14,8 @@ export async function createMastra(options: {
   const { workflows = {}, agents = {} } = options;
   
   const compiledWorkflows = await compileWorkflows(Object.values(workflows));
-  console.log('Compiled workflows:', compiledWorkflows);
   
   const compiledAgents = await compileAgents(Object.values(agents));
-  console.log('Compiled agents:', compiledAgents);
   
   return await createMastraInstance({
     workflows: Object.fromEntries(Object.entries(compiledWorkflows).map(([id, wf]) => [id, wf.workflow])),

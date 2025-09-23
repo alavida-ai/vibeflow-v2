@@ -70,7 +70,7 @@ const fetchTweetsStep = createStep({
 
       const totalTweets = tweets.length;
 
-      logger.info(`✅ Fetched ${totalTweets} tweets`);
+      logger.info(`✅ Twitter analysis completed. Total tweets: ${totalTweets}`);
 
       return {
         tweetIds: tweets.map(tweet => tweet.id),

@@ -1,14 +1,12 @@
 import { Agent } from "@mastra/core/agent";
 import { memory } from "../memory";
-import { createOpenRouterProvider } from "../router";
+import { getDefaultOpenRouterProvider } from "../router";
 import { GPT_4O } from "../constants";
 import { getMCPClient } from "../mcp/client";
 import { perplexityAskTool } from "../tools/research/perplexity";
 
-const router = createOpenRouterProvider({
-  apiKey: process.env.OPENROUTER_API_KEY!
-});
-
+const router = getDefaultOpenRouterProvider();
+ 
 export const strategyAgent = new Agent({
   name: "Strategy Agent",
   description: "Strategy Agent for the brand. He should be used to analyse the brand and the market using his suite of research tools",

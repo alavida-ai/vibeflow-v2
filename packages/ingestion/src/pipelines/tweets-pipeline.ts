@@ -1,6 +1,12 @@
 // packages/ingestion/src/pipeline/TwitterPipeline.ts
 import { PipelineConfig, PipelineOptions, PipelineResult } from './types';
 import { schema } from '@vibeflow/database';
+import { createLogger } from "@vibeflow/logging";
+
+const logger = createLogger({
+  context: "cli",
+  name: "ingestion"
+});
 
 export class TwitterPipeline {
   constructor(private config: PipelineConfig) {}
@@ -14,18 +20,18 @@ export class TwitterPipeline {
     const maxPages = options?.maxPages || 100;
     const processorResults: Record<string, any> = {};
 
-    console.log(`🚀 Starting Twitter ingestion`);
+    logger.info(`🚀 Starting Twitter ingestion`);
 
     try {
       while (hasNextPage && pageCount < maxPages) {
         pageCount++;
-        console.log(`📄 Page ${pageCount}${cursor ? ` (cursor: ${cursor})` : ''}`);
+        logger.info(`📄 Page ${pageCount}${cursor ? ` (cursor: ${cursor})` : ''}`);
 
         // Fetch tweets
         const response = await this.config.source.fetch(params, cursor);
         
         if (response.tweets.length === 0) {
-          console.log("No tweets found");
+          logger.info("No tweets found for this page");
           break;
         }
 
@@ -52,10 +58,10 @@ export class TwitterPipeline {
         hasNextPage = response.hasNextPage;
         cursor = response.nextCursor || undefined;
 
-        console.log(`✅ Page ${pageCount}: ${savedTweets.length} saved tweets`);
+        logger.info(`✅ Page ${pageCount}: ${savedTweets.length} saved tweets`);
       }
 
-      console.log(`🎉 Complete! ${totalTweets} tweets across ${pageCount} pages`);
+      logger.info(`🎉 Complete! ${totalTweets} tweets across ${pageCount} pages`);
 
       return {
         success: true,
@@ -68,7 +74,7 @@ export class TwitterPipeline {
       };
 
     } catch (error: any) {
-      console.error('❌ Pipeline failed:', error);
+      logger.error('❌ Pipeline failed:', error);
       return {
         success: false,
         totalTweets,
