@@ -1,0 +1,8 @@
+{
+  "/_not-found/page": "/_not-found",
+  "/api/analyze/route": "/api/analyze",
+  "/favicon.ico/route": "/favicon.ico",
+  "/page": "/",
+  "/sign-in/[[...sign-in]]/page": "/sign-in/[[...sign-in]]",
+  "/tools/[tool]/dashboard/page": "/tools/[tool]/dashboard"
+}

@@ -1,0 +1,6 @@
+{
+  "version": 3,
+  "sources": [],
+  "sections": [
+    {"offset": {"line": 4, "column": 0}, "map": {"version":3,"sources":["file:///Users/alexandergarciachicote/code/projects/vibeflow-v2/apps/web/src/app/tools/%5Btool%5D/dashboard/page.tsx"],"sourcesContent":["// src/app/tools/[tool]/dashboard/page.tsx\n\"use client\";\n\nimport { useParams } from 'next/navigation';\nimport { getToolConfig } from \"@/lib/tools/registry\";\n\nexport default function DashboardPage() {\n  const params = useParams();\n  const tool = params.tool as string;\n  \n  const toolConfig = getToolConfig(tool);\n  \n  if (!toolConfig) {\n    return <div>Tool not found</div>;\n  }\n\n  const { DashboardContent } = toolConfig;\n  \n  return <DashboardContent />;\n}"],"names":[],"mappings":"AAAA,0CAA0C;;;;;;AAG1C;AACA;AAHA;;;;AAKe,SAAS;IACtB,MAAM,SAAS,IAAA,sTAAS;IACxB,MAAM,OAAO,OAAO,IAAI;IAExB,MAAM,aAAa,IAAA,gKAAa,EAAC;IAEjC,IAAI,CAAC,YAAY;QACf,qBAAO,qZAAC;sBAAI;;;;;;IACd;IAEA,MAAM,EAAE,gBAAgB,EAAE,GAAG;IAE7B,qBAAO,qZAAC;;;;;AACV","debugId":null}}]
+}

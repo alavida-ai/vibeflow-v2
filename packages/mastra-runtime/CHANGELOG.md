@@ -1,5 +1,20 @@
 # @vibeflow/mastra-runtime
 
+## 1.3.0
+
+### Minor Changes
+
+- Added agents
+
+### Patch Changes
+
+- Updated dependencies
+  - @vibeflow/agent-sdk@1.1.0
+  - @vibeflow/compiler@2.1.0
+  - @vibeflow/core@1.1.0
+  - @vibeflow/database@2.1.0
+  - @vibeflow/ingestion@2.1.0
+
 ## 1.2.0
 
 ### Minor Changes

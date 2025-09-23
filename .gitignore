@@ -61,6 +61,5 @@ coverage/
 tmp/
 temp/
 
-**/.mastra/
-
-.mastra/
+# Ignore mastra build output
+.mastra

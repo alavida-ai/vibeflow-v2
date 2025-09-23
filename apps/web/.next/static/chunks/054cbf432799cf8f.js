@@ -1,0 +1,1 @@
+(globalThis.TURBOPACK||(globalThis.TURBOPACK=[])).push(["object"==typeof document?document.currentScript:void 0,32451,o=>{"use strict";o.s(["default",()=>l]);var t=o.i(78652),e=o.i(66430),i=o.i(14073);function l(){let o=(0,e.useParams)().tool,l=(0,i.getToolConfig)(o);if(!l)return(0,t.jsx)("div",{children:"Tool not found"});let{DashboardContent:n}=l;return(0,t.jsx)(n,{})}}]);

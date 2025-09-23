@@ -11,6 +11,7 @@ const router = createOpenRouterProvider({
 
 export const frameworkAgent = new Agent({
   name: "Framework Agent",
+  description: "A framework agent for analyzing swipe files",
   instructions: `
 ROLE ASSIGNMENT
 

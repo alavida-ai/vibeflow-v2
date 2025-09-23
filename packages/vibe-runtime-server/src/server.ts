@@ -4,7 +4,7 @@ import { Hono } from 'hono';
 import { serve } from '@hono/node-server';
 import { createHonoServer } from '@mastra/deployer/server';
 import fs from 'node:fs/promises';
-import { compile, type WorkflowInput, type Manifest } from '@vibeflow/compiler';
+import { compile, type WorkflowInput, type AgentInput, type Manifest } from '@vibeflow/compiler';
 import { swaggerUI } from '@hono/swagger-ui';
 import { Scalar } from '@scalar/hono-api-reference';
 import path from 'node:path';
@@ -30,10 +30,23 @@ export async function startServer(manifest: Manifest, outDir: string, options: {
     return workflows;
   };
 
+  const loadAgents = async (manifest: Manifest) => {
+    console.log('Loading agents from manifest:', manifest);
+    const agents: Record<string, AgentInput> = {};
+    for (const agent of manifest.agents) {
+      const agentContent = await fs.readFile(path.join(outDir, agent.path), 'utf8');
+      agents[agent.id] = JSON.parse(agentContent);
+    }
+    console.log('Loaded agents:', Object.keys(agents));
+    return agents;
+  };
+
   // Create workflow Hono app from mastra
   const createWorkflowApp = async (manifest: Manifest) => {
     const workflows = await loadWorkflows(manifest);
-    const mastra = await createMastra({ workflows });
+    const agents = await loadAgents(manifest);
+    
+    const mastra = await createMastra({ workflows, agents });
     return await createHonoServer(mastra) as unknown as Hono;
   };
 
@@ -85,7 +98,8 @@ if (import.meta.url === `file://${process.argv[1]}`) {
   console.log(`📤 Output directory: ${OUT_DIR}`);
   
   const compiledWorkflows = await compile({ srcDir: WORKFLOWS_DIR, outDir: OUT_DIR });
-  await startServer(compiledWorkflows, OUT_DIR);
+  const { host, port } = await startServer(compiledWorkflows, OUT_DIR);
+  console.log(`Server started at http://${host}:${port}`);
 }
 
 
