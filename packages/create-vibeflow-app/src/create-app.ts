@@ -1,11 +1,12 @@
 import fs from 'fs-extra';
-import path from 'path';
-import { fileURLToPath } from 'url';
-import chalk from 'chalk';
+import path from 'path'
+import { createLogger } from '@vibeflow/logging';
 import { spawn } from 'child_process';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const log = createLogger({ 
+  context: 'cli', 
+  name: 'create-vibeflow-app'
+});
 
 export interface CreateAppOptions {
   projectPath: string;
@@ -21,7 +22,7 @@ export async function createApp(options: CreateAppOptions): Promise<void> {
   // Ensure project directory exists
   await fs.ensureDir(projectPath);
 
-  console.log('📁 Creating project structure...');
+  log.info('📁 Creating project structure...');
 
   // Copy template files
   const templatePath = path.join(__dirname, '..', 'templates', template);
@@ -34,19 +35,19 @@ export async function createApp(options: CreateAppOptions): Promise<void> {
     PROJECT_NAME: projectName,
   });
 
-  console.log('✅ Project structure created');
+  log.info('✅ Project structure created');
 
   // Install dependencies if not skipped
   if (!skipInstall) {
-    console.log(`📦 Installing dependencies with ${packageManager}...`);
+    log.info(`📦 Installing dependencies with ${packageManager}...`);
     await installDependencies(projectPath, packageManager);
-    console.log('✅ Dependencies installed');
+    log.info('✅ Dependencies installed');
   }
 
   // Initialize git repository
-  console.log('🔧 Initializing git repository...');
+  log.info('🔧 Initializing git repository...');
   await initializeGit(projectPath);
-  console.log('✅ Git repository initialized');
+  log.info('✅ Git repository initialized');
 }
 
 async function copyTemplate(
@@ -118,7 +119,7 @@ function initializeGit(projectPath: string): Promise<void> {
 
     child.on('close', (code) => {
       if (code !== 0) {
-        console.log(chalk.yellow('⚠️  Could not initialize git repository'));
+        log.warn('⚠️  Could not initialize git repository');
         resolve();
         return;
       }
@@ -126,7 +127,7 @@ function initializeGit(projectPath: string): Promise<void> {
     });
 
     child.on('error', (error) => {
-      console.log(chalk.yellow('⚠️  Git not available, skipping repository initialization'));
+      log.warn('⚠️  Git not available, skipping repository initialization');
       resolve();
     });
   });

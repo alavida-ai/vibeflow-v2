@@ -1,6 +1,6 @@
 import { Agent } from "@mastra/core/agent";
 import { memory } from "../memory";
-import { createOpenRouterProvider } from "../router";
+import { getDefaultOpenRouterProvider } from "../router";
 import { GPT_4O } from "../constants";
 import { getMCPClient } from "../mcp/client";
 import { perplexityAskTool } from "../tools/research/perplexity";
@@ -25,10 +25,8 @@ const getDefaultTools = async () => {
   };
 };
 
-// Default router for agents
-const router = createOpenRouterProvider({
-  apiKey: process.env.OPENROUTER_API_KEY!
-});
+// Default router for agents (singleton instance)
+const router = getDefaultOpenRouterProvider();
 
 // Runtime compiler that creates Agent instances from AgentInput specs
 export async function compileAgent(spec: AgentInput): Promise<{

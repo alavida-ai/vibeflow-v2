@@ -2,6 +2,7 @@ import { createTool } from "@mastra/core";
 import { z } from "zod";
 import { startWorkflow, startWorkflowResultSchema } from "@vibeflow/agent-sdk";
 import { setSession } from "../../sessions";
+import { createLogger } from "@vibeflow/logging";
 
 export const startWorkflowTool: ReturnType<typeof createTool> = createTool({
   id: "start-workflow",
@@ -12,10 +13,11 @@ export const startWorkflowTool: ReturnType<typeof createTool> = createTool({
   outputSchema: startWorkflowResultSchema,
   execute: async ({ context, runtimeContext, mastra }, options) => {
 
-    console.log("mastra", mastra);
+    const logger = mastra!.getLogger();
+    logger.info("workflow info log"); 
     // @ts-ignore
     const mcpSid = options?.extra?.sessionId;       // provided by MCP over Hono SSE
-    console.log("appSid", mcpSid)
+    logger.info("appSid", JSON.stringify(mcpSid, null, 2) as any);
     
     if (!mcpSid) {
       throw new Error("Session ID is required but not provided. Make sure the MCP client is properly configured.");
@@ -27,7 +29,7 @@ export const startWorkflowTool: ReturnType<typeof createTool> = createTool({
       const result = await startWorkflow(workflowId);
       runtimeContext.set("current-run-id", result.runId);
       runtimeContext.set("workflowId", workflowId);
-      console.log("result and set runId and workflowId", result);
+      logger.info("result and set runId and workflowId", JSON.stringify(result, null, 2) as any);
 
       if (!result.runId) {
         throw new Error("No runId found from startWorkflow");
@@ -40,7 +42,7 @@ export const startWorkflowTool: ReturnType<typeof createTool> = createTool({
         }
       })
 
-      console.log("set session", session);
+      logger.info("set session", JSON.stringify(session, null, 2) as any);
       return result;
     } catch (error) {
       throw new Error(`Failed to start workflow: ${error instanceof Error ? error.message : String(error)}`);

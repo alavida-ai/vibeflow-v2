@@ -8,6 +8,13 @@ import { compile, type WorkflowInput, type AgentInput, type Manifest } from '@vi
 import { swaggerUI } from '@hono/swagger-ui';
 import { Scalar } from '@scalar/hono-api-reference';
 import path from 'node:path';
+import { createLogger } from '@vibeflow/logging';
+
+const log = createLogger({ 
+  context: 'cli', 
+  name: 'vibe-runtime-server'
+});
+
 
 export async function startServer(manifest: Manifest, outDir: string, options: { port?: number; host?: string } = {}) {
   await initEnv();
@@ -20,24 +27,22 @@ export async function startServer(manifest: Manifest, outDir: string, options: {
 
   // Load workflows function that can be called to reload
   const loadWorkflows = async (manifest: Manifest) => {
-    console.log('Loading workflows from manifest:', manifest);
     const workflows: Record<string, WorkflowInput> = {};
     for (const wf of manifest.workflows) {
       const workflowContent = await fs.readFile(path.join(outDir, wf.path), 'utf8');
       workflows[wf.id] = JSON.parse(workflowContent);
     }
-    console.log('Loaded workflows:', Object.keys(workflows));
+    log.info(`Loaded workflows: ${Object.keys(workflows)}`);
     return workflows;
   };
 
   const loadAgents = async (manifest: Manifest) => {
-    console.log('Loading agents from manifest:', manifest);
     const agents: Record<string, AgentInput> = {};
     for (const agent of manifest.agents) {
       const agentContent = await fs.readFile(path.join(outDir, agent.path), 'utf8');
       agents[agent.id] = JSON.parse(agentContent);
     }
-    console.log('Loaded agents:', Object.keys(agents));
+    log.info(`Loaded agents: ${Object.keys(agents)}`);
     return agents;
   };
 
@@ -78,9 +83,9 @@ export async function startServer(manifest: Manifest, outDir: string, options: {
     host: HOST, 
     server,
     reloadWorkflows: async (newManifest: Manifest) => {
-      console.log('🔄 Rebuilding workflow server...');
+      log.info('🔄 Rebuilding workflow server...');
       workflowApp = await createWorkflowApp(newManifest);
-      console.log('✅ Workflow server rebuilt and remounted');
+      log.info('✅ Workflow server rebuilt and remounted');
     },
     stop: () => server.close()
   };
@@ -93,7 +98,7 @@ if (import.meta.url === `file://${process.argv[1]}`) {
   
   const compiledWorkflows = await compile({ srcDir: WORKFLOWS_DIR, outDir: OUT_DIR });
   const { host, port } = await startServer(compiledWorkflows, OUT_DIR);
-  console.log(`Server started at http://${host}:${port}`);
+  log.info(`Server started at http://${host}:${port}`);
 }
 
 

@@ -9,6 +9,12 @@ import { createVibeflowMCP } from "./mcp";
 import { PinoLogger } from "@mastra/loggers";
 import { strategyAgent } from "./agents/strategyAgent";
 import { Agent } from "@mastra/core/agent";
+import { createCliTransport } from "@vibeflow/logging";
+import { createCustomTransport } from "@mastra/core/logger";
+
+const transportFactory = createCliTransport('VibeFlow-Mastra');
+const pinoStream = await transportFactory({});
+const transport = createCustomTransport(pinoStream);
 
 export async function createMastraInstance(options?: {
   workflows?: Record<string, Workflow>,
@@ -17,7 +23,8 @@ export async function createMastraInstance(options?: {
   return new Mastra({
     logger: new PinoLogger({
       name: 'VibeFlow-Mastra',
-      level: 'debug'
+      transports: { cli: transport },
+      level: 'error'
     }),
     agents: {
       frameworkAgent,

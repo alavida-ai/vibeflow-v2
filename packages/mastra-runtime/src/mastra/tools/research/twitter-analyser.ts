@@ -16,7 +16,8 @@ export const userTweetsScraperTool: ReturnType<typeof createTool> = createTool({
     totalTweets: z.number(),
     username: z.string()
   }),
-  execute: async ({ context }) => {
+  execute: async ({ context, mastra }) => {
+    const logger = mastra!.getLogger();
     try {
       // Validate input parameters
       if (!context.userName) {
@@ -26,7 +27,7 @@ export const userTweetsScraperTool: ReturnType<typeof createTool> = createTool({
         throw new Error('numTweets must be a positive number');
       }
 
-      console.log(`Scraping recent tweets for user: ${context.userName}, pages: ${Math.ceil(context.numTweets / 20)}`);
+      logger.info(`Scraping recent tweets for user: ${context.userName}, pages: ${Math.ceil(context.numTweets / 20)}`);
       
       const twitterAnalyser = new TwitterAnalyser({
         userName: context.userName,
@@ -42,7 +43,7 @@ export const userTweetsScraperTool: ReturnType<typeof createTool> = createTool({
 
       const totalTweets = tweetsForOutput.ingestionResult.totalTweets ?? 0;
       
-      console.log(`✅ Twitter analysis completed. Total tweets: ${totalTweets}`);
+      logger.info(`✅ Twitter analysis completed. Total tweets: ${totalTweets}`);
 
       return {
           totalTweets: totalTweets,

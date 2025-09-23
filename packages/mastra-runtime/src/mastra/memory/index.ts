@@ -2,7 +2,8 @@ import { createOpenRouterProvider } from "../router";
 import { TEXT_EMBEDDING_3_SMALL } from "../constants";
 import { createOpenAI } from "@ai-sdk/openai";
 import { Memory } from "@mastra/memory";
-import { PostgresStore, PgVector } from "@mastra/pg";
+import { PgVector } from "@mastra/pg";
+import { getSharedStorage } from "../storage";
 
 const router = createOpenRouterProvider({
   apiKey: process.env.OPENROUTER_API_KEY!
@@ -14,14 +15,13 @@ const openaiForEmbeddings = createOpenAI({
 })  
 
 /**
- * Creates a Memory instance with PostgreSQL storage and vector search
+ * Creates a Memory instance with shared PostgreSQL storage and vector search
  * @param connectionString - PostgreSQL connection string (e.g., "postgresql://user:password@host:port/database")
  * @returns Configured Memory instance
  */
 export function createMemory(connectionString: string) {
-  const storage = new PostgresStore({
-    connectionString,
-  });
+  // Reuse shared storage instance to avoid duplicate connections
+  const storage = getSharedStorage();
 
   return new Memory({
     storage,
@@ -37,5 +37,5 @@ export function createMemory(connectionString: string) {
 }
 
 // Default memory instance using environment variable
-const defaultConnectionString = process.env.DATABASE_URL || `postgresql://postgres.vbdntompztegzppzjzep:zeBWGkeXWCBnYHoE@aws-1-eu-west-2.pooler.supabase.com:6543/postgres`;
+const defaultConnectionString = process.env.DATABASE_URL!;
 export const memory = createMemory(defaultConnectionString);

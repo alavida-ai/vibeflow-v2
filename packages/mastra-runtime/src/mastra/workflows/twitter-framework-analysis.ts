@@ -73,7 +73,7 @@ const twitterScraperStep = createStep({
 
       const totalTweets = totalTweetsViews.length;
 
-      console.log(`✅ Twitter analysis completed. Total tweets: ${totalTweets}`);
+      logger.info(`✅ Twitter analysis completed. Total tweets: ${totalTweets}`);
 
       return {
         totalTweets: totalTweets,

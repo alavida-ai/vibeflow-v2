@@ -1,7 +1,14 @@
 import { VibeflowAgentClient } from "../client";
 import { StartWorkflowResult } from "./types";
+import { createLogger } from "@vibeflow/logging";
 
 const VIBEFLOW_BASE_URL = process.env.VIBEFLOW_BASE_URL || "http://localhost:4111/";
+
+const logger = createLogger({
+    context: "cli",
+    name: "agent-sdk"
+});
+
 
   
   export async function startWorkflow(workflowId: string) : Promise<StartWorkflowResult> {
@@ -18,7 +25,7 @@ const VIBEFLOW_BASE_URL = process.env.VIBEFLOW_BASE_URL || "http://localhost:411
           },
         });
       
-      console.log("Started workflow, run ID:", run.runId, result);
+      logger.info("Started workflow, run ID:", JSON.stringify(run.runId, null, 2) as any, JSON.stringify(result, null, 2) as any);
       
       if (result.status === "suspended" && result.suspended.length > 0) {
         const suspendedStepName = result.suspended[0][0];

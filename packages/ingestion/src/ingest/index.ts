@@ -3,6 +3,13 @@ import { schema } from "@vibeflow/database";
 import * as AnalyticsService from "@vibeflow/core";
 import * as TwitterDatabaseService from "@vibeflow/core";
 import { TwitterClient, TwitterApiResponse } from "../client/twitter";
+import { createLogger } from "@vibeflow/logging";
+
+const logger = createLogger({
+  context: "cli",
+  name: "ingestion"
+});
+
 /* -------------------------------------------------------------------------- */
 /*                              TYPES                                         */
 /* -------------------------------------------------------------------------- */
@@ -59,11 +66,11 @@ export interface BrandListenerConfig {
       let pageCount = 0;
       let totalTweets = 0;
 
-      console.log(`🚀 Starting ${operationName}`);
+      logger.info(`🚀 Starting ${operationName}`);
 
       while (hasNextPage && pageCount < maxPages) {
         pageCount++;
-        console.log(`📄 Fetching page ${pageCount}${cursor ? ` with cursor: ${cursor}` : ''}`);
+        logger.info(`📄 Fetching page ${pageCount}${cursor ? ` with cursor: ${cursor}` : ''}`);
         
         const response = await fetchFunction(cursor);
         const transformed = TwitterTransformer.transformTwitterResponse(response);
@@ -75,7 +82,7 @@ export interface BrandListenerConfig {
           });
           totalTweets += processedCount;
         } else {
-          console.log("No tweets found for this page");
+          logger.info("No tweets found for this page");
           break;
         }
         
@@ -83,15 +90,15 @@ export interface BrandListenerConfig {
         hasNextPage = transformed.hasNextPage;
         cursor = transformed.nextCursor || undefined;
         
-        console.log(`✅ Page ${pageCount}: Found ${transformed.tweets.length} tweets, hasNextPage: ${hasNextPage}`);
+        logger.info(`✅ Page ${pageCount}: Found ${transformed.tweets.length} tweets, hasNextPage: ${hasNextPage}`);
       }
 
       const reachedMaxPages = pageCount >= maxPages;
       if (reachedMaxPages) {
-        console.log(`⚠️  Reached maximum page limit (${maxPages}). There may be more tweets available.`);
+        logger.info(`⚠️  Reached maximum page limit (${maxPages}). There may be more tweets available.`);
       }
       
-      console.log(`🎉 Complete! Processed ${totalTweets} total tweets across ${pageCount} pages`);
+      logger.info(`🎉 Complete! Processed ${totalTweets} total tweets across ${pageCount} pages`);
 
       return {
         success: true,
@@ -102,7 +109,7 @@ export interface BrandListenerConfig {
       };
 
     } catch (error) {
-      console.error(`❌ ${operationName} failed:`, error);
+      logger.error(`❌ ${operationName} failed:`, JSON.stringify(error, null, 2) as any);
       return {
         success: false,
         totalTweets: 0,
@@ -132,11 +139,11 @@ export async function hasUserRepliedToTweet({
       let hasNextPage = true;
       let pageCount = 0;
 
-      console.log(`🔍 Checking if user replied to tweet ${tweetId}`);
+      logger.info(`🔍 Checking if user replied to tweet ${tweetId}`);
 
       while (hasNextPage && pageCount < maxPages) {
         pageCount++;
-        console.log(`📄 Checking page ${pageCount}${currentCursor ? ` with cursor: ${currentCursor}` : ''}`);
+        logger.info(`📄 Checking page ${pageCount}${currentCursor ? ` with cursor: ${currentCursor}` : ''}`);
         
         const response = await client.getReplies(tweetId, currentCursor);
         const transformed = TwitterTransformer.transformTwitterResponse(response);
@@ -145,7 +152,7 @@ export async function hasUserRepliedToTweet({
         for (const tweet of transformed.tweets) {
           const isUserReply = await AnalyticsService.checkIfUserRepliedToTweet(tweet);
           if (isUserReply) {
-            console.log(`✅ Found user reply on page ${pageCount}`);
+            logger.info(`✅ Found user reply on page ${pageCount}`);
             return true;
           }
         }
@@ -154,18 +161,18 @@ export async function hasUserRepliedToTweet({
         hasNextPage = transformed.hasNextPage;
         currentCursor = transformed.nextCursor || undefined;
         
-        console.log(`📊 Page ${pageCount}: Checked ${transformed.tweets.length} replies, no user reply found`);
+        logger.info(`📊 Page ${pageCount}: Checked ${transformed.tweets.length} replies, no user reply found`);
         
         if (transformed.tweets.length === 0) {
           break;
         }
       }
 
-      console.log(`🔍 Completed search across ${pageCount} pages - no user reply found`);
+      logger.info(`🔍 Completed search across ${pageCount} pages - no user reply found`);
       return false;
 
     } catch (error) {
-      console.error(`❌ Error checking user replies for tweet ${tweetId}:`, error);
+      logger.error(`❌ Error checking user replies for tweet ${tweetId}:`, JSON.stringify(error, null, 2) as any);
       throw error;
     }
   }
@@ -258,7 +265,7 @@ export async function ingestMentions(config: BrandListenerConfig): Promise<Inges
 
     const processPageFunction: ProcessPageFunction = async (tweets) => {
       const result = await TwitterDatabaseService.insertTweetsAndIgnoreDuplicates(tweets);
-      console.log(`💾 Uploaded ${result.length} tweets`);
+      logger.info(`💾 Uploaded ${result.length} tweets`);
       return tweets.length;
     };
 
@@ -290,21 +297,21 @@ export async function ingestUserLastTweets(config: UserLastTweetsConfig): Promis
     let pageCount = 0;
     let totalTweets = 0;
 
-    console.log(`🚀 Starting user last tweets ingestion for @${userName}`);
+    logger.info(`🚀 Starting user last tweets ingestion for @${userName}`);
 
     while (hasNextPage && pageCount < maxPages) {
       pageCount++;
-      console.log(`📄 Fetching page ${pageCount}${cursor ? ` with cursor: ${cursor}` : ''}`);
+      logger.info(`📄 Fetching page ${pageCount}${cursor ? ` with cursor: ${cursor}` : ''}`);
       
       const response = await client.getLastTweets(userName, cursor);
       const transformed = TwitterTransformer.transformTwitterAnalyzerResponse(response);
 
       if (transformed.tweets.length > 0) {
         const result = await TwitterDatabaseService.AnalyzerService.saveParsedTweets(transformed.tweets);
-        console.log(`💾 Uploaded ${result.length} tweets`);
+        logger.info(`💾 Uploaded ${result.length} tweets`);
         totalTweets += transformed.tweets.length;
       } else {
-        console.log("No tweets found for this page");
+        logger.info("No tweets found for this page");
         break;
       }
       
@@ -312,15 +319,15 @@ export async function ingestUserLastTweets(config: UserLastTweetsConfig): Promis
       hasNextPage = transformed.hasNextPage;
       cursor = transformed.nextCursor || undefined;
       
-      console.log(`✅ Page ${pageCount}: Found ${transformed.tweets.length} tweets, hasNextPage: ${hasNextPage}`);
+      logger.info(`✅ Page ${pageCount}: Found ${transformed.tweets.length} tweets, hasNextPage: ${hasNextPage}`);
     }
 
     const reachedMaxPages = pageCount >= maxPages;
     if (reachedMaxPages) {
-      console.log(`⚠️  Reached maximum page limit (${maxPages}). There may be more tweets available.`);
+      logger.info(`⚠️  Reached maximum page limit (${maxPages}). There may be more tweets available.`);
     }
     
-    console.log(`🎉 Complete! Processed ${totalTweets} total tweets across ${pageCount} pages`);
+    logger.info(`🎉 Complete! Processed ${totalTweets} total tweets across ${pageCount} pages`);
 
     return {
       success: true,

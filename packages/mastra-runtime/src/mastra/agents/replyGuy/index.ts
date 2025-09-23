@@ -2,6 +2,12 @@ import { Agent } from '@mastra/core/agent';
 import { PROMPT_GENERATE } from "./prompt";
 import { createOpenRouterProvider, OpenRouterConfig } from '../../router';
 import { CLAUDE_SONNET_4 } from '../../constants';
+import { createLogger } from "@vibeflow/logging";
+
+const logger = createLogger({
+    context: "cli",
+    name: "mastra-runtime"
+});
 
 // Agent configuration interface
 export interface ReplyGuyAgentConfig {
@@ -12,15 +18,15 @@ export type ReplyGuyAgent = Agent;
 
 // Factory function for creating the reply guy agent at runtime
 export function createReplyGuyAgent(config: ReplyGuyAgentConfig): Agent {
-    console.log('🚀 Creating Reply Guy Agent with runtime configuration...');
+    logger.info('🚀 Creating Reply Guy Agent with runtime configuration...');
     
     // Create the OpenRouter provider with runtime config
     const openRouter = createOpenRouterProvider(config.openRouter);
     
     // Create and validate the model
     const model = openRouter(CLAUDE_SONNET_4);
-    console.log('🤖 Model created:', model ? 'SUCCESS' : 'FAILED');
-    console.log('🎯 Model ID:', CLAUDE_SONNET_4);
+    logger.info('🤖 Model created:', JSON.stringify(model ? 'SUCCESS' : 'FAILED', null, 2) as any);
+    logger.info('🎯 Model ID:  CLAUDE_SONNET_4', JSON.stringify(CLAUDE_SONNET_4, null, 2) as any);
     
     const agent = new Agent({
         name: 'Reply Guy Twitter Agent',
@@ -31,7 +37,7 @@ export function createReplyGuyAgent(config: ReplyGuyAgentConfig): Agent {
         },
     });
     
-    console.log('✅ Reply Guy Agent created successfully');
+        logger.info('✅ Reply Guy Agent created successfully');
     return agent;
 }
 

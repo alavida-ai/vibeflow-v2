@@ -26,6 +26,7 @@
     "@vibeflow/core": "workspace:*",
     "@vibeflow/database": "workspace:*",
     "@vibeflow/ingestion": "workspace:*",
+    "@vibeflow/logging": "workspace:*",
     "@google/genai": "^1.16.0",
     "@hono/swagger-ui": "^0.5.2",
     "@hono/zod-openapi": "^0.16.4",

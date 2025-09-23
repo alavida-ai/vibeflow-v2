@@ -51,6 +51,7 @@
     "generate": "turbo generate",
     "generate:db": "pnpm --filter=@vibeflow/database generate",
     "migrate:db": "pnpm --filter=@vibeflow/database migrate",
+    "build:packages": "turbo run build --filter=@vibeflow/*",
     "lint": "turbo lint",
     "typecheck": "turbo typecheck",
     "clean": "turbo clean",

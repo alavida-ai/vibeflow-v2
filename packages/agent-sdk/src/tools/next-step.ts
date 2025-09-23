@@ -1,6 +1,11 @@
 import { z } from "zod";
 import { VibeflowAgentClient } from "../client";
+import { createLogger } from "@vibeflow/logging";
 
+const logger = createLogger({
+    context: "cli",
+    name: "agent-sdk"
+});
 
   export const getNextStepResultSchema = z.object({
     suspendPayload: z.any().optional(),
@@ -31,7 +36,7 @@ import { VibeflowAgentClient } from "../client";
       
       // Get the current workflow state to find suspended steps
       const currentState = await workflow.runExecutionResult(runId);
-      console.log("currentState", currentState);
+      logger.info("currentState", JSON.stringify(currentState, null, 2) as any);
       let step = null;
       
       // Find the suspended step from current state
@@ -41,7 +46,7 @@ import { VibeflowAgentClient } from "../client";
           .filter(([, stepState]) => (stepState as any).status === "suspended");
         if (suspendedSteps.length > 0) {
           step = suspendedSteps[0][0];
-          console.log("step", step);
+          logger.info("step", JSON.stringify(step, null, 2) as any);
         }
       }
       
