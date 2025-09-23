@@ -4,7 +4,7 @@ import {
 } from "@vibeflow/database";
 import { eq, and, isNull, desc, or, inArray } from 'drizzle-orm';
 
-// Type for the getBestPerformingTweetsByUsernameView return value
+
 export type TweetView = {
     id: number;
     text: string;
