@@ -2,6 +2,12 @@
 // This is the same code - just moved to endpoints folder
 
 import { z } from "zod";
+import type { 
+  UserMentionsParams, 
+  AdvancedSearchParams, 
+  TweetRepliesParams, 
+  UserLastTweetsParams
+} from './params';
 
 /* -------------------------------------------------------------------------- */
 /*                              TYPES                                     */
@@ -104,6 +110,7 @@ export const TWITTER_API_BASE_URL = 'https://api.twitterapi.io';
 export const USER_MENTIONS_ENDPOINT = '/twitter/user/mentions';
 export const REPLIES_ENDPOINT = '/twitter/tweet/replies';
 export const LAST_TWEETS_ENDPOINT = '/twitter/user/last_tweets';
+export const ADVANCED_SEARCH_ENDPOINT = '/twitter/tweet/advanced_search';
 
 /* -------------------------------------------------------------------------- */
 /*                              CLASS                                     */
@@ -158,15 +165,7 @@ export class TwitterClient {
   /* -------------------------------------------------------------------------- */
 
 
-  async getUserMentions({
-    userName,
-    sinceTime,
-    cursor
-  }: {
-    userName: string;
-    sinceTime: Date;
-    cursor?: string;
-  }): Promise<TweetsApiResponse> {
+  async getUserMentions({ userName, sinceTime }: UserMentionsParams, cursor?: string): Promise<TweetsApiResponse> {
     try {
 
       const url = new URL(USER_MENTIONS_ENDPOINT, TWITTER_API_BASE_URL);
@@ -188,7 +187,7 @@ export class TwitterClient {
     }
   }
 
-  async getTweetReplies(tweetId: string, cursor?: string): Promise<TweetsApiResponse> {
+  async getTweetReplies({ tweetId }: TweetRepliesParams, cursor?: string): Promise<TweetsApiResponse> {
     try {
       const url = new URL(REPLIES_ENDPOINT, TWITTER_API_BASE_URL);
       url.searchParams.set('tweetId', tweetId);
@@ -204,7 +203,7 @@ export class TwitterClient {
     }
   }
 
-  async getUserLastTweets(userName: string, cursor?: string): Promise<UserLastTweetsApiResponse> {
+  async getUserLastTweets({ userName }: UserLastTweetsParams, cursor?: string): Promise<UserLastTweetsApiResponse> {
     try {
       const url = new URL(LAST_TWEETS_ENDPOINT, TWITTER_API_BASE_URL);
       url.searchParams.set('userName', userName);
@@ -217,6 +216,28 @@ export class TwitterClient {
       return response;
     } catch (error) {
       console.error('❌ Error in last tweets:', error);
+      throw error;
+    }
+  }
+
+  async getAdvancedSearch({ query, queryType }: AdvancedSearchParams, cursor?: string): Promise<TweetsApiResponse> {
+    try {
+
+      const url = new URL(ADVANCED_SEARCH_ENDPOINT, TWITTER_API_BASE_URL);
+      url.searchParams.set('query', query);
+      url.searchParams.set('queryType', queryType);
+
+      if (cursor) {
+        url.searchParams.set('cursor', cursor);
+      }
+
+      const rawData = await this.makeRequest(url.toString());
+
+      const response = apiTweetsResponseSchema.parse(rawData);
+
+      return response;
+    } catch (error) {
+      console.error('❌ Error in mentions:', error);
       throw error;
     }
   }

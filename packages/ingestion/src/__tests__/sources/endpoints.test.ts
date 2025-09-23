@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest'
-import { UserMentionsEndpoint, UserLastTweetsEndpoint, TweetRepliesEndpoint } from '../../sources/endpoints'
+import { UserMentionsEndpoint, UserLastTweetsEndpoint, TweetRepliesEndpoint } from '../../sources/twitter'
 import { mockTwitterClient, createMockTweetsApiResponse, createMockUserLastTweetsApiResponse, createMockApiTweet } from '../test-utils'
 
 describe('Twitter Endpoints', () => {

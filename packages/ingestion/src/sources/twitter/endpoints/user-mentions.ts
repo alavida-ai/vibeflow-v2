@@ -1,18 +1,15 @@
-import { TwitterEndpoint } from '.';
-import { TwitterClient } from '../twitter-client';
+import { TwitterEndpoint } from '..';
+import { TwitterClient } from '../client';
+import type { UserMentionsParams } from '../params';
 
 export class UserMentionsEndpoint implements TwitterEndpoint {
   constructor(private client: TwitterClient) {}
 
   async fetch(
-    params: { userName: string; sinceTime: Date }, 
+    params: UserMentionsParams, 
     cursor?: string
   ) {
-    const response = await this.client.getUserMentions({
-      userName: params.userName,
-      sinceTime: params.sinceTime,
-      cursor
-    });
+    const response = await this.client.getUserMentions(params, cursor);
 
     return {
       tweets: response.tweets,

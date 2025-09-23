@@ -1,4 +1,4 @@
-import { ApiTweet } from '..';
+import { ApiTweet } from './client';
 
 export interface TwitterEndpoint {
     fetch(params: any, cursor?: string): Promise<{

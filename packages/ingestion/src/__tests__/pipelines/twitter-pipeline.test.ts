@@ -2,7 +2,7 @@ import { describe, it, expect, beforeEach, vi } from 'vitest'
 import { TwitterPipeline } from '../../pipelines/tweets-pipeline'
 import { TweetTransformer } from '../../transformers/tweet'
 import { TweetSink } from '../../sinks/tweet-sink'
-import { UserMentionsEndpoint } from '../../sources/endpoints'
+import { UserMentionsEndpoint } from '../../sources/twitter'
 import { 
   mockTwitterClient, 
   mockTwitterService, 

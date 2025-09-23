@@ -1,14 +1,15 @@
-import { TwitterClient } from '../twitter-client';
-import { TwitterEndpoint } from '.';
+import { TwitterClient } from '../client';
+import { TwitterEndpoint } from '..';
+import type { TweetRepliesParams } from '../params';
 
 export class TweetRepliesEndpoint implements TwitterEndpoint {
   constructor(private client: TwitterClient) {}
 
   async fetch(
-    params: { tweetId: string }, 
+    params: TweetRepliesParams, 
     cursor?: string
   ) {
-    const response = await this.client.getTweetReplies(params.tweetId, cursor);
+    const response = await this.client.getTweetReplies(params, cursor);
 
     return {
       tweets: response.tweets,

@@ -6,7 +6,7 @@ import {
     createCustomPipeline
 } from '../../pipelines/factories'
 import { TwitterPipeline } from '../../pipelines/tweets-pipeline'
-import { UserMentionsEndpoint, UserLastTweetsEndpoint, TweetRepliesEndpoint } from '../../sources/endpoints'
+import { UserMentionsEndpoint, UserLastTweetsEndpoint, TweetRepliesEndpoint } from '../../sources/twitter'
 import { TweetTransformer } from '../../transformers/tweet'
 import { TweetSink } from '../../sinks/tweet-sink'
 import { MediaProcessor } from '../../processors'

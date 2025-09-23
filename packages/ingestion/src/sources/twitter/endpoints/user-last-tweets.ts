@@ -1,14 +1,15 @@
-import { TwitterEndpoint } from '.';
-import { TwitterClient } from '../twitter-client';
+import { TwitterEndpoint } from '..';
+import { TwitterClient } from '../client';
+import type { UserLastTweetsParams } from '../params';
 
 export class UserLastTweetsEndpoint implements TwitterEndpoint {
   constructor(private client: TwitterClient) {}
 
   async fetch(
-    params: { userName: string }, 
+    params: UserLastTweetsParams, 
     cursor?: string
   ) {
-    const response = await this.client.getUserLastTweets(params.userName, cursor);
+    const response = await this.client.getUserLastTweets(params, cursor);
 
     // Handle the "data" wrapper in LastTweetsApiResponse
     return {

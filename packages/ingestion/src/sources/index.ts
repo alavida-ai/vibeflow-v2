@@ -1,2 +1,1 @@
-export * from './twitter-client';
-export * from './endpoints';
+export * from './twitter';
