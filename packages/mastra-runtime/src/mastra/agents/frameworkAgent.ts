@@ -2,7 +2,7 @@ import { Agent } from "@mastra/core/agent";
 import { memory } from "../memory";
 import { createOpenRouterProvider } from "../router";
 import { CLAUDE_SONNET_4, GPT_4O } from "../constants";
-import { userTweetsFetcherTool } from "../tools/research/twitter-analyser";
+import { userTweetsFetcherTool } from "../tools/research/scrape-tweets";
 import { getMCPClient } from "../mcp/client";
 
 const router = createOpenRouterProvider({

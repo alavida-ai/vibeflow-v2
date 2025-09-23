@@ -4,7 +4,7 @@ import { createOpenRouterProvider } from "../router";
 import { GPT_4O } from "../constants";
 import { getMCPClient } from "../mcp/client";
 import { perplexityAskTool } from "../tools/research/perplexity";
-import { userTweetsFetcherTool } from "../tools/research/twitter-analyser";
+import { userTweetsFetcherTool } from "../tools/research/scrape-tweets";
 
 // Agent types - keeping it simple for now
 export interface AgentInput {
