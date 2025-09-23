@@ -25,7 +25,8 @@
       "@vibeflow/mastra-runtime": ["./packages/mastra-runtime/src"],
       "@vibeflow/replier": ["./packages/replier/src"],
       "@vibeflow/reporting": ["./packages/reporting/src"],
-      "@vibeflow/vibe-runtime-server": ["./packages/vibe-runtime-server/src"]
+      "@vibeflow/vibe-runtime-server": ["./packages/vibe-runtime-server/src"],
+      "@vibeflow/logging": ["./packages/logging/src"]
     }
   }
 }

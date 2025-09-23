@@ -1,6 +1,12 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { parse } from 'dotenv';
+import { createLogger } from '@vibeflow/logging';
+
+const log = createLogger({ 
+  context: 'cli', 
+  name: 'vibe-runtime-server'
+});
 
 interface EnvConfig {
   envDir?: string;
@@ -44,10 +50,10 @@ export function loadEnvConfig(config: EnvConfig = {}): Record<string, string> {
           }
         }
         
-        console.log(`✓ Loaded environment variables from ${envFile}`);
+        log.info(`✓ Loaded environment variables from ${envFile}`);
       }
     } catch (error) {
-      console.warn(`Warning: Could not load ${envFile}:`, error);
+      log.warn(`Warning: Could not load ${envFile}: ${error}`);
     }
   }
 
@@ -68,7 +74,7 @@ export function findProjectRoot(startDir: string = process.cwd()): string {
       fs.existsSync(path.join(currentDir, 'pnpm-workspace.yaml')) ||
       fs.existsSync(path.join(currentDir, 'turbo.json'))
     ) {
-        console.log("Found workspace root in", currentDir);
+        log.info(`Found workspace root in ${currentDir}`);
       return currentDir;
     }
     
@@ -99,17 +105,16 @@ export async function initEnv(config: EnvConfig = {}): Promise<void> {
   const projectRoot = findProjectRoot();
   const envConfig = { envDir: projectRoot, ...config };
   
-  console.log(`🌍 Loading environment variables from: ${envConfig.envDir}`);
-  console.log(`📁 Current working directory: ${process.cwd()}`);
-  console.log(`🎯 Project root detected: ${projectRoot}`);
+  log.info(`🌍 Loading environment variables from: ${envConfig.envDir}`);
+  log.info(`📁 Current working directory: ${process.cwd()}`);
   
   const loadedVars = loadEnvConfig(envConfig);
   const loadedKeys = Object.keys(loadedVars);
   
-  if (loadedKeys.length > 0) {
-    console.log(`✅ Loaded ${loadedKeys.length} environment variables:`, loadedKeys.join(', '));
+  if (loadedKeys.length > 0) {  
+    log.info(`✅ Loaded ${loadedKeys.length} environment variables: ${loadedKeys.join(', ')}`);
   } else {
-    console.log(`⚠️ No environment variables were loaded. Make sure .env files exist in ${projectRoot}`);
+    log.warn(`⚠️ No environment variables were loaded. Make sure .env files exist in ${projectRoot}`);
   }
   
   // Specifically check for common required variables
@@ -117,8 +122,8 @@ export async function initEnv(config: EnvConfig = {}): Promise<void> {
   const missing = requiredVars.filter(key => !process.env[key]);
   
   if (missing.length > 0) {
-    console.log(`🔴 Missing required environment variables: ${missing.join(', ')}`);
+    log.error(`🔴 Missing required environment variables: ${missing.join(', ')}`);
   } else {
-    console.log(`🟢 All common environment variables are loaded`);
+    log.info(`🟢 All common environment variables are loaded`);
   }
 }

@@ -12,11 +12,12 @@ export const listAgentsTool: ReturnType<typeof createTool> = createTool({
       card: z.any(),
     }))
   }),
-  execute: async ({ runtimeContext }, options) => {
+  execute: async ({ runtimeContext, mastra }, options) => {
+    const logger = mastra!.getLogger();
     try {
       // Use the agent-sdk function that handles A2A protocol
       const result = await listAgentsWithCards();
-      console.log("result", result);
+      logger.info("result", JSON.stringify(result, null, 2) as any);
       return { agents: result };
     } catch (error) {
       console.error("❌ Failed to list agents:", error);

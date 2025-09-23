@@ -16,11 +16,12 @@ const startStep = createStep({
   outputSchema: z.object({
     brandName: z.string()
   }),
-  execute: async ({ inputData, runtimeContext }: { inputData: { brandName: string }, runtimeContext: RuntimeContext<WorkflowContext> }) => {
+  execute: async ({ inputData, runtimeContext, mastra }: { inputData: { brandName: string }, runtimeContext: RuntimeContext<WorkflowContext>, mastra: any }) => {
+    const logger = mastra!.getLogger();
     const { brandName } = inputData;
     runtimeContext.set("threadId", "123");
     runtimeContext.set("resourceId", "user_123");
-    console.log(`Thread ID: ${runtimeContext.get("threadId")}`);
+    logger.info(`Thread ID: ${runtimeContext.get("threadId")}`, JSON.stringify(runtimeContext.get("threadId"), null, 2) as any);
     return { brandName };
   }
 });
@@ -42,6 +43,7 @@ const strategyStep = createStep({
     stepCompleted: z.boolean()
   }),
   execute: async ({ inputData, mastra, resumeData, suspend, runtimeContext }) => {
+    const logger = mastra!.getLogger();
     let { brandName } = inputData;
     const { userMessage } = resumeData ?? {};
     let firstMessage = true;
@@ -49,13 +51,13 @@ const strategyStep = createStep({
     const threadId = runtimeContext.get("threadId") as string;
     const resourceId = runtimeContext.get("resourceId") as string;
 
-    console.log("threadId", threadId);
-    console.log("resourceId", resourceId);
+    logger.info("threadId", JSON.stringify(threadId, null, 2) as any);
+    logger.info("resourceId", JSON.stringify(resourceId, null, 2) as any);
 
     const acceptanceCriteria = "We have all the information we need to develop a brand strategy for a given brand, including the brand name, the target ICP, and the users website";
  
     if (!userMessage) {
-        console.log("No user message, suspending");
+        logger.info("No user message, suspending");
         await suspend({
           suspendResponse: "What is the brand name? Do you have a website? Do you have a logo?"
         });
@@ -100,9 +102,11 @@ const winStep = createStep({
     agentResponse: z.string(),
     stepCompleted: z.boolean()
   }),
-  execute: async ({ inputData }) => {
+  execute: async ({ inputData, mastra }) => {
+    const logger = mastra!.getLogger();
     const { agentResponse, stepCompleted } = inputData;
- 
+    logger.info("agentResponse", JSON.stringify(agentResponse, null, 2) as any);
+    logger.info("stepCompleted", JSON.stringify(stepCompleted, null, 2) as any);
     return { agentResponse, stepCompleted };
   }
 });

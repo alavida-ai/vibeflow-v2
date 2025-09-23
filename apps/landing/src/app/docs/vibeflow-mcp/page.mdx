@@ -1,0 +1,188 @@
+import { PageHeader } from '@/components/page-header'
+
+export const metadata = {
+  title: "Vibeflow MCP",
+  description: "MCP tools interface for Vibeflow marketing workflows and agent orchestration",
+  order: 4
+}
+
+<PageHeader 
+  title={metadata.title}
+  description={metadata.description}
+/>
+
+## Overview
+
+This document provides an overview of the MCP (Model Context Protocol) interface for Vibeflow. The MCP interface exposes Vibeflow's core marketing automation functionalities as a set of tools that can be called remotely by AI agents and other systems.
+
+**Each user runs their own MCP instance** - ensuring complete privacy and control over your marketing data and workflows.
+
+## Core Concepts
+
+The Vibeflow MCP interface is built on top of the Mastra framework and registers a set of tools that correspond to Vibeflow's core functionalities. These tools are defined in the `packages/mastra-runtime/src/mastra/tools/` directory and are registered with the MCP server in `mcp.ts`.
+
+Each tool is defined with:
+- **A unique ID** for identification
+- **A clear description** of its functionality  
+- **Input schema** validated using Zod for type safety
+- **Output schema** ensuring consistent responses
+- **Execute function** that calls the corresponding core logic
+
+Your MCP instance provides secure, isolated access to your brand's marketing system.
+
+## Tool Categories
+
+The Vibeflow MCP tools are organized into two main categories:
+
+### 1. Workflow Management
+
+**start-workflow**: Initiates a new marketing workflow and returns the first task.
+- Creates a new workflow session
+- Returns initial suspend payload with first task details
+- Only one workflow can be active per session
+
+**get-next-step**: Resumes the current workflow by completing the previous step.
+- Marks the previous workflow step as completed
+- Returns the next suspend payload (next task)
+- Requires an active workflow started with `start-workflow`
+
+**list-workflows**: Lists all available marketing workflows.
+- Returns all configured workflows in your Vibeflow project
+- Shows workflow IDs and metadata
+- No input parameters required
+
+### 2. Agent Management
+
+**list-agents**: Lists all agents with their detailed capability cards.
+- Uses the A2A (Agent-to-Agent) protocol
+- Returns agent IDs and their detailed capability cards
+- Shows what each agent can do and how to interact with them
+
+**send-message**: Sends a message to a specific agent.
+- Enables direct communication with individual agents
+- Requires agent ID, thread ID, and message content
+- Returns the agent's response and conversation context
+
+## How Your MCP Instance Works
+
+<div className="bg-blue-50 border-l-4 border-blue-400 p-4 my-6">
+  <div className="text-lg font-semibold mb-2">🔒 Private & Secure</div>
+  <p className="text-sm text-blue-800">
+    Unlike shared SaaS tools, your Vibeflow MCP runs locally on your machine or your chosen infrastructure. Your brand data, workflows, and agent interactions remain completely private.
+  </p>
+</div>
+
+When you run `npm run dev` in your Vibeflow project:
+
+1. **MCP Server Starts** - Your local MCP instance launches
+2. **Tools Register** - All 5 marketing tools become available
+3. **Session Management** - Secure sessions track workflow state
+4. **Agent Communication** - A2A protocol enables agent collaboration
+
+## Integration with Cursor
+
+The Vibeflow MCP integrates seamlessly with Cursor IDE through the Model Context Protocol:
+
+```typescript
+// Your Cursor agent can call these tools directly:
+startWorkflow({ workflowId: "blog-content-creation" })
+getNextStep()  // Advance to next workflow step
+listAgents()   // See available marketing agents
+sendMessage({ 
+  agentId: "copywriter", 
+  message: "Create a blog post about AI marketing",
+  threadId: "conversation-123"
+})
+```
+
+## Tool Specifications
+
+### Workflow Tools
+
+<div className="grid gap-4 my-6">
+  <div className="border rounded-lg p-4">
+    <h4 className="font-semibold">start-workflow</h4>
+    <p className="text-sm text-gray-600 mt-1">
+      <strong>Input:</strong> <code>workflowId: string</code><br/>
+      <strong>Output:</strong> First task details and workflow session<br/>
+      <strong>Purpose:</strong> Begin marketing workflow execution
+    </p>
+  </div>
+  
+  <div className="border rounded-lg p-4">
+    <h4 className="font-semibold">get-next-step</h4>
+    <p className="text-sm text-gray-600 mt-1">
+      <strong>Input:</strong> None (uses session context)<br/>
+      <strong>Output:</strong> Next task details and workflow state<br/>
+      <strong>Purpose:</strong> Progress through workflow steps
+    </p>
+  </div>
+  
+  <div className="border rounded-lg p-4">
+    <h4 className="font-semibold">list-workflows</h4>
+    <p className="text-sm text-gray-600 mt-1">
+      <strong>Input:</strong> None<br/>
+      <strong>Output:</strong> Available workflows with metadata<br/>
+      <strong>Purpose:</strong> Discover available marketing automations
+    </p>
+  </div>
+</div>
+
+### Agent Tools
+
+<div className="grid gap-4 my-6">
+  <div className="border rounded-lg p-4">
+    <h4 className="font-semibold">list-agents</h4>
+    <p className="text-sm text-gray-600 mt-1">
+      <strong>Input:</strong> None<br/>
+      <strong>Output:</strong> Agent IDs and capability cards<br/>
+      <strong>Purpose:</strong> Discover available marketing agents and their skills
+    </p>
+  </div>
+  
+  <div className="border rounded-lg p-4">
+    <h4 className="font-semibold">send-message</h4>
+    <p className="text-sm text-gray-600 mt-1">
+      <strong>Input:</strong> <code>message, agentId, threadId</code><br/>
+      <strong>Output:</strong> Agent response and conversation context<br/>
+      <strong>Purpose:</strong> Direct communication with marketing agents
+    </p>
+  </div>
+</div>
+
+## Example Usage
+
+Here's how these tools work together in a typical marketing workflow:
+
+```typescript
+// 1. See what workflows are available
+const workflows = await listWorkflows()
+
+// 2. Start a content creation workflow  
+const firstTask = await startWorkflow({ 
+  workflowId: "social-media-campaign" 
+})
+
+// 3. Complete tasks and progress through workflow
+const nextTask = await getNextStep()
+
+// 4. Work with agents during the workflow
+const agents = await listAgents()
+const response = await sendMessage({
+  agentId: "content-strategist",
+  message: "Review this campaign strategy",
+  threadId: "campaign-123"
+})
+```
+
+## Security & Privacy
+
+Your Vibeflow MCP instance ensures:
+
+✅ **Local execution** - No data leaves your environment  
+✅ **Session isolation** - Each workflow session is independent  
+✅ **Type safety** - All inputs and outputs are validated  
+✅ **Agent authentication** - Secure A2A protocol communication  
+✅ **Workflow integrity** - State management prevents conflicts  
+
+This architecture gives you enterprise-grade marketing automation while maintaining complete control over your data and processes.

@@ -1,6 +1,14 @@
 import { VibeflowAgentClient } from "../client";
+import { createLogger } from "@vibeflow/logging";
 
 const VIBEFLOW_BASE_URL = process.env.VIBEFLOW_BASE_URL || "http://localhost:4111/";
+
+
+const logger = createLogger({
+    context: "cli",
+    name: "agent-sdk"
+});
+
 
 export const messageAgent = async ({
     agentId,
@@ -14,7 +22,7 @@ export const messageAgent = async ({
     const vibeflowAgentClient = new VibeflowAgentClient(VIBEFLOW_BASE_URL);
     const mastraClient = await vibeflowAgentClient.createMastraClient();
     const agent = mastraClient.getAgent(agentId);
-    console.log("sending message to agent", await agent.details());
+    logger.info("sending message to agent", JSON.stringify(await agent.details(), null, 2) as any);
 
     const response = await agent.generate({
         messages: [
@@ -28,6 +36,6 @@ export const messageAgent = async ({
             thread: { id: threadId },
           },
       });
-    console.log("Message sent to agent", response.text);
+    logger.info("Message sent to agent", JSON.stringify(response.text, null, 2) as any);
     return response.text;
 }
