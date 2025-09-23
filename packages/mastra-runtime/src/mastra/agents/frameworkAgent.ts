@@ -2,7 +2,7 @@ import { Agent } from "@mastra/core/agent";
 import { memory } from "../memory";
 import { getDefaultOpenRouterProvider } from "../router";
 import { CLAUDE_SONNET_4, GPT_4O } from "../constants";
-import { userTweetsFetcherTool, userTweetsScraperTool } from "../tools/research/twitter-analyser";
+import { userTweetsFetcherTool } from "../tools/research/twitter-analyser";
 import { getMCPClient } from "../mcp/client";
 
 const router = getDefaultOpenRouterProvider();
@@ -202,7 +202,5 @@ This tweet reference data is critical for calculating engagement metrics for eac
   memory: memory,
   tools: {  
     userTweetsFetcherTool,
-    // userTweetsScraperTool,
-    ...(await getMCPClient().getTools())   
   }
 });

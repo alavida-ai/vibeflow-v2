@@ -39,7 +39,7 @@ export function buildTweetNotificationMessage(tweet: schema.Tweet): SlackMessage
                 {
                     type: 'button',
                     text: { type: 'plain_text', text: '🔗 View Tweet' },
-                    url: tweet.tweetUrl,
+                    url: tweet.url,
                     style: 'primary'
                 },
                 {
@@ -107,7 +107,7 @@ export function buildMostRelevantTweetsReport(tweetCandidates: TweetCandidate[])
     const divider = { type: 'divider' } as const;
 
     const tweetBlocks = tweetCandidates.map((candidate, index) => {
-        const { tweet, analytics } = candidate;
+        const { tweet, analytics, reply } = candidate;
         const rank = index + 1;
         
         // Calculate age in hours
@@ -138,7 +138,7 @@ export function buildMostRelevantTweetsReport(tweetCandidates: TweetCandidate[])
                 type: 'section',
                 text: {
                     type: 'mrkdwn',
-                    text: `*Draft Reply:* "${tweet.reply}"`
+                    text: `*Draft Reply:* "${reply.reply}"`
                 }
             },
             {
@@ -147,13 +147,13 @@ export function buildMostRelevantTweetsReport(tweetCandidates: TweetCandidate[])
                     {
                         type: 'button',
                         text: { type: 'plain_text', text: '💬 Reply to Tweet' },
-                        url: `https://twitter.com/intent/tweet?in_reply_to=${tweet.tweetId}&text=${encodeURIComponent(tweet.reply || 'No draft reply')}`,
+                        url: `https://twitter.com/intent/tweet?in_reply_to=${tweet.apiId}&text=${encodeURIComponent(reply.reply || 'No draft reply')}`,
                         style: 'primary'
                     },
                     {
                         type: 'button',
                         text: { type: 'plain_text', text: '🔗 View Tweet' },
-                        url: tweet.tweetUrl
+                        url: tweet.url
                     },
                     {
                         type: 'button',

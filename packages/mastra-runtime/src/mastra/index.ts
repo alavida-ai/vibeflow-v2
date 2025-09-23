@@ -1,7 +1,7 @@
 import { Mastra } from "@mastra/core/mastra";
 import { Workflow } from "@mastra/core/workflows";
 import { businessStrategyWorkflow } from "./workflows/business-strategy";
-import { twitterFrameworkAnalysisWorkflow } from "./workflows/twitter-framework-analysis";
+import { extractTweetFrameworksWorkflow } from "./workflows/extract-tweet-frameworks";
 import { createStorage } from "./storage";
 import { frameworkAgent } from "./agents/frameworkAgent";
 import { parseAgent } from "./agents/parseAgent";
@@ -34,7 +34,7 @@ export async function createMastraInstance(options?: {
     },
     workflows: {
       businessStrategyWorkflow,
-      twitterFrameworkAnalysisWorkflow,
+      extractTweetFrameworksWorkflow,
       ...options?.workflows
       
     },

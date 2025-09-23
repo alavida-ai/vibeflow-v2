@@ -93,8 +93,14 @@ export async function startServer(manifest: Manifest, outDir: string, options: {
 
 // If running directly, fall back to old behavior
 if (import.meta.url === `file://${process.argv[1]}`) {
-  const WORKFLOWS_DIR = process.env.SRC_DIR || '/Users/alexandergirardet/Code/vibeflow/vibeflow-projects/vibeflow-v2/templates/studio';
-  const OUT_DIR = process.env.OUT_DIR || '/Users/alexandergirardet/Code/vibeflow/vibeflow-projects/vibeflow-v2/templates/.vibeflow';
+  // Find project root and use appropriate paths
+  const projectRoot = process.env.PROJECT_ROOT || path.resolve(process.cwd(), '../..');
+  const WORKFLOWS_DIR = process.env.SRC_DIR || path.join(projectRoot, 'templates/studio/workflows');
+  const OUT_DIR = process.env.OUT_DIR || path.join(projectRoot, 'templates/.vibeflow');
+  
+  console.log(`📁 Project root: ${projectRoot}`);
+  console.log(`📂 Workflows directory: ${WORKFLOWS_DIR}`);
+  console.log(`📤 Output directory: ${OUT_DIR}`);
   
   const compiledWorkflows = await compile({ srcDir: WORKFLOWS_DIR, outDir: OUT_DIR });
   const { host, port } = await startServer(compiledWorkflows, OUT_DIR);
