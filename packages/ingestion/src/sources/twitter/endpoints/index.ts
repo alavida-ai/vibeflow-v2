@@ -9,6 +9,7 @@ export enum TwitterEndpointEnum {
   USER_LAST_TWEETS = 'userLastTweets',
   TWEET_REPLIES = 'tweetReplies',
   ADVANCED_SEARCH = 'advancedSearch',
+  TWEETS_BY_IDS = 'tweetsByIds',
 }
 
 /**

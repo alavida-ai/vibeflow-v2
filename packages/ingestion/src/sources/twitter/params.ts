@@ -23,6 +23,10 @@ export const tweetRepliesParamsSchema = z.object({
   tweetId: z.string().describe('Tweet ID to fetch replies for'),
 });
 
+export const tweetsByIdsParamsSchema = z.object({
+  tweetIds: z.array(z.string()).describe('Tweet IDs to fetch'),
+});
+
 /* -------------------------------------------------------------------------- */
 /*                              TYPE EXPORTS                                 */
 /* -------------------------------------------------------------------------- */
@@ -30,3 +34,4 @@ export type UserLastTweetsParams = z.infer<typeof userLastTweetsParamsSchema>;
 export type UserMentionsParams = z.infer<typeof userMentionsParamsSchema>;
 export type AdvancedSearchParams = z.infer<typeof advancedSearchParamsSchema>;
 export type TweetRepliesParams = z.infer<typeof tweetRepliesParamsSchema>;
+export type TweetsByIdsParams = z.infer<typeof tweetsByIdsParamsSchema>;

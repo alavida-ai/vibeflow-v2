@@ -2,11 +2,12 @@
 // This is the same code - just moved to endpoints folder
 
 import { z } from "zod";
-import type { 
-  UserMentionsParams, 
-  AdvancedSearchParams, 
-  TweetRepliesParams, 
-  UserLastTweetsParams
+import type {
+  UserMentionsParams,
+  AdvancedSearchParams,
+  TweetRepliesParams,
+  UserLastTweetsParams,
+  TweetsByIdsParams
 } from './params';
 
 /* -------------------------------------------------------------------------- */
@@ -111,6 +112,7 @@ export const USER_MENTIONS_ENDPOINT = '/twitter/user/mentions';
 export const REPLIES_ENDPOINT = '/twitter/tweet/replies';
 export const LAST_TWEETS_ENDPOINT = '/twitter/user/last_tweets';
 export const ADVANCED_SEARCH_ENDPOINT = '/twitter/tweet/advanced_search';
+export const TWEETS_BY_IDS_ENDPOINT = '/twitter/tweets';
 
 /* -------------------------------------------------------------------------- */
 /*                              CLASS                                     */
@@ -222,7 +224,6 @@ export class TwitterClient {
 
   async getAdvancedSearch({ query, queryType }: AdvancedSearchParams, cursor?: string): Promise<TweetsApiResponse> {
     try {
-
       const url = new URL(ADVANCED_SEARCH_ENDPOINT, TWITTER_API_BASE_URL);
       url.searchParams.set('query', query);
       url.searchParams.set('queryType', queryType);
@@ -238,6 +239,25 @@ export class TwitterClient {
       return response;
     } catch (error) {
       console.error('❌ Error in mentions:', error);
+      throw error;
+    }
+  }
+
+  async getTweetsByIds({ tweetIds }: TweetsByIdsParams, cursor?: string): Promise<TweetsApiResponse> {
+    try {
+      const url = new URL(TWEETS_BY_IDS_ENDPOINT, TWITTER_API_BASE_URL);
+      url.searchParams.set('tweetIds', tweetIds.join(','));
+      if (cursor) {
+        url.searchParams.set('cursor', cursor);
+      }
+
+      const rawData = await this.makeRequest(url.toString());
+
+      const response = apiTweetsResponseSchema.parse(rawData);
+
+      return response;
+    } catch (error) {
+      console.error('❌ Error in tweets by ids:', error);
       throw error;
     }
   }
