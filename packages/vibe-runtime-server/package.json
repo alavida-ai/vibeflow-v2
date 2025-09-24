@@ -29,6 +29,8 @@
     "@scalar/hono-api-reference": "^0.9.16",
     "@vibeflow/compiler": "workspace:*",
     "@vibeflow/mastra-runtime": "workspace:*",
+    "@vibeflow/logging": "workspace:*",
+    "@vibeflow/core": "workspace:*",
     "dotenv": "^17.2.2",
     "hono": "^4.9.5"
   },

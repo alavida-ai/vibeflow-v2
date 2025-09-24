@@ -17,24 +17,54 @@ export const docsNavigation: NavSection[] = [
     title: "Getting Started",
     items: [
       {
-        title: "Overview",
-        href: "/docs",
-        description: "Get up and running with our platform"
+        title: "What is Vibeflow?",
+        href: "/docs/getting-started/what-is-vibeflow",
+        description: "The Marketing Architecture Revolution"
       },
       {
-        title: "Configuration", 
-        href: "/docs/configuration",
-        description: "Learn how to configure your application"
+        title: "Installation & Setup",
+        href: "/docs/getting-started/installation",
+        description: "System requirements and setup guide"
+      },
+      {
+        title: "Quick Start",
+        href: "/docs/getting-started/quick-start",
+        description: "Your first brand setup in 30 minutes"
       }
     ]
   },
   {
-    title: "API",
+    title: "Guides",
     items: [
       {
-        title: "API Reference",
-        href: "/docs/api-reference", 
-        description: "Complete API documentation"
+        title: "Brand Strategy in 30 Minutes",
+        href: "/docs/guides/brand-strategy",
+        description: "Complete brand setup from zero to launch"
+      }
+    ]
+  },
+  {
+    title: "Core Concepts",
+    items: [
+      {
+        title: "Marketing Architecture",
+        href: "/docs/concepts/marketing-architecture",
+        description: "Understanding the shift from execution to orchestration"
+      },
+      {
+        title: "MCP & A2A Protocols",
+        href: "/docs/concepts/protocols",
+        description: "How agents communicate and work together"
+      },
+      {
+        title: "The Vibeflow Framework",
+        href: "/docs/concepts/framework",
+        description: "Open source philosophy and core principles"
+      },
+      {
+        title: "Vibeflow MCP",
+        href: "/docs/vibeflow-mcp",
+        description: "MCP tools for workflow and agent management"
       }
     ]
   }
@@ -43,38 +73,16 @@ export const docsNavigation: NavSection[] = [
 // Alternative: If you want to dynamically import metadata (server-side only)
 export async function getDocsNavigation() {
   try {
-    // These imports only work on the server side
+    // These imports only work on the server side - update paths as you create MDX files
     const overviewMeta = await import('@/app/docs/page.mdx').then(m => m.metadata)
-    const configMeta = await import('@/app/docs/configuration/page.mdx').then(m => m.metadata)
-    const apiMeta = await import('@/app/docs/api-reference/page.mdx').then(m => m.metadata)
     
-    return [
-      {
-        title: "Getting Started",
-        items: [
-          {
-            title: overviewMeta.title,
-            href: "/docs",
-            description: overviewMeta.description
-          },
-          {
-            title: configMeta.title,
-            href: "/docs/configuration", 
-            description: configMeta.description
-          }
-        ]
-      },
-      {
-        title: "API",
-        items: [
-          {
-            title: apiMeta.title,
-            href: "/docs/api-reference",
-            description: apiMeta.description
-          }
-        ]
-      }
-    ]
+    // For now, return the static navigation until MDX files are created
+    // You can uncomment and update these imports as you create the corresponding MDX files:
+    // const whatIsVibeflowMeta = await import('@/app/docs/what-is-vibeflow/page.mdx').then(m => m.metadata)
+    // const installationMeta = await import('@/app/docs/installation/page.mdx').then(m => m.metadata)
+    // const quickStartMeta = await import('@/app/docs/quick-start/page.mdx').then(m => m.metadata)
+    
+    return docsNavigation
   } catch (error) {
     console.warn('Could not load dynamic navigation, falling back to static:', error)
     return docsNavigation
