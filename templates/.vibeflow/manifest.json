@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2025-09-23T09:13:18.686Z",
+  "generatedAt": "2025-09-24T12:04:20.713Z",
   "workflows": [
     {
       "id": "personal-brand-onboarding",
@@ -12,6 +12,11 @@
       "id": "copywriter",
       "path": "agents/copywriter.json",
       "hash": "81ee20c33733b0cdd76a4b999bf8a8a8222aba07"
+    },
+    {
+      "id": "new",
+      "path": "agents/new.json",
+      "hash": "5c77fa776adfbf7488bd047adb23db49b0593932"
     }
   ]
 }

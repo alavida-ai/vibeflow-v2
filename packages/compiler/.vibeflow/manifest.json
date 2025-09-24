@@ -1,0 +1,17 @@
+{
+  "generatedAt": "2025-09-24T11:59:11.400Z",
+  "workflows": [
+    {
+      "id": "test",
+      "path": "workflows/test.json",
+      "hash": "35e12f7ee4d9c9fa95c1d106a6566df9d21d0dd5"
+    }
+  ],
+  "agents": [
+    {
+      "id": "copywriter",
+      "path": "agents/copywriter.json",
+      "hash": "81ee20c33733b0cdd76a4b999bf8a8a8222aba07"
+    }
+  ]
+}

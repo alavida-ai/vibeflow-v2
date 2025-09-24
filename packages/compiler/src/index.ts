@@ -37,8 +37,8 @@ function formatYamlError(file: string, error: unknown): string {
   return `YAML error in ${file}: ${msg}`;
 }
 
-function formatZodError(file: string, error: ZodError): string {
-  const issue = error.errors[0];
+function formatZodError(file: string, error: ZodError<any>): string {
+  const issue = error.issues[0];
   const pathStr = issue.path.length ? issue.path.join('.') : '<root>';
   return `Schema error in ${file} at ${pathStr} — ${issue.message}`;
 }
@@ -186,3 +186,9 @@ export async function watch(options: WatchOptions): Promise<() => Promise<void>>
 
 
 
+
+
+if (import.meta.url === `file://${process.argv[1]}`) {
+  const manifest = await compile({ srcDir: 'studio', outDir: '.vibeflow' });
+  console.log(manifest);
+}

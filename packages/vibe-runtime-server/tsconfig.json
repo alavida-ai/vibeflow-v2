@@ -1,7 +1,14 @@
 {
     "extends": "../../tsconfig.base.json",
     "compilerOptions": {
-      "outDir": "dist"
+      "outDir": "dist",
+      "baseUrl": ".",
+      "paths": {
+        "@vibeflow/core": ["../core/src"],
+        "@vibeflow/logging": ["../logging/src"],
+        "@vibeflow/compiler": ["../compiler/src"],
+        "@vibeflow/mastra-runtime": ["../mastra-runtime/src"]
+      }
     },
     "include": ["src/**/*"],
     "exclude": ["dist", "node_modules"]

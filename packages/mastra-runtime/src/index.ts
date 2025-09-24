@@ -5,8 +5,6 @@ import { createVibeflowMCP } from "./mastra/mcp";
 import { compileWorkflows } from "./mastra/utils/spec-compiler";
 import { compileAgents } from "./mastra/utils/agent-compiler";
 
-// Public factories for apps to consume. No .mastra outputs are imported.
-
 export async function createMastra(options: {
   workflows?: Record<string, WorkflowInput>;
   agents?: Record<string, AgentInput>;
