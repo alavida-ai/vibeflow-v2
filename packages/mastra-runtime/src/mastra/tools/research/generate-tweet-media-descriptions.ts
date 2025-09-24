@@ -1,6 +1,7 @@
 import { createTool } from '@mastra/core/tools';
 import { z } from 'zod';
-import { batchProcessMediaDescriptions, getMediaPendingDescriptionByTweetIds } from '@vibeflow/core';
+import { batchProcessMediaDescriptions } from '@vibeflow/core/services/media';
+import { getMediaPendingDescriptionByTweetIds } from '@vibeflow/core';
 
 export const generateTweetMediaDescriptionsTool: ReturnType<typeof createTool> = createTool({
     id: 'generate-tweet-media-descriptions',

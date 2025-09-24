@@ -1,7 +1,6 @@
 import { Mastra } from "@mastra/core/mastra";
 import { Workflow } from "@mastra/core/workflows";
 import { businessStrategyWorkflow } from "./workflows/business-strategy";
-import { extractTweetFrameworksWorkflow } from "./workflows/extract-tweet-frameworks";
 import { createStorage } from "./storage";
 import { twitterAnalyzerAgent } from "./agents/twitter-analyzer-agent";
 import { createVibeflowMCP } from "./mcp";
@@ -32,7 +31,6 @@ export async function createMastraInstance(options?: {
     },
     workflows: {
       businessStrategyWorkflow,
-      extractTweetFrameworksWorkflow,
       ...options?.workflows
       
     },
@@ -40,9 +38,9 @@ export async function createMastraInstance(options?: {
       transpilePackages: [
         "@vibeflow/ingestion",
         "@vibeflow/agent-sdk",
-        "@vibeflow/core"
+        "@vibeflow/media-utils"
       ],
-      sourcemap: true,
+      sourcemap: true
     },
     mcpServers: {
       vibeflow: await createVibeflowMCP(),

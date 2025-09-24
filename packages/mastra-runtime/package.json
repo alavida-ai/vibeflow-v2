@@ -17,7 +17,7 @@
   "scripts": {
     "build": "tsup src/index.ts --format esm --sourcemap --dts --out-dir dist",
     "dev": "tsup src/index.ts --format esm --sourcemap --dts --out-dir dist --watch",
-    "dev:local": "mastra dev"
+    "dev:local": "pnpm dlx mastra dev"
   },
   "dependencies": {
     "@ai-sdk/openai": "^1.3.24",
@@ -27,6 +27,7 @@
     "@vibeflow/database": "workspace:*",
     "@vibeflow/ingestion": "workspace:*",
     "@vibeflow/logging": "workspace:*",
+    "@vibeflow/media-utils": "workspace:*",
     "@google/genai": "^1.16.0",
     "@hono/swagger-ui": "^0.5.2",
     "@hono/zod-openapi": "^0.16.4",

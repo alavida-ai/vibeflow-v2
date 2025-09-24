@@ -2,6 +2,7 @@ export * from './user-mentions';
 export * from './user-last-tweets';
 export * from './tweet-replies';
 export * from './advanced-search';
+export * from './tweets-by-ids';
 
 // define endpoitns enum here
 export enum TwitterEndpointEnum {

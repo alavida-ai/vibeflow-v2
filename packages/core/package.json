@@ -17,6 +17,14 @@
       "import": "./dist/index.js",
       "default": "./dist/index.js"
     },
+    "./services/media": {
+      "import": "./dist/services/media/index.js",
+      "default": "./dist/services/media/index.js"
+    },
+    "./services/database": {
+      "import": "./dist/services/database/index.js",
+      "default": "./dist/services/database/index.js"
+    },
     "./package.json": "./package.json"
   },
   "main": "./dist/index.js",
