@@ -9,7 +9,7 @@ export const createTwitterScraperMCP = async (): Promise<MCPServer> => {
   if (!serverPromise) {
     serverPromise = (async () =>
       new MCPServer({
-        name: "twitter-scraper",
+        name: "twitter",
         version: "0.1.0",
         tools: {
           twitterScrapeTool,

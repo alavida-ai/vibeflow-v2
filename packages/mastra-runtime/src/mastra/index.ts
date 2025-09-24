@@ -22,7 +22,7 @@ export async function createMastraInstance(options?: {
     logger: new PinoLogger({
       name: 'VibeFlow-Mastra',
       transports: { cli: transport },
-      level: 'error'
+      level: 'debug'
     }),
     agents: {
       twitterAnalyzerAgent,
@@ -44,8 +44,8 @@ export async function createMastraInstance(options?: {
       sourcemap: true
     },
     mcpServers: {
-      vibeflow: await createVibeflowMCP(),
-      twitter: await createTwitterScraperMCP(),
+      // vibeflow: await createVibeflowMCP(),
+      twitter: await createTwitterScraperMCP()
     },
     server: {
       port: 4111,

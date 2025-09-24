@@ -1,6 +1,8 @@
 import { Agent } from "@mastra/core/agent";
 import { memory } from "../memory";
 import { createOpenRouterProvider } from "../router";
+import { twitterScrapeTool } from "../tools/research/twitter-scrape";
+import { twitterSearchTool } from "../tools/research/twitter-search";
 import { CLAUDE_SONNET_4 } from "../constants";
 import { 
   fetchSavedTweetsTool,
@@ -45,7 +47,8 @@ TOOL USAGE GUIDELINES:
   model: router(CLAUDE_SONNET_4),
   memory: memory,
   tools: {  
-    fetchSavedTweetsTool,
-    generateTweetMediaDescriptionsTool,
+    twitterScrapeTool,
+    twitterSearchTool,
+    fetchSavedTweetsTool, 
   }
 });
