@@ -1,6 +1,6 @@
 'use client';
 
-import { motion as m } from 'motion/react';
+import { motion as m, type Variants } from 'motion/react';
 import { useTheme } from 'next-themes';
 import { useRef } from 'react';
 
@@ -11,7 +11,7 @@ export function ThemeToggle({ className }: { className?: string }) {
   const { theme, setTheme } = useTheme();
   const buttonRef = useRef<HTMLButtonElement>(null);
 
-  const iconVariants = {
+  const iconVariants: Variants = {
     hidden: {
       opacity: 0,
       scale: 0.8,
@@ -23,7 +23,7 @@ export function ThemeToggle({ className }: { className?: string }) {
       rotate: 0,
       transition: {
         duration: 0.4,
-        ease: [0.25, 0.46, 0.45, 0.94],
+        ease: "easeOut",
       },
     },
     exit: {
@@ -32,12 +32,12 @@ export function ThemeToggle({ className }: { className?: string }) {
       rotate: 90,
       transition: {
         duration: 0.3,
-        ease: [0.25, 0.46, 0.45, 0.94],
+        ease: "easeOut",
       },
     },
   };
 
-  const raysVariants = {
+  const raysVariants: Variants = {
     hidden: {
       opacity: 0,
       scale: 0.8,
@@ -56,7 +56,7 @@ export function ThemeToggle({ className }: { className?: string }) {
     },
   };
 
-  const rayVariant = {
+  const rayVariant: Variants = {
     hidden: {
       pathLength: 0,
       opacity: 0,

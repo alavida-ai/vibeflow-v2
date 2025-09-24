@@ -30,8 +30,8 @@
     "@google/genai": "^1.16.0",
     "@hono/swagger-ui": "^0.5.2",
     "@hono/zod-openapi": "^0.16.4",
-    "@mastra/client-js": "^0.11.2",
-    "@mastra/core": "^0.16.3",
+    "@mastra/client-js": "^0.13.2",
+    "@mastra/core": "^0.18.0",
     "@mastra/deployer": "^0.16.3",
     "@mastra/libsql": "^0.13.8",
     "@mastra/loggers": "^0.10.10",
@@ -49,14 +49,8 @@
     "hono": "^4.9.5",
     "replicate": "^1.0.1",
     "tsup": "^8.5.0",
-    "uuid": "^11.1.0"
-  },
-  "peerDependencies": {
-    "zod": "^3.25.0"
-  },
-  "devDependencies": {
-    "mastra": "latest",
-    "nodemon": "^3.1.0"
+    "uuid": "^11.1.0",
+    "zod": "^4.1.11"
   },
   "publishConfig": {
     "access": "public"

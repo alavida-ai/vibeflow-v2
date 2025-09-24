@@ -31,7 +31,7 @@
     "drizzle-orm": "^0.44.5",
     "drizzle-zod": "^0.8.3",
     "postgres": "^3.4.7",
-    "zod": "^3.25.0"
+    "zod": "^4.1.11"
   },
   "publishConfig": {
     "access": "public"
