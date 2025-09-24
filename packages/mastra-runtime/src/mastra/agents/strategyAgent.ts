@@ -4,7 +4,6 @@ import { getDefaultOpenRouterProvider } from "../router";
 import { GPT_4O } from "../constants";
 import { getMCPClient } from "../mcp/client";
 import { perplexityAskTool } from "../tools/research/perplexity";
-import { userTweetsFetcherTool, userTweetsScraperTool } from "../tools/research/twitter-analyser";
 
 const router = getDefaultOpenRouterProvider();
  
@@ -76,8 +75,6 @@ Your job is to have a conversation with the user to get the information you need
   memory: memory,
   tools: {
     perplexityAskTool,
-    // userTweetsFetcherTool,
-    userTweetsScraperTool,
     ...(await getMCPClient().getTools())    
   }
 });

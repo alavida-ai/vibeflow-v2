@@ -36,6 +36,7 @@ export function createMemory(connectionString: string) {
   });
 }
 
+// TODO: ensure we load this from env
 // Default memory instance using environment variable
 const defaultConnectionString = process.env.DATABASE_URL!;
 export const memory = createMemory(defaultConnectionString);
