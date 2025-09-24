@@ -1,5 +1,13 @@
 # vibeflow-ai
 
+## 4.1.2
+
+### Patch Changes
+
+- MCP working
+- Updated dependencies
+  - @vibeflow/runtime-server@3.1.2
+
 ## 4.1.1
 
 ### Patch Changes

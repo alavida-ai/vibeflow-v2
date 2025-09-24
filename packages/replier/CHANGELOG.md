@@ -1,5 +1,15 @@
 # @vibeflow/replier
 
+## 2.1.2
+
+### Patch Changes
+
+- MCP working
+- Updated dependencies
+  - @vibeflow/agent-sdk@1.1.2
+  - @vibeflow/database@2.1.2
+  - @vibeflow/core@1.1.2
+
 ## 2.1.1
 
 ### Patch Changes

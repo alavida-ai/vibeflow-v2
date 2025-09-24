@@ -1,5 +1,16 @@
 # @vibeflow/mastra-runtime
 
+## 1.3.2
+
+### Patch Changes
+
+- MCP working
+- Updated dependencies
+  - @vibeflow/agent-sdk@1.1.2
+  - @vibeflow/ingestion@2.1.2
+  - @vibeflow/database@2.1.2
+  - @vibeflow/core@1.1.2
+
 ## 1.3.1
 
 ### Patch Changes

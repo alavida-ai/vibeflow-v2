@@ -1,5 +1,14 @@
 # @vibeflow/runtime-server
 
+## 3.1.2
+
+### Patch Changes
+
+- MCP working
+- Updated dependencies
+  - @vibeflow/mastra-runtime@1.3.2
+  - @vibeflow/core@1.1.2
+
 ## 3.1.1
 
 ### Patch Changes

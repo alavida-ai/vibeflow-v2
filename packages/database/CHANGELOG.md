@@ -1,5 +1,11 @@
 # @vibeflow/database
 
+## 2.1.2
+
+### Patch Changes
+
+- MCP working
+
 ## 2.1.1
 
 ### Patch Changes
