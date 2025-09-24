@@ -54,5 +54,6 @@
     "setup": "./scripts/setup.sh",
     "verify": "./scripts/verify-setup.sh"
   },
+  "pnpm": {},
   "packageManager": "pnpm@10.13.1"
 }

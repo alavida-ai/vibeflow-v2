@@ -21,8 +21,8 @@ export const fetchSavedTweetsTool: ReturnType<typeof createTool> = createTool({
   description: `Fetch a tweet data by their IDs.`,
   inputSchema: inputSchema,
   outputSchema: z.object({
-    tweets: z.array(z.any())
-  }),
+    tweets: z.array(z.any()).describe('Array of tweet data')
+  }).describe('Response containing fetched tweets'),
   execute: async ({ context, mastra }) => {
     const { tweetIds, limit } = context as InputSchema;
     logger.info({ tweetIds, limit }, 'Fetching saved tweets');
