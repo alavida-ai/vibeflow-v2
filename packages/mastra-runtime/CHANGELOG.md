@@ -1,5 +1,16 @@
 # @vibeflow/mastra-runtime
 
+## 1.3.1
+
+### Patch Changes
+
+- 5af24cb: Twitter scraper
+- Updated dependencies [5af24cb]
+  - @vibeflow/ingestion@2.1.1
+  - @vibeflow/database@2.1.1
+  - @vibeflow/core@1.1.1
+  - @vibeflow/agent-sdk@1.1.1
+
 ## 1.3.0
 
 ### Minor Changes

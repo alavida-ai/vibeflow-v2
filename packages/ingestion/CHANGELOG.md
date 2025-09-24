@@ -1,5 +1,14 @@
 # @vibeflow/ingestion
 
+## 2.1.1
+
+### Patch Changes
+
+- 5af24cb: Twitter scraper
+- Updated dependencies [5af24cb]
+  - @vibeflow/database@2.1.1
+  - @vibeflow/core@1.1.1
+
 ## 2.1.0
 
 ### Minor Changes

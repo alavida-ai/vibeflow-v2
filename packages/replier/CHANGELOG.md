@@ -1,5 +1,14 @@
 # @vibeflow/replier
 
+## 2.1.1
+
+### Patch Changes
+
+- Updated dependencies [5af24cb]
+  - @vibeflow/database@2.1.1
+  - @vibeflow/core@1.1.1
+  - @vibeflow/agent-sdk@1.1.1
+
 ## 2.1.0
 
 ### Minor Changes
