@@ -36,9 +36,9 @@ export const apiTweetAuthorSchema = z.object({
   createdAt: z.string(),
   entities: z.object({
     description: z.object({
-      urls: z.array(z.unknown())
-    })
-  }),
+      urls: z.array(z.unknown()).optional()
+    }).optional()
+  }).optional(),
 }).passthrough();
 
 export const apiTweetMediaSchema = z.object({
@@ -92,7 +92,7 @@ export const userLastTweetsApiResponseSchema = z.object({
 
 export const apiTweetsResponseSchema = z.object({
   tweets: z.array(apiTweetSchema),
-  has_next_page: z.boolean(),
+  has_next_page: z.boolean().optional(),
   next_cursor: z.string().optional().nullable(),
   status: z.string(),
   msg: z.string(),
@@ -246,12 +246,14 @@ export class TwitterClient {
   async getTweetsByIds({ tweetIds }: TweetsByIdsParams, cursor?: string): Promise<TweetsApiResponse> {
     try {
       const url = new URL(TWEETS_BY_IDS_ENDPOINT, TWITTER_API_BASE_URL);
-      url.searchParams.set('tweetIds', tweetIds.join(','));
+      url.searchParams.set('tweet_ids', tweetIds.join(','));
       if (cursor) {
         url.searchParams.set('cursor', cursor);
       }
 
       const rawData = await this.makeRequest(url.toString());
+
+      console.log('🔍 Raw data:', rawData);
 
       const response = apiTweetsResponseSchema.parse(rawData);
 

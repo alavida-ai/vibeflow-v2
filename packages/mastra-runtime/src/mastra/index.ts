@@ -3,7 +3,7 @@ import { Workflow } from "@mastra/core/workflows";
 import { businessStrategyWorkflow } from "./workflows/business-strategy";
 import { createStorage } from "./storage";
 import { twitterAnalyzerAgent } from "./agents/twitter-analyzer-agent";
-import { createVibeflowMCP } from "./mcp";
+import { createVibeflowMCP, createTwitterScraperMCP } from "./mcp/servers";
 import { PinoLogger } from "@mastra/loggers";
 import { strategyAgent } from "./agents/strategyAgent";
 import { Agent } from "@mastra/core/agent";
@@ -38,12 +38,14 @@ export async function createMastraInstance(options?: {
       transpilePackages: [
         "@vibeflow/ingestion",
         "@vibeflow/agent-sdk",
-        "@vibeflow/media-utils"
+        "@vibeflow/media-utils",
+        "@vibeflow/core"
       ],
       sourcemap: true
     },
     mcpServers: {
       vibeflow: await createVibeflowMCP(),
+      twitter: await createTwitterScraperMCP(),
     },
     server: {
       port: 4111,

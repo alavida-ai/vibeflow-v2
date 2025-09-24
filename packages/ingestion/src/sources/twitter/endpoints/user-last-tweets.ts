@@ -14,7 +14,7 @@ export class UserLastTweetsEndpoint implements TwitterEndpoint {
     // Handle the "data" wrapper in LastTweetsApiResponse
     return {
       tweets: response.data.tweets,
-      hasNextPage: response.has_next_page,
+      hasNextPage: response.has_next_page ?? false,
       nextCursor: response.next_cursor
     };
   }

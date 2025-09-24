@@ -3,7 +3,12 @@ import {
     schema
 } from "@vibeflow/database";
 import { eq, and, isNull, desc, or, inArray, gte } from 'drizzle-orm';
+import { createLogger } from "@vibeflow/logging";
 
+const logger = createLogger({
+    context: 'cli',
+    name: 'twitter-service'
+});
 
 export type TweetView = {
     id: number;
@@ -236,6 +241,8 @@ export async function getTweetsByIds(
 
     const db = getDb();
 
+    logger.info({ tweetIds, options }, 'Getting tweets by ids');
+
     // Build the query with proper typing
     const baseQuery = db
         .select({
@@ -247,13 +254,13 @@ export async function getTweetsByIds(
             schema.tweetMedia,
             eq(schema.tweetMedia.tweetId, schema.tweets.id)
         )
-        .innerJoin(
+        .leftJoin(
             schema.tweetAnalytics,
             eq(schema.tweetAnalytics.tweetId, schema.tweets.id)
         )
         .where(inArray(schema.tweets.id, tweetIds))
         .orderBy(
-            desc(schema.tweetAnalytics.finalScore),
+            desc(schema.tweetAnalytics.finalScore),  // NULLs will sort last
             desc(schema.tweets.createdAtUtc)
         );
 
@@ -261,6 +268,8 @@ export async function getTweetsByIds(
     const tweets = options?.limit 
         ? await baseQuery.limit(options.limit)
         : await baseQuery;
+
+    logger.info({ tweets }, 'Tweets by ids');
 
     // Group media by tweet ID
     const mediaByTweetId = new Map<number, Array<{

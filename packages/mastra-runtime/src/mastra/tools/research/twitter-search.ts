@@ -8,7 +8,7 @@ import {
 
 // Create a dedicated logger for this tool
 const logger = createLogger({ 
-  context: 'server', 
+  context: 'cli', 
   name: 'twitter-search-tool' 
 });
 
@@ -21,6 +21,8 @@ const inputSchema = z.object({
   queryType: z.enum(['Latest', 'Top']).default('Latest').describe('Query type - Latest or Top posts'),
   maxTweets: z.number().default(20).describe('Maximum number of tweets to search (default: 20)'),
 });
+
+type InputSchema = z.infer<typeof inputSchema>;
 
 /* -------------------------------------------------------------------------- */
 /*                              OUTPUT SCHEMA                                */
@@ -68,7 +70,7 @@ export const twitterSearchTool: ReturnType<typeof createTool> = createTool({
   outputSchema,
   
   execute: async ({ context, runId }) => {
-    const { query, queryType = 'Latest', maxTweets = 20 } = context;
+    const { query, queryType = 'Latest', maxTweets = 20 } = context as InputSchema;
 
     logger.info({ 
       runId,

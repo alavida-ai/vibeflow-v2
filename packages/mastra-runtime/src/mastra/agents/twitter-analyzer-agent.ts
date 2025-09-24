@@ -4,13 +4,7 @@ import { createOpenRouterProvider } from "../router";
 import { CLAUDE_SONNET_4 } from "../constants";
 import { 
   fetchSavedTweetsTool,
-  callFrameworkExtractorAgentTool,
-  generateTweetMediaDescriptionsTool,
-  scrapeUserTweetsTool,
-  scrapeUserMentionsTool,
-  scrapeAdvancedSearchTool,
-  scrapeTweetRepliesTool,
-  scrapeTweetByIdTool
+  generateTweetMediaDescriptionsTool
 } from "../tools/research";
 
 const router = createOpenRouterProvider({
@@ -52,12 +46,6 @@ TOOL USAGE GUIDELINES:
   memory: memory,
   tools: {  
     fetchSavedTweetsTool,
-    callFrameworkExtractorAgentTool,
     generateTweetMediaDescriptionsTool,
-    scrapeUserTweetsTool,
-    scrapeUserMentionsTool,
-    scrapeAdvancedSearchTool,
-    scrapeTweetRepliesTool,
-    scrapeTweetByIdTool
   }
 });

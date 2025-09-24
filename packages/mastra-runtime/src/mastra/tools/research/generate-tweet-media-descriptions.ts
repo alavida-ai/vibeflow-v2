@@ -1,20 +1,26 @@
 import { createTool } from '@mastra/core/tools';
 import { z } from 'zod';
-import { batchProcessMediaDescriptions } from '@vibeflow/core/services/media';
-import { getMediaPendingDescriptionByTweetIds } from '@vibeflow/core';
+import { getMediaPendingDescriptionByTweetIds, batchProcessMediaDescriptions } from '@vibeflow/core';
+
+const inputSchema = z.object({
+    tweetIds: z.array(z.number()).describe('Tweet IDs to generate media descriptions for'),
+});
+
+type InputSchema = z.infer<typeof inputSchema>;
+
+const outputSchema = z.object({
+    mediaProcessed: z.number().describe('The number of media items processed')
+});
 
 export const generateTweetMediaDescriptionsTool: ReturnType<typeof createTool> = createTool({
     id: 'generate-tweet-media-descriptions',
     description: `Generate media descriptions for tweets.`,
-    inputSchema: z.object({
-        tweetIds: z.array(z.number()).describe('Tweet IDs to generate media descriptions for'),
-    }),
-    outputSchema: z.object({
-        mediaProcessed: z.number().describe('The number of media items processed')
-    }),
+    inputSchema: inputSchema,
+    outputSchema: outputSchema,
     execute: async ({ context }) => {
+        const { tweetIds } = context as InputSchema;
         try {
-            const mediaItems = await getMediaPendingDescriptionByTweetIds(context.tweetIds);
+            const mediaItems = await getMediaPendingDescriptionByTweetIds(tweetIds);
 
             if (mediaItems.length === 0) {
                 return {

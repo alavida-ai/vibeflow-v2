@@ -130,11 +130,11 @@ const links = [
     url: '/tools',
     icon: ToolsIcon,
   },
-  // {
-  //   name: 'MCP Servers',
-  //   url: '/mcps',
-  //   icon: McpServerIcon,
-  // },
+  {
+    name: 'MCP Servers',
+    url: '/mcps',
+    icon: McpServerIcon,
+  },
   // {
   //   name: 'Workflows',
   //   url: '/workflows',

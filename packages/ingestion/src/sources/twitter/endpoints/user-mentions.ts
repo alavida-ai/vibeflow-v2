@@ -13,7 +13,7 @@ export class UserMentionsEndpoint implements TwitterEndpoint {
 
     return {
       tweets: response.tweets,
-      hasNextPage: response.has_next_page,
+      hasNextPage: response.has_next_page ?? false,
       nextCursor: response.next_cursor
     };
   }

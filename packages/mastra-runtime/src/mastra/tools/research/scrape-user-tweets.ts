@@ -8,24 +8,28 @@ import {
 
 // Create a dedicated logger for this tool
 const logger = createLogger({ 
-  context: 'server', 
+  context: 'cli', 
   name: 'scrape-user-tweets-tool' 
 });
+
+const inputSchema = z.object({
+  userName: z.string().describe('Twitter username (without @)'),
+  maxTweets: z.number().default(20).describe('Maximum number of tweets to scrape (default: 20)')
+});
+
+type InputSchema = z.infer<typeof inputSchema>;
 
 export const scrapeUserTweetsTool: ReturnType<typeof createTool> = createTool({
   id: 'scrape-user-tweets',
   description: `Scrape recent tweets from a specific Twitter user's timeline.`,
-  inputSchema: z.object({
-    userName: z.string().describe('Twitter username (without @)'),
-    maxTweets: z.number().default(20).describe('Maximum number of tweets to scrape (default: 20)')
-  }),
+  inputSchema: inputSchema,
   outputSchema: z.object({
     tweetIds: z.array(z.number()).describe('Array of tweet IDs that were scraped'),
     totalTweets: z.number().describe('Total number of tweets scraped'),
     userName: z.string().describe('The username that was scraped'),
   }),
   execute: async ({ context, runId }) => {
-    const { userName, maxTweets = 20 } = context;
+    const { userName, maxTweets = 20 } = context as InputSchema;
 
     logger.info({ 
       runId,

@@ -5,6 +5,7 @@
   "dependencies": {
     "@vibeflow/database": "workspace:*",
     "@vibeflow/media-utils": "workspace:*",
+    "@vibeflow/logging": "workspace:*",
     "drizzle-orm": "^0.44.5",
     "yaml": "^2.3.2"
   },

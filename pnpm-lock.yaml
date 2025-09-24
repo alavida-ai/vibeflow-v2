@@ -270,6 +270,9 @@ importers:
       '@vibeflow/database':
         specifier: workspace:*
         version: link:../database
+      '@vibeflow/logging':
+        specifier: workspace:*
+        version: link:../logging
       '@vibeflow/media-utils':
         specifier: workspace:*
         version: link:../media-utils

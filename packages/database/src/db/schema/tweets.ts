@@ -9,6 +9,7 @@ import {
   boolean,
   index,
   uniqueIndex,
+  unique,
   decimal
 } from 'drizzle-orm/pg-core';
 import { relations } from 'drizzle-orm';
@@ -36,7 +37,9 @@ export const tweetReplyStatusEnum = pgEnum("tweet_reply_status", tweetReplyStatu
 export const tweetSourceEnumSchema = z.enum([
   "user_mentions",
   "tweet_replies", 
-  "user_last_tweets"
+  "user_last_tweets",
+  "tweets_by_ids",
+  "advanced_search"
 ]);
 export const sourceConstants = tweetSourceEnumSchema.enum;
 export const tweetSourceEnum = pgEnum("tweet_source", tweetSourceEnumSchema.options as [string, ...string[]]);
@@ -146,6 +149,7 @@ export const tweetAnalytics = pgTable("tweet_analytics", {
   index("idx_tweet_analytics_final_score").on(table.finalScore),
   index("idx_tweet_analytics_should_reply").on(table.shouldReply),
   index("idx_tweet_analytics_computed_at").on(table.computedAtUtc),
+  unique("unique_tweet_analytics_tweet_id").on(table.tweetId),
 ]);
 
 export const tweetReplies = pgTable("tweet_replies", {

@@ -1,6 +1,9 @@
 import { Agent } from "@mastra/core/agent";
 import { memory } from "../memory";
 import { getDefaultOpenRouterProvider } from "../router";
+import { twitterScrapeTool } from "../tools/research/twitter-scrape";
+import { twitterSearchTool } from "../tools/research/twitter-search";
+import { fetchSavedTweetsTool } from "../tools/research/fetch-saved-tweets";
 import { CLAUDE_SONNET_4 } from "../constants";
 
 const router = getDefaultOpenRouterProvider();
@@ -189,7 +192,7 @@ TWEET REFERENCE REQUIREMENT:
 
 When analyzing Twitter content frameworks, you MUST include the specific tweet IDs that demonstrate each framework pattern. For each framework you identify:
 
-1. Use the userTweetsFetcherTool to get the user's tweet data
+1. Use the userTweetsFetcherTool to get the user's tweet data (reference: userTweetsFetcherTool)
 2. Reference specific tweets by their ID that exemplify the framework
 3. Include these tweet IDs in your analysis output for each framework
 4. Format your output to clearly show which tweets support each framework pattern
@@ -197,5 +200,10 @@ When analyzing Twitter content frameworks, you MUST include the specific tweet I
 This tweet reference data is critical for calculating engagement metrics for each framework.
 `,
   model: router(CLAUDE_SONNET_4),
-  memory: memory
+  memory: memory,
+  tools: {
+    twitterScrapeTool,
+    twitterSearchTool,
+    fetchSavedTweetsTool
+  }
 });

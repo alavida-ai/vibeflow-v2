@@ -8,18 +8,22 @@ import {
 
 // Create a dedicated logger for this tool
 const logger = createLogger({ 
-  context: 'server', 
+  context: 'cli', 
   name: 'scrape-user-mentions-tool' 
 });
+
+const inputSchema = z.object({
+  userName: z.string().describe('Twitter username (without @) to find mentions of'),
+  sinceTime: z.string().describe('ISO date string - fetch mentions since this time'),
+  maxTweets: z.number().default(20).describe('Maximum number of tweets to scrape (default: 20)')
+});
+
+type InputSchema = z.infer<typeof inputSchema>;
 
 export const scrapeUserMentionsTool: ReturnType<typeof createTool> = createTool({
   id: 'scrape-user-mentions',
   description: `Scrape tweets that mention a specific user since a given time.`,
-  inputSchema: z.object({
-    userName: z.string().describe('Twitter username (without @) to find mentions of'),
-    sinceTime: z.string().describe('ISO date string - fetch mentions since this time'),
-    maxTweets: z.number().default(20).describe('Maximum number of tweets to scrape (default: 20)')
-  }),
+  inputSchema: inputSchema,
   outputSchema: z.object({
     tweetIds: z.array(z.number()).describe('Array of tweet IDs that were scraped'),
     totalTweets: z.number().describe('Total number of tweets scraped'),
@@ -27,7 +31,7 @@ export const scrapeUserMentionsTool: ReturnType<typeof createTool> = createTool(
     sinceTime: z.string().describe('The time filter that was used'),
   }),
   execute: async ({ context, runId }) => {
-    const { userName, sinceTime, maxTweets = 20 } = context;
+    const { userName, sinceTime, maxTweets = 20 } = context as InputSchema;
 
     logger.info({ 
       runId,

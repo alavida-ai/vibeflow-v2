@@ -30,9 +30,6 @@ export async function batchAddAnalyticsToTweets(analytics: schema.InsertTweetAna
     try {
         const db = getDb();
         await db.insert(schema.tweetAnalytics).values(analytics).onConflictDoUpdate(getAnalyticsUpsertConfig());
-        
-        const tweetIds = analytics.map(a => a.tweetId);
-        console.log(`Added analytics to ${tweetIds.length} tweet(s):`, tweetIds);
     } catch (error) {
         console.error("Error adding analytics to tweets:", error);
         throw error;
