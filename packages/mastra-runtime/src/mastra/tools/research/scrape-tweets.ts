@@ -1,5 +1,6 @@
 import { createTool } from '@mastra/core/tools';
 import { z } from 'zod';
+import { createLogger } from '@vibeflow/logging';
 import { 
   userLastTweetsParamsSchema,
   userMentionsParamsSchema,
@@ -8,6 +9,12 @@ import {
   TwitterEndpointEnum,
   createTwitterScraperPipeline,
 } from '@vibeflow/ingestion';
+
+// Create a dedicated logger for this tool
+const logger = createLogger({ 
+  context: 'server', 
+  name: 'scrape-tweets-tool' 
+});
 
 /* -------------------------------------------------------------------------- */
 /*                         TOOL PARAMETER SCHEMAS                            */
@@ -69,18 +76,29 @@ export const scrapeTweetsTool: ReturnType<typeof createTool> = createTool({
       tweetId: z.string().optional(),
     }).describe('Additional metadata about the scraping operation'),
   }),
-  execute: async ({ context }) => {
+  execute: async ({ context, runId }) => {
     const { operation, maxTweets = 20 } = context;
+
+    // Use dedicated tool logger
+    logger.info({ 
+      runId,
+      operation,
+      maxTweets,
+      fullContext: context
+    }, '🐦 Starting tweet scraping operation');
 
     try {
       let params: any;
       let metadata: any = {};
 
       // Prepare parameters and determine endpoint based on operation
+      logger.info({ runId, operation }, '🔧 Preparing parameters for operation');
+
       switch (operation) {
         case TwitterEndpointEnum.USER_LAST_TWEETS:
           params = { userName: context.userName };
           metadata.userName = context.userName;
+          logger.info({ runId, params }, '📋 USER_LAST_TWEETS params prepared');
           break;
 
         case TwitterEndpointEnum.USER_MENTIONS:
@@ -89,6 +107,7 @@ export const scrapeTweetsTool: ReturnType<typeof createTool> = createTool({
             sinceTime: new Date(context.sinceTime) 
           };
           metadata.userName = context.userName;
+          logger.info({ runId, params }, '📋 USER_MENTIONS params prepared');
           break;
 
         case TwitterEndpointEnum.ADVANCED_SEARCH:
@@ -97,39 +116,79 @@ export const scrapeTweetsTool: ReturnType<typeof createTool> = createTool({
             queryType: context.queryType 
           };
           metadata.query = context.query;
+          logger.info({ runId, params }, '📋 ADVANCED_SEARCH params prepared');
           break;
 
         case TwitterEndpointEnum.TWEET_REPLIES:
           params = { tweetId: context.tweetId };
           metadata.tweetId = context.tweetId;
+          logger.info({ runId, params }, '📋 TWEET_REPLIES params prepared');
           break;
 
         default:
-          throw new Error(`Unsupported operation: ${operation}`);
+          const errorMsg = `Unsupported operation: ${operation}`;
+          logger.error({ runId, operation, availableOperations: Object.values(TwitterEndpointEnum) }, '❌ Unsupported operation');
+          throw new Error(errorMsg);
       }
 
       const maxPages = Math.max(1, Math.floor(maxTweets / 20));
+
+      logger.info({ 
+        runId, 
+        operation, 
+        maxPages, 
+        params 
+      }, '🚀 Starting pipeline execution');
 
       // Build and run the pipeline
       const pipeline = createTwitterScraperPipeline({ endpoint: operation });
       const pipelineResult = await pipeline.run(params, { maxPages });
 
+      logger.info({ 
+        runId, 
+        resultKeys: Object.keys(pipelineResult || {}),
+        savedTweetsCount: pipelineResult?.savedTweets?.length || 0
+      }, '📊 Pipeline execution completed');
+
       // Validate the response
       if (!pipelineResult || !pipelineResult.savedTweets) {
-        throw new Error(`${operation} returned invalid result`);
+        const errorMsg = `${operation} returned invalid result`;
+        logger.error({ 
+          runId, 
+          operation, 
+          pipelineResult: pipelineResult ? 'exists but no savedTweets' : 'null/undefined'
+        }, '❌ Invalid pipeline result');
+        throw new Error(errorMsg);
       }
 
       const tweets = pipelineResult.savedTweets;
 
-      return {
+      const result = {
         tweetIds: tweets.map(tweet => tweet.id),
         totalTweets: tweets.length,
         operation,
         metadata,
       };
+
+      logger.info({ 
+        runId, 
+        totalTweets: result.totalTweets,
+        operation: result.operation,
+        metadata: result.metadata
+      }, '✅ Tweet scraping completed successfully');
+
+      return result;
     } catch (error) {
-      console.error(`❌ Twitter scraper tool failed for ${operation}:`, error);
-      throw new Error(`Failed to scrape tweets with ${operation}: ${error instanceof Error ? error.message : String(error)}`);
+      const errorMsg = `Failed to scrape tweets with ${operation}: ${error instanceof Error ? error.message : String(error)}`;
+      
+      logger.error({ 
+        runId, 
+        operation, 
+        error: error instanceof Error ? error.message : String(error),
+        stack: error instanceof Error ? error.stack : undefined
+      }, '❌ Twitter scraper tool failed');
+      
+      throw new Error(errorMsg);
     }
   },
 });

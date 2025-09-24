@@ -6,8 +6,12 @@ import {
   fetchSavedTweetsTool,
   callFrameworkExtractorAgentTool,
   generateTweetMediaDescriptionsTool,
-  scrapeTweetsTool
- } from "../tools/research";
+  scrapeUserTweetsTool,
+  scrapeUserMentionsTool,
+  scrapeAdvancedSearchTool,
+  scrapeTweetRepliesTool,
+  scrapeTweetByIdTool
+} from "../tools/research";
 
 const router = createOpenRouterProvider({
   apiKey: process.env.OPENROUTER_API_KEY!
@@ -28,10 +32,21 @@ You can do the following:
 - extract common tweet frameworks
 
 You can use the following tools to help you with your analysis:
-- scrapeTweetsTool: to scrape tweets
-- fetchSavedTweetsTool: to fetch saved tweets
+- scrapeUserTweetsTool: to scrape recent tweets from a specific user's timeline
+- scrapeUserMentionsTool: to scrape tweets that mention a specific user since a given time
+- scrapeAdvancedSearchTool: to search for tweets using an advanced query with Latest or Top posts
+- scrapeTweetRepliesTool: to scrape replies to a specific tweet
+- scrapeTweetByIdTool: to scrape a specific tweet by its ID to get full tweet details
+- fetchSavedTweetsTool: to fetch saved tweets from the database
 - generateTweetMediaDescriptionsTool: to generate media descriptions for tweets
 - callFrameworkExtractorAgentTool: to extract frameworks from tweets
+
+TOOL USAGE GUIDELINES:
+- Use scrapeUserTweetsTool when asked to get tweets FROM a user: "scrape 40 tweets from @pontusab"
+- Use scrapeUserMentionsTool when asked to find tweets ABOUT/MENTIONING a user: "find tweets mentioning @pontusab"
+- Use scrapeAdvancedSearchTool when asked to search for specific topics: "search for tweets about AI frameworks"
+- Use scrapeTweetRepliesTool when asked to get replies to a specific tweet: "get replies to tweet 123456789"
+- Use scrapeTweetByIdTool when asked to get a specific tweet: "get tweet 123456789" or "scrape tweet with ID 123456789"
 `,
   model: router(CLAUDE_SONNET_4),
   memory: memory,
@@ -39,6 +54,10 @@ You can use the following tools to help you with your analysis:
     fetchSavedTweetsTool,
     callFrameworkExtractorAgentTool,
     generateTweetMediaDescriptionsTool,
-    scrapeTweetsTool
+    scrapeUserTweetsTool,
+    scrapeUserMentionsTool,
+    scrapeAdvancedSearchTool,
+    scrapeTweetRepliesTool,
+    scrapeTweetByIdTool
   }
 });
