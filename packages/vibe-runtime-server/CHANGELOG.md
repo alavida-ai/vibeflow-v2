@@ -1,5 +1,19 @@
 # @vibeflow/runtime-server
 
+## 3.2.0
+
+### Minor Changes
+
+- 0954dc0: Updated runtime-server with latest changes and improvements
+
+### Patch Changes
+
+- Updated
+- Updated dependencies [0954dc0]
+- Updated dependencies
+  - @vibeflow/mastra-runtime@1.4.0
+  - @vibeflow/core@1.1.4
+
 ## 3.1.3
 
 ### Patch Changes

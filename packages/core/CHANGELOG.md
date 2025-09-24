@@ -1,5 +1,13 @@
 # @vibeflow/core
 
+## 1.1.4
+
+### Patch Changes
+
+- Updated
+- Updated dependencies
+  - @vibeflow/database@2.1.4
+
 ## 1.1.3
 
 ### Patch Changes

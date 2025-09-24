@@ -1,5 +1,6 @@
 import fs from 'fs-extra';
-import path from 'path'
+import path from 'path';
+import { fileURLToPath } from 'url';
 import { createLogger } from '@vibeflow/logging';
 import { spawn } from 'child_process';
 
@@ -7,6 +8,10 @@ const log = createLogger({
   context: 'cli', 
   name: 'create-vibeflow-app'
 });
+
+// Get current directory in ES modules
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 export interface CreateAppOptions {
   projectPath: string;

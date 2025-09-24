@@ -1,5 +1,20 @@
 # @vibeflow/mastra-runtime
 
+## 1.4.0
+
+### Minor Changes
+
+- 0954dc0: Updated mastra-runtime with latest changes and improvements
+
+### Patch Changes
+
+- Updated
+- Updated dependencies
+  - @vibeflow/agent-sdk@1.1.4
+  - @vibeflow/ingestion@2.1.4
+  - @vibeflow/database@2.1.4
+  - @vibeflow/core@1.1.4
+
 ## 1.3.3
 
 ### Patch Changes

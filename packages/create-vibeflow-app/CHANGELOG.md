@@ -1,5 +1,11 @@
 # create-vibeflow-app
 
+## 4.4.2
+
+### Patch Changes
+
+- Updated template
+
 ## 4.4.1
 
 ### Patch Changes

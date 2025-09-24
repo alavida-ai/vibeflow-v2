@@ -1,5 +1,11 @@
 # @vibeflow/database
 
+## 2.1.4
+
+### Patch Changes
+
+- Updated
+
 ## 2.1.3
 
 ### Patch Changes
