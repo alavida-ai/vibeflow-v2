@@ -44,7 +44,7 @@ export async function createMastraInstance(options?: {
       sourcemap: true
     },
     mcpServers: {
-      // vibeflow: await createVibeflowMCP(),
+      vibeflow: await createVibeflowMCP(),
       twitter: await createTwitterScraperMCP()
     },
     server: {
