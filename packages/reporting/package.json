@@ -32,7 +32,7 @@
   "dependencies": {
     "@vibeflow/core": "workspace:*",
     "@vibeflow/database": "workspace:*",
-    "zod": "^3.23.8"
+    "zod": "^4.1.11"
   },
   "publishConfig": {
     "access": "public"

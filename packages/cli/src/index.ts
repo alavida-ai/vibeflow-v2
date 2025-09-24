@@ -2,7 +2,7 @@
 import { exit } from 'node:process';
 import path from 'node:path';
 import { Command } from 'commander';
-import { compile, watch, type WatchOptions, type Manifest } from '@vibeflow/compiler';
+import { watch, type WatchOptions, type Manifest } from '@vibeflow/compiler';
 import { startServer } from '@vibeflow/runtime-server';
 import { createLogger } from '@vibeflow/logging';
 
@@ -12,6 +12,7 @@ const log = createLogger({
   name: 'vibeflow-cli'
 });
 
+
 class DevServer {
   private serverInstance: any = null;
 
@@ -19,7 +20,8 @@ class DevServer {
     private srcDir: string,
     private outDir: string,
     private port: number = 4111,
-    private host: string = 'localhost'
+    private host: string = 'localhost',
+    private enablePlayground: boolean = true
   ) {}
 
   async start(manifest: Manifest): Promise<void> {
@@ -32,7 +34,11 @@ class DevServer {
     log.info(`Starting Vibeflow runtime server on ${this.host}:${this.port}`);
 
     try {
-      this.serverInstance = await startServer(manifest, this.outDir, { port: this.port, host: this.host });
+      this.serverInstance = await startServer(manifest, this.outDir, { 
+        port: this.port, 
+        host: this.host,
+        enablePlayground: this.enablePlayground
+      });
       log.info(`Server started successfully`);
       log.info(`API available at http://${this.host}:${this.port}`);
       log.info(`Docs available at http://${this.host}:${this.port}/docs/swagger`);
@@ -74,43 +80,28 @@ program
   .version('0.1.0');
 
 program
-  .command('build')
-  .description('Compile workflows to .vibeflow')
-  .option('--src <dir>', 'Source dir', 'studio/workflows')
-  .option('--out <dir>', 'Output dir', '.vibeflow')
-  .action(async (opts: { src: string; out: string }) => {
-    const resolvedSrc = path.resolve(process.cwd(), opts.src);
-    const resolvedOut = path.resolve(process.cwd(), opts.out);
-    try {
-      log.info(`Compiling workflows from ${resolvedSrc}`);
-      const manifest = await compile({ srcDir: resolvedSrc, outDir: resolvedOut });
-      log.info(`Compiled ${manifest.workflows.length} workflows to ${resolvedOut}`);
-    } catch (err) {
-      log.error(`${(err as Error).message}`);
-      exit(1);
-    }
-  });
-
-program
   .command('dev')
   .description('Start development server with workflow watching')
-  .option('--src <dir>', 'Source dir', 'studio/workflows')
+  .option('--src <dir>', 'Source dir', 'studio')
   .option('--out <dir>', 'Output dir', '.vibeflow')
   .option('--port <port>', 'Server port', '4111')
   .option('--host <host>', 'Server host', 'localhost')
   .option('--debounce <ms>', 'Debounce milliseconds', '200')
-  .action(async (opts: { src: string; out: string; port: string; host: string; debounce: string }) => {
+  .option('--no-playground', 'Disable playground serving')
+  .action(async (opts: { src: string; out: string; port: string; host: string; debounce: string; playground: boolean }) => {
     const resolvedSrc = path.resolve(process.cwd(), opts.src);
     const resolvedOut = path.resolve(process.cwd(), opts.out);
     const port = Number.parseInt(opts.port, 10) || 4111;
     const host = opts.host || 'localhost';
     const debounceMs = Number.parseInt(opts.debounce, 10) || 200;
+    const enablePlayground = opts.playground;
 
     log.info(`Starting Vibeflow development server`);
     log.info(`Source: ${resolvedSrc}`);
     log.info(`Output: ${resolvedOut}`);
+    log.info(`Playground: ${enablePlayground ? 'enabled' : 'disabled'}`);
 
-    const devServer = new DevServer(resolvedSrc, resolvedOut, port, host);
+    const devServer = new DevServer(resolvedSrc, resolvedOut, port, host, enablePlayground);
     let watchStop: (() => Promise<void>) | null = null;
 
     // Graceful shutdown handling

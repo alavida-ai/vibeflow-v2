@@ -2,7 +2,6 @@ import { createTool } from "@mastra/core";
 import { z } from "zod";
 import { startWorkflow, startWorkflowResultSchema } from "@vibeflow/agent-sdk";
 import { setSession } from "../../sessions";
-import { createLogger } from "@vibeflow/logging";
 
 export const startWorkflowTool: ReturnType<typeof createTool> = createTool({
   id: "start-workflow",

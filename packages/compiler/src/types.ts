@@ -1,5 +1,5 @@
 export interface CompileOptions {
-  srcDir: string; // e.g., studio/workflows
+  srcDir: string; // e.g., studio
   outDir: string; // e.g., .mastra/out
 }
 
