@@ -3,7 +3,7 @@ import { Workflow } from "@mastra/core/workflows";
 import { businessStrategyWorkflow } from "./workflows/business-strategy";
 import { extractTweetFrameworksWorkflow } from "./workflows/extract-tweet-frameworks";
 import { createStorage } from "./storage";
-import { twitterAnalyzerAgent } from "./agents/twitter-analyzer";
+import { twitterAnalyzerAgent } from "./agents/twitter-analyzer-agent";
 import { createVibeflowMCP } from "./mcp";
 import { PinoLogger } from "@mastra/loggers";
 import { strategyAgent } from "./agents/strategyAgent";
