@@ -1,5 +1,13 @@
 # @vibeflow/agent-sdk
 
+## 1.1.3
+
+### Patch Changes
+
+- 6cabed4: Test update
+- Updated dependencies [6cabed4]
+  - @vibeflow/core@1.1.3
+
 ## 1.1.2
 
 ### Patch Changes

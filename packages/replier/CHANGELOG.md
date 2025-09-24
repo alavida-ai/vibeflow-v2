@@ -1,5 +1,15 @@
 # @vibeflow/replier
 
+## 2.1.3
+
+### Patch Changes
+
+- 6cabed4: Test update
+- Updated dependencies [6cabed4]
+  - @vibeflow/agent-sdk@1.1.3
+  - @vibeflow/database@2.1.3
+  - @vibeflow/core@1.1.3
+
 ## 2.1.2
 
 ### Patch Changes
