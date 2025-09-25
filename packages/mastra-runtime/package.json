@@ -51,7 +51,13 @@
     "replicate": "^1.0.1",
     "tsup": "^8.5.0",
     "uuid": "^11.1.0",
-    "zod": "3.23.8"
+    "zod": "4.1.11"
+  },
+  "peerDependencies": {
+    "zod": "^4.1.11"
+  },
+  "devDependencies": {
+    "zod": "^4.1.11"
   },
   "publishConfig": {
     "access": "public"
