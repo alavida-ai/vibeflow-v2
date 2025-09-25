@@ -1,6 +1,6 @@
 import { client } from '@/lib/client';
 import { UpdateModelParams } from '@mastra/client-js';
-import { usePlaygroundStore } from '@mastra/playground-ui';
+import { usePlaygroundStore } from '@vibeflow/playground-ui';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 export const useAgents = () => {

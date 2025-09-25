@@ -1,4 +1,4 @@
-import { Header, HeaderTitle, MainContentLayout, NetworkTable, MainContentContent } from '@mastra/playground-ui';
+import { Header, HeaderTitle, MainContentLayout, NetworkTable, MainContentContent } from '@vibeflow/playground-ui';
 import { useVNextNetworks } from '@/hooks/use-networks';
 
 function Networks() {

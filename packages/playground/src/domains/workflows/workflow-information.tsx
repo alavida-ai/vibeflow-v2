@@ -11,7 +11,7 @@ import {
   TabContent,
   EntityHeader,
   useWorkflow,
-} from '@mastra/playground-ui';
+} from '@vibeflow/playground-ui';
 
 import { WorkflowLogs } from './workflow-logs';
 import {
@@ -25,7 +25,7 @@ import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip
 
 import { CopyIcon } from 'lucide-react';
 import { useCopyToClipboard } from '@/hooks/use-copy-to-clipboard';
-import { WorkflowRuns } from '@mastra/playground-ui';
+import { WorkflowRuns } from '@vibeflow/playground-ui';
 import { useNavigate, useParams } from 'react-router';
 
 export function WorkflowInformation({ workflowId, isLegacy }: { workflowId: string; isLegacy?: boolean }) {

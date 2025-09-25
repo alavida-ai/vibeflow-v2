@@ -1,12 +1,18 @@
 # @internal/playground
 
+## 0.0.10
+
+### Patch Changes
+
+- 52f6e21: Chnageset
+
 ## 0.0.9
 
 ### Patch Changes
 
 - Small patch
 - Updated dependencies
-  - @mastra/playground-ui@6.2.3
+  - @vibeflow/playground-ui@6.2.3
 
 ## 0.0.8
 
@@ -14,7 +20,7 @@
 
 - Updated
 - Updated dependencies
-  - @mastra/playground-ui@6.2.2
+  - @vibeflow/playground-ui@6.2.2
 
 ## 0.0.7
 

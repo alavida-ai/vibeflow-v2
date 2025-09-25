@@ -11,7 +11,7 @@ import {
   KeyValueList,
   useScorer,
   useScoresByScorerId,
-} from '@mastra/playground-ui';
+} from '@vibeflow/playground-ui';
 import { useParams, Link, useSearchParams } from 'react-router';
 import { Skeleton } from '@/components/ui/skeleton';
 import { GaugeIcon } from 'lucide-react';

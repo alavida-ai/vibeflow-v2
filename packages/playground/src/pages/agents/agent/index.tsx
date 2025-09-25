@@ -4,7 +4,7 @@ import {
   AgentSettingsProvider,
   WorkingMemoryProvider,
   ThreadInputProvider,
-} from '@mastra/playground-ui';
+} from '@vibeflow/playground-ui';
 import { useEffect } from 'react';
 import { useNavigate, useParams, useSearchParams } from 'react-router';
 import { v4 as uuid } from '@lukeed/uuid';

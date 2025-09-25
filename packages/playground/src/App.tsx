@@ -33,7 +33,7 @@ import {
   LinkComponentProviderProps,
   MastraClientProvider,
   PlaygroundQueryClient,
-} from '@mastra/playground-ui';
+} from '@vibeflow/playground-ui';
 import VNextNetwork from './pages/networks/network/v-next';
 import { NavigateTo } from './lib/react-router';
 import { Link } from './lib/framework';

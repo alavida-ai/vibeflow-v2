@@ -9,7 +9,7 @@ import {
   MainContentContent,
   useWorkflow,
   useWorkflowRuns,
-} from '@mastra/playground-ui';
+} from '@vibeflow/playground-ui';
 
 import { Skeleton } from '@/components/ui/skeleton';
 

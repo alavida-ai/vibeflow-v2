@@ -1,4 +1,4 @@
-import { ChatThreads, useLinkComponent } from '@mastra/playground-ui';
+import { ChatThreads, useLinkComponent } from '@vibeflow/playground-ui';
 
 import { useDeleteThread } from '@/hooks/use-memory';
 import { StorageThreadType } from '@mastra/core/memory';

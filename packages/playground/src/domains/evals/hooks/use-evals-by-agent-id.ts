@@ -2,7 +2,7 @@ import type { TestInfo, MetricResult } from '@mastra/core/eval';
 
 import { client } from '@/lib/client';
 import { useQuery } from '@tanstack/react-query';
-import { usePlaygroundStore } from '@mastra/playground-ui';
+import { usePlaygroundStore } from '@vibeflow/playground-ui';
 
 export type Evals = {
   input: string;

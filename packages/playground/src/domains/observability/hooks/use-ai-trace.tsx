@@ -1,4 +1,4 @@
-import { useQuery } from '@mastra/playground-ui';
+import { useQuery } from '@vibeflow/playground-ui';
 import { client } from '@/lib/client';
 
 export const useAITrace = (traceId: string | null | undefined, options?: { enabled: boolean }) => {

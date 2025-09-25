@@ -7,7 +7,7 @@ import { toast } from 'sonner';
 import { resolveSerializedZodOutput } from '@/components/dynamic-form/utils';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Text } from '@/components/ui/text';
-import { Header, Breadcrumb, Crumb, usePlaygroundStore } from '@mastra/playground-ui';
+import { Header, Breadcrumb, Crumb, usePlaygroundStore } from '@vibeflow/playground-ui';
 
 import { useMCPServerTool } from '@/hooks/use-mcp-server-tool';
 import ToolExecutor from '@/pages/tools/tool-executor';

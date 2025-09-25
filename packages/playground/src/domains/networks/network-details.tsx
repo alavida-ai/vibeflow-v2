@@ -8,7 +8,7 @@ import { Input } from '@/components/ui/input';
 
 import { ScrollArea } from '@/components/ui/scroll-area';
 
-import { RadioGroup, RadioGroupItem, Entry, NetworkContext, ToolsIcon, WorkflowIcon } from '@mastra/playground-ui';
+import { RadioGroup, RadioGroupItem, Entry, NetworkContext, ToolsIcon, WorkflowIcon } from '@vibeflow/playground-ui';
 
 type NetworkDetailsProps = {
   network: GetVNextNetworkResponse;

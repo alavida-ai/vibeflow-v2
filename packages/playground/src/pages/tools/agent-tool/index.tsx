@@ -10,7 +10,7 @@ import { useAgent } from '@/hooks/use-agents';
 import { useExecuteTool } from '@/hooks/use-execute-agent-tool';
 
 import ToolExecutor from '../tool-executor';
-import { Header, Crumb, Breadcrumb, usePlaygroundStore, Txt, MainContentLayout } from '@mastra/playground-ui';
+import { Header, Crumb, Breadcrumb, usePlaygroundStore, Txt, MainContentLayout } from '@vibeflow/playground-ui';
 
 const AgentTool = () => {
   const { toolId, agentId } = useParams();

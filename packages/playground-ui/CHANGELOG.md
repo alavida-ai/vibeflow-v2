@@ -1,4 +1,10 @@
-# @mastra/playground-ui
+# @vibeflow/playground-ui
+
+## 6.2.4
+
+### Patch Changes
+
+- 52f6e21: Chnageset
 
 ## 6.2.3
 

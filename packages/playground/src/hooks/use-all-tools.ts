@@ -2,7 +2,7 @@ import type { GetToolResponse } from '@mastra/client-js';
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 import { client } from '@/lib/client';
-import { usePlaygroundStore } from '@mastra/playground-ui';
+import { usePlaygroundStore } from '@vibeflow/playground-ui';
 
 export const useTools = () => {
   const [tools, setTools] = useState<Record<string, GetToolResponse>>({});

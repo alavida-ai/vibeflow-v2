@@ -1,6 +1,6 @@
 import { Wand2, Loader, CheckIcon, X, FileClock } from 'lucide-react';
 
-import { Icon } from '@mastra/playground-ui';
+import { Icon } from '@vibeflow/playground-ui';
 import { CodeDisplay } from '@/components/ui/code-display';
 
 import { useCopyToClipboard } from '@/hooks/use-copy-to-clipboard';

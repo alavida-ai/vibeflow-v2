@@ -10,7 +10,7 @@ import { useTool } from '@/hooks/use-all-tools';
 import { useExecuteTool } from '@/hooks/use-execute-tool';
 
 import ToolExecutor from '../tool-executor';
-import { Header, Breadcrumb, Crumb, usePlaygroundStore, Txt } from '@mastra/playground-ui';
+import { Header, Breadcrumb, Crumb, usePlaygroundStore, Txt } from '@vibeflow/playground-ui';
 
 const Tool = () => {
   const { toolId } = useParams();

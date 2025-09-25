@@ -1,6 +1,6 @@
 import { client } from '@/lib/client';
 import { refineTraces } from '../utils/refine-traces';
-import { useInView, useInfiniteQuery } from '@mastra/playground-ui';
+import { useInView, useInfiniteQuery } from '@vibeflow/playground-ui';
 import { useEffect } from 'react';
 
 const fetchFn = async ({ componentName, page, perPage }: { componentName: string; page: number; perPage: number }) => {

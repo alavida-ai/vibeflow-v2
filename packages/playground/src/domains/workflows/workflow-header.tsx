@@ -1,6 +1,6 @@
 import { Link } from 'react-router';
 
-import { Crumb, Header, HeaderGroup, Button, Breadcrumb, HeaderAction, Icon, ApiIcon } from '@mastra/playground-ui';
+import { Crumb, Header, HeaderGroup, Button, Breadcrumb, HeaderAction, Icon, ApiIcon } from '@vibeflow/playground-ui';
 
 export function WorkflowHeader({
   workflowName,

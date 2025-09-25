@@ -1,4 +1,4 @@
-import { useWorkingMemory } from '@mastra/playground-ui';
+import { useWorkingMemory } from '@vibeflow/playground-ui';
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';

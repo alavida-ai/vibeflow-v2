@@ -5,7 +5,7 @@ import { NetworkEndpoints } from './network-endpoints';
 import { NetworkWorkflows } from './network-workflows';
 import { GetVNextNetworkResponse } from '@mastra/client-js';
 import { NetworkTools } from './network-tools';
-import { EntityHeader, PlaygroundTabs, Tab, TabContent, TabList } from '@mastra/playground-ui';
+import { EntityHeader, PlaygroundTabs, Tab, TabContent, TabList } from '@vibeflow/playground-ui';
 import { NetworkIcon } from 'lucide-react';
 
 export function NetworkInformation({ networkId }: { networkId: string }) {

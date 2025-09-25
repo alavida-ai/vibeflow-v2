@@ -15,7 +15,7 @@ import {
   WorkflowIcon,
   MainContentLayout,
   MainContentContent,
-} from '@mastra/playground-ui';
+} from '@vibeflow/playground-ui';
 
 import { useMCPServers } from '@/hooks/use-mcp-servers';
 import { useMCPServerTools } from '@/hooks/use-mcp-server-tools';

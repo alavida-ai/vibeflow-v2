@@ -5,7 +5,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { useVNextNetwork } from '@/hooks/use-networks';
 
 import { NetworkHeader } from './network-header';
-import { Header, HeaderTitle, MainContentLayout } from '@mastra/playground-ui';
+import { Header, HeaderTitle, MainContentLayout } from '@vibeflow/playground-ui';
 
 export const NetworkLayout = ({ children }: { children: React.ReactNode }) => {
   const { networkId } = useParams();

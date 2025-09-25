@@ -27,7 +27,7 @@ import {
   TabList,
   Tab,
   TabContent,
-} from '@mastra/playground-ui';
+} from '@vibeflow/playground-ui';
 import { useRef } from 'react';
 import { Link, useParams } from 'react-router';
 

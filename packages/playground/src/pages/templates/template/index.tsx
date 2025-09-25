@@ -20,7 +20,7 @@ import {
   ToolsIcon,
   AgentIcon,
   TemplateFailure,
-} from '@mastra/playground-ui';
+} from '@vibeflow/playground-ui';
 import { Link, useParams, useSearchParams } from 'react-router';
 import { useEffect, useState } from 'react';
 import { BrainIcon, TagIcon, WorkflowIcon } from 'lucide-react';

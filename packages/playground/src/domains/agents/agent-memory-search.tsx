@@ -1,6 +1,6 @@
 import { useState, useCallback, useEffect } from 'react';
 import { useParams } from 'react-router';
-import { MemorySearch } from '@mastra/playground-ui';
+import { MemorySearch } from '@vibeflow/playground-ui';
 import { useMemorySearch } from '@/hooks/use-memory';
 import { useThreadRuntime } from '@assistant-ui/react';
 

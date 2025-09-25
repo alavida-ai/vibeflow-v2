@@ -3,10 +3,10 @@ import { LegacyWorkflowRunResult, WorkflowWatchResult } from '@mastra/client-js'
 import type { WorkflowRunStatus } from '@mastra/core/workflows';
 import { RuntimeContext } from '@mastra/core/runtime-context';
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { usePlaygroundStore } from '@mastra/playground-ui';
+import { usePlaygroundStore } from '@vibeflow/playground-ui';
 import { useState } from 'react';
 import { useDebouncedCallback } from 'use-debounce';
-import { mapWorkflowStreamChunkToWatchResult } from '@mastra/playground-ui';
+import { mapWorkflowStreamChunkToWatchResult } from '@vibeflow/playground-ui';
 
 export type ExtendedLegacyWorkflowRunResult = LegacyWorkflowRunResult & {
   sanitizedOutput?: string | null;

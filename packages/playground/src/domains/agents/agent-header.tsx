@@ -1,6 +1,6 @@
 import { Link } from 'react-router';
 
-import { Header, Breadcrumb, Crumb, HeaderGroup, Button, DividerIcon } from '@mastra/playground-ui';
+import { Header, Breadcrumb, Crumb, HeaderGroup, Button, DividerIcon } from '@vibeflow/playground-ui';
 
 export function AgentHeader({ agentName, agentId }: { agentName: string; agentId: string }) {
   return (

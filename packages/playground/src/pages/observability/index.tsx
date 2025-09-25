@@ -11,7 +11,7 @@ import {
   TracesTools,
   TraceDialog,
   parseError,
-} from '@mastra/playground-ui';
+} from '@vibeflow/playground-ui';
 import { useEffect, useState } from 'react';
 import { useAgents } from '@/hooks/use-agents';
 import { EyeIcon } from 'lucide-react';

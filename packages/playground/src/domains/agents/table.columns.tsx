@@ -1,4 +1,4 @@
-import { DataTableProps, AgentIcon, Badge, Cell, EntryCell } from '@mastra/playground-ui';
+import { DataTableProps, AgentIcon, Badge, Cell, EntryCell } from '@vibeflow/playground-ui';
 import { Link } from 'react-router';
 
 export const providerMapToIcon = {

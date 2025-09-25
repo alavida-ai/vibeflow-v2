@@ -1,4 +1,4 @@
-import { Span, RefinedTrace } from '@mastra/playground-ui';
+import { Span, RefinedTrace } from '@vibeflow/playground-ui';
 
 export const refineTraces = (traces: Span[], isWorkflow: boolean = false): RefinedTrace[] => {
   const listOfSpanIds = new Set<string>();

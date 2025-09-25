@@ -1,7 +1,7 @@
-import { Header, HeaderTitle, MainContentLayout, MainContentContent } from '@mastra/playground-ui';
+import { Header, HeaderTitle, MainContentLayout, MainContentContent } from '@vibeflow/playground-ui';
 
 import { useAgents } from '@/hooks/use-agents';
-import { AgentsTable } from '@mastra/playground-ui';
+import { AgentsTable } from '@vibeflow/playground-ui';
 
 function Agents() {
   const { data: agents, isLoading } = useAgents();

@@ -1,5 +1,5 @@
-import { useScorers } from '@mastra/playground-ui';
-import { Header, HeaderTitle, MainContentLayout, ScorersTable } from '@mastra/playground-ui';
+import { useScorers } from '@vibeflow/playground-ui';
+import { Header, HeaderTitle, MainContentLayout, ScorersTable } from '@vibeflow/playground-ui';
 
 export default function Scorers() {
   const { scorers = {}, isLoading } = useScorers();

@@ -1,5 +1,5 @@
 import { useSendWorkflowRunEvent } from '@/hooks/use-workflows';
-import { WorkflowGraph, useWorkflow } from '@mastra/playground-ui';
+import { WorkflowGraph, useWorkflow } from '@vibeflow/playground-ui';
 import { useNavigate, useParams } from 'react-router';
 
 export const Workflow = () => {

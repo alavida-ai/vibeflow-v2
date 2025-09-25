@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 import { client } from '@/lib/client';
 import type { McpToolInfo as SdkMcpToolInfo } from '@mastra/client-js';
-import { usePlaygroundStore } from '@mastra/playground-ui';
+import { usePlaygroundStore } from '@vibeflow/playground-ui';
 
 // Structure for the hook to return
 export interface PlaygroundMCPToolInstance {

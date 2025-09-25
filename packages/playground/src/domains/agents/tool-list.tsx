@@ -1,4 +1,4 @@
-import { Entity, EntityContent, EntityDescription, EntityIcon, EntityName, ToolsIcon } from '@mastra/playground-ui';
+import { Entity, EntityContent, EntityDescription, EntityIcon, EntityName, ToolsIcon } from '@vibeflow/playground-ui';
 import { useRef } from 'react';
 import { Link } from 'react-router';
 

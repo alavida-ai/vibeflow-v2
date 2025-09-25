@@ -2,7 +2,7 @@ import { v4 as uuid } from '@lukeed/uuid';
 
 import { useNetworkMemory, useNetworkMessages, useNetworkThreads } from '@/hooks/use-network-memory';
 
-import { MainContentContent, NetworkProvider, VNextNetworkChat } from '@mastra/playground-ui';
+import { MainContentContent, NetworkProvider, VNextNetworkChat } from '@vibeflow/playground-ui';
 import { useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router';
 import { NetworkSidebar } from '@/domains/networks/network-sidebar';

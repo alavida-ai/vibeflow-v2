@@ -1,6 +1,6 @@
 import { ToolIconMap } from '@/types';
 import { MCPToolType } from '@mastra/core/mcp';
-import { Icon, Txt } from '@mastra/playground-ui';
+import { Icon, Txt } from '@vibeflow/playground-ui';
 
 export interface ToolInformationProps {
   toolDescription: string;

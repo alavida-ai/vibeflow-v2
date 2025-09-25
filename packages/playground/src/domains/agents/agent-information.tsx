@@ -10,7 +10,7 @@ import {
   AgentMetadata,
   AgentEntityHeader,
   useAgentSettings,
-} from '@mastra/playground-ui';
+} from '@vibeflow/playground-ui';
 
 import { useMemory } from '@/hooks/use-memory';
 import { AgentMemory } from './agent-memory';

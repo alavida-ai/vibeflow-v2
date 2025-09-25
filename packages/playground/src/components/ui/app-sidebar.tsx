@@ -16,7 +16,7 @@ import {
   SidebarRail,
   useSidebar,
 } from '@/components/ui/sidebar';
-import { AgentIcon, GithubIcon, Icon, McpServerIcon, ToolsIcon, WorkflowIcon } from '@mastra/playground-ui';
+import { AgentIcon, GithubIcon, Icon, McpServerIcon, ToolsIcon, WorkflowIcon } from '@vibeflow/playground-ui';
 
 import { Tooltip, TooltipContent, TooltipTrigger } from './tooltip';
 import clsx from 'clsx';

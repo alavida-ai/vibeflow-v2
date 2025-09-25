@@ -1,4 +1,4 @@
-import { Header, HeaderTitle, MainContentLayout, TemplatesTools, TemplatesList } from '@mastra/playground-ui';
+import { Header, HeaderTitle, MainContentLayout, TemplatesTools, TemplatesList } from '@vibeflow/playground-ui';
 import { useMastraTemplates } from '@/hooks/use-templates';
 import { cn } from '@/lib/utils';
 import { Link } from 'react-router';

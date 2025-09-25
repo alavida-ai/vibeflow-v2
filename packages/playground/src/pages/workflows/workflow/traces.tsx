@@ -1,5 +1,5 @@
 import { useParams, useSearchParams } from 'react-router';
-import { TracesView, useWorkflow } from '@mastra/playground-ui';
+import { TracesView, useWorkflow } from '@vibeflow/playground-ui';
 
 import { useTraces } from '@/domains/traces/hooks/use-traces';
 

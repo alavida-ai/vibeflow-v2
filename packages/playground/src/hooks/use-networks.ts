@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 import { GetVNextNetworkResponse } from '@mastra/client-js';
 import { client } from '@/lib/client';
-import { usePlaygroundStore } from '@mastra/playground-ui';
+import { usePlaygroundStore } from '@vibeflow/playground-ui';
 
 export const useVNextNetworks = () => {
   const [networks, setNetworks] = useState<GetVNextNetworkResponse[]>([]);

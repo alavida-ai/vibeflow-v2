@@ -1,5 +1,5 @@
 import { GetVNextNetworkResponse } from '@mastra/client-js';
-import { ToolsIcon } from '@mastra/playground-ui';
+import { ToolsIcon } from '@vibeflow/playground-ui';
 
 export function NetworkTools({ network }: { network: GetVNextNetworkResponse }) {
   if (!network.tools || network.tools.length === 0) {

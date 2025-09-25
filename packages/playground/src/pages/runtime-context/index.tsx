@@ -5,7 +5,7 @@ import {
   MainContentLayout,
   RuntimeContext,
   RuntimeContextWrapper,
-} from '@mastra/playground-ui';
+} from '@vibeflow/playground-ui';
 
 export default function RuntimeContextPage() {
   return (

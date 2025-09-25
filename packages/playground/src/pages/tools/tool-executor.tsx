@@ -1,4 +1,4 @@
-import { DynamicForm, MainContentContent } from '@mastra/playground-ui';
+import { DynamicForm, MainContentContent } from '@vibeflow/playground-ui';
 import { CopyButton } from '@/components/ui/copy-button';
 import { ZodType } from 'zod';
 import { ToolInformation } from '@/domains/tools/ToolInformation';

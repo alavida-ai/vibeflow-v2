@@ -1,4 +1,4 @@
-import { TracesView } from '@mastra/playground-ui';
+import { TracesView } from '@vibeflow/playground-ui';
 import { useParams } from 'react-router';
 
 import { useAgent } from '@/hooks/use-agents';
