@@ -2,8 +2,13 @@ import {
     getDb,
     schema
 } from "@vibeflow/database";
-import { eq, and, isNull, desc, or, inArray } from 'drizzle-orm';
+import { eq, and, isNull, desc, or, inArray, gte } from 'drizzle-orm';
+import { createLogger } from "@vibeflow/logging";
 
+const logger = createLogger({
+    context: 'cli',
+    name: 'twitter-service'
+});
 
 export type TweetView = {
     id: number;
@@ -225,16 +230,21 @@ export async function getTweetsViewByUsername(authorUsername: string, limit?: nu
 }
 
 /**
- * Get tweets by their IDs
+ * Get tweets by their IDs, optionally limited and ordered by final score
  * Used for calculating framework metrics based on specific tweet references
  */
-export async function getTweetsByIds(tweetIds: number[]): Promise<TweetView[]> {
+export async function getTweetsByIds(
+    tweetIds: number[], 
+    options?: { limit?: number }
+): Promise<TweetView[]> {
     if (tweetIds.length === 0) return [];
 
     const db = getDb();
 
-    // Get tweets and their media in a single query
-    const tweetsWithMedia = await db
+    logger.info({ tweetIds, options }, 'Getting tweets by ids');
+
+    // Build the query with proper typing
+    const baseQuery = db
         .select({
             tweet: schema.tweets,
             media: schema.tweetMedia
@@ -244,8 +254,22 @@ export async function getTweetsByIds(tweetIds: number[]): Promise<TweetView[]> {
             schema.tweetMedia,
             eq(schema.tweetMedia.tweetId, schema.tweets.id)
         )
+        .leftJoin(
+            schema.tweetAnalytics,
+            eq(schema.tweetAnalytics.tweetId, schema.tweets.id)
+        )
         .where(inArray(schema.tweets.id, tweetIds))
-        .orderBy(desc(schema.tweets.createdAtUtc));
+        .orderBy(
+            desc(schema.tweetAnalytics.finalScore),  // NULLs will sort last
+            desc(schema.tweets.createdAtUtc)
+        );
+
+    // Apply limit if specified and execute query
+    const tweets = options?.limit 
+        ? await baseQuery.limit(options.limit)
+        : await baseQuery;
+
+    logger.info({ tweets }, 'Tweets by ids');
 
     // Group media by tweet ID
     const mediaByTweetId = new Map<number, Array<{
@@ -253,7 +277,7 @@ export async function getTweetsByIds(tweetIds: number[]): Promise<TweetView[]> {
         description: string | null;
     }>>();
 
-    tweetsWithMedia.forEach(({ tweet, media }) => {
+    tweets.forEach(({ tweet, media }) => {
         if (media) {
             if (!mediaByTweetId.has(tweet.id)) {
                 mediaByTweetId.set(tweet.id, []);
@@ -265,21 +289,30 @@ export async function getTweetsByIds(tweetIds: number[]): Promise<TweetView[]> {
         }
     });
 
-    // Get unique tweets and combine with their media
+    // Get unique tweets and combine with their media, preserving the order from the query
     const uniqueTweets = new Map<number, typeof schema.tweets.$inferSelect>();
-    tweetsWithMedia.forEach(({ tweet }) => {
-        uniqueTweets.set(tweet.id, tweet);
+    const tweetOrder: number[] = [];
+    
+    tweets.forEach(({ tweet }) => {
+        if (!uniqueTweets.has(tweet.id)) {
+            uniqueTweets.set(tweet.id, tweet);
+            tweetOrder.push(tweet.id);
+        }
     });
 
-    return Array.from(uniqueTweets.values()).map(tweet => ({
-        id: tweet.id,
-        text: tweet.text,
-        retweetCount: tweet.retweetCount,
-        replyCount: tweet.replyCount,
-        likeCount: tweet.likeCount,
-        quoteCount: tweet.quoteCount,
-        viewCount: tweet.viewCount,
-        bookmarkCount: tweet.bookmarkCount,
-        media: mediaByTweetId.get(tweet.id) || []
-    }));
+    // Return tweets in the order determined by the query (by final score, then by created date)
+    return tweetOrder.map(tweetId => {
+        const tweet = uniqueTweets.get(tweetId)!;
+        return {
+            id: tweet.id,
+            text: tweet.text,
+            retweetCount: tweet.retweetCount,
+            replyCount: tweet.replyCount,
+            likeCount: tweet.likeCount,
+            quoteCount: tweet.quoteCount,
+            viewCount: tweet.viewCount,
+            bookmarkCount: tweet.bookmarkCount,
+            media: mediaByTweetId.get(tweet.id) || []
+        };
+    });
 }

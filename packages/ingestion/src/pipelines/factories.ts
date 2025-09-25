@@ -1,9 +1,15 @@
 import { TwitterPipeline } from './tweets-pipeline';
-import { TwitterClient, UserMentionsEndpoint, UserLastTweetsEndpoint, TweetRepliesEndpoint } from '../sources';
-import { TweetProcessor } from '../processors';
+import { 
+  TwitterClient,
+  AdvancedSearchEndpoint, 
+  UserMentionsEndpoint, 
+  UserLastTweetsEndpoint, 
+  TweetRepliesEndpoint, 
+  TwitterEndpointEnum 
+} from '../sources';
+import { AnalyticsProcessor, TweetProcessor } from '../processors';
 import { TweetTransformer } from '../transformers';
 import { TweetSink } from '../sinks';
-
 
 export function createMentionsPipeline(): TwitterPipeline {
   const client = TwitterClient.getInstance();
@@ -38,39 +44,40 @@ export function createRepliesPipeline(): TwitterPipeline {
   });
 }
 
-// Custom pipeline builder
-export function createCustomPipeline(config: {
-  endpoint: 'mentions' | 'userTweets' | 'replies';
-  storage: 'listener' | 'analyzer';
-  createReplies?: boolean;
+// Universal Twitter scraper pipeline builder
+export function createTwitterScraperPipeline(config: {
+  endpoint: TwitterEndpointEnum;
 }): TwitterPipeline {
   const client = TwitterClient.getInstance();
   
-  let endpoint;
+  let endpointInstance;
   switch (config.endpoint) {
-    case 'mentions':
-      endpoint = new UserMentionsEndpoint(client);
+    case TwitterEndpointEnum.USER_MENTIONS:
+      endpointInstance = new UserMentionsEndpoint(client);
       break;
-    case 'userTweets':
-      endpoint = new UserLastTweetsEndpoint(client);
+    case TwitterEndpointEnum.USER_LAST_TWEETS:
+      endpointInstance = new UserLastTweetsEndpoint(client);
       break;
-    case 'replies':
-      endpoint = new TweetRepliesEndpoint(client);
+    case TwitterEndpointEnum.TWEET_REPLIES:
+      endpointInstance = new TweetRepliesEndpoint(client);
       break;
+    case TwitterEndpointEnum.ADVANCED_SEARCH:
+      endpointInstance = new AdvancedSearchEndpoint(client);
+      break;
+    default:
+      throw new Error(`Unsupported endpoint: ${config.endpoint}`);
   }
   
-  const processors: TweetProcessor[] = [];
-  if (config.createReplies) {
-    // processors.push(new EvsProcessor());
-  }
+  const processors: TweetProcessor[] = [new AnalyticsProcessor()];
   
   return new TwitterPipeline({
-    source: endpoint,
+    source: endpointInstance,
     transformer: new TweetTransformer(),
     sink: new TweetSink(),
     processors
   });
 }
+
 
 // Re-export TwitterClient static methods for testing
 export const resetTwitterClient = TwitterClient.resetInstance;

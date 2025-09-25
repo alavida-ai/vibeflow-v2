@@ -8,7 +8,7 @@ export const ENGAGEMENT_WEIGHTS = {
   quote: 3,
   retweet: 2,
   like: 1,
-  view: 0.001
+  view: 0.5  // Increased from 0.001 since we'll use log scaling
 } as const;
 
 export const FRESHNESS_DECAY = {
@@ -16,9 +16,17 @@ export const FRESHNESS_DECAY = {
   decayFactor: Math.log(0.5) / 24
 } as const;
 
-export const ANALYTICS_VERSION = "1.0" as const;
+// Score normalization constants
+export const SCORE_NORMALIZATION = {
+  maxRawScore: 100,        // Target max for raw engagement score
+  maxFinalScore: 1000,     // Target max for final score
+  logBase: 10,             // Base for logarithmic scaling
+  minEngagementForLog: 1   // Minimum engagement count before applying log
+} as const;
 
-export const REPLY_THRESHOLD = 0.5;
+export const ANALYTICS_VERSION = "2.0" as const;  // Updated version
+
+export const REPLY_THRESHOLD = 50;
 
 export const TWITTER_USERNAME = process.env.TWITTER_USERNAME;
 
@@ -26,14 +34,36 @@ export const TWITTER_USERNAME = process.env.TWITTER_USERNAME;
 /*                              FUNCTIONS                                     */
 /* -------------------------------------------------------------------------- */
 
+/**
+ * Apply logarithmic scaling to engagement metrics to handle wide value ranges
+ */
+function normalizeEngagementMetric(value: number): number {
+  if (value <= SCORE_NORMALIZATION.minEngagementForLog) {
+    return value;
+  }
+  return Math.log(value + 1) / Math.log(SCORE_NORMALIZATION.logBase);
+}
+
+/**
+ * Calculate normalized raw engagement score using logarithmic scaling
+ * 
+ * This prevents massive scores from viral tweets (millions of views) by:
+ * 1. Applying log scaling to each engagement metric
+ * 2. Capping the final raw score at maxRawScore (100)
+ * 
+ * Example: 1M views -> log10(1M+1) = ~6, instead of contributing 1M to score
+ */
 export function calculateRawEngagementScore(tweet: schema.Tweet): number {
-  return (
-    ENGAGEMENT_WEIGHTS.reply * (tweet.replyCount || 0) +
-    ENGAGEMENT_WEIGHTS.quote * (tweet.quoteCount || 0) +
-    ENGAGEMENT_WEIGHTS.retweet * (tweet.retweetCount || 0) +
-    ENGAGEMENT_WEIGHTS.like * (tweet.likeCount || 0) +
-    ENGAGEMENT_WEIGHTS.view * (tweet.viewCount || 0)
+  const normalizedScore = (
+    ENGAGEMENT_WEIGHTS.reply * normalizeEngagementMetric(tweet.replyCount || 0) +
+    ENGAGEMENT_WEIGHTS.quote * normalizeEngagementMetric(tweet.quoteCount || 0) +
+    ENGAGEMENT_WEIGHTS.retweet * normalizeEngagementMetric(tweet.retweetCount || 0) +
+    ENGAGEMENT_WEIGHTS.like * normalizeEngagementMetric(tweet.likeCount || 0) +
+    ENGAGEMENT_WEIGHTS.view * normalizeEngagementMetric(tweet.viewCount || 0)
   );
+  
+  // Scale to target range and cap at maximum
+  return Math.min(normalizedScore, SCORE_NORMALIZATION.maxRawScore);
 }
 
 export function calculateAuthorSizeNormalization(authorFollowers: number): number {
@@ -53,7 +83,9 @@ export function calculateFreshnessDecay(tweetCreatedAt: Date): { factor: number;
 }
 
 export function calculateFinalScore(rawEngagementScore: number, authorSizeNormalizationFactor: number, freshnessDecayFactor: number): number {
-  return rawEngagementScore * authorSizeNormalizationFactor * freshnessDecayFactor;
+  const finalScore = rawEngagementScore * authorSizeNormalizationFactor * freshnessDecayFactor;
+  // Cap final score at maximum to prevent overflow
+  return Math.min(finalScore, SCORE_NORMALIZATION.maxFinalScore);
 }
 
 export function calculateShouldReply(finalScore: number): boolean {

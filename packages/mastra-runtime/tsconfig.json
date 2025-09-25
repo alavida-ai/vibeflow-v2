@@ -7,7 +7,10 @@
       "@vibeflow/core": ["../core/src"],
       "@vibeflow/logging": ["../logging/src"],
       "@vibeflow/compiler": ["../compiler/src"],
-      "@vibeflow/agent-sdk": ["../agent-sdk/src"]
+      "@vibeflow/agent-sdk": ["../agent-sdk/src"],
+      "@vibeflow/media-utils": ["../media-utils/src"],
+      "@vibeflow/ingestion": ["../ingestion/src"],
+      "@vibeflow/core/services/media": ["../core/src/services/media"]
     }
   },
   "include": ["src/**/*"],

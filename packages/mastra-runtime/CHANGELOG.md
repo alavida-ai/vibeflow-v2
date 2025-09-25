@@ -1,5 +1,87 @@
 # @vibeflow/mastra-runtime
 
+## 1.4.2
+
+### Patch Changes
+
+- Latest change
+- Updated dependencies
+  - @vibeflow/agent-sdk@1.1.6
+  - @vibeflow/ingestion@2.1.6
+  - @vibeflow/compiler@2.1.1
+  - @vibeflow/database@2.1.6
+  - @vibeflow/core@1.1.7
+
+## 1.4.2
+
+### Patch Changes
+
+- Zod compatibility
+- Updated dependencies
+  - @vibeflow/agent-sdk@1.1.6
+  - @vibeflow/ingestion@2.1.6
+  - @vibeflow/database@2.1.6
+  - @vibeflow/core@1.1.6
+
+## 1.4.1
+
+### Patch Changes
+
+- Small patch
+- Updated dependencies
+  - @vibeflow/agent-sdk@1.1.5
+  - @vibeflow/ingestion@2.1.5
+  - @vibeflow/database@2.1.5
+  - @vibeflow/core@1.1.5
+
+## 1.4.0
+
+### Minor Changes
+
+- 0954dc0: Updated mastra-runtime with latest changes and improvements
+
+### Patch Changes
+
+- Updated
+- Updated dependencies
+  - @vibeflow/agent-sdk@1.1.4
+  - @vibeflow/ingestion@2.1.4
+  - @vibeflow/database@2.1.4
+  - @vibeflow/core@1.1.4
+
+## 1.3.3
+
+### Patch Changes
+
+- 6cabed4: Test update
+- Updated dependencies [6cabed4]
+  - @vibeflow/agent-sdk@1.1.3
+  - @vibeflow/ingestion@2.1.3
+  - @vibeflow/database@2.1.3
+  - @vibeflow/core@1.1.3
+
+## 1.3.2
+
+### Patch Changes
+
+- MCP working
+- Updated dependencies
+  - @vibeflow/agent-sdk@1.1.2
+  - @vibeflow/ingestion@2.1.2
+  - @vibeflow/database@2.1.2
+  - @vibeflow/core@1.1.2
+
+## 1.3.1
+
+### Patch Changes
+
+- 5af24cb: Twitter scraper
+- Updated dependencies [5af24cb]
+  - @vibeflow/ingestion@2.1.1
+  - @vibeflow/database@2.1.1
+  - @vibeflow/core@1.1.1
+  - @vibeflow/agent-sdk@1.1.1
+
 ## 1.3.0
 
 ### Minor Changes

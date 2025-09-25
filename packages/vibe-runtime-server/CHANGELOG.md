@@ -1,5 +1,74 @@
 # @vibeflow/runtime-server
 
+## 3.2.3
+
+### Patch Changes
+
+- Latest change
+- Updated dependencies
+  - @vibeflow/mastra-runtime@1.4.2
+  - @vibeflow/compiler@2.1.1
+  - @vibeflow/core@1.1.7
+
+## 3.2.2
+
+### Patch Changes
+
+- Zod compatibility
+- Updated dependencies
+  - @vibeflow/mastra-runtime@1.4.2
+  - @vibeflow/core@1.1.6
+
+## 3.2.1
+
+### Patch Changes
+
+- Small patch
+- Updated dependencies
+  - @vibeflow/mastra-runtime@1.4.1
+  - @vibeflow/core@1.1.5
+
+## 3.2.0
+
+### Minor Changes
+
+- 0954dc0: Updated runtime-server with latest changes and improvements
+
+### Patch Changes
+
+- Updated
+- Updated dependencies [0954dc0]
+- Updated dependencies
+  - @vibeflow/mastra-runtime@1.4.0
+  - @vibeflow/core@1.1.4
+
+## 3.1.3
+
+### Patch Changes
+
+- 6cabed4: Test update
+- Updated dependencies [6cabed4]
+  - @vibeflow/mastra-runtime@1.3.3
+  - @vibeflow/core@1.1.3
+
+## 3.1.2
+
+### Patch Changes
+
+- MCP working
+- Updated dependencies
+  - @vibeflow/mastra-runtime@1.3.2
+  - @vibeflow/core@1.1.2
+
+## 3.1.1
+
+### Patch Changes
+
+- 5af24cb: Twitter scraper
+- Updated dependencies [5af24cb]
+  - @vibeflow/mastra-runtime@1.3.1
+  - @vibeflow/core@1.1.1
+
 ## 3.1.0
 
 ### Minor Changes

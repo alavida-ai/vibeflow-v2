@@ -1,11 +1,9 @@
 import { Mastra } from "@mastra/core/mastra";
 import { Workflow } from "@mastra/core/workflows";
 import { businessStrategyWorkflow } from "./workflows/business-strategy";
-import { extractTweetFrameworksWorkflow } from "./workflows/extract-tweet-frameworks";
 import { createStorage } from "./storage";
-import { frameworkAgent } from "./agents/frameworkAgent";
-import { parseAgent } from "./agents/parseAgent";
-import { createVibeflowMCP } from "./mcp";
+import { twitterAnalyzerAgent } from "./agents/twitter-analyzer-agent";
+import { createVibeflowMCP, createTwitterScraperMCP } from "./mcp/servers";
 import { PinoLogger } from "@mastra/loggers";
 import { strategyAgent } from "./agents/strategyAgent";
 import { Agent } from "@mastra/core/agent";
@@ -24,17 +22,15 @@ export async function createMastraInstance(options?: {
     logger: new PinoLogger({
       name: 'VibeFlow-Mastra',
       transports: { cli: transport },
-      level: 'error'
+      level: 'debug'
     }),
     agents: {
-      frameworkAgent,
-      parseAgent,
+      twitterAnalyzerAgent,
       strategyAgent,
       ...options?.agents
     },
     workflows: {
       businessStrategyWorkflow,
-      extractTweetFrameworksWorkflow,
       ...options?.workflows
       
     },
@@ -42,12 +38,14 @@ export async function createMastraInstance(options?: {
       transpilePackages: [
         "@vibeflow/ingestion",
         "@vibeflow/agent-sdk",
+        "@vibeflow/media-utils",
         "@vibeflow/core"
       ],
-      sourcemap: true,
+      sourcemap: true
     },
     mcpServers: {
       vibeflow: await createVibeflowMCP(),
+      twitter: await createTwitterScraperMCP()
     },
     server: {
       port: 4111,

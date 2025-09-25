@@ -1,4 +1,4 @@
-import { TwitterEndpoint } from '../sources/endpoints';
+import { TwitterEndpoint } from '../sources/twitter';
 import { Transformer } from '../transformers';
 import { Sink } from '../sinks';
 import { TweetProcessor, ProcessorResult } from '../processors';

@@ -15,10 +15,10 @@ export class TweetTransformer implements Transformer {
             url: tweet.twitterUrl,
 
             // Author information
-            authorId: tweet.author.id,
-            authorUsername: tweet.author.userName || null,
-            authorName: tweet.author.name || null,
-            authorFollowers: tweet.author.followers || 0,
+            authorId: tweet.author?.id || '',
+            authorUsername: tweet.author?.userName || null,
+            authorName: tweet.author?.name || null,
+            authorFollowers: tweet.author?.followers || 0,
 
             // Threading/context
             conversationId: tweet.conversationId || null,

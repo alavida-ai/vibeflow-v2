@@ -1,7 +1,7 @@
 import { Mastra } from "@mastra/core/mastra";
 import { type WorkflowInput, type AgentInput } from "@vibeflow/compiler";
 import { createMastraInstance } from "./mastra";
-import { createVibeflowMCP } from "./mastra/mcp";
+import { createVibeflowMCP } from "./mastra/mcp/servers/vibeflow";
 import { compileWorkflows } from "./mastra/utils/spec-compiler";
 import { compileAgents } from "./mastra/utils/agent-compiler";
 

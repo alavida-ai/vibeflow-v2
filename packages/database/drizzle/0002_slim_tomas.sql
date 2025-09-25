@@ -1,0 +1,1 @@
+ALTER TABLE "tweet_analytics" ADD CONSTRAINT "unique_tweet_analytics_tweet_id" UNIQUE("tweet_id");

@@ -7,6 +7,7 @@ import Navbar from '@/components/new-navbar';
 import Footer from '@/components/layout/footer';
 import { ThemeProvider } from '@/components/theme-provider';
 import { TooltipProvider } from '@/components/ui/tooltip';
+import Script from 'next/script';
 
 const inter = Inter({
   variable: '--font-inter',
@@ -88,6 +89,7 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <TooltipProvider>
+          <Script src="https://unpkg.com/@styleglide/theme-editor" />   
             <div className="fixed top-0 left-0 right-0 z-50">
             <Navbar />
             </div>

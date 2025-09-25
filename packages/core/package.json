@@ -1,10 +1,11 @@
 {
   "name": "@vibeflow/core",
-  "version": "1.1.0",
+  "version": "1.1.7",
   "type": "module",
   "dependencies": {
     "@vibeflow/database": "workspace:*",
     "@vibeflow/media-utils": "workspace:*",
+    "@vibeflow/logging": "workspace:*",
     "drizzle-orm": "^0.44.5",
     "yaml": "^2.3.2"
   },
@@ -16,6 +17,14 @@
     ".": {
       "import": "./dist/index.js",
       "default": "./dist/index.js"
+    },
+    "./services/media": {
+      "import": "./dist/services/media/index.js",
+      "default": "./dist/services/media/index.js"
+    },
+    "./services/database": {
+      "import": "./dist/services/database/index.js",
+      "default": "./dist/services/database/index.js"
     },
     "./package.json": "./package.json"
   },

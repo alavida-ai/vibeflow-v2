@@ -16,7 +16,7 @@ export class TwitterPipeline {
     let hasNextPage = true;
     let pageCount = 0;
     let totalTweets = 0;
-    let savedTweets: schema.TweetWithMedia[] = [];
+    let allSavedTweets: schema.TweetWithMedia[] = [];
     const maxPages = options?.maxPages || 100;
     const processorResults: Record<string, any> = {};
 
@@ -43,13 +43,14 @@ export class TwitterPipeline {
         );
 
         // Save tweets
-        savedTweets = await this.config.sink.save(scrapedTweets);
-        totalTweets += savedTweets.length;
+        const pageSavedTweets = await this.config.sink.save(scrapedTweets);
+        allSavedTweets.push(...pageSavedTweets);
+        totalTweets += pageSavedTweets.length;
 
         // Additional processing
         if (this.config.processors) {
           for (const processor of this.config.processors) {
-            const result = await processor.process(savedTweets);
+            const result = await processor.process(pageSavedTweets);
             processorResults[processor.name] = result;
           }
         }
@@ -58,7 +59,7 @@ export class TwitterPipeline {
         hasNextPage = response.hasNextPage;
         cursor = response.nextCursor || undefined;
 
-        logger.info(`✅ Page ${pageCount}: ${savedTweets.length} saved tweets`);
+        logger.info(`✅ Page ${pageCount}: ${pageSavedTweets.length} saved tweets`);
       }
 
       logger.info(`🎉 Complete! ${totalTweets} tweets across ${pageCount} pages`);
@@ -66,7 +67,7 @@ export class TwitterPipeline {
       return {
         success: true,
         totalTweets,
-        savedTweets,
+        savedTweets: allSavedTweets,
         pagesProcessed: pageCount,
         nextCursor: cursor,
         hasMorePages: pageCount >= maxPages && hasNextPage,
@@ -78,7 +79,7 @@ export class TwitterPipeline {
       return {
         success: false,
         totalTweets,
-        savedTweets,
+        savedTweets: allSavedTweets,
         pagesProcessed: pageCount,
         hasMorePages: false,
         processorResults,
@@ -96,8 +97,12 @@ export class TwitterPipeline {
         return schema.sourceConstants.user_mentions;
       case 'userlasttweets':
         return schema.sourceConstants.user_last_tweets;
-      case 'replies':
+      case 'tweetreplies':
         return schema.sourceConstants.tweet_replies;
+      case 'tweetsbyids':
+        return schema.sourceConstants.tweets_by_ids;
+      case 'advancedsearch':
+        return schema.sourceConstants.advanced_search;
       default:
         // Default fallback
         throw new Error(`Unknown source name: ${endpointName}`);

@@ -8,6 +8,20 @@
       "when": 1758565509920,
       "tag": "0000_damp_the_watchers",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1758727216547,
+      "tag": "0001_soft_revanche",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1758729119691,
+      "tag": "0002_slim_tomas",
+      "breakpoints": true
     }
   ]
 }

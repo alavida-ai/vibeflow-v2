@@ -4,7 +4,7 @@ import { getDefaultOpenRouterProvider } from "../router";
 import { GPT_4O } from "../constants";
 import { getMCPClient } from "../mcp/client";
 import { perplexityAskTool } from "../tools/research/perplexity";
-import { userTweetsFetcherTool } from "../tools/research/twitter-analyser";
+import { fetchSavedTweetsTool } from "../tools/research/fetch-saved-tweets";
 
 // Agent types - keeping it simple for now
 export interface AgentInput {
@@ -19,7 +19,7 @@ const getDefaultTools = async () => {
   const mcpTools = await getMCPClient().getTools();
   return {
     perplexityAskTool,
-    userTweetsFetcherTool,
+    fetchSavedTweetsTool,
     ...mcpTools
   };
 };

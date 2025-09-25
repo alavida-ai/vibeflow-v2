@@ -9,7 +9,7 @@
     "start": "vibe dev --port 3000"
   },
   "dependencies": {
-    "@vibeflow/cli": "^4.0.0"
+    "@vibeflow/cli": "^4.1.7"
   },
   "devDependencies": {
     "typescript": "^5.3.3"
