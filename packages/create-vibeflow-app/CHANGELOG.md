@@ -1,5 +1,17 @@
 # create-vibeflow-app
 
+## 4.4.7
+
+### Patch Changes
+
+- Latest change
+
+## 4.4.6
+
+### Patch Changes
+
+- Zod compatibility
+
 ## 4.4.5
 
 ### Patch Changes

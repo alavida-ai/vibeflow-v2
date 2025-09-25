@@ -1,5 +1,24 @@
 # @vibeflow/runtime-server
 
+## 3.2.3
+
+### Patch Changes
+
+- Latest change
+- Updated dependencies
+  - @vibeflow/mastra-runtime@1.4.2
+  - @vibeflow/compiler@2.1.1
+  - @vibeflow/core@1.1.7
+
+## 3.2.2
+
+### Patch Changes
+
+- Zod compatibility
+- Updated dependencies
+  - @vibeflow/mastra-runtime@1.4.2
+  - @vibeflow/core@1.1.6
+
 ## 3.2.1
 
 ### Patch Changes

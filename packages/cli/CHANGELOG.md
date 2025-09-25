@@ -1,5 +1,22 @@
 # vibeflow-ai
 
+## 4.1.7
+
+### Patch Changes
+
+- Latest change
+- Updated dependencies
+  - @vibeflow/runtime-server@3.2.3
+  - @vibeflow/compiler@2.1.1
+
+## 4.1.6
+
+### Patch Changes
+
+- Zod compatibility
+- Updated dependencies
+  - @vibeflow/runtime-server@3.2.2
+
 ## 4.1.5
 
 ### Patch Changes

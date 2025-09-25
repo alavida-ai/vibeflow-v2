@@ -28,16 +28,12 @@
     "apps/*"
   ],
   "devDependencies": {
-    "@changesets/cli": "^2.29.6",
-    "@types/node": "^20.5.0",
-    "@typescript-eslint/eslint-plugin": "^6.4.0",
-    "@typescript-eslint/parser": "^6.4.0",
-    "eslint": "^8.57.1",
-    "prettier": "^3.0.0",
+    "@changesets/cli": "^2.29.7",
+    "@types/node": "^20.19.17",
     "syncpack": "14.0.0-alpha.21",
     "tsx": "^4.20.5",
-    "turbo": "^1.10.7",
-    "typescript": "^5.1.6"
+    "turbo": "^1.13.4",
+    "typescript": "^5.9.2"
   },
   "scripts": {
     "build": "turbo build",
@@ -53,21 +49,6 @@
     "test": "turbo test",
     "setup": "./scripts/setup.sh",
     "verify": "./scripts/verify-setup.sh"
-  },
-  "pnpm": {
-    "overrides": {
-      "zod": "^4.0.0",
-      "@mastra/core": "0.18.0",
-      "@mastra/server": "0.16.3"
-    },
-    "packageExtensions": {
-      "@mastra/core@0.18.0": {
-        "peerDependencies": { "zod": "^4.0.0" }
-      },
-      "@mastra/server@0.16.3": {
-        "peerDependencies": { "zod": "^4.0.0" }
-      }
-    }
   },
   "packageManager": "pnpm@10.13.1"
 }

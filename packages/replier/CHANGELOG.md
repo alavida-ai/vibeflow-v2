@@ -1,5 +1,25 @@
 # @vibeflow/replier
 
+## 2.1.6
+
+### Patch Changes
+
+- Latest change
+- Updated dependencies
+  - @vibeflow/agent-sdk@1.1.6
+  - @vibeflow/database@2.1.6
+  - @vibeflow/core@1.1.7
+
+## 2.1.6
+
+### Patch Changes
+
+- Zod compatibility
+- Updated dependencies
+  - @vibeflow/agent-sdk@1.1.6
+  - @vibeflow/database@2.1.6
+  - @vibeflow/core@1.1.6
+
 ## 2.1.5
 
 ### Patch Changes

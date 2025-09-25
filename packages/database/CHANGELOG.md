@@ -1,5 +1,17 @@
 # @vibeflow/database
 
+## 2.1.6
+
+### Patch Changes
+
+- Latest change
+
+## 2.1.6
+
+### Patch Changes
+
+- Zod compatibility
+
 ## 2.1.5
 
 ### Patch Changes

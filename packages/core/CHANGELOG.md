@@ -1,5 +1,21 @@
 # @vibeflow/core
 
+## 1.1.7
+
+### Patch Changes
+
+- Latest change
+- Updated dependencies
+  - @vibeflow/database@2.1.6
+
+## 1.1.6
+
+### Patch Changes
+
+- Zod compatibility
+- Updated dependencies
+  - @vibeflow/database@2.1.6
+
 ## 1.1.5
 
 ### Patch Changes

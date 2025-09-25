@@ -1,5 +1,28 @@
 # @vibeflow/mastra-runtime
 
+## 1.4.2
+
+### Patch Changes
+
+- Latest change
+- Updated dependencies
+  - @vibeflow/agent-sdk@1.1.6
+  - @vibeflow/ingestion@2.1.6
+  - @vibeflow/compiler@2.1.1
+  - @vibeflow/database@2.1.6
+  - @vibeflow/core@1.1.7
+
+## 1.4.2
+
+### Patch Changes
+
+- Zod compatibility
+- Updated dependencies
+  - @vibeflow/agent-sdk@1.1.6
+  - @vibeflow/ingestion@2.1.6
+  - @vibeflow/database@2.1.6
+  - @vibeflow/core@1.1.6
+
 ## 1.4.1
 
 ### Patch Changes

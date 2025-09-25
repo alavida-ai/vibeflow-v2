@@ -1,5 +1,21 @@
 # @vibeflow/agent-sdk
 
+## 1.1.6
+
+### Patch Changes
+
+- Latest change
+- Updated dependencies
+  - @vibeflow/core@1.1.7
+
+## 1.1.6
+
+### Patch Changes
+
+- Zod compatibility
+- Updated dependencies
+  - @vibeflow/core@1.1.6
+
 ## 1.1.5
 
 ### Patch Changes

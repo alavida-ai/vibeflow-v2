@@ -1,6 +1,6 @@
 {
   "name": "@vibeflow/mastra-runtime",
-  "version": "1.4.1",
+  "version": "1.4.2",
   "type": "module",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -33,13 +33,10 @@
     "@hono/zod-openapi": "^0.16.4",
     "@mastra/client-js": "^0.13.2",
     "@mastra/core": "^0.18.0",
-    "@mastra/deployer": "^0.16.3",
-    "@mastra/libsql": "^0.13.8",
-    "@mastra/loggers": "^0.10.10",
-    "@mastra/mcp": "0.12.0",
+    "@mastra/loggers": "^0.10.13",
+    "@mastra/mcp": "0.13.1",
     "@mastra/memory": "^0.15.1",
-    "@mastra/pg": "^0.14.2",
-    "@mastra/rag": "^1.1.0",
+    "@mastra/pg": "^0.16.1",
     "@octokit/rest": "^21.0.2",
     "@openrouter/ai-sdk-provider": "^0.7.5",
     "@scalar/hono-api-reference": "^0.9.16",
@@ -51,13 +48,7 @@
     "replicate": "^1.0.1",
     "tsup": "^8.5.0",
     "uuid": "^11.1.0",
-    "zod": "4.1.11"
-  },
-  "peerDependencies": {
-    "zod": "^4.1.11"
-  },
-  "devDependencies": {
-    "zod": "^4.1.11"
+    "zod": "^3.24.1"
   },
   "publishConfig": {
     "access": "public"

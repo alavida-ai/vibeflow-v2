@@ -1,12 +1,10 @@
 {
   "name": "@vibeflow/runtime-server",
-  "version": "3.2.1",
+  "version": "3.2.3",
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "prebuild": "npm run copy-playground-assets",
     "build": "tsup src/index.ts --format esm --sourcemap --dts --out-dir dist",
-    "copy-playground-assets": "rm -rf playground-assets && mkdir -p playground-assets && cp -r ../playground/dist/* playground-assets/",
     "dev": "tsx src/index.ts",
     "start": "node dist/index.js"
   },
@@ -28,14 +26,15 @@
   "dependencies": {
     "@hono/node-server": "^1.19.1",
     "@hono/swagger-ui": "^0.5.2",
-    "@mastra/deployer": "^0.16.3",
+    "@mastra/deployer": "^0.18.0",
     "@scalar/hono-api-reference": "^0.9.16",
     "@vibeflow/compiler": "workspace:*",
     "@vibeflow/mastra-runtime": "workspace:*",
     "@vibeflow/logging": "workspace:*",
     "@vibeflow/core": "workspace:*",
     "dotenv": "^17.2.2",
-    "hono": "^4.9.5"
+    "hono": "^4.9.5",
+    "zod": "^3.25.6"
   },
   "devDependencies": {
     "tsup": "^8.5.0",
