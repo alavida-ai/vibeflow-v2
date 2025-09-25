@@ -1,6 +1,6 @@
 {
   "name": "@vibeflow/create-vibeflow-app",
-  "version": "4.4.3",
+  "version": "4.4.4",
   "description": "Create a new Vibeflow application",
   "type": "module",
   "bin": {

@@ -51,7 +51,11 @@
     "@vibeflow/compiler": "workspace:*",
     "@vibeflow/runtime-server": "workspace:*",
     "@vibeflow/logging": "workspace:*",
-    "commander": "^12.1.0"
+    "commander": "^12.1.0",
+    "zod": "3.23.8"
+  },
+  "peerDependencies": {
+    "zod": "3.23.8"
   },
   "publishConfig": {
     "access": "public"

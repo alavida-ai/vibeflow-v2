@@ -9,7 +9,11 @@
     "start": "vibe dev --port 3000"
   },
   "dependencies": {
-    "@vibeflow/cli": "^4.1.4"
+    "@vibeflow/cli": "^4.1.4",
+    "zod": "3.23.8"
+  },
+  "peerDependencies": {
+    "zod": "3.23.8"
   },
   "devDependencies": {
     "typescript": "^5.3.3"
