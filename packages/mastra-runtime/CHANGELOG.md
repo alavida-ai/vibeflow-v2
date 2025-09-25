@@ -1,5 +1,16 @@
 # @vibeflow/mastra-runtime
 
+## 1.4.1
+
+### Patch Changes
+
+- Small patch
+- Updated dependencies
+  - @vibeflow/agent-sdk@1.1.5
+  - @vibeflow/ingestion@2.1.5
+  - @vibeflow/database@2.1.5
+  - @vibeflow/core@1.1.5
+
 ## 1.4.0
 
 ### Minor Changes

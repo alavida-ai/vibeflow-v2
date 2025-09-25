@@ -1,5 +1,13 @@
 # vibeflow-ai
 
+## 4.1.5
+
+### Patch Changes
+
+- Small patch
+- Updated dependencies
+  - @vibeflow/runtime-server@3.2.1
+
 ## 4.1.4
 
 ### Patch Changes

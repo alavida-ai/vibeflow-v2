@@ -1,6 +1,6 @@
 {
   "name": "@vibeflow/replier",
-  "version": "2.1.4",
+  "version": "2.1.5",
   "description": "Brand Listener Twitter replier service for AWS deployment",
   "type": "module",
   "scripts": {

@@ -1,5 +1,14 @@
 # @vibeflow/runtime-server
 
+## 3.2.1
+
+### Patch Changes
+
+- Small patch
+- Updated dependencies
+  - @vibeflow/mastra-runtime@1.4.1
+  - @vibeflow/core@1.1.5
+
 ## 3.2.0
 
 ### Minor Changes

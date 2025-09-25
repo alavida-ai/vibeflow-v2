@@ -1,5 +1,13 @@
 # @internal/playground
 
+## 0.0.9
+
+### Patch Changes
+
+- Small patch
+- Updated dependencies
+  - @mastra/playground-ui@6.2.3
+
 ## 0.0.8
 
 ### Patch Changes

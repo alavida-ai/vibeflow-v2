@@ -1,5 +1,11 @@
 # @mastra/playground-ui
 
+## 6.2.3
+
+### Patch Changes
+
+- Small patch
+
 ## 6.2.2
 
 ### Patch Changes
